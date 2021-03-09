@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
@@ -6,6 +7,7 @@ class SplashScreen extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: Container(
         height: screenSize.height,
         width: screenSize.width,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/screens/SplashScreen.dart';
+import 'package:tiptop_v2/UI/screens/splash_screen.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 void main() {
