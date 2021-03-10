@@ -8,5 +8,10 @@
   "Please Enter Your Phone Number": "الرجاء ادخال رقم الهاتف",
   "Country Code": "رمز الدولة",
   "Phone Number": "رقم الهاتف",
-  "Continue": "متابعة"
+  "Continue": "متابعة",
+  "Phone Number Verification": "تأكيد رقم الهاتف",
+  "Is the number above correct?": "هل الرقم أعلاه صحيح؟",
+  "No, let me fix it": "لا, دعني اصححه",
+  "choose preferred method": "اذا كان الرقم أعلاه صحيح, الرجاء اختيار طريقة المتابعة",
+  "Continue Via": "المتابعة عن طريق"
 }

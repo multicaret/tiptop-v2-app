@@ -8,5 +8,10 @@
   "Please Enter Your Phone Number": "Please Enter Your Phone Number",
   "Country Code": "Country Code",
   "Phone Number": "Phone Number",
-  "Continue": "Continue"
+  "Continue": "Continue",
+  "Phone Number Verification": "Phone Number Verification",
+  "Is the number above correct?": "Is the number above correct?",
+  "No, let me fix it": "No, let me fix it",
+  "choose preferred method": "If the number above is correct, please choose your preferred method",
+  "Continue Via": "Continue Via"
 }

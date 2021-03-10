@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_step_two_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -13,7 +14,7 @@ class OTPStepOnePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 36),
+            SizedBox(height: 40),
             Text(Translations.of(context).get('Please Enter Your Phone Number')),
             SizedBox(height: 50),
             Row(
@@ -44,7 +45,7 @@ class OTPStepOnePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                //Todo: navigate to OTP Step 2 page
+                Navigator.of(context).pushNamed(OTPStepTwoPage.routeName);
               },
               child: Text(Translations.of(context).get('Continue')),
             ),

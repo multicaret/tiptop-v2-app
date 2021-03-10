@@ -6,7 +6,7 @@ class AppTextStyles {
   static const TextStyle h1 = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
   );
@@ -46,6 +46,14 @@ class AppTextStyles {
   static const TextStyle bodySecondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.secondary,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle bodySecondaryDark = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondaryDark,
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,

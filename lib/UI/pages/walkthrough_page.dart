@@ -50,7 +50,7 @@ class WalkthroughPage extends StatelessWidget {
                       },
                       child: Text(
                         Translations.of(context).get('Login'),
-                        style: AppTextStyles.bodySecondary,
+                        style: AppTextStyles.bodySecondaryDark,
                       ),
                     )
                   ],
