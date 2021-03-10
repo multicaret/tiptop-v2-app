@@ -21,7 +21,23 @@ class AppTextStyles {
 
   static const TextStyle body = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.text50,
+    color: AppColors.text,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle bodySecondary = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondary,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle button = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
