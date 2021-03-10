@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/providers/AppProvider.dart';
+import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,15 +28,32 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           primaryColor: AppColors.primary,
           accentColor: AppColors.secondary,
-          scaffoldBackgroundColor: AppColors.secondaryDark,
+          scaffoldBackgroundColor: Colors.transparent,
+          fontFamily: 'NeoSansArabic',
+          textTheme: TextTheme(
+            headline1: AppTextStyles.h2,
+            button: AppTextStyles.button,
+            bodyText1: AppTextStyles.body,
+            bodyText2: AppTextStyles.body, //Default style everywhere, e.g. Text widget
+          ),
           appBarTheme: AppBarTheme(
+            centerTitle: true,
             color: Colors.transparent,
             shadowColor: Colors.transparent,
+            textTheme: TextTheme(
+              headline1: AppTextStyles.h2,
+              headline6: AppTextStyles.h2,
+              bodyText1: AppTextStyles.body,
+            ),
+            iconTheme: IconThemeData(color: AppColors.primary, size: 20),
+            actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               primary: AppColors.primary,
+              onPrimary: AppColors.white,
               minimumSize: Size.fromHeight(55),
+              textStyle: AppTextStyles.button,
               shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(8.0),
               ),
@@ -42,6 +61,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: LanguageSelectPage(),
+        routes: routes,
       ),
     );
   }
