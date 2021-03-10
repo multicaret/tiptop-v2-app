@@ -5,11 +5,13 @@ class AppScaffold extends StatelessWidget {
   final Widget body;
   final AppBar appBar;
   final EdgeInsetsGeometry bodyPadding;
+  final String bgImage;
 
   const AppScaffold({
     this.body,
     this.appBar,
     this.bodyPadding,
+    this.bgImage,
   });
 
   @override
@@ -29,6 +31,7 @@ class AppScaffold extends StatelessWidget {
           ),
         ),
         Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: appBar ??
               AppBar(
                 title: Image.asset(
@@ -47,6 +50,12 @@ class AppScaffold extends StatelessWidget {
               height: screenSize.height,
               decoration: BoxDecoration(
                 color: AppColors.white,
+                image: bgImage != null
+                    ? DecorationImage(
+                        image: AssetImage(bgImage),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
               ),
               padding: bodyPadding ?? EdgeInsets.symmetric(horizontal: 17),
               child: body,
