@@ -4,5 +4,9 @@
   "Logout": "تسجيل الخروج",
   "Register": "تسجيل",
   "Continue Without Login": "تابع من دون تسجيل دخول",
-  "Already have an account?": "لديك حساب؟"
+  "Already have an account?": "لديك حساب؟",
+  "Please Enter Your Phone Number": "الرجاء ادخال رقم الهاتف",
+  "Country Code": "رمز الدولة",
+  "Phone Number": "رقم الهاتف",
+  "Continue": "متابعة"
 }

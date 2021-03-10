@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -21,14 +22,19 @@ class WalkthroughPage extends StatelessWidget {
           Container(
             child: Column(
               children: [
-                Text(
-                  Translations.of(context).get('Continue Without Login'),
+                GestureDetector(
+                  onTap: () {
+                    //Todo: If user location is selected, Navigate to Home Page.
+                    // If not, navigate to location permission page
+                  },
+                  child: Text(
+                    Translations.of(context).get('Continue Without Login'),
+                  ),
                 ),
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    //Todo: If user location is selected, Navigate to Home Page.
-                    // If not, navigate to location permission page
+                    Navigator.of(context).pushNamed(OTPStepOnePage.routeName);
                   },
                   child: Text(Translations.of(context).get('Register')),
                 ),
@@ -40,7 +46,7 @@ class WalkthroughPage extends StatelessWidget {
                     SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
-                        // Todo: Navigate to OTP page
+                        Navigator.of(context).pushNamed(OTPStepOnePage.routeName);
                       },
                       child: Text(
                         Translations.of(context).get('Login'),
