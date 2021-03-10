@@ -27,6 +27,22 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle bodyBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle bodyBoldSecondaryDark = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondaryDark,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle bodySecondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.secondary,
