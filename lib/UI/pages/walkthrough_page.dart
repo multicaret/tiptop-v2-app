@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class WalkthroughPage extends StatelessWidget {
@@ -20,27 +21,29 @@ class WalkthroughPage extends StatelessWidget {
           Container(
             child: Column(
               children: [
-                Text('Continue Without Login'),
+                Text(
+                  Translations.of(context).get('Continue Without Login'),
+                ),
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
                     //Todo: If user location is selected, Navigate to Home Page.
                     // If not, navigate to location permission page
                   },
-                  child: Text('Register'),
+                  child: Text(Translations.of(context).get('Register')),
                 ),
                 SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?'),
+                    Text(Translations.of(context).get('Already have an account?')),
                     SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
                         // Todo: Navigate to OTP page
                       },
                       child: Text(
-                        'Login',
+                        Translations.of(context).get('Login'),
                         style: AppTextStyles.bodySecondary,
                       ),
                     )

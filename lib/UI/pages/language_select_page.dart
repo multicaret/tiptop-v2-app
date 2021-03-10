@@ -31,7 +31,7 @@ class LanguageSelectPage extends StatelessWidget {
               width: screenSize.width / 2.5,
             ),
             SizedBox(height: 67),
-            ..._languageItems(context, appLanguages),
+            ..._languageItems(context, appLanguages, appProvider),
           ],
         ),
       ),
@@ -39,15 +39,21 @@ class LanguageSelectPage extends StatelessWidget {
   }
 }
 
-List<Widget> _languageItems(BuildContext context, List<Map<String, String>> _appLanguages) {
+List<Widget> _languageItems(
+  BuildContext context,
+  List<Map<String, String>> _appLanguages,
+  AppProvider appProvider,
+) {
   return List.generate(_appLanguages.length, (i) {
     return Container(
       padding: EdgeInsets.only(bottom: i == _appLanguages.length - 1 ? 0 : 15),
       child: ElevatedButton(
         onPressed: () {
+          appProvider.changeLanguage(_appLanguages[i]['locale']);
           Navigator.of(context).pushNamed(WalkthroughPage.routeName);
         },
         child: Row(
+          textDirection: TextDirection.ltr,
           children: [
             Expanded(
               child: Image(
@@ -57,10 +63,13 @@ List<Widget> _languageItems(BuildContext context, List<Map<String, String>> _app
                 height: 40,
               ),
             ),
-            SizedBox(
-              width: 25,
+            SizedBox(width: 25),
+            Expanded(
+              child: Text(
+                _appLanguages[i]['title'],
+                textDirection: TextDirection.ltr,
+              ),
             ),
-            Expanded(child: Text(_appLanguages[i]['title'])),
           ],
         ),
         style: ElevatedButton.styleFrom(
