@@ -6,6 +6,8 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class LanguageSelectPage extends StatelessWidget {
+  static const routeName = '/language-select';
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;

@@ -18,5 +18,16 @@
   "We sent a message to your number": "لقد ارسلنا لك رسالة على الرقم",
   "with verification code": "مع رمز التأكيد",
   "Has it not arrived yet?": "لم تصل الرسالة بعد؟",
-  "Send again": "ارسل مرة أخرى"
+  "Send again": "ارسل مرة أخرى",
+  "Complete Your Profile": "اكمل ملفك الشخصي",
+  "Final Step": "الخطوة الأخيرة",
+  "Please fill out your details": "الرجاء تعبئة تفاصيلك",
+  "First": "الاسم الأول",
+  "Last": "الاسم الأخير",
+  "Email": "البريد الالكتروني",
+  "Email (Optional)": "البريد الالكتروني (اختياري)",
+  "Optional": "اختياري",
+  "City": "المدينة",
+  "Neighborhood": "الحي",
+  "Save": "حفظ"
 }
