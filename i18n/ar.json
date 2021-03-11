@@ -30,7 +30,7 @@
   "City": "المدينة",
   "Neighborhood": "الحي",
   "Save": "حفظ",
-  "location permission text": "To use our services and for us to be able to find you, we need to access your location. Otherwise, we are sorry to tell you that you won’t be able to use our app",
-  "Use my location services": "Use my location services",
-  "I don’t want to use my location services": "I don’t want to use my location services"
+  "location permission text": "لتتمكن من استخدام خدماتنا ولكي نستطيع ايجادك, يجب علينا الوصول الى موقعك الجغرافي. ان لم نستطع فعل ذلك, نأسف لاخبارك انك لن تتمكن من استخدام التطبيق",
+  "Use my location services": "استخدم خدمات موقعي الجغرافي",
+  "I don’t want to use my location services": "لا أود استخدام خدمات موقعي الجفرافي"
 }
