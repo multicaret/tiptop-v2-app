@@ -32,23 +32,23 @@ class OTPCompleteProfile extends StatelessWidget {
             SizedBox(height: 30),
             AppTextField(
               labelText: 'First',
-              initialValue: 'John',
+              hintText: 'John',
             ),
             AppTextField(
               labelText: 'Last',
-              initialValue: 'Doe',
+              hintText: 'Doe',
             ),
             AppTextField(
               labelText: 'Email (Optional)',
-              initialValue: 'Johndoe@domain.com',
+              hintText: 'Johndoe@domain.com',
             ),
             AppTextField(
               labelText: 'City',
-              initialValue: 'Erbil',
+              hintText: 'Erbil',
             ),
             AppTextField(
               labelText: 'Neighborhood',
-              initialValue: 'French Town',
+              hintText: 'French Town',
             ),
             ElevatedButton(
               child: Text(Translations.of(context).get('Save')),
