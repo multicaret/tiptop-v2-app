@@ -13,5 +13,10 @@
   "Is the number above correct?": "هل الرقم أعلاه صحيح؟",
   "No, let me fix it": "لا, دعني اصححه",
   "choose preferred method": "اذا كان الرقم أعلاه صحيح, الرجاء اختيار طريقة المتابعة",
-  "Continue Via": "المتابعة عن طريق"
+  "Continue Via": "المتابعة عن طريق",
+  "Check your messages": "تحقق من رسائلك",
+  "We sent a message to your number": "لقد ارسلنا لك رسالة على الرقم",
+  "with verification code": "مع رمز التأكيد",
+  "Has it not arrived yet?": "لم تصل الرسالة بعد؟",
+  "Send again": "ارسل مرة أخرى"
 }

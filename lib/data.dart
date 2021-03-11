@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
+import 'UI/pages/otp/otp_step_three_page.dart';
+
 List<Map<String, dynamic>> getVerificationMethods(BuildContext context) {
   return [
     {
@@ -21,7 +23,7 @@ List<Map<String, dynamic>> getVerificationMethods(BuildContext context) {
       'color': AppColors.primary,
       'icon': FontAwesomeIcons.sms,
       'action': () {
-        // Navigator.of(context).pushNamed(OTPStepThreePage.routeName);
+        Navigator.of(context).pushNamed(OTPStepThreePage.routeName);
       },
     },
   ];
