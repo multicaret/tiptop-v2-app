@@ -7,8 +7,9 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class AppPinCodeTextField extends StatefulWidget {
   final int length;
   final Function onComplete;
+  final bool autoFocus;
 
-  const AppPinCodeTextField({this.length, this.onComplete});
+  const AppPinCodeTextField({this.length, this.onComplete, this.autoFocus = true});
 
   @override
   _AppPinCodeTextFieldState createState() => _AppPinCodeTextFieldState();
@@ -21,6 +22,7 @@ class _AppPinCodeTextFieldState extends State<AppPinCodeTextField> {
   @override
   Widget build(BuildContext context) {
     return PinInputTextFormField(
+      autoFocus: widget.autoFocus,
       pinLength: widget.length,
       validator: (pin) => requiredFieldValidator(context, pin),
       onSaved: (pin) {
