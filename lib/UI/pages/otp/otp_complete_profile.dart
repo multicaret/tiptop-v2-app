@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -50,8 +51,10 @@ class OTPCompleteProfile extends StatelessWidget {
               initialValue: 'French Town',
             ),
             ElevatedButton(
-              onPressed: () {},
               child: Text(Translations.of(context).get('Save')),
+              onPressed: () {
+                Navigator.of(context).pushNamed(LocationPermissionPage.routeName);
+              },
             ),
           ],
         ),

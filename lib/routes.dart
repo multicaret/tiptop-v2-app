@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
+import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_three_page.dart';
@@ -14,4 +15,5 @@ final routes = <String, WidgetBuilder>{
   OTPStepTwoPage.routeName: (BuildContext context) => OTPStepTwoPage(),
   OTPStepThreePage.routeName: (BuildContext context) => OTPStepThreePage(),
   OTPCompleteProfile.routeName: (BuildContext context) => OTPCompleteProfile(),
+  LocationPermissionPage.routeName: (BuildContext context) => LocationPermissionPage(),
 };

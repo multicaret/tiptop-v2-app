@@ -29,5 +29,8 @@
   "Optional": "اختياري",
   "City": "المدينة",
   "Neighborhood": "الحي",
-  "Save": "حفظ"
+  "Save": "حفظ",
+  "location permission text": "To use our services and for us to be able to find you, we need to access your location. Otherwise, we are sorry to tell you that you won’t be able to use our app",
+  "Use my location services": "Use my location services",
+  "I don’t want to use my location services": "I don’t want to use my location services"
 }
