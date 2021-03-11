@@ -22,6 +22,12 @@ class AppScaffold extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Container(
+            color: AppColors.white,
+          ),
+        ),
+        Positioned(
+          top: 0,
+          child: Container(
             color: AppColors.secondaryDark,
             child: Image.asset(
               'assets/images/appbar-bg-pattern.png',
@@ -31,7 +37,7 @@ class AppScaffold extends StatelessWidget {
           ),
         ),
         Scaffold(
-          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomInset: false,
           appBar: appBar ??
               AppBar(
                 title: Image.asset(

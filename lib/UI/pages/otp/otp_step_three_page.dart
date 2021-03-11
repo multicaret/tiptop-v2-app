@@ -1,6 +1,6 @@
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_pin_code_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -12,7 +12,6 @@ class OTPStepThreePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      bgImage: 'assets/images/otp-bg-pattern.png',
       body: Column(
         children: [
           SizedBox(height: 40),

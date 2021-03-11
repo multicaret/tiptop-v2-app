@@ -56,6 +56,7 @@ class OTPCompleteProfile extends StatelessWidget {
                 Navigator.of(context).pushNamed(LocationPermissionPage.routeName);
               },
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),
