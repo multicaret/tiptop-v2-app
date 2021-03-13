@@ -19,11 +19,43 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle h2White = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle body = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
     fontSize: 16,
     fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitle = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitle50 = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text50,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
@@ -56,6 +88,22 @@ class AppTextStyles {
     color: AppColors.secondaryDark,
     fontSize: 16,
     fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleWhite = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleWhiteBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 

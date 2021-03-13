@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabController tabController;
   int currentTabIndex = 0;
 
   static List<Map<String, dynamic>> tabsList = [
@@ -55,6 +54,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bodyPadding: EdgeInsets.all(0),
       automaticallyImplyLeading: false,
       body: tabsList[currentTabIndex]['screen'],
       bottomNavigationBar: ConvexAppBar.badge(
