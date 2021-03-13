@@ -1,3 +1,4 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -6,12 +7,16 @@ class AppScaffold extends StatelessWidget {
   final AppBar appBar;
   final EdgeInsetsGeometry bodyPadding;
   final String bgImage;
+  final bool automaticallyImplyLeading;
+  final ConvexAppBar bottomNavigationBar;
 
   const AppScaffold({
     this.body,
     this.appBar,
     this.bodyPadding,
     this.bgImage,
+    this.automaticallyImplyLeading = true,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -40,6 +45,7 @@ class AppScaffold extends StatelessWidget {
           // resizeToAvoidBottomInset: false,
           appBar: appBar ??
               AppBar(
+                automaticallyImplyLeading: automaticallyImplyLeading,
                 title: Image.asset(
                   'assets/images/tiptop-logo-title.png',
                   width: 77.42,
@@ -67,6 +73,7 @@ class AppScaffold extends StatelessWidget {
               child: body,
             ),
           ),
+          bottomNavigationBar: bottomNavigationBar,
         ),
       ],
     );

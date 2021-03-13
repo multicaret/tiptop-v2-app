@@ -9,6 +9,12 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 
 import 'http_exception.dart';
 
+Future<bool> getLocationPermissionStatus() async {
+  PermissionStatus locationPermission = await Permission.location.status;
+
+  return locationPermission.isGranted;
+}
+
 Future<bool> handleLocationPermission() async {
   PermissionStatus locationPermission = await Permission.location.status;
 
