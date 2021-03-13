@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -26,6 +27,7 @@ class WalkthroughPage extends StatelessWidget {
                   onTap: () {
                     //Todo: If user location is selected, Navigate to Home Page.
                     // If not, navigate to location permission page
+                    Navigator.of(context).pushNamed(LocationPermissionPage.routeName);
                   },
                   child: Text(
                     Translations.of(context).get('Continue Without Login'),

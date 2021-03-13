@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: SplashScreen(),
+          home: LanguageSelectPage(),
           routes: routes,
         ),
       ),

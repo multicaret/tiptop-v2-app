@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'local_storage.dart';
 
 class AppProvider with ChangeNotifier {
+
+  static const String GOOGLE_API_KEY = '';
+  //  Location
+  /*Todo: set these coordinates to be a proper place*/
+  static double latitude = 41.017827;
+  static double longitude = 28.971372;
+
   LocalStorage storageActions = LocalStorage.getActions();
 
   // Locale
