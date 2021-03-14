@@ -70,7 +70,8 @@ class AddressSelectButton extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 0,
+            left: appDir == 'ltr' ? 0 : null,
+            right: appDir == 'ltr' ? null : 0,
             child: InkWell(
               onTap: () {
                 //Todo: Open Addresses modal/bottom sheet
@@ -90,7 +91,7 @@ class AddressSelectButton extends StatelessWidget {
                 child: isLoadingHomeData
                     ? Container(
                         child: Text(
-                          'Select Address',
+                          Translations.of(context).get('Select Address'),
                           style: AppTextStyles.bodyBold,
                         ),
                         alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
