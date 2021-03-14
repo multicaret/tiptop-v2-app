@@ -6,7 +6,7 @@ class ChannelsButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+      padding: EdgeInsets.only(right: 17, left: 17, top: 10),
       child: Row(
         children: [
           Expanded(

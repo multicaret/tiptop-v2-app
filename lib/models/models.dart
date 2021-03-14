@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class EnumValues<T> {
   Map<String, T> map;
   Map<T, String> reverseMap;

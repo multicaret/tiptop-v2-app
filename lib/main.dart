@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
                 minimumSize: Size.fromHeight(55),
                 textStyle: AppTextStyles.button,
                 elevation: 4,
-                shadowColor: AppColors.primary50,
+                shadowColor: AppColors.shadowDark,
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(8.0),
                 ),
