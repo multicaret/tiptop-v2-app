@@ -10,6 +10,7 @@ class AddressSelectButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
+    String appDir = appProvider.dir;
 
     return Container(
       decoration: BoxDecoration(
@@ -27,8 +28,8 @@ class AddressSelectButton extends StatelessWidget {
               },
               child: Container(
                 padding: EdgeInsets.only(
-                  left: appProvider.dir == 'ltr' ? 17 : 0,
-                  right: appProvider.dir == 'ltr' ? 0 : 17,
+                  left: appDir == 'ltr' ? 17 : 0,
+                  right: appDir == 'ltr' ? 0 : 17,
                   top: 10,
                   bottom: 10,
                 ),
@@ -36,24 +37,31 @@ class AddressSelectButton extends StatelessWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.only(
-                        right: appProvider.dir == 'ltr' ? 10 : 0,
-                        left: appProvider.dir == 'ltr' ? 0 : 10,
+                        right: appDir == 'ltr' ? 10 : 0,
+                        left: appDir == 'ltr' ? 0 : 10,
                       ),
                       margin: EdgeInsets.only(
-                        right: appProvider.dir == 'ltr' ? 10 : 0,
-                        left: appProvider.dir == 'ltr' ? 0 : 10,
+                        right: appDir == 'ltr' ? 10 : 0,
+                        left: appDir == 'ltr' ? 0 : 10,
                       ),
                       child: Image(
                         image: AssetImage('assets/images/address-home-icon.png'),
                         width: 37,
                       ),
                       decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            width: 1,
-                            color: AppColors.border,
-                          ),
-                        ),
+                        border: appDir == 'ltr'
+                            ? Border(
+                                right: BorderSide(
+                                  width: 1,
+                                  color: AppColors.border,
+                                ),
+                              )
+                            : Border(
+                                left: BorderSide(
+                                  width: 1,
+                                  color: AppColors.border,
+                                )
+                              ),
                       ),
                     ),
                     Expanded(
@@ -88,7 +96,7 @@ class AddressSelectButton extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: AppIcon.icon(FontAwesomeIcons.angleRight),
+                      child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
                     ),
                   ],
                 ),
@@ -99,8 +107,8 @@ class AddressSelectButton extends StatelessWidget {
             flex: 2,
             child: Container(
               padding: EdgeInsets.only(
-                right: appProvider.dir == 'ltr' ? 17 : 0,
-                left: appProvider.dir == 'ltr' ? 0 : 17,
+                right: appDir == 'ltr' ? 17 : 0,
+                left: appDir == 'ltr' ? 0 : 17,
                 top: 10,
                 bottom: 10,
               ),
