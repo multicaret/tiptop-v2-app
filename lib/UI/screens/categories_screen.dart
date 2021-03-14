@@ -14,11 +14,19 @@ class CategoriesScreen extends StatelessWidget {
     return Column(
       children: [
         AddressSelectButton(),
-        AppCarousel(
-          images: _carouselImages,
-          autoplayDuration: Duration(milliseconds: 3000),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AppCarousel(
+                  images: _carouselImages,
+                  autoplayDuration: Duration(milliseconds: 3000),
+                ),
+                ChannelsButtons(),
+              ],
+            ),
+          ),
         ),
-        ChannelsButtons(),
       ],
     );
   }

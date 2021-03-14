@@ -24,7 +24,7 @@ class ChannelsButtons extends StatelessWidget {
                       image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 3),
                   Text(Translations.of(context).get('Food')),
                 ],
               ),
