@@ -34,5 +34,8 @@
   "Use my location services": "استخدم خدمات موقعي الجغرافي",
   "I don’t want to use my location services": "لا أود استخدام خدمات موقعي الجفرافي",
   "Address": "العنوان",
-  "ETA": "مدة التوصيل"
+  "ETA": "مدة التوصيل",
+  "Go to Settings": "اذهب الى الإعدادات",
+  "Location Permission": "طلب اذن استخدام الموقع الجغرافي",
+  "Location services must be turned on in order to use the app": "يجب تفعيل خدمات الموقع الجغرافي لاستخدام هذا التطبيق"
 }

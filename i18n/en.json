@@ -34,5 +34,8 @@
   "Use my location services": "Use my location services",
   "I don’t want to use my location services": "I don’t want to use my location services",
   "Address": "Address",
-  "ETA": "ETA"
+  "ETA": "ETA",
+  "Go to Settings": "Go to Settings",
+  "Location Permission": "Location Permission",
+  "Location services must be turned on in order to use the app": "Location services must be turned on in order to use the app"
 }

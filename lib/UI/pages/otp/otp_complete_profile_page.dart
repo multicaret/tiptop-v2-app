@@ -3,7 +3,10 @@ import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import '../home_page.dart';
 
 class OTPCompleteProfile extends StatelessWidget {
   static const routeName = '/otp-complete-profile';
@@ -53,7 +56,9 @@ class OTPCompleteProfile extends StatelessWidget {
             ElevatedButton(
               child: Text(Translations.of(context).get('Save')),
               onPressed: () {
-                Navigator.of(context).pushNamed(LocationPermissionPage.routeName);
+                getLocationPermissionStatus().then((isGranted) {
+                  Navigator.of(context).pushReplacementNamed(isGranted ? HomePage.routeName : LocationPermissionPage.routeName);
+                });
               },
             ),
             SizedBox(height: 20),
