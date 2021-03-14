@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'local_storage.dart';
 
@@ -64,5 +67,64 @@ class AppProvider with ChangeNotifier {
     await storageActions.save(key: 'language_code', data: localeString);
     localeSelected = true;
     notifyListeners();
+  }
+
+  static const DOMAIN = 'https://titan.trytiptop.app/';
+  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
+
+  String token;
+
+  Map<String, String> get authHeader {
+    var myHeader = headers;
+    myHeader.addAll({"Authorization": "Bearer " + token});
+    return myHeader;
+  }
+
+  Future<String> endpointRoot() async {
+    var locale = await this.fetchLocale();
+    return DOMAIN + locale.toString() + '/api/v1/';
+  }
+
+  Future<dynamic> get({
+    @required String endpoint,
+    Map<String, String> body,
+    bool withToken = false,
+  }) async {
+    try {
+      final root = await this.endpointRoot();
+      print("root");
+      print(root);
+      Uri uri = Uri.parse(root + endpoint);
+      uri = uri.replace(queryParameters: body);
+      print("uri");
+      print(uri);
+      final response = await http.get(uri, headers: withToken ? authHeader : headers);
+
+      final responseData = json.decode(response.body);
+      return responseData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<dynamic> post({
+    @required String endpoint,
+    Map<String, String> params,
+    Map<String, dynamic> body,
+    bool withToken = false,
+  }) async {
+    try {
+      final root = await this.endpointRoot();
+      Uri uri = Uri.parse(root + endpoint);
+      uri = uri.replace(queryParameters: params);
+      print("uri");
+      print(uri);
+      http.Response response = await http.post(uri, body: json.encode(body), headers: withToken ? authHeader : headers);
+      final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
+
+      return responseData;
+    } catch (error) {
+      throw error;
+    }
   }
 }
