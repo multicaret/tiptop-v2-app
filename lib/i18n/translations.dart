@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 
 class Translations {
   final Locale locale;
@@ -48,7 +49,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<Translations> {
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    return ['en', 'ar'].contains(locale.languageCode);
+    return AppProvider().appLanguages.map((language) => language['locale']).toList().contains(locale.languageCode);
   }
 
   @override

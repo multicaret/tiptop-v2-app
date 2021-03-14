@@ -17,16 +17,19 @@ class AppProvider with ChangeNotifier {
     {
       'title': 'English',
       'locale': 'en',
+      'country_code': 'US',
       'flag': 'assets/images/en-flag.png',
     },
     {
       'title': 'العربية',
       'locale': 'ar',
+      'country_code': '',
       'flag': 'assets/images/ar-flag.png',
     },
     {
       'title': 'كوردي',
-      'locale': 'ku',
+      'locale': 'fa',
+      'country_code': '',
       'flag': 'assets/images/ku-flag.png',
     },
   ];

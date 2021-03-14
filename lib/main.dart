@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
-import 'package:tiptop_v2/UI/screens/splash_screen.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -36,11 +35,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           locale: app.appLocal,
-          supportedLocales: [
-            const Locale('en', 'US'),
-            const Locale('ar', ''),
-            const Locale('ku', ''),
-          ],
+          supportedLocales: app.appLanguages.map((language) => Locale(language['locale'], language['country_code'])).toList(),
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: AppColors.primary,
