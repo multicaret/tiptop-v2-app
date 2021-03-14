@@ -27,11 +27,27 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle h3White = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle body = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
     fontSize: 16,
     fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle bodyWhiteBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
@@ -103,6 +119,15 @@ class AppTextStyles {
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
     fontSize: 14,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+  );
+
+
+  static const TextStyle subtitleXsWhiteBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 12,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
