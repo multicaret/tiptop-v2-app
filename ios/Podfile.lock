@@ -1,5 +1,8 @@
 PODS:
   - Flutter (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - google_maps_flutter (0.0.1):
     - Flutter
     - GoogleMaps (< 3.10)
@@ -10,10 +13,15 @@ PODS:
     - GoogleMaps/Base
   - location (0.0.1):
     - Flutter
+  - path_provider (0.0.1):
+    - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -27,8 +35,10 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - location (from `.symlinks/plugins/location/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -36,6 +46,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - FMDB
     - GoogleMaps
 
 EXTERNAL SOURCES:
@@ -45,10 +56,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   video_player:
@@ -60,11 +75,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_maps_flutter: c7f9c73576de1fbe152a227bfd6e6c4ae8088619
   GoogleMaps: 4b5346bddfe6911bb89155d43c903020170523ac
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
