@@ -43,6 +43,8 @@ dependencies:
   location: ^4.1.1
   google_maps_flutter: ^2.0.1
   convex_bottom_bar: ^2.7.1+2
+  carousel_pro: ^1.0.0
+  cached_network_image: ^2.5.1
 
 dev_dependencies:
   flutter_test:
