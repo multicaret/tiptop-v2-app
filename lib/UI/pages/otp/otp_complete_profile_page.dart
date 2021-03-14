@@ -6,7 +6,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import '../home_page.dart';
+import '../main_page.dart';
 
 class OTPCompleteProfile extends StatelessWidget {
   static const routeName = '/otp-complete-profile';
@@ -57,7 +57,7 @@ class OTPCompleteProfile extends StatelessWidget {
               child: Text(Translations.of(context).get('Save')),
               onPressed: () {
                 getLocationPermissionStatus().then((isGranted) {
-                  Navigator.of(context).pushReplacementNamed(isGranted ? HomePage.routeName : LocationPermissionPage.routeName);
+                  Navigator.of(context).pushReplacementNamed(isGranted ? MainPage.routeName : LocationPermissionPage.routeName);
                 });
               },
             ),

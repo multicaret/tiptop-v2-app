@@ -1,24 +1,24 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/screens/categories_screen.dart';
+import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class HomePage extends StatefulWidget {
+class MainPage extends StatefulWidget {
   static const routeName = '/home-page';
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MainPageState extends State<MainPage> {
   int currentTabIndex = 0;
 
   static List<Map<String, dynamic>> tabsList = [
     {
       'title': 'Categories',
-      'screen': CategoriesScreen(),
+      'screen': HomeScreen(),
       'icon': Icons.category,
     },
     {

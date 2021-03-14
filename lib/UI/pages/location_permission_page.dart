@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tiptop_v2/UI/pages/home_page.dart';
+import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/location_permission_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -31,7 +31,7 @@ class LocationPermissionPage extends StatelessWidget {
                 handleLocationPermission().then((isGranted) {
                   print('Location granted: $isGranted');
                   if (isGranted) {
-                    Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                    Navigator.of(context).pushReplacementNamed(MainPage.routeName);
                   } else {
                     // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
                     openAppSettings();

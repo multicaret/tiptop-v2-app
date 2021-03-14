@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/home_page.dart';
+import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
@@ -28,7 +28,7 @@ class WalkthroughPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     getLocationPermissionStatus().then((isGranted) {
-                      Navigator.of(context).pushReplacementNamed(isGranted ? HomePage.routeName : LocationPermissionPage.routeName);
+                      Navigator.of(context).pushReplacementNamed(isGranted ? MainPage.routeName : LocationPermissionPage.routeName);
                     });
                   },
                   child: Text(

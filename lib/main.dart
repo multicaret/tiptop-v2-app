@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
+import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: AppProvider(),
         ),
-        // ...providers,
+        ...providers,
       ],
       child: Consumer<AppProvider>(
         builder: (c, app, _) => MaterialApp(
