@@ -12,8 +12,11 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<MainPage> {
   int currentTabIndex = 0;
+
+  @override
+  bool get wantKeepAlive => true;
 
   static List<Map<String, dynamic>> tabsList = [
     {
@@ -53,9 +56,16 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return AppScaffold(
       bodyPadding: EdgeInsets.all(0),
       automaticallyImplyLeading: false,
+/*      body: DefaultTabController(
+        length: tabsList.length,
+        child: TabBarView(
+          children: [...tabsList.map((tab) => tab['screen'])],
+        ),
+      ),*/
       body: tabsList[currentTabIndex]['screen'],
       bottomNavigationBar: ConvexAppBar.badge(
         {
