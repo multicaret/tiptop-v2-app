@@ -1,8 +1,8 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,36 +20,42 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
 
   static List<Map<String, dynamic>> tabsList = [
     {
-      'title': 'Categories',
+      'title': 'Home',
       'screen': HomeScreen(),
-      'icon': Icons.category,
+      'icon': LineAwesomeIcons.home,
     },
     {
       'title': 'Offers',
       'screen': Center(child: Text('Tab 2')),
-      'icon': Icons.list,
+      'icon': LineAwesomeIcons.search,
     },
     {
       'title': 'Appointments',
       'screen': Center(child: Text('Cart')),
-      'icon': Icons.shopping_cart,
+      'icon': LineAwesomeIcons.shopping_cart,
     },
     {
       'title': 'Profile',
       'screen': Center(child: Text('Tab 4')),
-      'icon': Icons.person,
+      'icon': LineAwesomeIcons.headset,
     },
     {
       'title': 'Profile',
       'screen': Center(child: Text('Tab 5')),
-      'icon': Icons.settings,
+      'icon': LineAwesomeIcons.user_cog,
     },
   ];
 
   List<TabItem> _getTabItems() {
     return List.generate(tabsList.length, (i) {
       return TabItem(
-        icon: tabsList[i]['icon'],
+        icon: i == 2
+            ? Icon(
+                tabsList[i]['icon'],
+                color: AppColors.secondaryDark,
+                size: 40,
+              )
+            : tabsList[i]['icon'],
       );
     });
   }
@@ -70,12 +76,12 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
       bottomNavigationBar: ConvexAppBar.badge(
         {
           //Cart badge
-          2: CartItemsCountBadge(),
+          // 2: CartItemsCountBadge(),
         },
         backgroundColor: AppColors.primary,
         style: TabStyle.fixedCircle,
+        color: Colors.white30,
         items: _getTabItems(),
-        initialActiveIndex: 1,
         onTap: (int i) {
           setState(() {
             currentTabIndex = i;
