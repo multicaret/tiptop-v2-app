@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/screens/products_screen.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -33,10 +34,10 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
         icon: i == 0
             ? GestureDetector(
                 onTap: () {
-                  homeProvider.selectCategory(null);
                   setState(() {
                     currentTabIndex = i;
                   });
+                  homeProvider.selectCategory(null);
                 },
                 child: Icon(
                   tabsList[i]['icon'],
@@ -105,7 +106,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
         bottomNavigationBar: ConvexAppBar.badge(
           {
             //Cart badge
-            // 2: CartItemsCountBadge(),
+            2: CartItemsCountBadge(),
           },
           backgroundColor: AppColors.primary,
           style: TabStyle.fixedCircle,
