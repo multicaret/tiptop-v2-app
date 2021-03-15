@@ -90,6 +90,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
     super.build(context);
     return Consumer<HomeProvider>(
       builder: (c, homeProvider, _) => AppScaffold(
+        hasCurve: !homeProvider.categorySelected,
         appBar: currentTabIndex == 0 && homeProvider.categorySelected
             ? AppBar(
                 automaticallyImplyLeading: false,

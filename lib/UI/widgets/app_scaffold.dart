@@ -9,6 +9,7 @@ class AppScaffold extends StatelessWidget {
   final String bgImage;
   final bool automaticallyImplyLeading;
   final ConvexAppBar bottomNavigationBar;
+  final bool hasCurve;
 
   const AppScaffold({
     this.body,
@@ -17,6 +18,7 @@ class AppScaffold extends StatelessWidget {
     this.bgImage,
     this.automaticallyImplyLeading = true,
     this.bottomNavigationBar,
+    this.hasCurve = true,
   });
 
   @override
@@ -54,8 +56,8 @@ class AppScaffold extends StatelessWidget {
               ),
           body: ClipRRect(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+              topLeft: Radius.circular(hasCurve ? 40 : 0),
+              topRight: Radius.circular(hasCurve ? 40 : 0),
             ),
             child: Container(
               width: screenSize.width,
