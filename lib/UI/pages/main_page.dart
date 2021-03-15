@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
   bool get wantKeepAlive => true;
 
   List<TabItem> _getTabItems(HomeProvider homeProvider) {
-    List<Map<String, dynamic>> tabsList = _getTabsList(homeProvider.categorySelected);
+    List<Map<String, dynamic>> tabsList = _getTabsList(homeProvider);
 
     return List.generate(tabsList.length, (i) {
       return TabItem(
@@ -57,11 +57,15 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
     });
   }
 
-  List<Map<String, dynamic>> _getTabsList(bool categorySelected) {
+  List<Map<String, dynamic>> _getTabsList(HomeProvider homeProvider) {
     return [
       {
         'title': 'Home',
-        'screen': categorySelected ? ProductsScreen() : HomeScreen(),
+        'screen': homeProvider.categorySelected
+            ? ProductsScreen(
+                parents: homeProvider.categories,
+              )
+            : HomeScreen(),
         'icon': LineAwesomeIcons.home,
       },
       {
@@ -105,7 +109,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
             : null,
         bodyPadding: EdgeInsets.all(0),
         automaticallyImplyLeading: false,
-        body: _getTabsList(homeProvider.categorySelected)[currentTabIndex]['screen'],
+        body: _getTabsList(homeProvider)[currentTabIndex]['screen'],
         bottomNavigationBar: ConvexAppBar.badge(
           {
             //Cart badge
