@@ -29,23 +29,18 @@ class HomeProvider with ChangeNotifier {
       'selected_address_id': '1',
     };
 
-    try {
-      final responseData = await AppProvider().get(
-        endpoint: endpoint,
-        body: body,
-      );
+    final responseData = await AppProvider().get(
+      endpoint: endpoint,
+      body: body,
+    );
 
-      homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
+    homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
 
-      if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
-        throw HttpException(title: 'Error', message: homeDataResponse.message);
-      }
-
-      homeData = homeDataResponse.homeData;
-      categories = homeData.categories;
-
-    } catch (error) {
-      throw error;
+    if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
+      throw HttpException(title: 'Error', message: homeDataResponse.message);
     }
+
+    homeData = homeDataResponse.homeData;
+    categories = homeData.categories;
   }
 }
