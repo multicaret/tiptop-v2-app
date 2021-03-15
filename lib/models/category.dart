@@ -10,7 +10,7 @@ class Category {
     this.hasChildren,
     this.cover,
     this.thumbnail,
-    this.subCategories,
+    this.childCategories,
     this.products,
   });
 
@@ -21,7 +21,7 @@ class Category {
   bool hasChildren;
   String cover;
   dynamic thumbnail;
-  List<Category> subCategories;
+  List<Category> childCategories;
   List<Product> products;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
@@ -32,7 +32,7 @@ class Category {
     hasChildren: json["hasChildren"],
     cover: json["cover"],
     thumbnail: json["thumbnail"],
-    subCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
+    childCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
     products: json["products"] == null ? null : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
   );
 }

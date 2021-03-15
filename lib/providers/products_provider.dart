@@ -9,8 +9,9 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 class ProductsProvider with ChangeNotifier {
   ProductsDataResponse productsDataResponse;
   ParentsData parentsData;
+  Category selectedParent;
   List<Category> parents = [];
-  List<Category> selectedParentSubCategories = [];
+  List<Category> selectedParentChildCategories = [];
 
   Future<void> fetchAndSetParentsAndProducts(int selectedCategoryId) async {
     final endpoint = 'categories/$selectedCategoryId/products';
@@ -24,6 +25,7 @@ class ProductsProvider with ChangeNotifier {
 
     parentsData = productsDataResponse.parentsData;
     parents = parentsData.parents;
-    selectedParentSubCategories = parentsData.selectedParent.subCategories;
+    selectedParent = parentsData.selectedParent;
+    selectedParentChildCategories = selectedParent.childCategories;
   }
 }

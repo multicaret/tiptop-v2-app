@@ -22,6 +22,7 @@ class HomeProvider with ChangeNotifier {
     selectedCategoryId = categoryId;
     categorySelected = categoryId != null;
     await storageActions.save(key: 'selected_category_id', data: selectedCategoryId);
+    print('selected category saved in provider $categoryId');
     notifyListeners();
   }
 
