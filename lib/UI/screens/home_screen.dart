@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -47,6 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoadingHomeData = false;
     });
+  }
+
+  void selectCategory(int categoryId) {
+    homeProvider.selectCategory(categoryId);
+    print('category selected ${homeProvider.selectedCategoryId}');
   }
 
   @override
@@ -100,9 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisSpacing: 15,
                           mainAxisSpacing: 16,
                           children: categories
-                              .map((category) => CategoryItem(
-                                    title: category.title,
-                                    imageUrl: category.cover,
+                              .map((category) => GestureDetector(
+                                    onTap: () => selectCategory(category.id),
+                                    child: CategoryItem(
+                                      title: category.title,
+                                      imageUrl: category.cover,
+                                    ),
                                   ))
                               .toList(),
                         )

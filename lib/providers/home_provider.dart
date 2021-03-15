@@ -11,6 +11,15 @@ class HomeProvider with ChangeNotifier {
   HomeData homeData;
   List<Category> categories;
 
+  bool categorySelected = false;
+  int selectedCategoryId;
+
+  void selectCategory(int categoryId) async {
+    selectedCategoryId = categoryId;
+    categorySelected = categoryId != null;
+    notifyListeners();
+  }
+
   Future<void> fetchAndSetHomeData() async {
     final endpoint = 'home';
     final body = {
