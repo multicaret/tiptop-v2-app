@@ -14,7 +14,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class MainPage extends StatefulWidget {
-  static const routeName = '/home-page';
+  static const routeName = '/main-page';
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -44,13 +44,15 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                   color: currentTabIndex == 0 ? Colors.white : Colors.white30,
                 ),
               )
-            : i == 2
-                ? Icon(
-                    tabsList[i]['icon'],
-                    color: AppColors.secondaryDark,
-                    size: 40,
-                  )
-                : tabsList[i]['icon'],
+            : Icon(
+                tabsList[i]['icon'],
+                color: i == 2
+                    ? AppColors.secondaryDark
+                    : currentTabIndex == i
+                        ? Colors.white
+                        : Colors.white30,
+                size: i == 2 ? 40 : 25,
+              ),
       );
     });
   }
