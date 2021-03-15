@@ -6,6 +6,8 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
+import 'local_storage.dart';
+
 class HomeProvider with ChangeNotifier {
   HomeDataResponse homeDataResponse;
   HomeData homeData;
@@ -14,9 +16,12 @@ class HomeProvider with ChangeNotifier {
   bool categorySelected = false;
   int selectedCategoryId;
 
-  void selectCategory(int categoryId) async {
+  LocalStorage storageActions = LocalStorage.getActions();
+
+  Future<void> selectCategory(int categoryId) async {
     selectedCategoryId = categoryId;
     categorySelected = categoryId != null;
+    await storageActions.save(key: 'selected_category_id', data: selectedCategoryId);
     notifyListeners();
   }
 

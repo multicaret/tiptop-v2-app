@@ -49,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void selectCategory(int categoryId) {
-    homeProvider.selectCategory(categoryId);
+  Future<void> selectCategory(int categoryId) async {
+    await homeProvider.selectCategory(categoryId);
     print('category selected ${homeProvider.selectedCategoryId}');
   }
 
