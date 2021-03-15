@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/screens/products_screen.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -91,7 +92,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
         appBar: currentTabIndex == 0 && homeProvider.categorySelected
             ? AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('Products'),
+                title: Text(Translations.of(context).get('Products')),
                 leading: IconButton(
                   onPressed: () => homeProvider.selectCategory(null),
                   icon: Icon(Platform.isAndroid ? Icons.arrow_back : CupertinoIcons.back),
