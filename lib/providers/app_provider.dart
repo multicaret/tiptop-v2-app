@@ -48,7 +48,7 @@ class AppProvider with ChangeNotifier {
     _appLocale = value;
   }
 
-  String get dir => _appLocale == Locale('ar') ? 'rtl' : 'ltr';
+  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
 
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
@@ -82,7 +82,8 @@ class AppProvider with ChangeNotifier {
 
   Future<String> endpointRoot() async {
     var locale = await this.fetchLocale();
-    return DOMAIN + locale.toString() + '/api/v1/';
+    String localeCode = locale.toString() == 'fa' ? 'ku' : locale.toString();
+    return DOMAIN + localeCode + '/api/v1/';
   }
 
   Future<dynamic> get({
