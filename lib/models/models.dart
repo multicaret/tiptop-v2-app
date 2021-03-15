@@ -94,4 +94,26 @@ class EdAt {
   };
 }
 
+class Media {
+  Media({
+    this.logo,
+    this.cover,
+    this.gallery,
+  });
 
+  String logo;
+  dynamic cover;
+  List<dynamic> gallery;
+
+  factory Media.fromJson(Map<String, dynamic> json) => Media(
+    logo: json["logo"],
+    cover: json["cover"],
+    gallery: List<dynamic>.from(json["gallery"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "logo": logo,
+    "cover": cover,
+    "gallery": List<dynamic>.from(gallery.map((x) => x)),
+  };
+}

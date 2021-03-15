@@ -2,15 +2,9 @@ import 'dart:convert';
 
 import 'package:tiptop_v2/models/models.dart';
 
-import 'package:tiptop_v2/models/models.dart';
-
-import 'package:tiptop_v2/models/models.dart';
-
 import 'category.dart';
 
 HomeDataResponse homeDataResponseFromJson(String str) => HomeDataResponse.fromJson(json.decode(str));
-
-String homeDataResponseToJson(HomeDataResponse data) => json.encode(data.toJson());
 
 class HomeDataResponse {
   HomeDataResponse({
@@ -31,13 +25,6 @@ class HomeDataResponse {
     message: json["message"],
     status: json["status"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "data": homeData.toJson(),
-    "errors": errors,
-    "message": message,
-    "status": status,
-  };
 }
 
 class HomeData {
@@ -68,16 +55,6 @@ class HomeData {
     hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
     categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
   );
-
-  Map<String, dynamic> toJson() => {
-    "addresses": List<dynamic>.from(addresses.map((x) => x)),
-    "slides": List<dynamic>.from(slides.map((x) => x)),
-    "estimated_arrival_time": estimatedArrivalTime.toJson(),
-    "branch": branch.toJson(),
-    "distance": distance,
-    "hasAvailableBranchesNow": hasAvailableBranchesNow,
-    "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
-  };
 }
 
 class EstimatedArrivalTime {
@@ -213,30 +190,5 @@ class Chain {
     "secondaryColor": secondaryColor,
     "numberOfItemsOnMobileGridView": numberOfItemsOnMobileGridView,
     "media": media.toJson(),
-  };
-}
-
-class Media {
-  Media({
-    this.logo,
-    // this.cover,
-    this.gallery,
-  });
-
-  String logo;
-  //Todo: uncomment when filled
-  // String cover;
-  List<dynamic> gallery;
-
-  factory Media.fromJson(Map<String, dynamic> json) => Media(
-    logo: json["logo"],
-    // cover: json["cover"],
-    gallery: List<dynamic>.from(json["gallery"].map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "logo": logo,
-    // "cover": cover,
-    "gallery": List<dynamic>.from(gallery.map((x) => x)),
   };
 }

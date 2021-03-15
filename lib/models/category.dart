@@ -1,4 +1,5 @@
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/product.dart';
 
 class Category {
   Category({
@@ -9,6 +10,8 @@ class Category {
     this.hasChildren,
     this.cover,
     this.thumbnail,
+    this.subCategories,
+    this.products,
   });
 
   int id;
@@ -18,6 +21,8 @@ class Category {
   bool hasChildren;
   String cover;
   dynamic thumbnail;
+  List<Category> subCategories;
+  List<Product> products;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
@@ -27,15 +32,7 @@ class Category {
     hasChildren: json["hasChildren"],
     cover: json["cover"],
     thumbnail: json["thumbnail"],
+    subCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
+    products: json["products"] == null ? null : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
   );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "icon": icon,
-    "title": title,
-    "description": description.toJson(),
-    "hasChildren": hasChildren,
-    "cover": cover,
-    "thumbnail": thumbnail,
-  };
 }
