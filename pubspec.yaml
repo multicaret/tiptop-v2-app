@@ -49,6 +49,7 @@ dependencies:
   line_awesome_flutter: ^1.0.0
   scrollable_positioned_list: ^0.1.10
   scroll_to_index: ^2.0.0
+  visibility_detector: ^0.1.5
 
 dev_dependencies:
   flutter_test:
