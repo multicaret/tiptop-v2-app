@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/models/category.dart';
-import 'package:tiptop_v2/models/product.dart';
-import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import 'child_categories_tabs.dart';
 import 'child_category_products.dart';
@@ -27,6 +23,8 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   AutoScrollController productsScrollController;
   final productsScrollDirection = Axis.horizontal;
 
+  bool scrollIsAtTheTop = true;
+
   @override
   void initState() {
     childCategoriesScrollController = AutoScrollController(
@@ -38,7 +36,16 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
       axis: childCategoriesScrollDirection,
     )..addListener(() {
-        // print("offset = ${productsScrollController.offset}");
+        if (productsScrollController.offset == 0) {
+          setState(() {
+            scrollIsAtTheTop = true;
+          });
+          scrollSpy(0);
+        } else {
+          setState(() {
+            scrollIsAtTheTop = false;
+          });
+        }
       });
 
     selectedChildCategoryId = widget.children[0].id;
@@ -64,6 +71,13 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
     );
   }
 
+  void scrollSpy(int index) {
+    setState(() {
+      selectedChildCategoryId = widget.children[index].id;
+    });
+    scrollToCategory(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -86,13 +100,9 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
               (i) => ChildCategoryProducts(
                 index: i,
                 child: widget.children[i],
-                action: (index) {
-                  setState(() {
-                    selectedChildCategoryId = widget.children[index].id;
-                  });
-                  scrollToCategory(index);
-                },
+                scrollSpyAction: (index) => scrollSpy(index),
                 productsScrollController: productsScrollController,
+                scrollIsAtTheTop: scrollIsAtTheTop,
               ),
             ),
             controller: productsScrollController,
