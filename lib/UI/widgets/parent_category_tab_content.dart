@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -19,37 +19,37 @@ class ParentCategoryTabContent extends StatefulWidget {
 class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   int selectedChildCategoryId;
 
-  ItemScrollController childCategoryScrollController;
-  ItemPositionsListener childCategoryItemPositionsListener;
+  AutoScrollController childCategoriesScrollController;
+  final childCategoriesScrollDirection = Axis.horizontal;
 
-  ItemScrollController productsScrollController;
-  ItemPositionsListener productsPositionsListener;
+  AutoScrollController productsScrollController;
+  final productsScrollDirection = Axis.horizontal;
 
   @override
   void initState() {
-    childCategoryScrollController = ItemScrollController();
-    childCategoryItemPositionsListener = ItemPositionsListener.create();
+    childCategoriesScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: childCategoriesScrollDirection,
+    );
 
-    productsScrollController = ItemScrollController();
-    productsPositionsListener = ItemPositionsListener.create();
+    productsScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: childCategoriesScrollDirection,
+    );
 
     selectedChildCategoryId = widget.children[0].id;
     super.initState();
   }
 
   void scrollTo(int index) {
-    childCategoryScrollController.scrollTo(
-      index: index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOutCubic,
-      alignment: 0.05,
+    childCategoriesScrollController.scrollToIndex(
+      index,
+      preferPosition: AutoScrollPosition.begin,
     );
 
-    productsScrollController.scrollTo(
-      index: index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOutCubic,
-      alignment: 1,
+    productsScrollController.scrollToIndex(
+      index,
+      preferPosition: AutoScrollPosition.begin,
     );
   }
 
@@ -59,8 +59,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       children: [
         ChildCategoriesTabs(
           children: widget.children,
-          itemScrollController: childCategoryScrollController,
-          itemPositionsListener: childCategoryItemPositionsListener,
+          itemScrollController: childCategoriesScrollController,
           selectedChildCategoryId: selectedChildCategoryId,
           action: (i) {
             setState(() {
@@ -70,16 +69,15 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           },
         ),
         Expanded(
-          child: ScrollablePositionedList.builder(
-            itemCount: widget.children.length,
-            itemBuilder: (context, i) {
-              return childCategoryProducts(
+          child: ListView(
+            children: List.generate(
+              widget.children.length,
+              (i) => childCategoryProducts(
                 index: i,
                 child: widget.children[i],
-              );
-            },
-            itemScrollController: productsScrollController,
-            itemPositionsListener: productsPositionsListener,
+              ),
+            ),
+            controller: productsScrollController,
           ),
         )
       ],
@@ -101,20 +99,25 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
               style: AppTextStyles.body50,
             ),
           ),
-        GridView.count(
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          crossAxisCount: 3,
-          children: <Widget>[
-            ...products.map((product) => Container(
-                  height: 200,
-                  color: AppColors.secondaryDark,
-                  child: Center(child: Text(product.title)),
-                ))
-          ],
+        AutoScrollTag(
+          controller: productsScrollController,
+          index: index,
+          key: ValueKey(index),
+          child: GridView.count(
+            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 3,
+            children: <Widget>[
+              ...products.map((product) => Container(
+                    height: 200,
+                    color: AppColors.secondaryDark,
+                    child: Center(child: Text(product.title)),
+                  ))
+            ],
+          ),
         ),
       ],
     );
