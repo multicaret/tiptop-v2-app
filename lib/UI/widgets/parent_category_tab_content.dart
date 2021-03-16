@@ -7,6 +7,7 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'child_categories_tabs.dart';
+import 'child_category_products.dart';
 
 class ParentCategoryTabContent extends StatefulWidget {
   final List<Category> children;
@@ -82,79 +83,22 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           child: ListView(
             children: List.generate(
               widget.children.length,
-              (i) => childCategoryProducts(
+              (i) => ChildCategoryProducts(
                 index: i,
                 child: widget.children[i],
-                context: context,
+                action: (index) {
+                  setState(() {
+                    selectedChildCategoryId = widget.children[index].id;
+                  });
+                  scrollToCategory(index);
+                },
+                productsScrollController: productsScrollController,
               ),
             ),
             controller: productsScrollController,
           ),
         )
       ],
-    );
-  }
-
-  int previousProductsVisibility = 0;
-  int currentProductsVisibility = 0;
-
-  List<int> visibilityPercentages = [];
-
-  Widget childCategoryProducts({Category child, int index, BuildContext context}) {
-    List<Product> products = child.products;
-    Size screenSize = MediaQuery.of(context).size;
-    double screenHeight = screenSize.height;
-    int productsAreaHeight = screenHeight.round() - 56 - 50 - 50 - 200;
-
-    return VisibilityDetector(
-      key: ValueKey(index),
-      onVisibilityChanged: (visibilityInfo) {
-        int visibilityPercentage = (visibilityInfo.visibleFraction * 100).round();
-        int _productsVisibleHeight = (visibilityInfo.size.height).round();
-        bool _largeCategoryInView = _productsVisibleHeight > productsAreaHeight - 10 && _productsVisibleHeight < productsAreaHeight + 10;
-        bool _smallCategoryInView = visibilityPercentage > 80 && visibilityPercentage <= 100;
-        if (_smallCategoryInView || _largeCategoryInView) {
-          setState(() {
-            selectedChildCategoryId = widget.children[index].id;
-          });
-          scrollToCategory(index);
-        }
-        // }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (index != 0)
-            Container(
-              padding: EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
-              color: AppColors.bg,
-              child: Text(
-                child.title,
-                style: AppTextStyles.body50,
-              ),
-            ),
-          AutoScrollTag(
-            controller: productsScrollController,
-            index: index,
-            key: ValueKey(index),
-            child: GridView.count(
-              padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 3,
-              children: <Widget>[
-                ...products.map((product) => Container(
-                      height: 200,
-                      color: AppColors.secondaryDark,
-                      child: Center(child: Text(product.title)),
-                    ))
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
