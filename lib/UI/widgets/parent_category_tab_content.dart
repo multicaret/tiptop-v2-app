@@ -17,22 +17,70 @@ class ParentCategoryTabContent extends StatefulWidget {
 }
 
 class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
+  int selectedChildCategoryId;
+
+  ItemScrollController childCategoryScrollController;
+  ItemPositionsListener childCategoryItemPositionsListener;
+
+  ItemScrollController productsScrollController;
+  ItemPositionsListener productsPositionsListener;
+
+  @override
+  void initState() {
+    childCategoryScrollController = ItemScrollController();
+    childCategoryItemPositionsListener = ItemPositionsListener.create();
+
+    productsScrollController = ItemScrollController();
+    productsPositionsListener = ItemPositionsListener.create();
+
+    selectedChildCategoryId = widget.children[0].id;
+    super.initState();
+  }
+
+  void scrollTo(int index) {
+    childCategoryScrollController.scrollTo(
+      index: index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+      alignment: 0.05,
+    );
+
+    productsScrollController.scrollTo(
+      index: index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+      alignment: 1,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ChildCategoriesTabs(
           children: widget.children,
+          itemScrollController: childCategoryScrollController,
+          itemPositionsListener: childCategoryItemPositionsListener,
+          selectedChildCategoryId: selectedChildCategoryId,
+          action: (i) {
+            setState(() {
+              selectedChildCategoryId = widget.children[i].id;
+            });
+            scrollTo(i);
+          },
         ),
         Expanded(
           child: ScrollablePositionedList.builder(
-              itemCount: widget.children.length,
-              itemBuilder: (context, i) {
-                return childCategoryProducts(
-                  index: i,
-                  child: widget.children[i],
-                );
-              }),
+            itemCount: widget.children.length,
+            itemBuilder: (context, i) {
+              return childCategoryProducts(
+                index: i,
+                child: widget.children[i],
+              );
+            },
+            itemScrollController: productsScrollController,
+            itemPositionsListener: productsPositionsListener,
+          ),
         )
       ],
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/language_select_page.dart';
+import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
+import 'UI/screens/scroll_test_page.dart';
 import 'i18n/translations.dart';
 
 void main() {
@@ -75,7 +76,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: LanguageSelectPage(),
+          home: MainPage(),
           routes: routes,
         ),
       ),

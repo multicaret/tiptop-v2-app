@@ -4,38 +4,22 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class ChildCategoriesTabs extends StatefulWidget {
+class ChildCategoriesTabs extends StatelessWidget {
   final List<Category> children;
+  final ItemScrollController itemScrollController;
+  final ItemPositionsListener itemPositionsListener;
+  final Function action;
+  final int selectedChildCategoryId;
 
-  ChildCategoriesTabs({@required this.children});
+  ChildCategoriesTabs({
+    @required this.children,
+    @required this.itemScrollController,
+    @required this.itemPositionsListener,
+    @required this.action,
+    @required this.selectedChildCategoryId,
+  });
 
-  @override
-  _ChildCategoriesTabsState createState() => _ChildCategoriesTabsState();
-}
-
-class _ChildCategoriesTabsState extends State<ChildCategoriesTabs> {
   static double childCategoriesTabsHeight = 50.0;
-  int _selectedChildCategoryId;
-
-  ItemScrollController itemScrollController;
-  ItemPositionsListener itemPositionsListener;
-
-  @override
-  void initState() {
-    itemScrollController = ItemScrollController();
-    itemPositionsListener = ItemPositionsListener.create();
-    _selectedChildCategoryId = widget.children[0].id;
-    super.initState();
-  }
-
-  void scrollTo(int index) {
-    itemScrollController.scrollTo(
-      index: index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOutCubic,
-      alignment: 0.05,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +36,7 @@ class _ChildCategoriesTabsState extends State<ChildCategoriesTabs> {
         ],
       ),
       child: ScrollablePositionedList.builder(
-        itemCount: widget.children.length,
+        itemCount: children.length,
         itemBuilder: (context, i) => childTab(i),
         itemScrollController: itemScrollController,
         itemPositionsListener: itemPositionsListener,
@@ -62,7 +46,29 @@ class _ChildCategoriesTabsState extends State<ChildCategoriesTabs> {
   }
 
   Widget childTab(int i) {
-    bool _isCurrentChildSelected = widget.children[i].id == _selectedChildCategoryId;
+    bool _isCurrentChildSelected = children[i].id == selectedChildCategoryId;
+
+    return InkWell(
+      onTap: () => action(i),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 5, horizontal: _isCurrentChildSelected ? 10 : 0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: _isCurrentChildSelected ? AppColors.primary : AppColors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          children[i].title,
+          style: _isCurrentChildSelected ? AppTextStyles.subtitleWhite : AppTextStyles.subtitle,
+        ),
+      ),
+    );
+  }
+
+/*
+  Widget childTab(int i) {
+    bool _isCurrentChildSelected = children[i].id == _selectedChildCategoryId;
 
     return InkWell(
       onTap: _isCurrentChildSelected
@@ -88,4 +94,5 @@ class _ChildCategoriesTabsState extends State<ChildCategoriesTabs> {
       ),
     );
   }
+*/
 }
