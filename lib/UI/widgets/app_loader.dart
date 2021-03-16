@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppLoader extends StatelessWidget {
@@ -20,7 +19,7 @@ class AppLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 100,
-      child: Lottie.asset('assets/images/lottie-loader/data.json'),
+      child: Image(image: AssetImage('assets/images/tiptop-loader.gif')),
     );
   }
 }
