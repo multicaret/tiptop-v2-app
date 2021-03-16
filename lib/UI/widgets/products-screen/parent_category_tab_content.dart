@@ -100,9 +100,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
               (i) => ChildCategoryProducts(
                 index: i,
                 child: widget.children[i],
-                scrollSpyAction: (index) => scrollSpy(index),
                 productsScrollController: productsScrollController,
-                scrollIsAtTheTop: scrollIsAtTheTop,
               ),
             ),
             controller: productsScrollController,
