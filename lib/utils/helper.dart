@@ -71,3 +71,12 @@ String formatTime(BuildContext context, dynamic dateTime) {
   String formattedTime = DateFormat('hh:mm a', appProvider.appLocal.languageCode).format(_dateTime);
   return formattedTime;
 }
+
+double screenGutter = 17;
+double gridGutter = 10;
+
+double getColItemHeight(int colCount, BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  return (screenWidth - (screenGutter * 2) - (gridGutter * (colCount - 1))) / colCount;
+}

@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       : GridView.count(
                           padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
                           shrinkWrap: true,
-                          childAspectRatio: 0.7,
+                          childAspectRatio: 0.78,
                           physics: NeverScrollableScrollPhysics(),
                           crossAxisCount: 4,
                           crossAxisSpacing: 15,
