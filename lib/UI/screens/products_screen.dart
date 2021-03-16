@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/child_categories_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/parent_categories_tabs.dart';
+import 'package:tiptop_v2/UI/widgets/parent_category_tab_content.dart';
 import 'package:tiptop_v2/models/category.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -50,28 +50,21 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
         Expanded(
           child: TabBarView(
             controller: tabController,
-            children: _getParentsTabBarContent(),
+            children: List.generate(widget.parents.length, (i) {
+              bool hasChildCategories = widget.parents[i].hasChildren && widget.parents[i].childCategories.length != 0;
+              List<Category> children = widget.parents[i].childCategories.where((child) => child.products.length > 0).toList();
+
+              return hasChildCategories
+                  ? ParentCategoryTabContent(
+                      children: children,
+                    )
+                  : Center(
+                      child: Text('No Sub Categories/Products'),
+                    );
+            }),
           ),
         ),
       ],
     );
-  }
-
-  List<Widget> _getParentsTabBarContent() {
-    return List.generate(widget.parents.length, (i) {
-      bool hasChildCategories = widget.parents[i].hasChildren && widget.parents[i].childCategories.length != 0;
-
-      return hasChildCategories
-          ? Column(
-              children: [
-                ChildCategoriesTabs(
-                  children: widget.parents[i].childCategories,
-                )
-              ],
-            )
-          : Center(
-              child: Text('No Sub Categories/Products'),
-            );
-    });
   }
 }

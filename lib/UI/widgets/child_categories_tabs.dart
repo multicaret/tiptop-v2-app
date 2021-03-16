@@ -54,7 +54,6 @@ class _ChildCategoriesTabsState extends State<ChildCategoriesTabs> {
       child: ScrollablePositionedList.builder(
         itemCount: widget.children.length,
         itemBuilder: (context, i) => childTab(i),
-        // initialScrollIndex: widget.children.indexWhere((parent) => parent.id == widget.selectedParentCategoryId),
         itemScrollController: itemScrollController,
         itemPositionsListener: itemPositionsListener,
         scrollDirection: Axis.horizontal,

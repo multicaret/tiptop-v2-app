@@ -43,6 +43,14 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle body50 = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text50,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle bodyWhite = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
