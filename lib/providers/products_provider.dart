@@ -13,8 +13,8 @@ class ProductsProvider with ChangeNotifier {
   List<Category> parents = [];
   List<Category> selectedParentChildCategories = [];
 
-  Future<void> fetchAndSetParentsAndProducts(int selectedCategoryId) async {
-    final endpoint = 'categories/$selectedCategoryId/products';
+  Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {
+    final endpoint = 'categories/$selectedParentCategoryId/products';
 
     final responseData = await AppProvider().get(endpoint: endpoint);
     productsDataResponse = productDataResponseFromJson(json.encode(responseData));

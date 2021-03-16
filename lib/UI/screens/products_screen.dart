@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/child_categories_tabs.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ProductsScreen extends StatefulWidget {
   final List<Category> parents;
+  final int selectedParentCategoryId;
 
-  ProductsScreen({@required this.parents});
+  ProductsScreen({
+    @required this.parents,
+    @required this.selectedParentCategoryId,
+  });
 
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
@@ -20,17 +25,20 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
     }
   }
 
-  int selectedCategoryId;
-
-  Category selectedParent;
-  List<Category> selectedParentChildCategories = [];
+  int selectedParentIndex;
 
   TabController tabController;
   int _currentTabIndex = 0;
 
+  double _parentsTabHeight = 50.0;
+  double _selectedParentTabHeight = 46.0;
+
   @override
   void initState() {
+    selectedParentIndex = widget.parents.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
+
     tabController = TabController(length: widget.parents.length, vsync: this);
+    tabController.animateTo(selectedParentIndex);
     tabController.animation
       ..addListener(() {
         setState(() {
@@ -46,7 +54,7 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
       children: [
         Container(
             width: MediaQuery.of(context).size.width,
-            height: 50,
+            height: _parentsTabHeight,
             color: AppColors.primary,
             child: TabBar(
               isScrollable: true,
@@ -57,7 +65,6 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
               ),
               indicatorColor: AppColors.white,
               indicatorSize: TabBarIndicatorSize.label,
-              indicatorPadding: EdgeInsets.only(top: 10),
               tabs: <Widget>[
                 ...widget.parents.asMap().entries.map((entry) {
                   int index = entry.key;
@@ -65,12 +72,12 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
 
                   return Tab(
                     child: Transform.translate(
-                      offset: const Offset(0.0, 4.0),
+                      offset: Offset(0.0, _parentsTabHeight - _selectedParentTabHeight),
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 300),
                         alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(horizontal: _currentTabIndex == index ? 10 : 0),
-                        // margin: EdgeInsets.only(top: _currentTabIndex == index ? 6 : 0),
+                        padding: EdgeInsets.symmetric(horizontal: _currentTabIndex == index ? 15 : 0),
+                        margin: EdgeInsets.only(top: _currentTabIndex == index ? _parentsTabHeight - _selectedParentTabHeight : 0),
                         decoration: BoxDecoration(
                           color: _currentTabIndex == index ? AppColors.white : AppColors.primary,
                           borderRadius: BorderRadius.only(
@@ -91,26 +98,28 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
         Expanded(
           child: TabBarView(
             controller: tabController,
-            children: <Widget>[...widget.parents.map((parent) => Center(child: Text(parent.title)))],
+            children: _getParentsTabBarContent(),
           ),
-        )
-/*              ParentCategoriesTabs(
-                    action: (int parentId) {
-                      homeProvider.selectCategory(parentId);
-                      setState(() {
-                        _localSelectedCategoryId = parentId;
-                      });
-                    },
-                    selectedCategoryId: selectedCategoryId,
-                    //Todo: find a better way
-                    localSelectedCategoryId: _localSelectedCategoryId,
-                    parents: parents,
-                  ),*/
-/*            if (selectedParent.hasChildren && selectedParentChildCategories != null)
-              ChildCategoriesTabs(
-                children: selectedParentChildCategories,
-              )*/
+        ),
       ],
     );
+  }
+
+  List<Widget> _getParentsTabBarContent() {
+    return List.generate(widget.parents.length, (i) {
+      bool hasChildCategories = widget.parents[i].hasChildren && widget.parents[i].childCategories.length != 0;
+
+      return hasChildCategories
+          ? Column(
+              children: [
+                ChildCategoriesTabs(
+                  children: widget.parents[i].childCategories,
+                )
+              ],
+            )
+          : Center(
+              child: Text('No Sub Categories/Products'),
+            );
+    });
   }
 }

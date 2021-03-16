@@ -14,14 +14,14 @@ class HomeProvider with ChangeNotifier {
   List<Category> categories;
 
   bool categorySelected = false;
-  int selectedCategoryId;
+  int selectedParentCategoryId;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
   Future<void> selectCategory(int categoryId) async {
-    selectedCategoryId = categoryId;
+    selectedParentCategoryId = categoryId;
     categorySelected = categoryId != null;
-    await storageActions.save(key: 'selected_category_id', data: selectedCategoryId);
+    await storageActions.save(key: 'selected_category_id', data: selectedParentCategoryId);
     print('selected category saved in provider $categoryId');
     notifyListeners();
   }

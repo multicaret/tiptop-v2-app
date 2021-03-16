@@ -64,6 +64,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
         'screen': homeProvider.categorySelected
             ? ProductsScreen(
                 parents: homeProvider.categories,
+                selectedParentCategoryId: homeProvider.selectedParentCategoryId,
               )
             : HomeScreen(),
         'icon': LineAwesomeIcons.home,
