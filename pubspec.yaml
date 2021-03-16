@@ -50,6 +50,7 @@ dependencies:
   scrollable_positioned_list: ^0.1.10
   scroll_to_index: ^2.0.0
   visibility_detector: ^0.1.5
+  lottie: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,9 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/lottie-loader/
+    - assets/images/lottie-loader/images/
+    - assets/images/lottie-loader.zip
     - i18n/
 
   fonts:

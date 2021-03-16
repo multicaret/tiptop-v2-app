@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppLoader extends StatelessWidget {
@@ -18,19 +18,9 @@ class AppLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isFitted
-        ? FittedBox(
-            fit: BoxFit.fitWidth,
-            child: SpinKitFadingFour(
-              color: color,
-              size: size,
-              duration: duration,
-            ),
-          )
-        : SpinKitFadingFour(
-            color: color,
-            size: size,
-            duration: duration,
-          );
+    return Container(
+      width: 100,
+      child: Lottie.asset('assets/images/lottie-loader/data.json'),
+    );
   }
 }
