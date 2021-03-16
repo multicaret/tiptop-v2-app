@@ -77,7 +77,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             setState(() {
               selectedChildCategoryId = widget.children[i].id;
             });
-            scrollToCategoryAndProducts(i);
+            scrollToProducts(i);
           },
         ),
         Expanded(

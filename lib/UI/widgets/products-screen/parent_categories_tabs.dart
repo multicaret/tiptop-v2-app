@@ -15,7 +15,6 @@ class ParentCategoriesTabs extends StatelessWidget {
   });
 
   static double _parentsTabHeight = 50.0;
-  static double _selectedParentTabHeight = 46.0;
 
   @override
   Widget build(BuildContext context) {
