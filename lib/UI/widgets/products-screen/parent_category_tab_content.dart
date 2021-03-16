@@ -18,10 +18,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   int selectedChildCategoryId;
 
   AutoScrollController childCategoriesScrollController;
-  final childCategoriesScrollDirection = Axis.horizontal;
-
   AutoScrollController productsScrollController;
-  final productsScrollDirection = Axis.horizontal;
 
   bool scrollIsAtTheTop = true;
 
@@ -29,24 +26,13 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   void initState() {
     childCategoriesScrollController = AutoScrollController(
       viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: childCategoriesScrollDirection,
+      axis: Axis.horizontal,
     );
 
     productsScrollController = AutoScrollController(
       viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: childCategoriesScrollDirection,
-    )..addListener(() {
-        if (productsScrollController.offset == 0) {
-          setState(() {
-            scrollIsAtTheTop = true;
-          });
-          scrollSpy(0);
-        } else {
-          setState(() {
-            scrollIsAtTheTop = false;
-          });
-        }
-      });
+      axis: Axis.vertical,
+    );
 
     selectedChildCategoryId = widget.children[0].id;
     super.initState();
@@ -87,6 +73,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           itemScrollController: childCategoriesScrollController,
           selectedChildCategoryId: selectedChildCategoryId,
           action: (i) {
+            //Todo: use provider/consumer to avoid entire widget tree rebuild
             setState(() {
               selectedChildCategoryId = widget.children[i].id;
             });
@@ -99,8 +86,10 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
               widget.children.length,
               (i) => ChildCategoryProducts(
                 index: i,
+                count: widget.children.length,
                 child: widget.children[i],
                 productsScrollController: productsScrollController,
+                scrollSpyAction: (index) => scrollSpy(index),
               ),
             ),
             controller: productsScrollController,
