@@ -72,7 +72,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
   Widget build(BuildContext context) {
     List<Product> products = widget.child.products;
     //Todo: Uncomment this print to see the horror 🤬
-    print('Rebuilt ${widget.child.title} widget!!! 🤬');
+    // print('Rebuilt ${widget.child.title} widget!!! 🤬');
 
     return Column(
       key: key,
