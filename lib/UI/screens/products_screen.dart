@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/parent_categories_tabs.dart';
-import 'package:tiptop_v2/UI/widgets/parent_category_tab_content.dart';
+import 'package:tiptop_v2/UI/widgets/products-screen/parent_categories_tabs.dart';
+import 'package:tiptop_v2/UI/widgets/products-screen/parent_category_tab_content.dart';
 import 'package:tiptop_v2/models/category.dart';
 
 class ProductsScreen extends StatefulWidget {
