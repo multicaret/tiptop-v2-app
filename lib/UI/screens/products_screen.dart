@@ -28,12 +28,6 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
 
     tabController = TabController(length: widget.parents.length, vsync: this);
     tabController.animateTo(selectedParentIndex);
-    tabController.animation
-      ..addListener(() {
-        setState(() {
-          currentTabIndex = (tabController.animation.value).round();
-        });
-      });
     super.initState();
   }
 
@@ -45,7 +39,6 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
           parents: widget.parents,
           selectedParentCategoryId: widget.selectedParentCategoryId,
           tabController: tabController,
-          currentTabIndex: currentTabIndex,
         ),
         Expanded(
           child: TabBarView(

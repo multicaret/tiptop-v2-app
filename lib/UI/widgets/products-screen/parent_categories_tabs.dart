@@ -7,13 +7,11 @@ class ParentCategoriesTabs extends StatelessWidget {
   final List<Category> parents;
   final int selectedParentCategoryId;
   final TabController tabController;
-  final int currentTabIndex;
 
   const ParentCategoriesTabs({
     @required this.parents,
     @required this.selectedParentCategoryId,
     @required this.tabController,
-    @required this.currentTabIndex,
   });
 
   static double _parentsTabHeight = 50.0;
@@ -26,42 +24,27 @@ class ParentCategoriesTabs extends StatelessWidget {
       height: _parentsTabHeight,
       color: AppColors.primary,
       child: TabBar(
+        indicatorPadding: EdgeInsets.only(top: 6, left: 6, right: 6),
         isScrollable: true,
         controller: tabController,
-        indicator: UnderlineTabIndicator(
-          // borderSide: BorderSide(width: 42, color: AppColors.white),
-          borderSide: BorderSide(width: 0),
+        labelStyle: AppTextStyles.subtitle,
+        unselectedLabelStyle: AppTextStyles.subtitleWhite,
+        unselectedLabelColor: AppColors.white,
+        labelColor: AppColors.primary,
+        labelPadding: EdgeInsets.symmetric(horizontal: 15),
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8),
+            topRight: Radius.circular(8),
+          ),
+          color: Colors.white,
         ),
         indicatorColor: AppColors.white,
-        indicatorSize: TabBarIndicatorSize.label,
         tabs: <Widget>[
-          ...parents.asMap().entries.map((entry) {
-            int index = entry.key;
-            Category parent = entry.value;
-
-            return Tab(
-              child: Transform.translate(
-                offset: Offset(0.0, _parentsTabHeight - _selectedParentTabHeight),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: currentTabIndex == index ? 15 : 0),
-                  margin: EdgeInsets.only(top: currentTabIndex == index ? _parentsTabHeight - _selectedParentTabHeight : 0),
-                  decoration: BoxDecoration(
-                    color: currentTabIndex == index ? AppColors.white : AppColors.primary,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    parent.title,
-                    style: currentTabIndex == index ? AppTextStyles.subtitle : AppTextStyles.subtitleWhite,
-                  ),
-                ),
-              ),
-            );
-          })
+          ...parents.map((parent) => Transform.translate(
+                offset: Offset(0.0, 3.0),
+                child: Tab(text: parent.title),
+              ))
         ],
       ),
     );
