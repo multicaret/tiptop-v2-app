@@ -8,7 +8,6 @@ import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'UI/screens/scroll_test_page.dart';
 import 'i18n/translations.dart';
 
 void main() {
