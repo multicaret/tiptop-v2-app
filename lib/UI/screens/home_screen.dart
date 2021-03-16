@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> selectCategory(int categoryId) async {
     await homeProvider.selectCategory(categoryId);
-    print('category selected ${homeProvider.selectedCategoryId}');
   }
 
   @override
