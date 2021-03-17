@@ -125,7 +125,6 @@ class Product {
         "excerpt": excerpt,
         "notes": notes,
         "customBannerText": customBannerText,
-        "unitText": unitText,
         "quantity": quantity,
         "sku": sku,
         "upc": upc,
