@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tiptop_v2/UI/widgets/product_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -72,7 +73,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
   Widget build(BuildContext context) {
     List<Product> products = widget.child.products;
     //Todo: Uncomment this print to see the horror 🤬
-    // print('Rebuilt ${widget.child.title} widget!!! 🤬');
+    print('Rebuilt ${widget.child.title} widget!!! 🤬');
 
     return Column(
       key: key,
@@ -98,13 +99,8 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             crossAxisCount: 3,
-            children: <Widget>[
-              ...products.map((product) => Container(
-                    height: 200,
-                    color: AppColors.secondaryDark,
-                    child: Center(child: Text(product.title)),
-                  ))
-            ],
+            childAspectRatio: 0.7,
+            children: <Widget>[...products.map((product) => ProductItem(product: product))],
           ),
         ),
       ],
