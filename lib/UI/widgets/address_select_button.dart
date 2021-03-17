@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -22,6 +24,9 @@ class AddressSelectButton extends StatelessWidget {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     String appDir = appProvider.dir;
     Size screenSize = MediaQuery.of(context).size;
+
+    bool showSelectAddress = isLoadingHomeData || !appProvider.isAuth;
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -48,7 +53,7 @@ class AddressSelectButton extends StatelessWidget {
                     style: AppTextStyles.subtitleWhite,
                   ),
                   SizedBox(height: 5),
-                  if (!isLoadingHomeData)
+                  if (!showSelectAddress)
                     RichText(
                       overflow: TextOverflow.visible,
                       text: TextSpan(
@@ -87,14 +92,21 @@ class AddressSelectButton extends StatelessWidget {
                 curve: Curves.fastOutSlowIn,
                 color: AppColors.white,
                 height: 70,
-                width: isLoadingHomeData ? screenSize.width : screenSize.width * 0.75,
-                child: isLoadingHomeData
-                    ? Container(
-                        child: Text(
-                          Translations.of(context).get('Select Address'),
-                          style: AppTextStyles.bodyBold,
+                width: showSelectAddress ? screenSize.width : screenSize.width * 0.75,
+                child: showSelectAddress
+                    ? InkWell(
+                        child: Container(
+                          child: Text(
+                            Translations.of(context).get('Select Address'),
+                            style: AppTextStyles.bodyBold,
+                          ),
+                          alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
                         ),
-                        alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
+                        onTap: () {
+                          //Todo: run this code and show this button also when user is logged in but no address is selected
+                          showToast(msg: 'You need to log in first!');
+                          Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
+                        },
                       )
                     : Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
