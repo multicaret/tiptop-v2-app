@@ -24,19 +24,16 @@ class CategoryItem extends StatelessWidget {
           width: double.infinity,
           height: getColItemHeight(4, context),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 blurRadius: 7,
                 color: AppColors.shadow,
               )
             ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(imageUrl),
               fit: BoxFit.cover,
-              height: getColItemHeight(4, context),
             ),
           ),
         ),
