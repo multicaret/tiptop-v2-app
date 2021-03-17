@@ -52,7 +52,6 @@ class Product {
     this.excerpt,
     this.notes,
     this.customBannerText,
-    this.unitText,
     this.quantity,
     this.sku,
     this.upc,
@@ -67,6 +66,7 @@ class Product {
     this.height,
     this.depth,
     this.weight,
+    this.unit,
   });
 
   int id;
@@ -76,7 +76,6 @@ class Product {
   dynamic excerpt;
   dynamic notes;
   dynamic customBannerText;
-  dynamic unitText;
   int quantity;
   String sku;
   dynamic upc;
@@ -91,6 +90,7 @@ class Product {
   int height;
   int depth;
   double weight;
+  Unit unit;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -100,7 +100,6 @@ class Product {
         excerpt: json["excerpt"],
         notes: json["notes"],
         customBannerText: json["customBannerText"],
-        unitText: json["unitText"],
         quantity: json["quantity"],
         sku: json["sku"],
         upc: json["upc"],
@@ -109,11 +108,62 @@ class Product {
         ratingCount: json["ratingCount"],
         price: IntRawStringFormatted.fromJson(json["price"]),
         discountedPrice: IntRawStringFormatted.fromJson(json["discountedPrice"]),
-        barcodes: List<dynamic>.from(json["barcodes"].map((x) => x)),
+        barcodes: json["barcodes"] == null ? null : List<dynamic>.from(json["barcodes"].map((x) => x)),
         media: Media.fromJson(json["media"]),
         width: json["width"].toDouble(),
         height: json["height"],
         depth: json["depth"],
         weight: json["weight"].toDouble(),
+        unit: Unit.fromJson(json["unit"]),
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "uuid": uuid,
+        "title": title,
+        "description": description,
+        "excerpt": excerpt,
+        "notes": notes,
+        "customBannerText": customBannerText,
+        "unitText": unitText,
+        "quantity": quantity,
+        "sku": sku,
+        "upc": upc,
+        "minimumOrderableQuantity": minimumOrderableQuantity,
+        "avgRating": avgRating,
+        "ratingCount": ratingCount,
+        "price": price.toJson(),
+        "discountedPrice": discountedPrice.toJson(),
+        "barcodes": List<dynamic>.from(barcodes.map((x) => x)),
+        "media": media.toJson(),
+        "width": width,
+        "height": height,
+        "depth": depth,
+        "weight": weight,
+        "unit": unit.toJson(),
+      };
+}
+
+class Unit {
+  Unit({
+    this.id,
+    this.title,
+    this.step,
+  });
+
+  int id;
+  String title;
+  String step;
+
+  factory Unit.fromJson(Map<String, dynamic> json) => Unit(
+        id: json["id"],
+        title: json["title"],
+        step: json["step"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "step": step,
+      };
 }

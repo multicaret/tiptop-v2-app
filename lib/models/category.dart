@@ -25,14 +25,26 @@ class Category {
   List<Product> products;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: json["id"],
-    icon: json["icon"],
-    title: json["title"],
-    description: StringRawStringFormatted.fromJson(json["description"]),
-    hasChildren: json["hasChildren"],
-    cover: json["cover"],
-    thumbnail: json["thumbnail"],
-    childCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
-    products: json["products"] == null ? null : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
-  );
+        id: json["id"],
+        icon: json["icon"],
+        title: json["title"],
+        description: StringRawStringFormatted.fromJson(json["description"]),
+        hasChildren: json["hasChildren"],
+        cover: json["cover"],
+        thumbnail: json["thumbnail"],
+        childCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
+        products: json["products"] == null ? null : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "icon": icon,
+        "title": title,
+        "description": description.toJson(),
+        "hasChildren": hasChildren == null ? null : hasChildren,
+        "children": childCategories == null ? null : List<dynamic>.from(childCategories.map((x) => x.toJson())),
+        "cover": cover,
+        "thumbnail": thumbnail,
+        "products": products == null ? null : List<dynamic>.from(products.map((x) => x.toJson())),
+      };
 }
