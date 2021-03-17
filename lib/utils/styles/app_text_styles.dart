@@ -83,6 +83,15 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle subtitleXsBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: 12,
+    height: 1,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle subtitle50 = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text50,
@@ -95,6 +104,7 @@ class AppTextStyles {
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
     fontSize: 14,
+    height: 1.3,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );

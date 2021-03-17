@@ -6,16 +6,19 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class CartControls extends StatelessWidget {
   final Product product;
   final bool isZero;
   final Function editCartAction;
+  final int quantity;
 
   CartControls({
     @required this.product,
     @required this.isZero,
     @required this.editCartAction,
+    @required this.quantity,
   });
 
   @override
@@ -38,17 +41,17 @@ class CartControls extends StatelessWidget {
               duration: Duration(milliseconds: 200),
               width: cartButtonHeight,
               height: cartButtonHeight,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(isZero ? 10 : 0),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 6,
-                    color: AppColors.shadow
-                  ),
-                ]
+              decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(isZero ? 10 : 0), boxShadow: [
+                BoxShadow(blurRadius: 6, color: AppColors.shadow),
+              ]),
+              child: Center(
+                child: Text(
+                  quantity == 0 ? '' : '$quantity',
+                  style: quantity.toString().length >= 2 ? AppTextStyles.subtitleXsBold : AppTextStyles.subtitleBold,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                ),
               ),
-              child: Center(child: Text('1')),
             ),
           ),
           buttonAnimatedContainer(
@@ -122,7 +125,6 @@ class CartControls extends StatelessWidget {
       left: getLeftOffset(actionName, isRTL, cartButtonHeight),
       child: InkWell(
         onTap: () {
-          print('action: $actionName');
           editCartAction(actionName);
         },
         child: AnimatedContainer(
@@ -136,7 +138,13 @@ class CartControls extends StatelessWidget {
               BoxShadow(blurRadius: 6, color: AppColors.shadow),
             ],
           ),
-          child: AppIcon.iconXsWhite(actionName == 'add' ? FontAwesomeIcons.plus : FontAwesomeIcons.minus),
+          child: AppIcon.iconXsWhite(
+            actionName == 'add'
+                ? FontAwesomeIcons.plus
+                : quantity == 1
+                    ? FontAwesomeIcons.trashAlt
+                    : FontAwesomeIcons.minus,
+          ),
         ),
       ),
     );
