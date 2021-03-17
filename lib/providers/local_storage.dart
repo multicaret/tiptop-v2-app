@@ -29,6 +29,7 @@ class LocalStorage {
   }
 
   Future<bool> clear() {
+    print('clearing local storage!!');
     return _pref.clear();
   }
 

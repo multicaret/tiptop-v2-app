@@ -9,7 +9,8 @@ class OTPProvider with ChangeNotifier {
   bool validationStatus;
   bool isNewUser;
   OTPDataResponse otpInitDataResponse;
-  OTPValidationCheckDataResponse otpValidationCheckDataResponse;
+  OTPValidationDataResponse otpValidationDataResponse;
+  OTPValidationData otpValidationData;
 
   Future<void> initOTPValidation(String method) async {
     final endpoint = 'otp/init-validation?method=$method';
@@ -41,14 +42,16 @@ class OTPProvider with ChangeNotifier {
       body: body,
     );
     print(responseData);
-    otpValidationCheckDataResponse = OTPValidationCheckDataResponse.fromJson(responseData);
+    otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
 
-    if (otpValidationCheckDataResponse.otpValidationData == null || otpValidationCheckDataResponse.status != 200) {
+    if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {
       throw HttpException(title: 'Error', message: otpInitDataResponse.message);
     }
+    otpValidationData = otpValidationDataResponse.otpValidationData;
+    validationStatus = otpValidationData.validationStatus;
+    isNewUser = otpValidationData.newUser;
 
-    validationStatus = otpValidationCheckDataResponse.otpValidationData.validationStatus;
-    isNewUser = otpValidationCheckDataResponse.otpValidationData.newUser;
+    AppProvider().updateUserData(otpValidationData.user, otpValidationData.accessToken);
 
     print('validationStatus: $validationStatus');
     notifyListeners();

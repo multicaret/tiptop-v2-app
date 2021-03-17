@@ -52,7 +52,6 @@ List<Widget> _languageItems(
       child: ElevatedButton(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i]['locale']);
-          Navigator.of(context).pushNamed(WalkthroughPage.routeName);
         },
         child: Row(
           textDirection: TextDirection.ltr,

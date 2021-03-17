@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiptop_v2/models/user.dart';
 
 import 'local_storage.dart';
 
@@ -53,6 +54,7 @@ class AppProvider with ChangeNotifier {
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
     if (languageCode == null) {
+      print('locale not selected yet!');
       _appLocale = Locale(DEFAULT_LOCALE);
       localeSelected = false;
       return _appLocale;
@@ -71,8 +73,6 @@ class AppProvider with ChangeNotifier {
 
   static const DOMAIN = 'https://titan.trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
-
-  String token;
 
   Map<String, String> get authHeader {
     var myHeader = headers;
@@ -127,5 +127,46 @@ class AppProvider with ChangeNotifier {
     } catch (error) {
       throw error;
     }
+  }
+
+  User authUser;
+  int userId;
+  String token;
+
+  bool get isAuth => token != null;
+
+  Future<void> updateUserData(User _authUser, String accessToken) async {
+    authUser = _authUser;
+    userId = authUser.id;
+    token = accessToken;
+    final userData = {
+      'accessToken': token,
+      'userId': userId,
+      'data': json.encode(authUser.toJson()),
+    };
+    storageActions.save(key: 'userData', data: userData).then((_) {
+      print('Successfully saved user data');
+    }).catchError((error) {
+      throw error;
+    });
+  }
+
+  Future<void> autoLogin() async {
+    print("Trying to auto login....");
+    var checkUserDataKey = storageActions.checkKey(key: 'userData');
+    if (!checkUserDataKey) {
+      print('Not logged in! (No local storage key)');
+      return;
+    }
+    var userDataString = await storageActions.getDataType(key: 'userData', type: String);
+    final responseData = json.decode(userDataString) as Map<String, dynamic>;
+    authUser = User.fromJson(json.decode(responseData['data']));
+    userId = LocalStorage.userId = responseData['userId'];
+    token = responseData['accessToken'];
+    if (token != null) {
+      print('Token found in locale storage, auto login successful!');
+      print('User id: ${authUser.id}, username: ${authUser.name}');
+    }
+    notifyListeners();
   }
 }

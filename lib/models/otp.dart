@@ -54,12 +54,12 @@ class OTPData {
       };
 }
 
-OTPValidationCheckDataResponse otpValidationCheckDataResponseFromJson(String str) => OTPValidationCheckDataResponse.fromJson(json.decode(str));
+OTPValidationDataResponse otpValidationDataResponseFromJson(String str) => OTPValidationDataResponse.fromJson(json.decode(str));
 
-String otpValidationCheckDataResponseToJson(OTPValidationCheckDataResponse data) => json.encode(data.toJson());
+String otpValidationDataResponseToJson(OTPValidationDataResponse data) => json.encode(data.toJson());
 
-class OTPValidationCheckDataResponse {
-  OTPValidationCheckDataResponse({
+class OTPValidationDataResponse {
+  OTPValidationDataResponse({
     this.otpValidationData,
     this.errors,
     this.message,
@@ -71,7 +71,7 @@ class OTPValidationCheckDataResponse {
   String message;
   int status;
 
-  factory OTPValidationCheckDataResponse.fromJson(Map<String, dynamic> json) => OTPValidationCheckDataResponse(
+  factory OTPValidationDataResponse.fromJson(Map<String, dynamic> json) => OTPValidationDataResponse(
         otpValidationData: json["data"] == null ? null : OTPValidationData.fromJson(json["data"]),
         errors: json["errors"],
         message: json["message"],

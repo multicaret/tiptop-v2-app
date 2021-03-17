@@ -1,28 +1,60 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/main_page.dart';
+import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
+import 'UI/pages/main_page.dart';
+import 'UI/screens/splash_screen.dart';
 import 'i18n/translations.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  await runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    LocalStorage().isReady().then((_) async {
+      // Uncomment when you want to clear local storage on app launch
+      // LocalStorage().clear();
+      AppProvider appProvider = AppProvider();
+      await appProvider.fetchLocale();
+      runApp(MyApp(
+        appProvider: appProvider,
+      ));
+    });
+  }, (e, _) => throw e);
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  final AppProvider appProvider;
+
+  MyApp({this.appProvider});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<void> _autoLoginFuture;
+
+  @override
+  void initState() {
+    _autoLoginFuture = widget.appProvider.autoLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: AppProvider(),
+          value: widget.appProvider,
         ),
         ...providers,
       ],
@@ -76,7 +108,15 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: WalkthroughPage(),
+          home: app.localeSelected
+              ? app.isAuth
+                  ? MainPage()
+                  : FutureBuilder(
+                      future: _autoLoginFuture,
+                      builder: (c, authResultSnapshot) =>
+                          authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
+                    )
+              : LanguageSelectPage(),
           routes: routes,
         ),
       ),
