@@ -41,7 +41,6 @@ class OTPProvider with ChangeNotifier {
       endpoint: endpoint,
       body: body,
     );
-    print(responseData);
     otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
 
     if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {

@@ -93,8 +93,6 @@ class AppProvider with ChangeNotifier {
   }) async {
     try {
       final root = await this.endpointRoot();
-      print("root");
-      print(root);
       Uri uri = Uri.parse(root + endpoint);
       uri = uri.replace(queryParameters: body);
       print("uri");
@@ -164,7 +162,7 @@ class AppProvider with ChangeNotifier {
     userId = LocalStorage.userId = responseData['userId'];
     token = responseData['accessToken'];
     if (token != null) {
-      print('Token found in locale storage, auto login successful!');
+      print('Token found in local storage, auto login successful!');
       print('User id: ${authUser.id}, username: ${authUser.name}');
     }
     notifyListeners();
