@@ -32,6 +32,12 @@ class _ProductsScreenState extends State<ProductsScreen> with SingleTickerProvid
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
