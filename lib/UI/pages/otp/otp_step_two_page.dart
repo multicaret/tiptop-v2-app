@@ -1,13 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/main_page.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/otp_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class OTPStepTwoPage extends StatelessWidget {
+import 'otp_step_three_page.dart';
+
+class OTPStepTwoPage extends StatefulWidget {
   static const routeName = '/otp-step-two';
+
+  @override
+  _OTPStepTwoPageState createState() => _OTPStepTwoPageState();
+}
+
+class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObserver {
+  OTPProvider otpProvider;
+  String deepLink;
+  String reference;
+  String phoneNumber;
+  String phoneCountryCode;
+  bool isValid;
+  bool isNewUser;
+  bool _isInit = true;
+
+  Future<void> _initOTPValidation(String method) async {
+    await otpProvider.initOTPValidation(method);
+    setState(() {
+      deepLink = otpProvider.deepLink;
+      reference = otpProvider.reference;
+    });
+    launch(deepLink);
+  }
+
+  List<Map<String, dynamic>> getVerificationMethods(BuildContext context) {
+    return [
+      {
+        'name': 'WhatsApp',
+        'color': AppColors.whatsApp,
+        'icon': FontAwesomeIcons.whatsapp,
+        'action': () {
+          _initOTPValidation('whatsapp');
+        },
+      },
+      {
+        'name': 'Telegram',
+        'color': AppColors.telegram,
+        'icon': FontAwesomeIcons.telegram,
+        'action': () {
+          _initOTPValidation('telegram');
+        },
+      },
+      {
+        'name': 'SMS',
+        'color': AppColors.primary,
+        'icon': FontAwesomeIcons.sms,
+        'action': () {
+          Navigator.of(context).pushNamed(OTPStepThreePage.routeName);
+        },
+      },
+    ];
+  }
+
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      // try {
+      await otpProvider.checkOTPValidation(reference, phoneCountryCode, phoneNumber);
+      isValid = otpProvider.validationStatus;
+      isNewUser = otpProvider.isNewUser;
+      if (isValid == true) {
+        if (isNewUser) {
+          print('New user, navigating to complete profile page');
+          Navigator.of(context).pushNamed(OTPCompleteProfile.routeName);
+        } else {
+          print('Registered user, navigating to home page');
+          Navigator.of(context).pushNamed(MainPage.routeName);
+        }
+      } else {
+        showToast(msg: 'OTP Validation Failed');
+      }
+      // } catch (error) {
+      //   showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
+      //   throw error;
+      // }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      otpProvider = Provider.of<OTPProvider>(context);
+      Map<String, String> data = ModalRoute.of(context).settings.arguments as Map<String, String>;
+      phoneNumber = data['phone_number'];
+      phoneCountryCode = data['phone_country_code'];
+
+      WidgetsBinding.instance.addObserver(this);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +130,7 @@ class OTPStepTwoPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              '+(964) 555 333 11 22',
+              '$phoneCountryCode $phoneNumber',
               style: AppTextStyles.h1,
               textDirection: TextDirection.ltr,
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/main_page.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/routes.dart';
@@ -75,7 +76,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: MainPage(),
+          home: WalkthroughPage(),
           routes: routes,
         ),
       ),

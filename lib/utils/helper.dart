@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-/*
 void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.BOTTOM}) {
   Fluttertoast.showToast(
       msg: msg,
@@ -16,7 +17,6 @@ void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGr
       textColor: AppColors.white,
       fontSize: 16.0);
 }
-*/
 
 IconData getIconData(data) {
   String name = data['name'];

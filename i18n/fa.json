@@ -41,5 +41,6 @@
   "Food": "طعام",
   "Market": "ماركت",
   "Select Address": "اختر العنوان",
-  "Products": "المنتجات"
+  "Products": "المنتجات",
+  "Invalid Form": "البيانات خاطئة أو ناقصة"
 }
