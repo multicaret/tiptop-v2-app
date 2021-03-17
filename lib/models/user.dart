@@ -117,9 +117,9 @@ class User {
         "updatedAt": updatedAt.toJson(),
         "mobileApp": mobileApp.toJson(),
         "settings": settings.toJson(),
-        "currency": currency.toJson(),
-        "country": country.toJson(),
-        "region": region.toJson(),
-        "city": city.toJson(),
+        "currency": currency == null ? null : currency.toJson(),
+        "country": country == null ? null : country.toJson(),
+        "region": region == null ? null : region.toJson(),
+        "city": region == null ? null : city.toJson(),
       };
 }

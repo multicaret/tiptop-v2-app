@@ -7,8 +7,8 @@ import 'package:tiptop_v2/models/user.dart';
 import 'local_storage.dart';
 
 class AppProvider with ChangeNotifier {
-
   static const String GOOGLE_API_KEY = '';
+
   //  Location
   /*Todo: set these coordinates to be a proper place*/
   static double latitude = 41.017827;
@@ -50,6 +50,7 @@ class AppProvider with ChangeNotifier {
   }
 
   String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+
   bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
 
   fetchLocale() async {
@@ -135,6 +136,8 @@ class AppProvider with ChangeNotifier {
   bool get isAuth => token != null;
 
   Future<void> updateUserData(User _authUser, String accessToken) async {
+    print('accessToken');
+    print(accessToken);
     authUser = _authUser;
     userId = authUser.id;
     token = accessToken;
@@ -146,6 +149,7 @@ class AppProvider with ChangeNotifier {
     storageActions.save(key: 'userData', data: userData).then((_) {
       print('Successfully saved user data');
     }).catchError((error) {
+      print('Error saving user data to local storage');
       throw error;
     });
   }
