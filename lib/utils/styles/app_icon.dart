@@ -40,6 +40,6 @@ class AppIcon {
   }
 
   static iconXsWhite(IconData iconName) {
-    return Icon(iconName, color: AppColors.white, size: 14);
+    return Icon(iconName, color: AppColors.white, size: 13);
   }
 }

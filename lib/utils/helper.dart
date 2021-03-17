@@ -80,3 +80,14 @@ double getColItemHeight(int colCount, BuildContext context) {
 
   return (screenWidth - (screenGutter * 2) - (gridGutter * (colCount - 1))) / colCount;
 }
+
+double cartControlsMargin = 10;
+
+double getCartControlsWidth(BuildContext context, {int colCount = 3}) {
+  double colItemHeight = getColItemHeight(colCount, context);
+  return colItemHeight - (cartControlsMargin * 2);
+}
+
+double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
+  return getCartControlsWidth(context, colCount: colCount) / 3;
+}

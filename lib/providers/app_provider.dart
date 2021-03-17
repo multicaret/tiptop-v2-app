@@ -50,6 +50,7 @@ class AppProvider with ChangeNotifier {
   }
 
   String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+  bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
 
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
