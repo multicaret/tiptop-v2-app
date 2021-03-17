@@ -100,6 +100,10 @@ class AppProvider with ChangeNotifier {
       print("uri");
       print(uri);
       final response = await http.get(uri, headers: withToken ? authHeader : headers);
+      if (response.statusCode == 401) {
+        print('unauthenticated request!');
+        return 401;
+      }
 
       final responseData = json.decode(response.body);
       return responseData;
@@ -120,9 +124,12 @@ class AppProvider with ChangeNotifier {
       uri = uri.replace(queryParameters: params);
       print("uri");
       print(uri);
-      http.Response response = await http.post(uri, body: json.encode(body), headers: withToken ? authHeader : headers);
+      http.Response response = await http.post(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
       final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
-
+      if (response.statusCode == 401) {
+        print('Unauthenticated request!');
+        return 401;
+      }
       return responseData;
     } catch (error) {
       throw error;
@@ -181,5 +188,9 @@ class AppProvider with ChangeNotifier {
     await storageActions.deleteData(key: 'userData');
     print('Deleted user data and logged out');
     notifyListeners();
+  }
+
+  void isAttemptingRequestWithExpiredToken() {
+
   }
 }

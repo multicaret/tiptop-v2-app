@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -21,15 +22,27 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   int productCartQuantity = 0;
   AppProvider appProvider;
+  CartProvider cartProvider;
   bool _isInit = true;
 
-  void editCartAction(String actionName) {
+  Future<void> editCartAction(String actionName) async {
     if (!appProvider.isAuth) {
       showToast(msg: 'You Need to Log In First!');
       Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
     } else {
       if (actionName == 'add') {
         //Add item
+        final response = await cartProvider.addRemoveProduct(
+          appProvider,
+          isAdding: true,
+          productId: widget.product.id,
+        );
+        //Unauthenticated, navigate to auth page
+        if (response == 401) {
+          showToast(msg: 'You need to log in first!');
+          Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
+          return;
+        }
         setState(() {
           productCartQuantity++;
         });
@@ -50,6 +63,7 @@ class _ProductItemState extends State<ProductItem> {
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
     }
     _isInit = false;
     super.didChangeDependencies();
