@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -22,6 +23,7 @@ class OTPStepTwoPage extends StatefulWidget {
 }
 
 class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObserver {
+  AppProvider appProvider;
   OTPProvider otpProvider;
   String deepLink;
   String reference;
@@ -73,16 +75,16 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       // try {
-      await otpProvider.checkOTPValidation(reference, phoneCountryCode, phoneNumber);
+      await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
       isValid = otpProvider.validationStatus;
       isNewUser = otpProvider.isNewUser;
       if (isValid == true) {
         if (isNewUser) {
           print('New user, navigating to complete profile page');
-          Navigator.of(context).pushNamed(OTPCompleteProfile.routeName);
+          Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
         } else {
           print('Registered user, navigating to home page');
-          Navigator.of(context).pushNamed(MainPage.routeName);
+          Navigator.of(context).pushReplacementNamed(MainPage.routeName);
         }
       } else {
         showToast(msg: 'OTP Validation Failed');
@@ -98,6 +100,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   void didChangeDependencies() {
     if (_isInit) {
       otpProvider = Provider.of<OTPProvider>(context);
+      appProvider = Provider.of<AppProvider>(context);
       Map<String, String> data = ModalRoute.of(context).settings.arguments as Map<String, String>;
       phoneNumber = data['phone_number'];
       phoneCountryCode = data['phone_country_code'];
@@ -142,7 +145,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
                 SizedBox(width: 5),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed(OTPStepOnePage.routeName);
                   },
                   child: Text(
                     Translations.of(context).get('No, let me fix it'),

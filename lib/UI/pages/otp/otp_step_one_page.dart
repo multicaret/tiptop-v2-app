@@ -74,7 +74,7 @@ class OTPStepOnePage extends StatelessWidget {
       return;
     }
     _formKey.currentState.save();
-    Navigator.of(context).pushNamed(OTPStepTwoPage.routeName, arguments: {
+    Navigator.of(context).pushReplacementNamed(OTPStepTwoPage.routeName, arguments: {
       'phone_number': phoneNumber,
       'phone_country_code': phoneCountryCode,
     });

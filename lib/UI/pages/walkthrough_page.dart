@@ -38,7 +38,7 @@ class WalkthroughPage extends StatelessWidget {
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed(OTPStepOnePage.routeName);
+                    Navigator.of(context).pushReplacementNamed(OTPStepOnePage.routeName);
                   },
                   child: Text(Translations.of(context).get('Register')),
                 ),

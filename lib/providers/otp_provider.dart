@@ -29,7 +29,7 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkOTPValidation(String reference, String phoneCountryCode, String phoneNumber) async {
+  Future<void> checkOTPValidation(AppProvider appProvider, String reference, String phoneCountryCode, String phoneNumber) async {
     print('reference in check: $reference');
     final endpoint = 'otp/check-validation/$reference';
     final body = {
@@ -50,7 +50,7 @@ class OTPProvider with ChangeNotifier {
     validationStatus = otpValidationData.validationStatus;
     isNewUser = otpValidationData.newUser;
 
-    AppProvider().updateUserData(otpValidationData.user, otpValidationData.accessToken);
+    appProvider.updateUserData(otpValidationData.user, otpValidationData.accessToken);
 
     print('validationStatus: $validationStatus');
     notifyListeners();
