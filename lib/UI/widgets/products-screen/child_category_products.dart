@@ -39,7 +39,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
       widget.scrollSpyAction(0);
     } else if (scrollPosition == widget.productsScrollController.position.maxScrollExtent) {
       widget.scrollSpyAction(widget.count - 1);
-    } else if (scrollPositionWithTopBars >= categoryPosition) {
+    } else if (scrollPositionWithTopBars >= categoryPosition && scrollPositionWithTopBars < categoryPosition + 30) {
       widget.scrollSpyAction(widget.index);
     }
   }
