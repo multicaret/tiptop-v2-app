@@ -7,6 +7,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/screens/products_screen.dart';
+import 'package:tiptop_v2/UI/screens/profile_screen.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -70,23 +71,23 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
         'icon': LineAwesomeIcons.home,
       },
       {
-        'title': 'Offers',
+        'title': 'Search',
         'screen': Center(child: Text('Tab 2')),
         'icon': LineAwesomeIcons.search,
       },
       {
-        'title': 'Appointments',
-        'screen': Center(child: Text('Cart')),
+        'title': 'Basket',
+        'screen': Center(child: Text('Basket')),
         'icon': LineAwesomeIcons.shopping_cart,
       },
       {
-        'title': 'Profile',
+        'title': 'Support',
         'screen': Center(child: Text('Tab 4')),
         'icon': LineAwesomeIcons.headset,
       },
       {
         'title': 'Profile',
-        'screen': Center(child: Text('Tab 5')),
+        'screen': ProfileScreen(),
         'icon': LineAwesomeIcons.user_cog,
       },
     ];
@@ -107,7 +108,9 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                   icon: Icon(Platform.isAndroid ? Icons.arrow_back : CupertinoIcons.back),
                 ),
               )
-            : null,
+            : AppBar(
+                title: Text(_getTabsList(homeProvider)[currentTabIndex]['title']),
+              ),
         bodyPadding: EdgeInsets.all(0),
         automaticallyImplyLeading: false,
         body: _getTabsList(homeProvider)[currentTabIndex]['screen'],

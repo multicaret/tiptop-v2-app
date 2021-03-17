@@ -164,7 +164,17 @@ class AppProvider with ChangeNotifier {
     if (token != null) {
       print('Token found in local storage, auto login successful!');
       print('User id: ${authUser.id}, username: ${authUser.name}');
+      // print('token');
+      // print(token);
     }
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    token = null;
+    userId = null;
+    await storageActions.deleteData(key: 'userData');
+    print('Deleted user data and logged out');
     notifyListeners();
   }
 }
