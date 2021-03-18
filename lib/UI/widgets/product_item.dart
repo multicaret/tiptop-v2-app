@@ -134,12 +134,11 @@ class _ProductItemState extends State<ProductItem> {
           style: AppTextStyles.subtitle,
         ),
         SizedBox(height: 10),
-        FormattedPrice(price: widget.product.price.amountFormatted),
         if (widget.product.discountedPrice != null)
           FormattedPrice(
             price: widget.product.discountedPrice.amountFormatted,
-            isDiscounted: true,
           ),
+        FormattedPrice(price: widget.product.price.amountFormatted, isDiscounted: widget.product.discountedPrice != null),
         if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
       ],
     );
