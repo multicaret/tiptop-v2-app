@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
+import 'package:tiptop_v2/UI/widgets/price.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -37,22 +38,14 @@ class _ProductItemState extends State<ProductItem> {
         _isLoadingAddRemoveRequest = true;
       });
       //Add item
-      print('$actionName ${widget.product.title}');
-      final response = await cartProvider.addRemoveProduct(
+      print('$actionName ${widget.product.id} ${widget.product.title}');
+      await cartProvider.addRemoveProduct(
+        context: context,
         appProvider: appProvider,
         homeProvider: homeProvider,
         isAdding: actionName == 'add',
         productId: widget.product.id,
       );
-      //Unauthenticated, navigate to auth page
-      if (response == 401) {
-        showToast(msg: 'You need to log in first!');
-        setState(() {
-          _isLoadingAddRemoveRequest = false;
-        });
-        Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
-        return;
-      }
 
       setState(() {
         _isLoadingAddRemoveRequest = false;
@@ -106,12 +99,18 @@ class _ProductItemState extends State<ProductItem> {
           ),
         ),
         SizedBox(height: 10),
-        Expanded(
-          child: Text(
-            widget.product.title,
-            style: AppTextStyles.subtitle,
+        Text(
+          widget.product.title,
+          style: AppTextStyles.subtitle,
+        ),
+        SizedBox(height: 10),
+        Price(price: widget.product.price.amountFormatted),
+        if (widget.product.discountedPrice != null && widget.product.discountedPrice.amountRaw != 0)
+          Price(
+            price: widget.product.discountedPrice.amountFormatted,
+            isDiscounted: true,
           ),
-        )
+        if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
       ],
     );
   }

@@ -90,6 +90,26 @@ class IntRawStringFormatted {
   };
 }
 
+class Price {
+  int amountRaw;
+  String amountFormatted;
+
+  Price({
+    this.amountRaw,
+    this.amountFormatted,
+  });
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+    amountRaw: json["amountRaw"] == null ? null : json["amountRaw"],
+    amountFormatted: json["amountFormatted"] == null ? null : json["amountFormatted"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "amountRaw": amountRaw == null ? null : amountRaw,
+    "amountFormatted": amountFormatted == null ? null : amountFormatted,
+  };
+}
+
 class EdAt {
   String formatted;
   String diffForHumans;

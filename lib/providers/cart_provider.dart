@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class CartProvider with ChangeNotifier {
@@ -19,6 +21,7 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<dynamic> addRemoveProduct({
+    @required BuildContext context,
     @required AppProvider appProvider,
     @required HomeProvider homeProvider,
     @required bool isAdding,
@@ -45,7 +48,8 @@ class CartProvider with ChangeNotifier {
         return;
       } else {
         print('Sending authenticated request without logging in!');
-        return 401;
+        showToast(msg: 'You need to log in first!');
+        Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
       }
     }
 

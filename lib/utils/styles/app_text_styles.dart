@@ -75,6 +75,15 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle subtitleSecondaryBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondaryDark,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    height: 1,
+  );
+
   static const TextStyle subtitleXs = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
@@ -96,6 +105,14 @@ class AppTextStyles {
     fontFamily: 'NeoSansArabic',
     color: AppColors.text50,
     fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleXs50 = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text50,
+    fontSize: 12,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
   );
@@ -181,6 +198,7 @@ class AppTextStyles {
     String family = 'NeoSansArabic',
     FontStyle fontStyle = FontStyle.normal,
     TextDecoration decoration = TextDecoration.none,
+    double height = 1.2,
   }) {
     return TextStyle(
       fontFamily: family,
@@ -189,6 +207,7 @@ class AppTextStyles {
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       decoration: decoration,
+      height: height,
     );
   }
 }

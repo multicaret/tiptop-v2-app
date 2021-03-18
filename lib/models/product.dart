@@ -53,6 +53,7 @@ class Product {
     this.notes,
     this.customBannerText,
     this.availableQuantity,
+    this.unitText,
     this.sku,
     this.upc,
     this.minimumOrderableQuantity,
@@ -77,13 +78,14 @@ class Product {
   dynamic notes;
   dynamic customBannerText;
   int availableQuantity;
+  String unitText;
   String sku;
   dynamic upc;
   int minimumOrderableQuantity;
   String avgRating;
   int ratingCount;
-  IntRawStringFormatted price;
-  IntRawStringFormatted discountedPrice;
+  Price price;
+  Price discountedPrice;
   List<dynamic> barcodes;
   Media media;
   double width;
@@ -101,13 +103,14 @@ class Product {
         notes: json["notes"],
         customBannerText: json["customBannerText"],
         availableQuantity: json["availableQuantity"],
+        unitText: json["unitText"],
         sku: json["sku"],
         upc: json["upc"],
         minimumOrderableQuantity: json["minimumOrderableQuantity"],
         avgRating: json["avgRating"],
         ratingCount: json["ratingCount"],
-        price: IntRawStringFormatted.fromJson(json["price"]),
-        discountedPrice: IntRawStringFormatted.fromJson(json["discountedPrice"]),
+        price: Price.fromJson(json["price"]),
+        discountedPrice: json["discountedPrice"] == null ? null : Price.fromJson(json["discountedPrice"]),
         barcodes: json["barcodes"] == null ? null : List<dynamic>.from(json["barcodes"].map((x) => x)),
         media: Media.fromJson(json["media"]),
         width: json["width"].toDouble(),
@@ -126,13 +129,14 @@ class Product {
         "notes": notes,
         "customBannerText": customBannerText,
         "availableQuantity": availableQuantity,
+        "unitText": unitText,
         "sku": sku,
         "upc": upc,
         "minimumOrderableQuantity": minimumOrderableQuantity,
         "avgRating": avgRating,
         "ratingCount": ratingCount,
         "price": price.toJson(),
-        "discountedPrice": discountedPrice.toJson(),
+        "discountedPrice": discountedPrice == null ? null : discountedPrice.toJson(),
         "barcodes": List<dynamic>.from(barcodes.map((x) => x)),
         "media": media.toJson(),
         "width": width,

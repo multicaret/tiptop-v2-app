@@ -73,7 +73,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
   Widget build(BuildContext context) {
     List<Product> products = widget.child.products;
     //Todo: Uncomment this print to see the horror 🤬
-    print('Rebuilt ${widget.child.title} widget!!! 🤬');
+    // print('Rebuilt ${widget.child.title} widget!!! 🤬');
 
     return Column(
       key: key,
@@ -99,7 +99,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             crossAxisCount: 3,
-            childAspectRatio: 0.7,
+            childAspectRatio: 0.5,
             children: <Widget>[...products.map((product) => ProductItem(product: product))],
           ),
         ),
