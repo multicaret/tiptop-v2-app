@@ -108,9 +108,9 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                   icon: Icon(Platform.isAndroid ? Icons.arrow_back : CupertinoIcons.back),
                 ),
               )
-            : currentTabIndex != 0 ? AppBar(
-                title: Text(_getTabsList(homeProvider)[currentTabIndex]['title']),
-              ) : null,
+            : currentTabIndex != 0
+                ? AppBar(title: Text(_getTabsList(homeProvider)[currentTabIndex]['title']))
+                : null,
         bodyPadding: EdgeInsets.all(0),
         automaticallyImplyLeading: false,
         body: _getTabsList(homeProvider)[currentTabIndex]['screen'],

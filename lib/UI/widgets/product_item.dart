@@ -60,8 +60,10 @@ class _ProductItemState extends State<ProductItem> {
           setState(() => productCartQuantity = returnedProductQuantity);
         }
       } catch (e) {
-        //If an error occurred, reset the quantity
+        // If an error occurred, reset the quantity
+        print('An error occurred!');
         setState(() => productCartQuantity = _oldProductCartQuantity);
+        throw e;
       }
     }
   }

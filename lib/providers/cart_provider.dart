@@ -11,6 +11,7 @@ class CartProvider with ChangeNotifier {
   List<CartProduct> cartProducts;
   String cartTotal;
   double doubleCartTotal;
+  int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
   bool requestedMoreThanAvailableQuantity = false;
 
@@ -19,6 +20,7 @@ class CartProvider with ChangeNotifier {
     cart = _cart;
     cartTotal = _cart.total.formatted;
     doubleCartTotal = _cart.total.raw;
+    cartProductsCount = _cart.productsCount > 0 ? _cart.productsCount : 0;
     cartProducts = _cart.products == null ? [] : _cart.products;
   }
 
