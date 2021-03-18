@@ -99,7 +99,7 @@ class AppProvider with ChangeNotifier {
       uri = uri.replace(queryParameters: body);
       print("uri");
       print(uri);
-      final response = await http.get(uri, headers: withToken ? authHeader : headers);
+      final response = await http.get(uri, headers: withToken && token != null ? authHeader : headers);
 
       if (response.statusCode == 401) {
         if (token != null) {
