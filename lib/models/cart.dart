@@ -2,49 +2,45 @@ import 'package:tiptop_v2/models/product.dart';
 
 class AddRemoveProductDataResponse {
   AddRemoveProductDataResponse({
-    this.addRemoveProductData,
+    this.cartData,
     this.errors,
     this.message,
     this.status,
   });
 
-  AddRemoveProductData addRemoveProductData;
+  CartData cartData;
   String errors;
   String message;
   int status;
 
   factory AddRemoveProductDataResponse.fromJson(Map<String, dynamic> json) => AddRemoveProductDataResponse(
-        addRemoveProductData: json["data"] == null ? null : AddRemoveProductData.fromJson(json["data"]),
+        cartData: json["data"] == null ? null : CartData.fromJson(json["data"]),
         errors: json["errors"],
         message: json["message"],
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": addRemoveProductData.toJson(),
+        "data": cartData.toJson(),
         "errors": errors,
         "message": message,
         "status": status,
       };
 }
 
-class AddRemoveProductData {
-  AddRemoveProductData({
+class CartData {
+  CartData({
     this.cart,
-    this.quantity,
   });
 
   Cart cart;
-  int quantity;
 
-  factory AddRemoveProductData.fromJson(Map<String, dynamic> json) => AddRemoveProductData(
+  factory CartData.fromJson(Map<String, dynamic> json) => CartData(
         cart: Cart.fromJson(json["basket"]),
-        quantity: json["quantity"],
       );
 
   Map<String, dynamic> toJson() => {
         "cart": cart.toJson(),
-        "quantity": quantity,
       };
 }
 
@@ -69,7 +65,7 @@ class Cart {
   int userId;
   int chainId;
   int branchId;
-  List<Product> products;
+  List<CartProduct> products;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
         id: json["id"],
@@ -80,7 +76,7 @@ class Cart {
         userId: json["userId"],
         chainId: json["chainId"],
         branchId: json["branchId"],
-        products: List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
+        products: List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,5 +89,25 @@ class Cart {
         "chainId": chainId,
         "branchId": branchId,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
+      };
+}
+
+class CartProduct {
+  Product product;
+  int quantity;
+
+  CartProduct({
+    this.product,
+    this.quantity,
+  });
+
+  factory CartProduct.fromJson(Map<String, dynamic> json) => CartProduct(
+        product: Product.fromJson(json["product"]),
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product": product.toJson(),
+        "quantity": quantity,
       };
 }

@@ -52,7 +52,7 @@ class Product {
     this.excerpt,
     this.notes,
     this.customBannerText,
-    this.quantity,
+    this.availableQuantity,
     this.sku,
     this.upc,
     this.minimumOrderableQuantity,
@@ -76,7 +76,7 @@ class Product {
   dynamic excerpt;
   dynamic notes;
   dynamic customBannerText;
-  int quantity;
+  int availableQuantity;
   String sku;
   dynamic upc;
   int minimumOrderableQuantity;
@@ -100,7 +100,7 @@ class Product {
         excerpt: json["excerpt"],
         notes: json["notes"],
         customBannerText: json["customBannerText"],
-        quantity: json["quantity"],
+        availableQuantity: json["availableQuantity"],
         sku: json["sku"],
         upc: json["upc"],
         minimumOrderableQuantity: json["minimumOrderableQuantity"],
@@ -125,7 +125,7 @@ class Product {
         "excerpt": excerpt,
         "notes": notes,
         "customBannerText": customBannerText,
-        "quantity": quantity,
+        "availableQuantity": availableQuantity,
         "sku": sku,
         "upc": upc,
         "minimumOrderableQuantity": minimumOrderableQuantity,
