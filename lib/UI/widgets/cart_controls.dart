@@ -21,13 +21,15 @@ class CartControls extends StatelessWidget {
     @required this.quantity,
   });
 
+  static double productUnitTitleHeight = 12;
+
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     double cartButtonHeight = getCartControlButtonHeight(context);
 
     return Positioned(
-      bottom: 0,
+      bottom: product.unit == null || product.unit.title == null ? 0 : productUnitTitleHeight,
       left: cartControlsMargin,
       right: cartControlsMargin,
       height: cartButtonHeight,

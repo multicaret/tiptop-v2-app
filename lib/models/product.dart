@@ -117,7 +117,7 @@ class Product {
         height: json["height"],
         depth: json["depth"],
         weight: json["weight"].toDouble(),
-        unit: Unit.fromJson(json["unit"]),
+        unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
       );
 
   Map<String, dynamic> toJson() => {

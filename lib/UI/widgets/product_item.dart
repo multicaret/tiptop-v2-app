@@ -71,11 +71,13 @@ class _ProductItemState extends State<ProductItem> {
 
   @override
   Widget build(BuildContext context) {
+    bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2),
+          height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? CartControls.productUnitTitleHeight : 0),
           child: Stack(
             children: [
               AnimatedContainer(
@@ -95,6 +97,21 @@ class _ProductItemState extends State<ProductItem> {
                 quantity: productCartQuantity,
                 editCartAction: (actionName) => editCartAction(actionName),
               ),
+              if (hasUnitTitle)
+                Positioned(
+                  bottom: 0,
+                  height: CartControls.productUnitTitleHeight,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      widget.product.unit.title,
+                      style: AppTextStyles.subtitleXxs50,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
             ],
           ),
         ),
@@ -105,7 +122,7 @@ class _ProductItemState extends State<ProductItem> {
         ),
         SizedBox(height: 10),
         Price(price: widget.product.price.amountFormatted),
-        if (widget.product.discountedPrice != null && widget.product.discountedPrice.amountRaw != 0)
+        if (widget.product.discountedPrice != null)
           Price(
             price: widget.product.discountedPrice.amountFormatted,
             isDiscounted: true,
