@@ -43,7 +43,7 @@ class HomeProvider with ChangeNotifier {
       body: body,
       withToken: appProvider.isAuth,
     );
-
+    // print(responseData);
     homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
 
     if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
@@ -59,7 +59,7 @@ class HomeProvider with ChangeNotifier {
             ? null
             : homeData.branch.chain.id;
 
-    if(homeData.cart != null) {
+    if (homeData.cart != null) {
       cartProvider.setCart(homeData.cart);
     }
 

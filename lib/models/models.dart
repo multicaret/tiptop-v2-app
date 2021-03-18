@@ -514,3 +514,5 @@ class Notifications {
     "push_mobile_all": pushMobileAll,
   };
 }
+
+enum CartAction {ADD, REMOVE}

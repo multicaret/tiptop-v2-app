@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -13,12 +14,14 @@ class CartControls extends StatelessWidget {
   final bool isZero;
   final Function editCartAction;
   final int quantity;
+  final bool disableAddition;
 
   CartControls({
     @required this.product,
     @required this.isZero,
     @required this.editCartAction,
     @required this.quantity,
+    this.disableAddition = false,
   });
 
   static double productUnitTitleHeight = 12;
@@ -35,7 +38,7 @@ class CartControls extends StatelessWidget {
       height: cartButtonHeight,
       child: Stack(
         children: [
-          //Remove button
+          //Quantity
           Positioned(
             left: cartButtonHeight,
             height: cartButtonHeight,
@@ -56,15 +59,16 @@ class CartControls extends StatelessWidget {
               ),
             ),
           ),
+          //Remove Button
           buttonAnimatedContainer(
             context: context,
-            actionName: 'remove',
+            action: CartAction.REMOVE,
             isRTL: appProvider.isRTL,
           ),
           //Add Button
           buttonAnimatedContainer(
             context: context,
-            actionName: 'add',
+            action: CartAction.ADD,
             isRTL: appProvider.isRTL,
           ),
         ],
@@ -72,14 +76,14 @@ class CartControls extends StatelessWidget {
     );
   }
 
-  double getLeftOffset(String actionName, bool isRTL, double cartButtonHeight) {
-    if (actionName == 'add') {
+  double getLeftOffset(CartAction action, bool isRTL, double cartButtonHeight) {
+    if (action == CartAction.ADD) {
       return isZero
           ? cartButtonHeight
           : isRTL
               ? 0
               : cartButtonHeight * 2;
-    } else if (actionName == 'remove') {
+    } else if (action == CartAction.REMOVE) {
       return isZero
           ? cartButtonHeight
           : isRTL
@@ -90,15 +94,15 @@ class CartControls extends StatelessWidget {
     }
   }
 
-  BorderRadius getBorderRadius(String actionName, bool isRTL) {
-    if (actionName == 'add') {
+  BorderRadius getBorderRadius(CartAction action, bool isRTL) {
+    if (action == CartAction.ADD) {
       return BorderRadius.only(
         topLeft: Radius.circular(isZero || isRTL ? 10 : 0),
         bottomLeft: Radius.circular(isZero || isRTL ? 10 : 0),
         topRight: Radius.circular(isZero || !isRTL ? 10 : 0),
         bottomRight: Radius.circular(isZero || !isRTL ? 10 : 0),
       );
-    } else if (actionName == 'remove') {
+    } else if (action == CartAction.REMOVE) {
       return BorderRadius.only(
         topLeft: Radius.circular(isZero || !isRTL ? 10 : 0),
         bottomLeft: Radius.circular(isZero || !isRTL ? 10 : 0),
@@ -117,36 +121,41 @@ class CartControls extends StatelessWidget {
 
   Widget buttonAnimatedContainer({
     @required BuildContext context,
-    @required String actionName,
+    @required CartAction action,
     @required bool isRTL,
   }) {
     double cartButtonHeight = getCartControlButtonHeight(context);
+    bool _disableAddition = action == CartAction.ADD && disableAddition;
 
     return AnimatedPositioned(
       duration: Duration(milliseconds: 200),
-      left: getLeftOffset(actionName, isRTL, cartButtonHeight),
+      left: getLeftOffset(action, isRTL, cartButtonHeight),
       child: InkWell(
-        onTap: () {
-          editCartAction(actionName);
-        },
+        onTap: _disableAddition
+            ? null
+            : () {
+                editCartAction(action);
+              },
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
           height: cartButtonHeight,
           width: cartButtonHeight,
           decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: getBorderRadius(actionName, isRTL),
+            color: _disableAddition ? AppColors.disabled : AppColors.primary,
+            borderRadius: getBorderRadius(action, isRTL),
             boxShadow: [
               BoxShadow(blurRadius: 6, color: AppColors.shadow),
             ],
           ),
-          child: AppIcon.iconXsWhite(
-            actionName == 'add'
-                ? FontAwesomeIcons.plus
-                : quantity == 1
-                    ? FontAwesomeIcons.trashAlt
-                    : FontAwesomeIcons.minus,
-          ),
+          child: _disableAddition
+              ? AppIcon.iconXsWhite50(FontAwesomeIcons.plus)
+              : AppIcon.iconXsWhite(
+                  action == CartAction.ADD
+                      ? FontAwesomeIcons.plus
+                      : quantity == 1
+                          ? FontAwesomeIcons.trashAlt
+                          : FontAwesomeIcons.minus,
+                ),
         ),
       ),
     );

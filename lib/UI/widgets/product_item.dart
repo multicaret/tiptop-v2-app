@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
-import 'package:tiptop_v2/UI/widgets/price.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -11,6 +11,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import 'formatted_price.dart';
 
 class ProductItem extends StatefulWidget {
   final Product product;
@@ -27,34 +29,40 @@ class _ProductItemState extends State<ProductItem> {
   HomeProvider homeProvider;
   CartProvider cartProvider;
   bool _isInit = true;
-  bool _isLoadingAddRemoveRequest = false;
+  bool requestedMoreThanAvailableQuantity = false;
 
-  Future<void> editCartAction(String actionName) async {
+  Future<void> editCartAction(CartAction actionName) async {
     if (!appProvider.isAuth) {
       showToast(msg: 'You Need to Log In First!');
       Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
     } else {
+      int _oldProductCartQuantity = productCartQuantity;
       setState(() {
-        _isLoadingAddRemoveRequest = true;
-      });
-      //Add item
-      print('$actionName ${widget.product.id} ${widget.product.title}');
-      await cartProvider.addRemoveProduct(
-        context: context,
-        appProvider: appProvider,
-        homeProvider: homeProvider,
-        isAdding: actionName == 'add',
-        productId: widget.product.id,
-      );
-
-      setState(() {
-        _isLoadingAddRemoveRequest = false;
-        productCartQuantity = actionName == 'add'
+        productCartQuantity = actionName == CartAction.ADD
             ? productCartQuantity + 1
             : productCartQuantity == 1
                 ? 0
                 : productCartQuantity - 1;
       });
+      print('$actionName ${widget.product.id} ${widget.product.title}');
+      try {
+        int returnedProductQuantity = await cartProvider.addRemoveProduct(
+          context: context,
+          appProvider: appProvider,
+          homeProvider: homeProvider,
+          isAdding: actionName == CartAction.ADD,
+          productId: widget.product.id,
+        );
+        requestedMoreThanAvailableQuantity = cartProvider.requestedMoreThanAvailableQuantity;
+        if (requestedMoreThanAvailableQuantity) {
+          print('Requested quantity: $productCartQuantity, Returned quantity: $returnedProductQuantity');
+          showToast(msg: 'There are only $returnedProductQuantity available ${widget.product.title}');
+          setState(() => productCartQuantity = returnedProductQuantity);
+        }
+      } catch (e) {
+        //If an error occurred, reset the quantity
+        setState(() => productCartQuantity = _oldProductCartQuantity);
+      }
     }
   }
 
@@ -64,6 +72,8 @@ class _ProductItemState extends State<ProductItem> {
       appProvider = Provider.of<AppProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
+      // print('productCartQuantity: $productCartQuantity');
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -95,6 +105,7 @@ class _ProductItemState extends State<ProductItem> {
                 product: widget.product,
                 isZero: productCartQuantity == 0,
                 quantity: productCartQuantity,
+                disableAddition: requestedMoreThanAvailableQuantity,
                 editCartAction: (actionName) => editCartAction(actionName),
               ),
               if (hasUnitTitle)
@@ -121,9 +132,9 @@ class _ProductItemState extends State<ProductItem> {
           style: AppTextStyles.subtitle,
         ),
         SizedBox(height: 10),
-        Price(price: widget.product.price.amountFormatted),
+        FormattedPrice(price: widget.product.price.amountFormatted),
         if (widget.product.discountedPrice != null)
-          Price(
+          FormattedPrice(
             price: widget.product.discountedPrice.amountFormatted,
             isDiscounted: true,
           ),

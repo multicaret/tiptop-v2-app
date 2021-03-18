@@ -12,15 +12,26 @@ class CartProvider with ChangeNotifier {
   String cartTotal;
   double doubleCartTotal;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
+  bool requestedMoreThanAvailableQuantity = false;
 
   void setCart(Cart _cart) {
+    print('setting cart, products count: ${_cart.products.length}');
     cart = _cart;
     cartTotal = _cart.total.formatted;
     doubleCartTotal = _cart.total.raw;
     cartProducts = _cart.products == null ? [] : _cart.products;
   }
 
-  Future<dynamic> addRemoveProduct({
+  int getProductQuantity(int productId) {
+    if (cart != null && cartProducts != null && cartProducts.length != 0) {
+      CartProduct cartProduct = cartProducts.firstWhere((cartProduct) => cartProduct.product.id == productId, orElse: () => null);
+      return cartProduct == null ? 0 : cartProduct.quantity;
+    } else {
+      return 0;
+    }
+  }
+
+  Future<int> addRemoveProduct({
     @required BuildContext context,
     @required AppProvider appProvider,
     @required HomeProvider homeProvider,
@@ -35,32 +46,41 @@ class CartProvider with ChangeNotifier {
       'is_adding': isAdding,
     };
 
-    final responseData = await appProvider.post(
-      endpoint: endpoint,
-      body: body,
-      withToken: true,
-    );
+    requestedMoreThanAvailableQuantity = false;
+    try {
+      final responseData = await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
+      // print(responseData);
 
-    if (responseData == 401) {
-      if (appProvider.token != null) {
-        print('Sending authenticated request with expired token! Logging out...');
-        appProvider.logout();
-        return;
-      } else {
-        print('Sending authenticated request without logging in!');
+      if (responseData == 401) {
+        //Sending authenticated request without logging in!
         showToast(msg: 'You need to log in first!');
         Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
+        return null;
       }
+
+      addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
+
+      if (addRemoveProductDataResponse.status == 422) {
+        requestedMoreThanAvailableQuantity = true;
+        int productAvailableQuantity = addRemoveProductDataResponse.cartData.availableQuantity;
+        print('product is not available, available quantity: $productAvailableQuantity');
+        return productAvailableQuantity;
+      }
+
+      if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
+        throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
+      }
+      setCart(addRemoveProductDataResponse.cartData.cart);
+
+      notifyListeners();
+
+      return getProductQuantity(productId);
+    } catch (e) {
+      throw e;
     }
-
-    addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
-
-    if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
-      throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
-    }
-
-    setCart(addRemoveProductDataResponse.cartData.cart);
-
-    notifyListeners();
   }
 }

@@ -4,11 +4,11 @@ import 'package:flutter_html/style.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class Price extends StatelessWidget {
+class FormattedPrice extends StatelessWidget {
   final String price;
   final bool isDiscounted;
 
-  Price({
+  FormattedPrice({
     @required this.price,
     this.isDiscounted = false,
   });
