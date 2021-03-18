@@ -42,4 +42,8 @@ class AppIcon {
   static iconXsWhite(IconData iconName) {
     return Icon(iconName, color: AppColors.white, size: 13);
   }
+
+  static iconXsWhite50(IconData iconName) {
+    return Icon(iconName, color: AppColors.white.withOpacity(0.5), size: 13);
+  }
 }
