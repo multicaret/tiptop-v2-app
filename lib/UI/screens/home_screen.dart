@@ -9,6 +9,7 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool isLoadingHomeData = false;
+  bool homeDataRequestError = false;
   bool _isInit = true;
   AppProvider appProvider;
   HomeProvider homeProvider;
@@ -40,14 +42,22 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoadingHomeData = true;
     });
-
-    await homeProvider.fetchAndSetHomeData();
-    estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
-    categories = homeProvider.homeData.categories;
-
-    setState(() {
-      isLoadingHomeData = false;
-    });
+    try {
+      await homeProvider.fetchAndSetHomeData();
+      estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
+      categories = homeProvider.homeData.categories;
+      setState(() {
+        isLoadingHomeData = false;
+      });
+    } catch (e) {
+      //Todo: translate this string/reconsider what to do
+      showToast(msg: 'An Error Occurred! Please try again later');
+      setState(() {
+        homeDataRequestError = true;
+        isLoadingHomeData = false;
+      });
+      throw e;
+    }
   }
 
   Future<void> selectCategory(int categoryId) async {
@@ -70,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         AddressSelectButton(
-          isLoadingHomeData: isLoadingHomeData,
+          isLoadingHomeData: isLoadingHomeData || homeDataRequestError,
           estimatedArrivalTime: estimatedArrivalTime,
         ),
         Expanded(
@@ -81,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  isLoadingHomeData
+                  isLoadingHomeData || homeDataRequestError
                       ? Container(
                           height: 212,
                           color: AppColors.bg,
@@ -91,10 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           autoplayDuration: Duration(milliseconds: 3000),
                         ),
                   ChannelsButtons(),
-                  isLoadingHomeData
+                  isLoadingHomeData || homeDataRequestError
                       ? Padding(
                           padding: EdgeInsets.symmetric(vertical: 50),
-                          child: AppLoader(),
+                          child: homeDataRequestError ? Text('An error occurred! Please try again later') : AppLoader(),
                         )
                       : GridView.count(
                           padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),

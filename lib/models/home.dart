@@ -50,7 +50,7 @@ class HomeData {
     addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
     slides: List<dynamic>.from(json["slides"].map((x) => x)),
     estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
-    branch: Branch.fromJson(json["branch"]),
+    branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
     distance: json["distance"],
     hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
     categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
@@ -118,7 +118,7 @@ class Branch {
     whatsappPhoneNumber: json["whatsappPhoneNumber"],
     latitude: json["latitude"],
     longitude: json["longitude"],
-    chain: Chain.fromJson(json["chain"]),
+    chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -133,7 +133,7 @@ class Branch {
     "whatsappPhoneNumber": whatsappPhoneNumber,
     "latitude": latitude,
     "longitude": longitude,
-    "chain": chain.toJson(),
+    "chain": chain == null ? null : chain.toJson(),
   };
 }
 
