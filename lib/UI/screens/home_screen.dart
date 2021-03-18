@@ -45,9 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
       await homeProvider.fetchAndSetHomeData();
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
-      if (homeProvider.branchId == null) {
-        setState(() => _noBranchFound = true);
-      }
+
+      if (homeProvider.branchId == null) setState(() => _noBranchFound = true);
+
       setState(() => isLoadingHomeData = false);
     } catch (e) {
       //Todo: translate this string/reconsider what to do
@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: _noBranchFound
                               ? Text('No Branch Found')
                               : homeDataRequestError
+                                  //Todo: translate this string/reconsider what to do
                                   ? Text('An error occurred! Please try again later')
                                   : AppLoader(),
                         )
