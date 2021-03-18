@@ -24,14 +24,8 @@ class ChildCategoriesTabs extends StatelessWidget {
     return Container(
       height: childCategoriesTabsHeight,
       decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(width: 1.5, color: AppColors.border)),
         color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 4,
-            offset: Offset.fromDirection(1.57, 5),
-          )
-        ],
       ),
       child: ListView(
         controller: itemScrollController,
