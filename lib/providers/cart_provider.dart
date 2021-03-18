@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 
 class CartProvider with ChangeNotifier {
   Cart cart;
   List<CartProduct> cartProducts;
+  String cartTotal;
+  double doubleCartTotal;
+  AddRemoveProductDataResponse addRemoveProductDataResponse;
+
+  void setCart(Cart _cart) {
+    cart = _cart;
+    cartTotal = _cart.total.formatted;
+    doubleCartTotal = _cart.total.raw;
+    cartProducts = _cart.products == null ? [] : _cart.products;
+  }
 
   Future<dynamic> addRemoveProduct({
     @required AppProvider appProvider,
@@ -37,5 +48,15 @@ class CartProvider with ChangeNotifier {
         return 401;
       }
     }
+
+    addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
+
+    if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
+      throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
+    }
+
+    setCart(addRemoveProductDataResponse.cartData.cart);
+
+    notifyListeners();
   }
 }

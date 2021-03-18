@@ -8,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -29,8 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool homeDataRequestError = false;
   bool _noBranchFound = false;
   bool _isInit = true;
+
   AppProvider appProvider;
   HomeProvider homeProvider;
+  CartProvider cartProvider;
+
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
 
@@ -42,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
     try {
-      await homeProvider.fetchAndSetHomeData();
+      await homeProvider.fetchAndSetHomeData(appProvider, cartProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
 
@@ -69,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
       _fetchAndSetHomeData();
     }
     _isInit = false;
