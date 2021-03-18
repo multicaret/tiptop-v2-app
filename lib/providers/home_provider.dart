@@ -12,6 +12,8 @@ class HomeProvider with ChangeNotifier {
   HomeDataResponse homeDataResponse;
   HomeData homeData;
   List<Category> categories;
+  int branchId;
+  int chainId;
 
   bool categorySelected = false;
   int selectedParentCategoryId;
@@ -48,5 +50,11 @@ class HomeProvider with ChangeNotifier {
 
     homeData = homeDataResponse.homeData;
     categories = homeData.categories;
+    branchId = homeData.branch == null ? null : homeData.branch.id;
+    chainId = branchId == null
+        ? null
+        : homeData.branch.chain == null
+            ? null
+            : homeData.branch.chain.id;
   }
 }

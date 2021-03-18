@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/cart.dart';
-import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 
 class CartProvider with ChangeNotifier {
   Cart cart;
-  List<Product> cartProducts;
+  List<CartProduct> cartProducts;
 
-  Future<dynamic> addRemoveProduct(
-    AppProvider appProvider, {
+  Future<dynamic> addRemoveProduct({
+    @required AppProvider appProvider,
+    @required HomeProvider homeProvider,
     @required bool isAdding,
     @required int productId,
-    //Todo: send chain id and branch dynamically
-    int chainId = 1,
-    int branchId = 3,
   }) async {
     final endpoint = 'baskets/add-remove-product';
     Map<String, dynamic> body = {
       'product_id': productId,
-      'chain_id': chainId,
-      'branch_id': branchId,
+      'chain_id': homeProvider.chainId,
+      'branch_id': homeProvider.branchId,
       'is_adding': isAdding,
     };
 
@@ -33,6 +31,7 @@ class CartProvider with ChangeNotifier {
       if (appProvider.token != null) {
         print('Sending authenticated request with expired token! Logging out...');
         appProvider.logout();
+        return;
       } else {
         print('Sending authenticated request without logging in!');
         return 401;
