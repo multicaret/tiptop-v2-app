@@ -33,16 +33,20 @@ class AddRemoveProductDataResponse {
 class CartData {
   CartData({
     this.cart,
+    this.availableQuantity,
   });
 
   Cart cart;
+  int availableQuantity;
 
   factory CartData.fromJson(Map<String, dynamic> json) => CartData(
-        cart: Cart.fromJson(json["basket"]),
+        cart: json["basket"] == null ? null : Cart.fromJson(json["basket"]),
+        availableQuantity: json["availableQuantity"],
       );
 
   Map<String, dynamic> toJson() => {
         "cart": cart.toJson(),
+        "availableQuantity": availableQuantity,
       };
 }
 
