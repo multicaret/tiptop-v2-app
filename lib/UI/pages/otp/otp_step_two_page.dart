@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -25,6 +26,7 @@ class OTPStepTwoPage extends StatefulWidget {
 class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObserver {
   AppProvider appProvider;
   OTPProvider otpProvider;
+  HomeProvider homeProvider;
   String deepLink;
   String reference;
   String phoneNumber;
@@ -79,6 +81,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
       isValid = otpProvider.validationStatus;
       isNewUser = otpProvider.isNewUser;
       if (isValid == true) {
+        homeProvider.selectCategory(null);
         if (isNewUser) {
           print('New user, navigating to complete profile page');
           Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
@@ -101,6 +104,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
     if (_isInit) {
       otpProvider = Provider.of<OTPProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       Map<String, String> data = ModalRoute.of(context).settings.arguments as Map<String, String>;
       phoneNumber = data['phone_number'];
       phoneCountryCode = data['phone_country_code'];
