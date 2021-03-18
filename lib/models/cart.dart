@@ -1,5 +1,7 @@
 import 'package:tiptop_v2/models/product.dart';
 
+import 'models.dart';
+
 class AddRemoveProductDataResponse {
   AddRemoveProductDataResponse({
     this.cartData,
@@ -48,6 +50,7 @@ class Cart {
   Cart({
     this.id,
     this.productsCount,
+    this.total,
     this.status,
     this.createdAt,
     this.updatedAt,
@@ -59,6 +62,7 @@ class Cart {
 
   int id;
   int productsCount;
+  DoubleRawStringFormatted total;
   int status;
   String createdAt;
   String updatedAt;
@@ -70,6 +74,7 @@ class Cart {
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
         id: json["id"],
         productsCount: json["productsCount"],
+        total: DoubleRawStringFormatted.fromJson(json["total"]),
         status: json["status"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
