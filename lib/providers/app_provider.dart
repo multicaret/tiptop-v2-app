@@ -100,9 +100,16 @@ class AppProvider with ChangeNotifier {
       print("uri");
       print(uri);
       final response = await http.get(uri, headers: withToken ? authHeader : headers);
+
       if (response.statusCode == 401) {
-        print('unauthenticated request!');
-        return 401;
+        if (token != null) {
+          print('Sending authenticated request with expired token! Logging out...');
+          logout();
+          return;
+        } else {
+          print('Sending authenticated request without logging in!');
+          return 401;
+        }
       }
 
       final responseData = json.decode(response.body);
@@ -127,8 +134,14 @@ class AppProvider with ChangeNotifier {
       http.Response response = await http.post(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
       final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
       if (response.statusCode == 401) {
-        print('Unauthenticated request!');
-        return 401;
+        if (token != null) {
+          print('Sending authenticated request with expired token! Logging out...');
+          logout();
+          return;
+        } else {
+          print('Sending authenticated request without logging in!');
+          return 401;
+        }
       }
       return responseData;
     } catch (error) {
@@ -176,8 +189,8 @@ class AppProvider with ChangeNotifier {
     if (token != null) {
       print('Token found in local storage, auto login successful!');
       print('User id: ${authUser.id}, username: ${authUser.name}');
-      // print('token');
-      // print(token);
+      print('token');
+      print(token);
     }
     notifyListeners();
   }
@@ -190,7 +203,5 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void isAttemptingRequestWithExpiredToken() {
-
-  }
+  void isAttemptingRequestWithExpiredToken() {}
 }
