@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool isLoadingHomeData = false;
   bool homeDataRequestError = false;
+  bool _noBranchFound = false;
   bool _isInit = true;
   AppProvider appProvider;
   HomeProvider homeProvider;
@@ -39,16 +40,15 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   Future<void> _fetchAndSetHomeData() async {
-    setState(() {
-      isLoadingHomeData = true;
-    });
+    setState(() => isLoadingHomeData = true);
     try {
       await homeProvider.fetchAndSetHomeData();
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
-      setState(() {
-        isLoadingHomeData = false;
-      });
+      if (homeProvider.branchId == null) {
+        setState(() => _noBranchFound = true);
+      }
+      setState(() => isLoadingHomeData = false);
     } catch (e) {
       //Todo: translate this string/reconsider what to do
       showToast(msg: 'An Error Occurred! Please try again later');
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         AddressSelectButton(
-          isLoadingHomeData: isLoadingHomeData || homeDataRequestError,
+          isLoadingHomeData: isLoadingHomeData || homeDataRequestError || _noBranchFound,
           estimatedArrivalTime: estimatedArrivalTime,
         ),
         Expanded(
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  isLoadingHomeData || homeDataRequestError
+                  isLoadingHomeData || homeDataRequestError || _noBranchFound
                       ? Container(
                           height: 212,
                           color: AppColors.bg,
@@ -101,10 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           autoplayDuration: Duration(milliseconds: 3000),
                         ),
                   ChannelsButtons(),
-                  isLoadingHomeData || homeDataRequestError
+                  isLoadingHomeData || homeDataRequestError || _noBranchFound
                       ? Padding(
                           padding: EdgeInsets.symmetric(vertical: 50),
-                          child: homeDataRequestError ? Text('An error occurred! Please try again later') : AppLoader(),
+                          child: _noBranchFound
+                              ? Text('No Branch Found')
+                              : homeDataRequestError
+                                  ? Text('An error occurred! Please try again later')
+                                  : AppLoader(),
                         )
                       : GridView.count(
                           padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
