@@ -42,5 +42,13 @@
   "Market": "Market",
   "Select Address": "Select Address",
   "Products": "Products",
-  "Invalid Form": "Invalid Form"
+  "Invalid Form": "Invalid Form",
+  "My Addresses" : "My Addresses",
+  "My Favorites" : "My Favorites",
+  "Previous Orders" : "Previous Orders",
+  "Payment Methods" : "Payment Methods",
+  "Support" : "Support",
+  "Blog":"Blog",
+  "About TipTop" : "About TipTop",
+  "Languages" : "Languages"
 }

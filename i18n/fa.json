@@ -42,5 +42,13 @@
   "Market": "ماركت",
   "Select Address": "اختر العنوان",
   "Products": "المنتجات",
-  "Invalid Form": "البيانات خاطئة أو ناقصة"
+  "Invalid Form": "البيانات خاطئة أو ناقصة",
+  "My Addresses" : "العناوين",
+  "My Favorites" : "مفضلتي",
+  "Previous Orders" : "الطلبات السابقة",
+  "Payment Methods" : "طرق الدفع",
+  "Support" : "الدعم",
+  "Blog":"مقالات",
+  "About TipTop" : "حول TipTop",
+  "Languages" : "اللغات"
 }
