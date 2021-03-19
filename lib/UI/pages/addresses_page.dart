@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class MyAddressesPage extends StatelessWidget {
+class AddressesPage extends StatelessWidget {
   static const routeName = '/my-addresses';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

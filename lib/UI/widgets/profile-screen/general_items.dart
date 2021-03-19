@@ -20,7 +20,7 @@ class GeneralItems extends StatelessWidget {
     {
       'title': "My Addresses",
       'icon': FontAwesomeIcons.mapMarked,
-      'route': MyAddressesPage.routeName,
+      'route': AddressesPage.routeName,
     },
     {
       'title': "My Favorites",

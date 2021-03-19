@@ -3,9 +3,9 @@ import 'package:tiptop_v2/UI/pages/about_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/favorites_page.dart';
-import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
+import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_three_page.dart';
@@ -18,7 +18,7 @@ import 'UI/pages/otp/otp_step_two_page.dart';
 
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
-  MyAddressesPage.routeName: (BuildContext context) => MyAddressesPage(),
+  AddressesPage.routeName: (BuildContext context) => AddressesPage(),
   BlogPage.routeName: (BuildContext context) => BlogPage(),
   FavoritesPage.routeName: (BuildContext context) => FavoritesPage(),
   PaymentMethodsPage.routeName: (BuildContext context) => PaymentMethodsPage(),
