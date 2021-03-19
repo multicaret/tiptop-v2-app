@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/screens/home_screen.dart';
 import 'package:tiptop_v2/UI/screens/products_screen.dart';
 import 'package:tiptop_v2/UI/screens/profile_screen.dart';
+import 'package:tiptop_v2/UI/widgets/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -98,7 +99,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
     super.build(context);
     return Consumer<HomeProvider>(
       builder: (c, homeProvider, _) => AppScaffold(
-        hasCurve: !homeProvider.categorySelected,
+        hasCurve: !homeProvider.categorySelected || currentTabIndex == 4,
         appBar: currentTabIndex == 0 && homeProvider.categorySelected
             ? AppBar(
                 automaticallyImplyLeading: false,
@@ -107,6 +108,9 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
                   onPressed: () => homeProvider.selectCategory(null),
                   icon: Icon(Platform.isAndroid ? Icons.arrow_back : CupertinoIcons.back),
                 ),
+                actions: [
+                  AppBarCartTotal(),
+                ],
               )
             : currentTabIndex != 0
                 ? AppBar(title: Text(_getTabsList(homeProvider)[currentTabIndex]['title']))

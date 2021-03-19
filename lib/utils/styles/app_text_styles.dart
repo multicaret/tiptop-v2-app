@@ -92,6 +92,14 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle subtitleXxsWhite = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white,
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle subtitleXsBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
