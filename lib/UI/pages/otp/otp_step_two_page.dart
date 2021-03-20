@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/main_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
@@ -14,6 +13,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app_wrapper.dart';
 import 'otp_step_three_page.dart';
 
 class OTPStepTwoPage extends StatefulWidget {
@@ -87,7 +87,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
           Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
         } else {
           print('Registered user, navigating to home page');
-          Navigator.of(context).pushReplacementNamed(MainPage.routeName);
+          Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
         }
       } else {
         showToast(msg: 'OTP Validation Failed');
