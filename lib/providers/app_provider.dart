@@ -152,7 +152,7 @@ class AppProvider with ChangeNotifier {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
           logout();
-          return;
+          return null;
         } else {
           print('Sending authenticated request without logging in!');
           return 401;

@@ -40,7 +40,7 @@ class CartData {
   int availableQuantity;
 
   factory CartData.fromJson(Map<String, dynamic> json) => CartData(
-        cart: json["basket"] == null ? null : Cart.fromJson(json["basket"]),
+        cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         availableQuantity: json["availableQuantity"],
       );
 
