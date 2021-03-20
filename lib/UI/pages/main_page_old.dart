@@ -77,8 +77,8 @@ class _AppWrapperState extends State<AppWrapper> with AutomaticKeepAliveClientMi
         'icon': LineAwesomeIcons.search,
       },
       {
-        'title': 'Basket',
-        'screen': Center(child: Text('Basket test')),
+        'title': 'Cart',
+        'screen': Center(child: Text('Cart test')),
         'icon': LineAwesomeIcons.shopping_cart,
       },
       {

@@ -89,9 +89,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      // appBarActions: [
-        // AppBarCartTotal(),
-      // ],
+      appBarActions: appProvider.isAuth ? [
+        AppBarCartTotal(isLoadingHomeData: isLoadingHomeData),
+      ] : null,
       bodyPadding: EdgeInsets.all(0),
       body: Column(
         children: [

@@ -4,10 +4,10 @@ import 'package:tiptop_v2/UI/widgets/profile-screen/profile_setting_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
-class LanguageContainer extends StatelessWidget {
+class LanguagesContainer extends StatelessWidget {
   final AppProvider appProvider;
 
-  LanguageContainer({this.appProvider});
+  LanguagesContainer({this.appProvider});
 
   @override
   Widget build(BuildContext context) {

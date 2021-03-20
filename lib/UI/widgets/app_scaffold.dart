@@ -10,6 +10,7 @@ class AppScaffold extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final ConvexAppBar bottomNavigationBar;
   final bool hasCurve;
+  final List<Widget> appBarActions;
 
   const AppScaffold({
     this.body,
@@ -19,6 +20,7 @@ class AppScaffold extends StatelessWidget {
     this.automaticallyImplyLeading = true,
     this.bottomNavigationBar,
     this.hasCurve = true,
+    this.appBarActions
   });
 
   @override
@@ -53,6 +55,7 @@ class AppScaffold extends StatelessWidget {
                   width: 77.42,
                   height: 26.84,
                 ),
+                actions: appBarActions
               ),
           body: ClipRRect(
             borderRadius: BorderRadius.only(

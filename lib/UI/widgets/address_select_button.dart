@@ -105,7 +105,7 @@ class AddressSelectButton extends StatelessWidget {
                         onTap: () {
                           //Todo: run this code and show this button also when user is logged in but no address is selected
                           showToast(msg: 'You need to log in first!');
-                          Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
+                          Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                         },
                       )
                     : Row(

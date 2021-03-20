@@ -9,8 +9,8 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 class CartProvider with ChangeNotifier {
   Cart cart;
   List<CartProduct> cartProducts;
-  String cartTotal;
-  double doubleCartTotal;
+  String cartTotal = '';
+  double doubleCartTotal = 0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
   bool requestedMoreThanAvailableQuantity = false;
@@ -76,6 +76,7 @@ class CartProvider with ChangeNotifier {
       if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
         throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
       }
+
       setCart(addRemoveProductDataResponse.cartData.cart);
 
       notifyListeners();
