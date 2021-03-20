@@ -22,10 +22,11 @@ class LanguageSelectPage extends StatelessWidget {
         width: screenSize.width,
         padding: EdgeInsets.symmetric(horizontal: 17),
         decoration: BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage("assets/images/page-bg-pattern.png"),
-          fit: BoxFit.cover,
-        )),
+          image: DecorationImage(
+            image: AssetImage("assets/images/page-bg-pattern.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -57,7 +58,7 @@ List<Widget> _languageItems(
           appProvider.changeLanguage(_appLanguages[i]['locale']);
           homeProvider.selectCategory(null);
           //Todo: remove this when profile screen has language selection
-          if(appProvider.localeSelected) {
+          if (appProvider.localeSelected) {
             Navigator.of(context).pushNamed(MainPage.routeName);
           }
         },
