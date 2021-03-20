@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/products-screen/parent_categories_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/products-screen/parent_category_tab_content.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 
 class ProductsPage extends StatefulWidget {
   static const routeName = '/products';
@@ -42,8 +45,11 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
     return AppScaffold(
       hasCurve: false,
+      appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       body: Column(
         children: [
           ParentCategoriesTabs(
