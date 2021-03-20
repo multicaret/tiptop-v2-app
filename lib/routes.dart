@@ -14,13 +14,17 @@ import 'package:tiptop_v2/UI/pages/otp/otp_step_three_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_two_page.dart';
 import 'package:tiptop_v2/UI/pages/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
+import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
+  PrivacyPage.routeName: (BuildContext context) => PrivacyPage(),
+  TermsPage.routeName: (BuildContext context) => TermsPage(),
   AddressesPage.routeName: (BuildContext context) => AddressesPage(),
   BlogPage.routeName: (BuildContext context) => BlogPage(),
   FavoritesPage.routeName: (BuildContext context) => FavoritesPage(),

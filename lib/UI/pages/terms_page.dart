@@ -5,16 +5,16 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/models/static_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
-class AboutPage extends StatefulWidget {
-  static const routeName = '/about';
+class TermsPage extends StatefulWidget {
+  static const routeName = '/terms';
 
   @override
-  _AboutPageState createState() => _AboutPageState();
+  _TermsPageState createState() => _TermsPageState();
 }
 
-class _AboutPageState extends State<AboutPage> {
+class _TermsPageState extends State<TermsPage> {
   bool _isLoading = false;
-  StaticPage _about;
+  StaticPage _terms;
 
   @override
   void initState() {
@@ -26,9 +26,9 @@ class _AboutPageState extends State<AboutPage> {
     setState(() {
       _isLoading = true;
     });
-    final responseData = await AppProvider().get(endpoint: 'about-us');
+    final responseData = await AppProvider().get(endpoint: 'terms-and-conditions');
     StaticPageResponse staticPageResponse = StaticPageResponse.fromJson(responseData);
-    _about = staticPageResponse.staticPage;
+    _terms = staticPageResponse.staticPage;
     setState(() {
       _isLoading = false;
     });
@@ -46,7 +46,7 @@ class _AboutPageState extends State<AboutPage> {
                 padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                 child: Html(
                   shrinkWrap: true,
-                  data: """${_about.content.formatted}""",
+                  data: """${_terms.content.formatted}""",
                 ),
               ),
       ),

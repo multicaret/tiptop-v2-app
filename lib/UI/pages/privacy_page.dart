@@ -5,16 +5,16 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/models/static_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
-class AboutPage extends StatefulWidget {
-  static const routeName = '/about';
+class PrivacyPage extends StatefulWidget {
+  static const routeName = '/privacy';
 
   @override
-  _AboutPageState createState() => _AboutPageState();
+  _PrivacyPageState createState() => _PrivacyPageState();
 }
 
-class _AboutPageState extends State<AboutPage> {
+class _PrivacyPageState extends State<PrivacyPage> {
   bool _isLoading = false;
-  StaticPage _about;
+  StaticPage _privacy;
 
   @override
   void initState() {
@@ -26,9 +26,9 @@ class _AboutPageState extends State<AboutPage> {
     setState(() {
       _isLoading = true;
     });
-    final responseData = await AppProvider().get(endpoint: 'about-us');
+    final responseData = await AppProvider().get(endpoint: 'privacy-policy');
     StaticPageResponse staticPageResponse = StaticPageResponse.fromJson(responseData);
-    _about = staticPageResponse.staticPage;
+    _privacy = staticPageResponse.staticPage;
     setState(() {
       _isLoading = false;
     });
@@ -46,7 +46,7 @@ class _AboutPageState extends State<AboutPage> {
                 padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                 child: Html(
                   shrinkWrap: true,
-                  data: """${_about.content.formatted}""",
+                  data: """${_privacy.content.formatted}""",
                 ),
               ),
       ),
