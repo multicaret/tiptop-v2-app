@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/screens/home_screen.dart';
-import 'package:tiptop_v2/UI/screens/products_screen.dart';
-import 'package:tiptop_v2/UI/screens/profile_screen.dart';
+import 'package:tiptop_v2/UI/pages/home_page.dart';
+import 'package:tiptop_v2/UI/pages/products_page.dart';
+import 'package:tiptop_v2/UI/pages/profile_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart_items_count_badge.dart';
@@ -15,14 +15,14 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class MainPage extends StatefulWidget {
+class AppWrapper extends StatefulWidget {
   static const routeName = '/main-page';
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _AppWrapperState createState() => _AppWrapperState();
 }
 
-class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<MainPage> {
+class _AppWrapperState extends State<AppWrapper> with AutomaticKeepAliveClientMixin<AppWrapper> {
   int currentTabIndex = 0;
 
   @override
@@ -64,11 +64,11 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
       {
         'title': 'Home',
         'screen': homeProvider.categorySelected
-            ? ProductsScreen(
+            ? ProductsPage(
                 parents: homeProvider.categories,
                 selectedParentCategoryId: homeProvider.selectedParentCategoryId,
               )
-            : HomeScreen(),
+            : HomePage(),
         'icon': LineAwesomeIcons.home,
       },
       {
@@ -78,7 +78,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
       },
       {
         'title': 'Basket',
-        'screen': Center(child: Text('Basket')),
+        'screen': Center(child: Text('Basket test')),
         'icon': LineAwesomeIcons.shopping_cart,
       },
       {
@@ -88,7 +88,7 @@ class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin<
       },
       {
         'title': 'Profile',
-        'screen': ProfileScreen(),
+        'screen': ProfilePage(),
         'icon': LineAwesomeIcons.user_cog,
       },
     ];

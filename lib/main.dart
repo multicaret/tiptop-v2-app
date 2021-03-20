@@ -12,8 +12,8 @@ import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'UI/pages/main_page.dart';
-import 'UI/screens/splash_screen.dart';
+import 'UI/app_wrapper.dart';
+import 'UI/splash_screen.dart';
 import 'i18n/translations.dart';
 
 void main() async {
@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
           ),
           home: app.localeSelected
               ? app.isAuth
-                  ? MainPage()
+                  ? AppWrapper()
                   : FutureBuilder(
                       future: _autoLoginFuture,
                       builder: (c, authResultSnapshot) =>

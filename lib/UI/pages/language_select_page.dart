@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/main_page.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
 
 class LanguageSelectPage extends StatelessWidget {
   static const routeName = '/language-select';
@@ -58,7 +59,7 @@ List<Widget> _languageItems(
           homeProvider.selectCategory(null);
           //Todo: remove this when profile screen has language selection
           if(appProvider.localeSelected) {
-            Navigator.of(context).pushNamed(MainPage.routeName);
+            Navigator.of(context).pushNamed(AppWrapper.routeName);
           }
         },
         child: Row(
