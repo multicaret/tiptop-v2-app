@@ -10,6 +10,5 @@ class PaymentMethodsPage extends StatelessWidget {
         child: Text('Payment Methods Page'),
       ),
     );
-    ;
   }
 }
