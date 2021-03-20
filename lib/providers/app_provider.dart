@@ -119,11 +119,21 @@ class AppProvider with ChangeNotifier {
     }
   }
 
+  Future<dynamic> put({
+    @required String endpoint,
+    Map<String, String> params,
+    Map<String, dynamic> body,
+    bool withToken = false,
+  }) async {
+    this.post(endpoint: endpoint, body: body, params: params, withToken: withToken, isPut: true);
+  }
+
   Future<dynamic> post({
     @required String endpoint,
     Map<String, String> params,
     Map<String, dynamic> body,
     bool withToken = false,
+    bool isPut = false,
   }) async {
     try {
       final root = await this.endpointRoot();
@@ -131,7 +141,12 @@ class AppProvider with ChangeNotifier {
       uri = uri.replace(queryParameters: params);
       print("uri");
       print(uri);
-      http.Response response = await http.post(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
+      http.Response response;
+      if (!isPut) {
+        response = await http.post(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
+      } else {
+        response = await http.put(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
+      }
       final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
       if (response.statusCode == 401) {
         if (token != null) {
