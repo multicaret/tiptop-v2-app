@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
               SizedBox(height: 30.0),
               GeneralItems(appProvider: appProvider),
               SizedBox(height: 30.0),
-              if (!appProvider.isAuth) LogoutContainer(appProvider: appProvider),
+              if (appProvider.isAuth) LogoutContainer(appProvider: appProvider),
               SizedBox(height: 30.0),
               LanguagesContainer(appProvider: appProvider),
               SizedBox(height: 20.0),
