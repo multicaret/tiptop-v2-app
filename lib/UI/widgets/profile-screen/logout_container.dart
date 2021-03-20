@@ -21,7 +21,7 @@ class LogoutContainer extends StatelessWidget {
           if (appProvider.isAuth) {
             appProvider.logout();
           } else {
-            Navigator.of(context).pushNamed(WalkthroughPage.routeName);
+            Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
           }
         });
   }

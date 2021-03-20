@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
@@ -34,7 +35,7 @@ class _ProductItemState extends State<ProductItem> {
   Future<void> editCartAction(CartAction actionName) async {
     if (!appProvider.isAuth) {
       showToast(msg: 'You Need to Log In First!');
-      Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     } else {
       int _oldProductCartQuantity = productCartQuantity;
       setState(() {
@@ -75,7 +76,6 @@ class _ProductItemState extends State<ProductItem> {
       cartProvider = Provider.of<CartProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
-      // print('productCartQuantity: $productCartQuantity');
     }
     _isInit = false;
     super.didChangeDependencies();
