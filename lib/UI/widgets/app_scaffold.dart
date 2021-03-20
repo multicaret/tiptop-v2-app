@@ -71,7 +71,7 @@ class AppScaffold extends StatelessWidget {
                       )
                     : null,
               ),
-              padding: bodyPadding ?? EdgeInsets.symmetric(horizontal: 17),
+              padding: bodyPadding ?? EdgeInsets.all(0),
               child: body,
             ),
           ),
