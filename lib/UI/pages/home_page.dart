@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     'assets/images/slide-2.png',
   ];
 
-  Future<void> _fetchAndSetHomeData() async {
+  Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
     try {
       await homeProvider.fetchAndSetHomeData(appProvider, cartProvider);
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
-      _fetchAndSetHomeData();
+      fetchAndSetHomeData();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -89,9 +89,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBarActions: appProvider.isAuth ? [
-        AppBarCartTotal(isLoadingHomeData: isLoadingHomeData),
-      ] : null,
+      appBarActions: appProvider.isAuth
+          ? [
+              AppBarCartTotal(isLoadingHomeData: isLoadingHomeData),
+            ]
+          : null,
       bodyPadding: EdgeInsets.all(0),
       body: Column(
         children: [
@@ -101,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: _fetchAndSetHomeData,
+              onRefresh: fetchAndSetHomeData,
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
@@ -138,11 +140,16 @@ class _HomePageState extends State<HomePage> {
                             children: categories
                                 .map((category) => GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(CupertinoPageRoute<void>(
+                                        Navigator.of(context).push(
+                                          CupertinoPageRoute<void>(
                                             builder: (BuildContext context) => ProductsPage(
-                                                  selectedParentCategoryId: category.id,
-                                                  parents: categories,
-                                                )));
+                                              selectedParentCategoryId: category.id,
+                                              parents: categories,
+                                              refreshHomeData: fetchAndSetHomeData,
+                                              isLoadingHomeData: isLoadingHomeData,
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: CategoryItem(
                                         title: category.title,

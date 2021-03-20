@@ -13,10 +13,14 @@ class ProductsPage extends StatefulWidget {
 
   final List<Category> parents;
   final int selectedParentCategoryId;
+  final Function refreshHomeData;
+  final bool isLoadingHomeData;
 
   ProductsPage({
     @required this.parents,
     @required this.selectedParentCategoryId,
+    @required this.refreshHomeData,
+    @required this.isLoadingHomeData,
   });
 
   @override
@@ -47,12 +51,13 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
-
+print('widget.isLoadingHomeData');
+print(widget.isLoadingHomeData);
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Products')),
-        actions: appProvider.isAuth ? [AppBarCartTotal()] : null,
+        actions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: widget.isLoadingHomeData)] : null,
       ),
       body: Column(
         children: [
@@ -71,6 +76,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                 return hasChildCategories
                     ? ParentCategoryTabContent(
                         children: children,
+                        refreshHomeData: widget.refreshHomeData,
                       )
                     : Center(
                         child: Text('No Sub Categories/Products'),

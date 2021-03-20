@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/models/category.dart';
 
 import 'child_categories_tabs.dart';
@@ -7,8 +8,12 @@ import 'child_category_products.dart';
 
 class ParentCategoryTabContent extends StatefulWidget {
   final List<Category> children;
+  final Function refreshHomeData;
 
-  ParentCategoryTabContent({@required this.children});
+  ParentCategoryTabContent({
+    @required this.children,
+    @required this.refreshHomeData,
+  });
 
   @override
   _ParentCategoryTabContentState createState() => _ParentCategoryTabContentState();
@@ -21,6 +26,13 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   AutoScrollController productsScrollController;
 
   bool scrollIsAtTheTop = true;
+  bool _isRefreshingData = false;
+
+  Future<void> _refreshData() async {
+    setState(() => _isRefreshingData = true);
+    await widget.refreshHomeData();
+    setState(() => _isRefreshingData = false);
+  }
 
   @override
   void initState() {
@@ -81,18 +93,23 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           },
         ),
         Expanded(
-          child: ListView(
-            children: List.generate(
-              widget.children.length,
-              (i) => ChildCategoryProducts(
-                index: i,
-                count: widget.children.length,
-                child: widget.children[i],
-                productsScrollController: productsScrollController,
-                scrollSpyAction: (index) => scrollSpy(index),
-              ),
-            ),
-            controller: productsScrollController,
+          child: RefreshIndicator(
+            onRefresh: _refreshData,
+            child: _isRefreshingData
+                ? Center(child: AppLoader())
+                : ListView(
+                    children: List.generate(
+                      widget.children.length,
+                      (i) => ChildCategoryProducts(
+                        index: i,
+                        count: widget.children.length,
+                        child: widget.children[i],
+                        productsScrollController: productsScrollController,
+                        scrollSpyAction: (index) => scrollSpy(index),
+                      ),
+                    ),
+                    controller: productsScrollController,
+                  ),
           ),
         )
       ],
