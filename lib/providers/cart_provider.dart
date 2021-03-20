@@ -10,7 +10,7 @@ class CartProvider with ChangeNotifier {
   Cart cart;
   List<CartProduct> cartProducts;
   String cartTotal = '';
-  double doubleCartTotal;
+  double doubleCartTotal = 0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
   bool requestedMoreThanAvailableQuantity = false;
