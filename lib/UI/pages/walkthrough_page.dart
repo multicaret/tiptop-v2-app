@@ -16,6 +16,7 @@ class WalkthroughPage extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return AppScaffold(
+      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

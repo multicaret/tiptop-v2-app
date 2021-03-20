@@ -15,6 +15,7 @@ class OTPStepOnePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       body: Form(
         key: _formKey,
         child: Column(
@@ -49,7 +50,7 @@ class OTPStepOnePage extends StatelessWidget {
                     required: true,
                     textDirection: TextDirection.ltr,
                     labelText: 'Phone Number',
-                    initialValue: '5070326662',
+                    initialValue: '5395534325',
                     hintText: '5xx-xxx-xx-xx',
                     onSaved: (value) {
                       phoneNumber = value;
