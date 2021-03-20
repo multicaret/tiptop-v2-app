@@ -46,7 +46,7 @@ class AppTextField extends StatefulWidget {
     this.keyboardType,
     this.onTap,
     this.readOnly = false,
-    this.required = true,
+    this.required = false,
     this.isPassword = false,
     this.hasInnerLabel = false,
     this.fit = false,

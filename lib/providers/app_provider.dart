@@ -148,6 +148,8 @@ class AppProvider with ChangeNotifier {
         response = await http.put(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
       }
       final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
+      print("response.statusCode");
+      print(response.statusCode);
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
