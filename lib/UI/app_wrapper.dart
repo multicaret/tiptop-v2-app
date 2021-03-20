@@ -12,16 +12,25 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppWrapper extends StatefulWidget {
   static const routeName = '/app-wrapper';
+  AppWrapper({Key key}) : super(key: key);
 
   @override
   _AppWrapperState createState() => _AppWrapperState();
 }
 
-class _AppWrapperState extends State<AppWrapper> with AutomaticKeepAliveClientMixin<AppWrapper> {
+final appWrapperKey = new GlobalKey<_AppWrapperState>();
+
+class _AppWrapperState extends State<AppWrapper> {
+  final CupertinoTabController _cupertinoTabController = CupertinoTabController();
   int currentTabIndex = 0;
 
-  @override
-  bool get wantKeepAlive => true;
+  void onTabItemTapped(int index) {
+    setState(() {
+      _selectedTabIndex = index;
+      _cupertinoTabController.index = index;
+      print(_selectedTabIndex);
+    });
+  }
 
   List<BottomNavigationBarItem> _getCupertinoTabBarItems() {
     return List.generate(_cupertinoTabsList.length, (i) {
@@ -61,12 +70,15 @@ class _AppWrapperState extends State<AppWrapper> with AutomaticKeepAliveClientMi
     },
   ];
 
+  int _selectedTabIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Consumer<HomeProvider>(
       builder: (c, homeProvider, _) => CupertinoTabScaffold(
+        controller: _cupertinoTabController,
         tabBar: CupertinoTabBar(
+          onTap: onTabItemTapped,
           backgroundColor: AppColors.primary,
           activeColor: AppColors.secondaryDark,
           inactiveColor: AppColors.white.withOpacity(0.5),
@@ -79,40 +91,6 @@ class _AppWrapperState extends State<AppWrapper> with AutomaticKeepAliveClientMi
             },
           );
         },
-        // hasCurve: !homeProvider.categorySelected || currentTabIndex == 4,
-/*        appBar: currentTabIndex == 0 && homeProvider.categorySelected
-            ? AppBar(
-                automaticallyImplyLeading: false,
-                title: Text(Translations.of(context).get('Products')),
-                leading: IconButton(
-                  onPressed: () => homeProvider.selectCategory(null),
-                  icon: Icon(Platform.isAndroid ? Icons.arrow_back : CupertinoIcons.back),
-                ),
-                actions: [
-                  AppBarCartTotal(),
-                ],
-              )
-            : currentTabIndex != 0
-                ? AppBar(title: Text(_getTabsList(homeProvider)[currentTabIndex]['title']))
-                : null,*/
-        // bodyPadding: EdgeInsets.all(0),
-        // automaticallyImplyLeading: false,
-        // body: _getTabsList(homeProvider)[currentTabIndex]['screen'],
-/*        bottomNavigationBar: ConvexAppBar.badge(
-          {
-            //Cart badge
-            2: CartItemsCountBadge(),
-          },
-          backgroundColor: AppColors.primary,
-          style: TabStyle.fixedCircle,
-          color: Colors.white30,
-          items: _getCupertinoTabBarItems(homeProvider),
-          onTap: (int i) {
-            setState(() {
-              currentTabIndex = i;
-            });
-          },
-        ),*/
       ),
     );
   }
