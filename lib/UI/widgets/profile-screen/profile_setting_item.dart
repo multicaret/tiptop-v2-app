@@ -28,6 +28,7 @@ class ProfileSettingItem extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
+            color: AppColors.white,
             child: Row(
               children: [
                 Icon(
