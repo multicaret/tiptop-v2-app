@@ -10,7 +10,7 @@ class CartProvider with ChangeNotifier {
   Cart cart;
   List<CartProduct> cartProducts;
   String cartTotal = '';
-  double doubleCartTotal = 0;
+  double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
   bool requestedMoreThanAvailableQuantity = false;
@@ -22,6 +22,10 @@ class CartProvider with ChangeNotifier {
     doubleCartTotal = _cart.total.raw;
     cartProductsCount = _cart.productsCount > 0 ? _cart.productsCount : 0;
     cartProducts = _cart.products == null ? [] : _cart.products;
+  }
+
+  bool noCart() {
+    return cart == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
   }
 
   int getProductQuantity(int productId) {
@@ -49,41 +53,45 @@ class CartProvider with ChangeNotifier {
     };
 
     requestedMoreThanAvailableQuantity = false;
-    try {
-      final responseData = await appProvider.post(
-        endpoint: endpoint,
-        body: body,
-        withToken: true,
-      );
-      // print(responseData);
+    // try {
+    final responseData = await appProvider.post(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+    // print(responseData);
 
-      if (responseData == 401) {
-        //Sending authenticated request without logging in!
-        showToast(msg: 'You need to log in first!');
-        Navigator.of(context).pushReplacementNamed(WalkthroughPage.routeName);
-        return null;
-      }
-
-      addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
-
-      if (addRemoveProductDataResponse.status == 422) {
-        requestedMoreThanAvailableQuantity = true;
-        int productAvailableQuantity = addRemoveProductDataResponse.cartData.availableQuantity;
-        print('product is not available, available quantity: $productAvailableQuantity');
-        return productAvailableQuantity;
-      }
-
-      if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
-        throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
-      }
-
-      setCart(addRemoveProductDataResponse.cartData.cart);
-
-      notifyListeners();
-
-      return getProductQuantity(productId);
-    } catch (e) {
-      throw e;
+    if (responseData == 401) {
+      //Sending authenticated request without logging in!
+      showToast(msg: 'You need to log in first!');
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      return null;
     }
+    //Todo: optimize this code
+    if (responseData == null) {
+      return null;
+    }
+
+    addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
+
+    if (addRemoveProductDataResponse.status == 422) {
+      requestedMoreThanAvailableQuantity = true;
+      int productAvailableQuantity = addRemoveProductDataResponse.cartData.availableQuantity;
+      print('product is not available, available quantity: $productAvailableQuantity');
+      return productAvailableQuantity;
+    }
+
+    if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
+      throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
+    }
+
+    setCart(addRemoveProductDataResponse.cartData.cart);
+
+    notifyListeners();
+
+    return getProductQuantity(productId);
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 }
