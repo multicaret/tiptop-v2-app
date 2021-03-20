@@ -52,7 +52,7 @@ class HomeData {
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
     addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
     slides: List<dynamic>.from(json["slides"].map((x) => x)),
-    cart: json["basket"] == null ? null : Cart.fromJson(json["basket"]),
+    cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
     estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
     branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
     distance: json["distance"],
