@@ -78,7 +78,7 @@ class GeneralItems extends StatelessWidget {
             hasChildren: false,
             icon: profileItems[i]['icon'],
             title: Translations.of(context).get(profileItems[i]['title']),
-            onTap: () => Navigator.of(context).pushNamed(profileItems[i]['route']),
+            onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(profileItems[i]['route']),
           ),
         ),
       ),
