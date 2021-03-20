@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/widgets/profile-screen/general_items.dart';
 import 'package:tiptop_v2/UI/widgets/profile-screen/language_container.dart';
 import 'package:tiptop_v2/UI/widgets/profile-screen/login_header.dart';
 import 'package:tiptop_v2/UI/widgets/profile-screen/logout_container.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -13,8 +14,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
-    //TODO: Remove curve
     return AppScaffold(
+      hasCurve: false,
+      appBar: AppBar(
+        title: Text(Translations.of(context).get('Profile')),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
