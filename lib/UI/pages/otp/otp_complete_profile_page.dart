@@ -7,12 +7,21 @@ import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../app_wrapper.dart';
+
 class OTPCompleteProfile extends StatelessWidget {
   static const routeName = '/otp-complete-profile';
+
+  static Map<String, dynamic> formData = {
+    'full_name': '',
+    'email': '',
+    'region_id': 2,
+    'city_id': 1,
+  };
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
         //Todo: Uncomment this line when OTP is implemented
         // automaticallyImplyLeading: false,
@@ -33,24 +42,32 @@ class OTPCompleteProfile extends StatelessWidget {
             ),
             SizedBox(height: 30),
             AppTextField(
-              labelText: 'First',
-              hintText: 'John',
-            ),
-            AppTextField(
-              labelText: 'Last',
-              hintText: 'Doe',
+              labelText: 'Full Name',
+              hintText: 'John Doe',
+              onSaved: (value) {
+                formData['full_name'] = value;
+              },
             ),
             AppTextField(
               labelText: 'Email (Optional)',
               hintText: 'Johndoe@domain.com',
+              onSaved: (value) {
+                formData['email'] = value;
+              },
             ),
             AppTextField(
               labelText: 'City',
               hintText: 'Erbil',
+              /*onSaved: (value) {
+                formData['region_id'] = value;
+              },*/
             ),
             AppTextField(
               labelText: 'Neighborhood',
-              hintText: 'French Town',
+              hintText: 'Italian Town',
+              /*onSaved: (value) {
+                formData['city_id'] = value;
+              },*/
             ),
             ElevatedButton(
               child: Text(Translations.of(context).get('Save')),
