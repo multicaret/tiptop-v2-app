@@ -24,7 +24,7 @@ class GeneralItems extends StatelessWidget {
     },
     {
       'title': "My Favorites",
-      'icon': FontAwesomeIcons.heart,
+      'icon': FontAwesomeIcons.solidHeart,
       'route': FavoritesPage.routeName,
     },
     {
