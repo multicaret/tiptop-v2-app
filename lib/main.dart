@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
           ),
           home: app.localeSelected
               ? app.isAuth
-                  ? AppWrapper(key: appWrapperKey)
+                  ? AppWrapper()
                   : FutureBuilder(
                       future: _autoLoginFuture,
                       builder: (c, authResultSnapshot) =>

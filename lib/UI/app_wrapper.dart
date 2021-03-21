@@ -12,13 +12,10 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppWrapper extends StatefulWidget {
   static const routeName = '/app-wrapper';
-  AppWrapper({Key key}) : super(key: key);
 
   @override
   _AppWrapperState createState() => _AppWrapperState();
 }
-
-final appWrapperKey = new GlobalKey<_AppWrapperState>();
 
 class _AppWrapperState extends State<AppWrapper> {
   final CupertinoTabController _cupertinoTabController = CupertinoTabController();
