@@ -16,7 +16,7 @@ class OTPStepThreePage extends StatefulWidget {
 }
 
 class _OTPStepThreePageState extends State<OTPStepThreePage> {
-  OTPProvider otpProvider = OTPProvider();
+  OTPProvider otpProvider;
   bool _isInit = true;
   String reference;
   String phoneCountryCode;
@@ -45,6 +45,11 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
   void didChangeDependencies() {
     if (_isInit) {
       otpProvider = Provider.of<OTPProvider>(context);
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      reference = data['reference'];
+      phoneNumber = data['phone_number'];
+      countryCode = data['country_code'];
+      phoneCountryCode = data['phone_country_code'];
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -52,12 +57,6 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    reference = data['reference'];
-    phoneNumber = data['phone_number'];
-    countryCode = data['country_code'];
-    phoneCountryCode = data['phone_country_code'];
-
     return AppScaffold(
       body: Column(
         children: [
