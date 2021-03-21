@@ -17,6 +17,12 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
+List<String> carouselImages = [
+  'https://cdn.pixabay.com/photo/2016/12/26/17/28/food-1932466_1280.jpg',
+  'https://cdn.pixabay.com/photo/2014/06/11/17/00/food-366875_1280.jpg',
+  'https://cdn.pixabay.com/photo/2015/03/26/09/39/cupcakes-690040_1280.jpg'
+];
+
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
 
@@ -43,11 +49,6 @@ class _HomePageState extends State<HomePage> {
 
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
-
-  List<String> _carouselImages = [
-    'assets/images/slide-1.png',
-    'assets/images/slide-2.png',
-  ];
 
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                             color: AppColors.bg,
                           )
                         : AppCarousel(
-                            images: _carouselImages,
+                            images: carouselImages,
                             autoplayDuration: Duration(milliseconds: 3000),
                           ),
                     ChannelsButtons(),
