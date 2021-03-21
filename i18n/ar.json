@@ -52,5 +52,7 @@
   "Languages" : "اللغات",
   "Cart" : "السلة",
   "Search": "البحث",
-  "Profile": "الملف الشخصي"
+  "Profile": "الملف الشخصي",
+  "results match your search": "نتائج تطابق عملية البحث",
+  "result match your search": "نتيجة تطابق عملية البحث"
 }

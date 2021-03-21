@@ -52,5 +52,7 @@
   "Languages" : "Languages",
   "Cart": "Cart",
   "Search": "Search",
-  "Profile": "Profile"
+  "Profile": "Profile",
+  "results match your search": "Results match your search",
+  "result match your search": "Result match your search"
 }
