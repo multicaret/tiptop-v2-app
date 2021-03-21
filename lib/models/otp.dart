@@ -121,3 +121,59 @@ class OTPValidationData {
         "appPlatform": appPlatform,
       };
 }
+
+SMSValidationDataResponse smsValidationResponseFromJson(String str) => SMSValidationDataResponse.fromJson(json.decode(str));
+
+String smsValidationResponseToJson(SMSValidationDataResponse data) => json.encode(data.toJson());
+
+class SMSValidationDataResponse {
+  SMSValidationDataResponse({
+    this.smsData,
+    this.errors,
+    this.message,
+    this.status,
+  });
+
+  SMSValidationData smsData;
+  String errors;
+  String message;
+  int status;
+
+  factory SMSValidationDataResponse.fromJson(Map<String, dynamic> json) => SMSValidationDataResponse(
+        smsData: SMSValidationData.fromJson(json["data"]),
+        errors: json["errors"],
+        message: json["message"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": smsData.toJson(),
+        "errors": errors,
+        "message": message,
+        "status": status,
+      };
+}
+
+class SMSValidationData {
+  SMSValidationData({
+    this.phoneNumber,
+    this.validationType,
+    this.validationDate,
+  });
+
+  String phoneNumber;
+  String validationType;
+  DateTime validationDate;
+
+  factory SMSValidationData.fromJson(Map<String, dynamic> json) => SMSValidationData(
+        phoneNumber: json["phoneNumber"],
+        validationType: json["validationType"],
+        validationDate: DateTime.parse(json["validationDate"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "phoneNumber": phoneNumber,
+        "validationType": validationType,
+        "validationDate": validationDate.toIso8601String(),
+      };
+}

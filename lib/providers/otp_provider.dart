@@ -11,6 +11,8 @@ class OTPProvider with ChangeNotifier {
   OTPDataResponse otpInitDataResponse;
   OTPValidationDataResponse otpValidationDataResponse;
   OTPValidationData otpValidationData;
+  SMSValidationDataResponse otpSMSValidationDataResponse;
+  DateTime validationDate;
 
   Future<void> initOTPValidation(String method) async {
     final endpoint = 'otp/init-validation?method=$method';
@@ -53,6 +55,37 @@ class OTPProvider with ChangeNotifier {
     appProvider.updateUserData(otpValidationData.user, otpValidationData.accessToken);
 
     print('validationStatus: $validationStatus');
+    notifyListeners();
+  }
+
+  Future<void> sendOTPSms(String countryCode, String phoneNumber) async {
+    final endpoint = 'otp/sms-send';
+    final responseData = await AppProvider().post(endpoint: endpoint, params: {
+      'country_code': countryCode,
+      'phone_number': phoneNumber,
+    });
+    otpInitDataResponse = OTPDataResponse.fromJson(responseData);
+
+    reference = otpInitDataResponse.otpData.reference;
+
+    print('SMS reference: $reference');
+    notifyListeners();
+  }
+
+  Future<void> validateSMS(String countryCode, String phoneNumber, String code, String reference) async {
+    final endpoint = 'otp/sms-validate';
+    final responseData = await AppProvider().post(endpoint: endpoint, params: {
+      'country_code': countryCode,
+      'phone_number': phoneNumber,
+      'code': code,
+      'reference': reference,
+    });
+
+    otpSMSValidationDataResponse = SMSValidationDataResponse.fromJson(responseData);
+
+    validationDate = otpSMSValidationDataResponse.smsData.validationDate;
+
+    print('validationDate: ${validationDate.toString()}');
     notifyListeners();
   }
 }
