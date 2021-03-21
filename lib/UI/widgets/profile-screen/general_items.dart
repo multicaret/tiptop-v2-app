@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/pages/about_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
+import 'package:tiptop_v2/UI/pages/faq_page.dart';
 import 'package:tiptop_v2/UI/pages/favorites_page.dart';
 import 'package:tiptop_v2/UI/pages/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
@@ -52,7 +53,7 @@ class GeneralItems extends StatelessWidget {
     {
       'title': "FAQ",
       'icon': FontAwesomeIcons.solidQuestionCircle,
-      'route': AboutPage.routeName,
+      'route': FaqPage.routeName,
     },
     {
       'title': "About TipTop",

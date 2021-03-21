@@ -74,8 +74,8 @@ class Product {
   String uuid;
   String title;
   StringRawStringFormatted description;
-  dynamic excerpt;
-  dynamic notes;
+  StringRawStringFormatted excerpt;
+  StringRawStringFormatted notes;
   dynamic customBannerText;
   int availableQuantity;
   String unitText;
@@ -98,9 +98,9 @@ class Product {
         id: json["id"],
         uuid: json["uuid"],
         title: json["title"],
-        description: json["description"],
-        excerpt: json["excerpt"],
-        notes: json["notes"],
+        description: json["description"] == null ? null : StringRawStringFormatted.fromJson(json["description"]),
+        excerpt: json["excerpt"] == null ? null : StringRawStringFormatted.fromJson(json["excerpt"]),
+        notes: json["notes"]  == null ? null : StringRawStringFormatted.fromJson(json["notes"]),
         customBannerText: json["customBannerText"],
         availableQuantity: json["availableQuantity"],
         unitText: json["unitText"],

@@ -21,10 +21,13 @@ import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
+import 'UI/pages/faq_page.dart';
+
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
   PrivacyPage.routeName: (BuildContext context) => PrivacyPage(),
   TermsPage.routeName: (BuildContext context) => TermsPage(),
+  FaqPage.routeName: (BuildContext context) => FaqPage(),
   AddressesPage.routeName: (BuildContext context) => AddressesPage(),
   BlogPage.routeName: (BuildContext context) => BlogPage(),
   FavoritesPage.routeName: (BuildContext context) => FavoritesPage(),
@@ -38,7 +41,7 @@ final routes = <String, WidgetBuilder>{
   OTPStepThreePage.routeName: (BuildContext context) => OTPStepThreePage(),
   OTPCompleteProfile.routeName: (BuildContext context) => OTPCompleteProfile(),
   LocationPermissionPage.routeName: (BuildContext context) => LocationPermissionPage(),
-  AppWrapper.routeName: (BuildContext context) => AppWrapper(),
+  AppWrapper.routeName: (BuildContext context) => AppWrapper(key: appWrapperKey),
   SearchPage.routeName: (BuildContext context) => SearchPage(),
   ProfilePage.routeName: (BuildContext context) => ProfilePage(),
   CartPage.routeName: (BuildContext context) => CartPage(),

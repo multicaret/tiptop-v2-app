@@ -7,26 +7,37 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class FormattedPrice extends StatelessWidget {
   final String price;
   final bool isDiscounted;
+  final bool isLarge;
 
   FormattedPrice({
     @required this.price,
     this.isDiscounted = false,
+    this.isLarge = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
       //Todo: Find a better way to remove the extra padding
-      offset: Offset(-8, 0),
+      offset: Offset(isLarge ? 0 : -8, 0),
       child: Html(
-        shrinkWrap: true,
+        shrinkWrap: !isLarge,
         data: """$price""",
         style: {
+          "html": Style(
+            textAlign: isLarge ? TextAlign.center : TextAlign.start,
+          ),
           "body": Style.fromTextStyle(
             AppTextStyles.dynamicValues(
               color: isDiscounted ? AppColors.text50 : AppColors.secondaryDark,
-              height: 0.3,
-              fontSize: isDiscounted ? 12 : 14,
+              height: isLarge ? 1 : 0.3,
+              fontSize: isDiscounted
+                  ? isLarge
+                      ? 18
+                      : 12
+                  : isLarge
+                      ? 20
+                      : 14,
               fontWeight: FontWeight.w600,
               decoration: isDiscounted ? TextDecoration.lineThrough : TextDecoration.none,
             ),

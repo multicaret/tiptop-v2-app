@@ -20,7 +20,7 @@ class AppScaffold extends StatelessWidget {
     this.automaticallyImplyLeading = true,
     this.bottomNavigationBar,
     this.hasCurve = true,
-    this.appBarActions
+    this.appBarActions,
   });
 
   @override
@@ -49,14 +49,13 @@ class AppScaffold extends StatelessWidget {
           // resizeToAvoidBottomInset: false,
           appBar: appBar ??
               AppBar(
-                automaticallyImplyLeading: automaticallyImplyLeading,
-                title: Image.asset(
-                  'assets/images/tiptop-logo-title.png',
-                  width: 77.42,
-                  height: 26.84,
-                ),
-                actions: appBarActions
-              ),
+                  automaticallyImplyLeading: automaticallyImplyLeading,
+                  title: Image.asset(
+                    'assets/images/tiptop-logo-title.png',
+                    width: 77.42,
+                    height: 26.84,
+                  ),
+                  actions: appBarActions),
           body: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(hasCurve ? 40 : 0),
