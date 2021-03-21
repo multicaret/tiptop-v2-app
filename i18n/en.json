@@ -3,6 +3,7 @@
   "Login": "Login",
   "Logout": "Logout",
   "Register": "Register",
+  "Sign Up" : "Sign Up",
   "Continue Without Login": "Continue Without Login",
   "Already have an account?": "Already have an account?",
   "Please Enter Your Phone Number": "Please Enter Your Phone Number",
@@ -48,11 +49,15 @@
   "Payment Methods" : "Payment Methods",
   "Support" : "Support",
   "Blog":"Blog",
+  "FAQ" : "FAQ",
   "About TipTop" : "About TipTop",
+  "Privacy Policy" : "Privacy Policy",
+  "Terms and Conditions" : "Terms and Conditions",
   "Languages" : "Languages",
   "Cart": "Cart",
   "Search": "Search",
   "Profile": "Profile",
+  "This field is required": "This field is required",
   "results match your search": "Results match your search",
   "result match your search": "Result match your search"
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -46,8 +47,7 @@ class AppCarousel extends StatelessWidget {
         autoplay: autoplayDuration != null,
         autoplayDuration: autoplayDuration,
         dotBgColor: hasDots ? dotBgColor : Colors.transparent,
-        images: images.map((image) => AssetImage(image)).toList(),
-/*        images: images
+        images: images
             .map((image) => imageOverlay
                 ? CachedNetworkImage(
                     imageUrl: image,
@@ -56,7 +56,7 @@ class AppCarousel extends StatelessWidget {
                     colorBlendMode: BlendMode.darken,
                   )
                 : CachedNetworkImageProvider(image))
-            .toList(),*/
+            .toList(),
       ),
     );
   }

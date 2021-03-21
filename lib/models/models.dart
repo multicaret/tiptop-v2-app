@@ -143,18 +143,18 @@ class Media {
 
   String logo;
   dynamic cover;
-  List<dynamic> gallery;
+  List<Gallery> gallery;
 
   factory Media.fromJson(Map<String, dynamic> json) => Media(
     logo: json["logo"],
     cover: json["cover"],
-    gallery: List<dynamic>.from(json["gallery"].map((x) => x)),
+    gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "logo": logo,
     "cover": cover,
-    "gallery": List<dynamic>.from(gallery.map((x) => x)),
+    "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
   };
 }
 
@@ -516,3 +516,39 @@ class Notifications {
 }
 
 enum CartAction {ADD, REMOVE}
+
+class Gallery {
+  Gallery({
+    this.id,
+    this.name,
+    this.type,
+    this.size,
+    this.file,
+    this.thumbnail,
+  });
+
+  int id;
+  String name;
+  String type;
+  int size;
+  String file;
+  String thumbnail;
+
+  factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
+    id: json["id"],
+    name: json["name"],
+    type: json["type"],
+    size: json["size"],
+    file: json["file"],
+    thumbnail: json["thumbnail"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "type": type,
+    "size": size,
+    "file": file,
+    "thumbnail": thumbnail,
+  };
+}

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
+import 'package:tiptop_v2/UI/widgets/product_page.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -92,14 +93,33 @@ class _ProductItemState extends State<ProductItem> {
           height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? CartControls.productUnitTitleHeight : 0),
           child: Stack(
             children: [
-              AnimatedContainer(
-                duration: Duration(milliseconds: 200),
-                height: getColItemHeight(3, context),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
-                  borderRadius: BorderRadius.circular(14),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(widget.product.media.cover),
+              GestureDetector(
+                onTap: () {
+                  /*showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    useRootNavigator: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => ProductPage(product: widget.product),
+                  );*/
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      fullscreenDialog: true,
+                      builder: (c) => ProductPage(
+                        product: widget.product,
+                      ),
+                    ),
+                  );
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  height: getColItemHeight(3, context),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
+                    borderRadius: BorderRadius.circular(14),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(widget.product.media.cover),
+                    ),
                   ),
                 ),
               ),

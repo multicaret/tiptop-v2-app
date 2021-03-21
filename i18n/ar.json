@@ -3,6 +3,7 @@
   "Login": "تسجيل الدخول",
   "Logout": "تسجيل الخروج",
   "Register": "تسجيل",
+  "Sign Up" : "تسجيل",
   "Continue Without Login": "تابع من دون تسجيل دخول",
   "Already have an account?": "لديك حساب؟",
   "Please Enter Your Phone Number": "الرجاء ادخال رقم الهاتف",
@@ -48,11 +49,15 @@
   "Payment Methods" : "طرق الدفع",
   "Support" : "الدعم",
   "Blog":"مقالات",
+  "FAQ" : "الأسئلة الشائعة",
   "About TipTop" : "حول TipTop",
+  "Privacy Policy" : "سياسة الخصوصية",
+  "Terms and Conditions" : "الشروط و الأحكام",
   "Languages" : "اللغات",
   "Cart" : "السلة",
   "Search": "البحث",
   "Profile": "الملف الشخصي",
+  "This field is required": "هذا الحقل مطلوب",
   "results match your search": "نتائج تطابق عملية البحث",
   "result match your search": "نتيجة تطابق عملية البحث"
 }

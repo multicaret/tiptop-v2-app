@@ -23,8 +23,7 @@ class OTPStepTwoPage extends StatefulWidget {
   _OTPStepTwoPageState createState() => _OTPStepTwoPageState();
 }
 
-class _OTPStepTwoPageState extends State<OTPStepTwoPage>
-    with WidgetsBindingObserver {
+class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObserver {
   AppProvider appProvider;
   OTPProvider otpProvider;
   HomeProvider homeProvider;
@@ -32,6 +31,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
   String reference;
   String phoneNumber;
   String phoneCountryCode;
+  String countryCode = 'TR';
   bool isValid;
   bool isNewUser;
   bool _isInit = true;
@@ -43,6 +43,23 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
       reference = otpProvider.reference;
     });
     launch(deepLink, forceSafariVC: false, forceWebView: false);
+  }
+
+  Future<void> _sendOTPSms(String countryCode, String phoneNumber) async {
+    try {
+      await otpProvider.sendOTPSms(countryCode, phoneNumber);
+      setState(() {
+        reference = otpProvider.reference;
+      });
+      Navigator.of(context).pushReplacementNamed(OTPStepThreePage.routeName, arguments: {
+        'reference': reference,
+        'phone_number': phoneNumber,
+        'country_code': countryCode,
+        'phone_country_code': phoneCountryCode,
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   List<Map<String, dynamic>> getVerificationMethods(BuildContext context) {
@@ -68,7 +85,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
         'color': AppColors.primary,
         'icon': FontAwesomeIcons.sms,
         'action': () {
-          Navigator.of(context).pushNamed(OTPStepThreePage.routeName);
+          _sendOTPSms(countryCode, phoneNumber);
         },
       },
     ];
@@ -77,28 +94,26 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      // try {
-      await otpProvider.checkOTPValidation(
-          appProvider, reference, phoneCountryCode, phoneNumber);
-      isValid = otpProvider.validationStatus;
-      isNewUser = otpProvider.isNewUser;
-      if (isValid == true) {
-        homeProvider.selectCategory(null);
-        if (isNewUser) {
-          print('New user, navigating to complete profile page');
-          Navigator.of(context)
-              .pushReplacementNamed(OTPCompleteProfile.routeName);
+      try {
+        await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
+        isValid = otpProvider.validationStatus;
+        isNewUser = otpProvider.isNewUser;
+        if (isValid == true) {
+          homeProvider.selectCategory(null);
+          if (isNewUser) {
+            print('New user, navigating to complete profile page');
+            Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+          } else {
+            print('Registered user, navigating to home page');
+            Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+          }
         } else {
-          print('Registered user, navigating to home page');
-          Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+          showToast(msg: 'OTP Validation Failed');
         }
-      } else {
-        showToast(msg: 'OTP Validation Failed');
+      } catch (error) {
+        showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
+        throw error;
       }
-      // } catch (error) {
-      //   showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
-      //   throw error;
-      // }
     }
   }
 
@@ -108,8 +123,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
       otpProvider = Provider.of<OTPProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
-      Map<String, String> data =
-          ModalRoute.of(context).settings.arguments as Map<String, String>;
+      Map<String, String> data = ModalRoute.of(context).settings.arguments as Map<String, String>;
       phoneNumber = data['phone_number'];
       phoneCountryCode = data['phone_country_code'];
 
@@ -128,6 +142,9 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
+    final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    phoneNumber = data['phone_number'];
+    phoneCountryCode = data['phone_country_code'];
 
     return AppScaffold(
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
@@ -150,13 +167,11 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Translations.of(context)
-                    .get('Is the number above correct?')),
+                Text(Translations.of(context).get('Is the number above correct?')),
                 SizedBox(width: 5),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(OTPStepOnePage.routeName);
+                    Navigator.of(context).pushReplacementNamed(OTPStepOnePage.routeName);
                   },
                   child: Text(
                     Translations.of(context).get('No, let me fix it'),
@@ -178,14 +193,12 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
     );
   }
 
-  List<Widget> _verificationMethodsList(
-      BuildContext context, AppProvider appProvider) {
+  List<Widget> _verificationMethodsList(BuildContext context, AppProvider appProvider) {
     List verificationMethods = getVerificationMethods(context);
 
     return List.generate(verificationMethods.length, (i) {
       return Container(
-        padding: EdgeInsets.only(
-            bottom: i == verificationMethods.length - 1 ? 0 : 20),
+        padding: EdgeInsets.only(bottom: i == verificationMethods.length - 1 ? 0 : 20),
         child: ElevatedButton(
             onPressed: verificationMethods[i]['action'],
             style: ElevatedButton.styleFrom(
@@ -196,9 +209,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage>
                 Expanded(
                   flex: 1,
                   child: Container(
-                    alignment: appProvider.dir == 'ltr'
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
+                    alignment: appProvider.dir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
                     child: Icon(verificationMethods[i]['icon']),
                   ),
                 ),

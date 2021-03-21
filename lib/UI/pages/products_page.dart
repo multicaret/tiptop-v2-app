@@ -51,8 +51,6 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
-print('widget.isLoadingHomeData');
-print(widget.isLoadingHomeData);
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
