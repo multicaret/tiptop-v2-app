@@ -72,10 +72,11 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> validateSMS(String countryCode, String phoneNumber, String code, String reference) async {
+  Future<void> validateSMS(String countryCode, String phoneCountryCode, String phoneNumber, String code, String reference) async {
     final endpoint = 'otp/sms-validate';
     final responseData = await AppProvider().post(endpoint: endpoint, params: {
       'country_code': countryCode,
+      'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
       'code': code,
       'reference': reference,

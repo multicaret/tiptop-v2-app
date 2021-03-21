@@ -26,7 +26,7 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
 
   Future<void> _validateSMSCode(String code) async {
     try {
-      await otpProvider.validateSMS(countryCode, phoneNumber, code, reference);
+      await otpProvider.validateSMS(countryCode, phoneCountryCode,phoneNumber, code, reference);
       if (mounted) {
         setState(() {
           validationDate = otpProvider.validationDate;
