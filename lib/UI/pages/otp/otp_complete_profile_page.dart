@@ -37,7 +37,7 @@ class OTPCompleteProfile extends StatelessWidget {
             children: [
               SizedBox(height: 40),
               Text(
-                Translations.of(context).get('Final Step'),
+                'John Doe',
                 style: AppTextStyles.bodyBold,
                 textAlign: TextAlign.center,
               ),
