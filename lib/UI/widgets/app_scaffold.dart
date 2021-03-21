@@ -11,7 +11,6 @@ class AppScaffold extends StatelessWidget {
   final ConvexAppBar bottomNavigationBar;
   final bool hasCurve;
   final List<Widget> appBarActions;
-  final EdgeInsets safeAreaMinimum;
 
   const AppScaffold({
     this.body,
@@ -22,7 +21,6 @@ class AppScaffold extends StatelessWidget {
     this.bottomNavigationBar,
     this.hasCurve = true,
     this.appBarActions,
-    this.safeAreaMinimum = EdgeInsets.zero,
   });
 
   @override
@@ -47,42 +45,39 @@ class AppScaffold extends StatelessWidget {
             ),
           ),
         ),
-        SafeArea(
-          minimum: safeAreaMinimum,
-          child: Scaffold(
-            // resizeToAvoidBottomInset: false,
-            appBar: appBar ??
-                AppBar(
-                    automaticallyImplyLeading: automaticallyImplyLeading,
-                    title: Image.asset(
-                      'assets/images/tiptop-logo-title.png',
-                      width: 77.42,
-                      height: 26.84,
-                    ),
-                    actions: appBarActions),
-            body: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(hasCurve ? 40 : 0),
-                topRight: Radius.circular(hasCurve ? 40 : 0),
-              ),
-              child: Container(
-                width: screenSize.width,
-                height: screenSize.height,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  image: bgImage != null
-                      ? DecorationImage(
-                          image: AssetImage(bgImage),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                ),
-                padding: bodyPadding ?? EdgeInsets.all(0),
-                child: body,
-              ),
+        Scaffold(
+          // resizeToAvoidBottomInset: false,
+          appBar: appBar ??
+              AppBar(
+                  automaticallyImplyLeading: automaticallyImplyLeading,
+                  title: Image.asset(
+                    'assets/images/tiptop-logo-title.png',
+                    width: 77.42,
+                    height: 26.84,
+                  ),
+                  actions: appBarActions),
+          body: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(hasCurve ? 40 : 0),
+              topRight: Radius.circular(hasCurve ? 40 : 0),
             ),
-            bottomNavigationBar: bottomNavigationBar,
+            child: Container(
+              width: screenSize.width,
+              height: screenSize.height,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                image: bgImage != null
+                    ? DecorationImage(
+                        image: AssetImage(bgImage),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
+              padding: bodyPadding ?? EdgeInsets.all(0),
+              child: body,
+            ),
           ),
+          bottomNavigationBar: bottomNavigationBar,
         ),
       ],
     );
