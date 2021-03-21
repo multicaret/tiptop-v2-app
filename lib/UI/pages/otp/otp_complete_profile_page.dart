@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
@@ -23,6 +24,8 @@ class OTPCompleteProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
     return AppScaffold(
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
@@ -81,7 +84,7 @@ class OTPCompleteProfile extends StatelessWidget {
               ),*/
               ElevatedButton(
                 child: Text(Translations.of(context).get('Save')),
-                onPressed: () => _submit(context),
+                onPressed: () => _submit(context, appProvider),
               ),
               SizedBox(height: 20),
             ],
@@ -91,7 +94,7 @@ class OTPCompleteProfile extends StatelessWidget {
     );
   }
 
-  Future<void> _submit(BuildContext context) async {
+  Future<void> _submit(BuildContext context, AppProvider appProvider) async {
     if (!_formKeyFoo.currentState.validate()) {
       showToast(msg: Translations.of(context).get('Invalid Form'));
       return;
@@ -99,7 +102,7 @@ class OTPCompleteProfile extends StatelessWidget {
     _formKeyFoo.currentState.save();
     print(formData);
     try {
-      final responseData = await AppProvider().put(
+      final responseData = await appProvider.put(
         endpoint: 'profile',
         body: formData,
         withToken: true,
@@ -107,7 +110,9 @@ class OTPCompleteProfile extends StatelessWidget {
       print(responseData);
       // Todo: store user
       getLocationPermissionStatus().then((isGranted) {
-        Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,
+        );
       });
     } catch (e) {
       throw e;
