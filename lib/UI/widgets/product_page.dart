@@ -11,7 +11,6 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      safeAreaMinimum: EdgeInsets.only(top: 40),
       appBar: AppBar(
         title: Text(product.title),
         leading: IconButton(
