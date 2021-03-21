@@ -6,7 +6,9 @@ import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/favorites_page.dart';
 import 'package:tiptop_v2/UI/pages/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
+import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/widgets/profile-screen/profile_setting_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -48,9 +50,24 @@ class GeneralItems extends StatelessWidget {
       'route': BlogPage.routeName,
     },
     {
+      'title': "FAQ",
+      'icon': FontAwesomeIcons.solidQuestionCircle,
+      'route': AboutPage.routeName,
+    },
+    {
       'title': "About TipTop",
       'icon': FontAwesomeIcons.infoCircle,
       'route': AboutPage.routeName,
+    },
+    {
+      'title': "Privacy Policy",
+      'icon': FontAwesomeIcons.userLock,
+      'route': PrivacyPage.routeName,
+    },
+    {
+      'title': "Terms and Conditions",
+      'icon': FontAwesomeIcons.solidFileAlt,
+      'route': TermsPage.routeName,
     },
   ];
 
