@@ -26,12 +26,38 @@ class ProductItem extends StatefulWidget {
 }
 
 class _ProductItemState extends State<ProductItem> {
-  int productCartQuantity = 0;
   AppProvider appProvider;
   HomeProvider homeProvider;
   CartProvider cartProvider;
   bool _isInit = true;
   bool requestedMoreThanAvailableQuantity = false;
+  int productCartQuantity;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      appProvider = Provider.of<AppProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
+      productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void openProductModal(CartProvider cartProvider) {
+    Navigator.of(context, rootNavigator: true).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (c) => ProductPage(
+          product: widget.product,
+          disableAddition: requestedMoreThanAvailableQuantity,
+          quantity: productCartQuantity,
+          editCartAction: (action) => editCartAction(action),
+        ),
+      ),
+    );
+  }
 
   Future<void> editCartAction(CartAction actionName) async {
     if (!appProvider.isAuth) {
@@ -43,8 +69,8 @@ class _ProductItemState extends State<ProductItem> {
         productCartQuantity = actionName == CartAction.ADD
             ? productCartQuantity + 1
             : productCartQuantity == 1
-                ? 0
-                : productCartQuantity - 1;
+            ? 0
+            : productCartQuantity - 1;
       });
       print('$actionName ${widget.product.id} ${widget.product.title}');
       try {
@@ -71,96 +97,89 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
-      cartProvider = Provider.of<CartProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
-      productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
+    double cartButtonHeight = getCartControlButtonHeight(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? CartControls.productUnitTitleHeight : 0),
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  /*showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    useRootNavigator: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => ProductPage(product: widget.product),
-                  );*/
-                  Navigator.of(context, rootNavigator: true).push(
-                    CupertinoPageRoute(
-                      fullscreenDialog: true,
-                      builder: (c) => ProductPage(
-                        product: widget.product,
+    return Consumer<CartProvider>(
+      builder: (c, cart, _) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height:
+                getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? CartControls.productUnitTitleHeight : 0),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () => openProductModal(cart),
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    height: getColItemHeight(3, context),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
+                      borderRadius: BorderRadius.circular(14),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(widget.product.media.cover),
                       ),
-                    ),
-                  );
-                },
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  height: getColItemHeight(3, context),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
-                    borderRadius: BorderRadius.circular(14),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(widget.product.media.cover),
                     ),
                   ),
                 ),
-              ),
-              CartControls(
-                product: widget.product,
-                isZero: productCartQuantity == 0,
-                quantity: productCartQuantity,
-                disableAddition: requestedMoreThanAvailableQuantity,
-                editCartAction: (actionName) => editCartAction(actionName),
-              ),
-              if (hasUnitTitle)
                 Positioned(
-                  bottom: 0,
-                  height: CartControls.productUnitTitleHeight,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      widget.product.unit.title,
-                      style: AppTextStyles.subtitleXxs50,
-                      textAlign: TextAlign.center,
-                    ),
+                  bottom: widget.product.unit == null || widget.product.unit.title == null ? 0 : CartControls.productUnitTitleHeight,
+                  left: cartControlsMargin,
+                  right: cartControlsMargin,
+                  height: cartButtonHeight,
+                  child: CartControls(
+                    product: widget.product,
+                    cartButtonHeight: cartButtonHeight,
+                    disableAddition: requestedMoreThanAvailableQuantity,
+                    quantity: productCartQuantity,
+                    editCartAction: editCartAction,
                   ),
-                )
-            ],
+                ),
+                if (hasUnitTitle)
+                  Positioned(
+                    bottom: 0,
+                    height: CartControls.productUnitTitleHeight,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        widget.product.unit.title,
+                        style: AppTextStyles.subtitleXxs50,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        Text(
-          widget.product.title,
-          style: AppTextStyles.subtitle,
-        ),
-        SizedBox(height: 10),
-        if (widget.product.discountedPrice != null)
-          FormattedPrice(
-            price: widget.product.discountedPrice.amountFormatted,
+          SizedBox(height: 10),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => openProductModal(cart),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.product.title,
+                    style: AppTextStyles.subtitle,
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 10),
+                  if (widget.product.discountedPrice != null)
+                    FormattedPrice(
+                      price: widget.product.discountedPrice.amountFormatted,
+                    ),
+                  FormattedPrice(price: widget.product.price.amountFormatted, isDiscounted: widget.product.discountedPrice != null),
+                  if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
+                ],
+              ),
+            ),
           ),
-        FormattedPrice(price: widget.product.price.amountFormatted, isDiscounted: widget.product.discountedPrice != null),
-        if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
-      ],
+        ],
+      ),
     );
   }
 }
