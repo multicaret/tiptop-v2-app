@@ -95,11 +95,20 @@ class _ProductItemState extends State<ProductItem> {
             children: [
               GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(
+                  /*showModalBottomSheet(
                     isScrollControlled: true,
                     context: context,
                     useRootNavigator: true,
+                    backgroundColor: Colors.transparent,
                     builder: (context) => ProductPage(product: widget.product),
+                  );*/
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      fullscreenDialog: true,
+                      builder: (c) => ProductPage(
+                        product: widget.product,
+                      ),
+                    ),
                   );
                 },
                 child: AnimatedContainer(
