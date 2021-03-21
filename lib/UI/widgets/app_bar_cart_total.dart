@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
+import 'package:tiptop_v2/UI/pages/cart_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -24,9 +27,7 @@ class AppBarCartTotal extends StatelessWidget {
           duration: Duration(milliseconds: 300),
           opacity: isLoadingHomeData || noCart ? 0 : 1,
           child: GestureDetector(
-            onTap: () {
-              //Todo: Navigate to cart screen
-            },
+            onTap: () => appWrapperKey.currentState.onTabItemTapped(2),
             child: Container(
               width: 130,
               alignment: Alignment.center,
