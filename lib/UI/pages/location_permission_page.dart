@@ -13,6 +13,7 @@ class LocationPermissionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       body: SingleChildScrollView(
         child: Column(
           children: [
