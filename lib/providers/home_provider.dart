@@ -13,6 +13,7 @@ class HomeProvider with ChangeNotifier {
   HomeDataResponse homeDataResponse;
   HomeData homeData;
   List<Category> categories;
+  List<Slide> slides;
   int branchId;
   int chainId;
 
@@ -52,6 +53,7 @@ class HomeProvider with ChangeNotifier {
 
     homeData = homeDataResponse.homeData;
     categories = homeData.categories;
+    slides = homeData.slides;
     branchId = homeData.branch == null ? null : homeData.branch.id;
     chainId = branchId == null
         ? null

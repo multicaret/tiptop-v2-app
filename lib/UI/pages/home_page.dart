@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
+  List<Slide> slides;
 
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
       await homeProvider.fetchAndSetHomeData(appProvider, cartProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
+      slides = homeProvider.homeData.slides;
 
       if (homeProvider.branchId == null) setState(() => _noBranchFound = true);
 
@@ -116,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                             color: AppColors.bg,
                           )
                         : AppCarousel(
-                            images: carouselImages,
+                            images: slides.map((slide) => slide.image).toList(),
                             autoplayDuration: Duration(milliseconds: 3000),
                           ),
                     ChannelsButtons(),
