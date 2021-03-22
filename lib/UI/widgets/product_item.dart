@@ -49,11 +49,6 @@ class _ProductItemState extends State<ProductItem> {
         fullscreenDialog: true,
         builder: (c) => ProductPage(
           product: widget.product,
-          cartControls: CartControls(
-            isModalControls: true,
-            product: widget.product,
-            cartButtonHeight: 45,
-          ),
         ),
       ),
     );
