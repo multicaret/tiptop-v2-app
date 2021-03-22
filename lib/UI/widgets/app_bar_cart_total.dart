@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -37,7 +38,7 @@ class AppBarCartTotal extends StatelessWidget {
                     width: 130,
                     bottom: 10,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
@@ -46,15 +47,20 @@ class AppBarCartTotal extends StatelessWidget {
                       ),
                       child: isLoadingHomeData || noCart
                           ? Text('')
-                          : Text(
-                              cart.cartTotal,
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: cart.cartTotal != null && cart.cartTotal.length > 12
-                                  ? AppTextStyles.subtitleXxsWhite
-                                  : AppTextStyles.subtitleXsWhiteBold,
-                              textAlign: TextAlign.center,
-                            ),
+                          : cart.isLoadingAddRemoveRequest
+                              ? SpinKitThreeBounce(
+                                  color: AppColors.white,
+                                  size: 20,
+                                )
+                              : Text(
+                                  cart.cartTotal,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
+                                  style: cart.cartTotal != null && cart.cartTotal.length > 12
+                                      ? AppTextStyles.subtitleXxsWhite
+                                      : AppTextStyles.subtitleXsWhiteBold,
+                                  textAlign: TextAlign.center,
+                                ),
                     ),
                   ),
                   Positioned(
