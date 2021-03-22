@@ -39,7 +39,6 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
       isValid = otpProvider.validationStatus;
       isNewUser = otpProvider.isNewUser;
       if (isValid == true) {
-        homeProvider.selectCategory(null);
         if (isNewUser) {
           print('New user, navigating to complete profile page');
           Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
