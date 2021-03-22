@@ -13,6 +13,7 @@ class HomeProvider with ChangeNotifier {
   HomeDataResponse homeDataResponse;
   HomeData homeData;
   List<Category> categories;
+  List<Slide> slides;
   int branchId;
   int chainId;
 
@@ -20,14 +21,6 @@ class HomeProvider with ChangeNotifier {
   int selectedParentCategoryId;
 
   LocalStorage storageActions = LocalStorage.getActions();
-
-  Future<void> selectCategory(int categoryId) async {
-    selectedParentCategoryId = categoryId;
-    categorySelected = categoryId != null;
-    await storageActions.save(key: 'selected_category_id', data: selectedParentCategoryId);
-    print('selected category saved in provider $categoryId');
-    notifyListeners();
-  }
 
   Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
     final endpoint = 'home';
@@ -52,6 +45,7 @@ class HomeProvider with ChangeNotifier {
 
     homeData = homeDataResponse.homeData;
     categories = homeData.categories;
+    slides = homeData.slides;
     branchId = homeData.branch == null ? null : homeData.branch.id;
     chainId = branchId == null
         ? null
