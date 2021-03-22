@@ -14,6 +14,7 @@ class CartProvider with ChangeNotifier {
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
+  bool isLoadingAddRemoveRequest = false;
 
   void setCart(Cart _cart) {
     print('setting cart, products count: ${_cart.products.length}');
@@ -55,6 +56,8 @@ class CartProvider with ChangeNotifier {
       'is_adding': isAdding,
     };
 
+    isLoadingAddRemoveRequest = true;
+
     requestedMoreThanAvailableQuantity[product.id] = false;
     List<CartProduct> _oldCartProducts = cartProducts;
     int oldProductQuantity = getProductQuantity(product.id);
@@ -91,7 +94,7 @@ class CartProvider with ChangeNotifier {
       withToken: true,
     );
     // print(responseData);
-
+    isLoadingAddRemoveRequest = false;
     if (responseData == 401) {
       //Sending authenticated request without logging in!
       cartProducts = _oldCartProducts;

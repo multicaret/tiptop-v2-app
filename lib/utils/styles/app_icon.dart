@@ -11,6 +11,10 @@ class AppIcon {
     return Icon(iconName, color: AppColors.primary, size: 20);
   }
 
+  static iconLgSecondary(IconData iconName) {
+    return Icon(iconName, color: AppColors.secondaryDark, size: 50);
+  }
+
   static icon50(IconData iconName) {
     return Icon(iconName, color: AppColors.text50, size: 20);
   }

@@ -73,6 +73,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle subtitleSecondaryBold = const TextStyle(
@@ -107,6 +108,7 @@ class AppTextStyles {
     height: 1,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle subtitle50 = const TextStyle(
@@ -141,6 +143,7 @@ class AppTextStyles {
     height: 1.3,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle bodyBold = const TextStyle(
