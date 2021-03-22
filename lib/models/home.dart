@@ -21,11 +21,11 @@ class HomeDataResponse {
   int status;
 
   factory HomeDataResponse.fromJson(Map<String, dynamic> json) => HomeDataResponse(
-    homeData: json["data"] == null ? null : HomeData.fromJson(json["data"]),
-    errors: json["errors"],
-    message: json["message"],
-    status: json["status"],
-  );
+        homeData: json["data"] == null ? null : HomeData.fromJson(json["data"]),
+        errors: json["errors"],
+        message: json["message"],
+        status: json["status"],
+      );
 }
 
 class HomeData {
@@ -41,7 +41,7 @@ class HomeData {
   });
 
   List<dynamic> addresses;
-  List<dynamic> slides;
+  List<Slide> slides;
   Cart cart;
   EstimatedArrivalTime estimatedArrivalTime;
   Branch branch;
@@ -50,15 +50,15 @@ class HomeData {
   List<Category> categories;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-    addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
-    slides: List<dynamic>.from(json["slides"].map((x) => x)),
-    cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
-    estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
-    branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
-    distance: json["distance"],
-    hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
-    categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
-  );
+        addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
+        slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
+        cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
+        estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
+        branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
+        distance: json["distance"],
+        hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
+        categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
+      );
 }
 
 class EstimatedArrivalTime {
@@ -71,14 +71,14 @@ class EstimatedArrivalTime {
   String unit;
 
   factory EstimatedArrivalTime.fromJson(Map<String, dynamic> json) => EstimatedArrivalTime(
-    value: json["value"],
-    unit: json["unit"],
-  );
+        value: json["value"],
+        unit: json["unit"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "value": value,
-    "unit": unit,
-  };
+        "value": value,
+        "unit": unit,
+      };
 }
 
 class Branch {
@@ -111,34 +111,34 @@ class Branch {
   Chain chain;
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
-    id: json["id"],
-    regionId: json["regionId"],
-    cityId: json["cityId"],
-    minimumOrder: IntRawStringFormatted.fromJson(json["minimumOrder"]),
-    underMinimumOrderDeliveryFee: IntRawStringFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
-    fixedDeliveryFee: IntRawStringFormatted.fromJson(json["fixedDeliveryFee"]),
-    primaryPhoneNumber: json["primaryPhoneNumber"],
-    secondaryPhoneNumber: json["secondaryPhoneNumber"],
-    whatsappPhoneNumber: json["whatsappPhoneNumber"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
-  );
+        id: json["id"],
+        regionId: json["regionId"],
+        cityId: json["cityId"],
+        minimumOrder: IntRawStringFormatted.fromJson(json["minimumOrder"]),
+        underMinimumOrderDeliveryFee: IntRawStringFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
+        fixedDeliveryFee: IntRawStringFormatted.fromJson(json["fixedDeliveryFee"]),
+        primaryPhoneNumber: json["primaryPhoneNumber"],
+        secondaryPhoneNumber: json["secondaryPhoneNumber"],
+        whatsappPhoneNumber: json["whatsappPhoneNumber"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "regionId": regionId,
-    "cityId": cityId,
-    "minimumOrder": minimumOrder.toJson(),
-    "underMinimumOrderDeliveryFee": underMinimumOrderDeliveryFee.toJson(),
-    "fixedDeliveryFee": fixedDeliveryFee.toJson(),
-    "primaryPhoneNumber": primaryPhoneNumber,
-    "secondaryPhoneNumber": secondaryPhoneNumber,
-    "whatsappPhoneNumber": whatsappPhoneNumber,
-    "latitude": latitude,
-    "longitude": longitude,
-    "chain": chain == null ? null : chain.toJson(),
-  };
+        "id": id,
+        "regionId": regionId,
+        "cityId": cityId,
+        "minimumOrder": minimumOrder.toJson(),
+        "underMinimumOrderDeliveryFee": underMinimumOrderDeliveryFee.toJson(),
+        "fixedDeliveryFee": fixedDeliveryFee.toJson(),
+        "primaryPhoneNumber": primaryPhoneNumber,
+        "secondaryPhoneNumber": secondaryPhoneNumber,
+        "whatsappPhoneNumber": whatsappPhoneNumber,
+        "latitude": latitude,
+        "longitude": longitude,
+        "chain": chain == null ? null : chain.toJson(),
+      };
 }
 
 class Chain {
@@ -169,30 +169,82 @@ class Chain {
   Media media;
 
   factory Chain.fromJson(Map<String, dynamic> json) => Chain(
-    id: json["id"],
-    regionId: json["regionId"],
-    cityId: json["cityId"],
-    currencyId: json["currencyId"],
-    primaryPhoneNumber: json["primaryPhoneNumber"],
-    secondaryPhoneNumber: json["secondaryPhoneNumber"],
-    whatsappPhoneNumber: json["whatsappPhoneNumber"],
-    primaryColor: json["primaryColor"],
-    secondaryColor: json["secondaryColor"],
-    numberOfItemsOnMobileGridView: json["numberOfItemsOnMobileGridView"],
-    media: Media.fromJson(json["media"]),
-  );
+        id: json["id"],
+        regionId: json["regionId"],
+        cityId: json["cityId"],
+        currencyId: json["currencyId"],
+        primaryPhoneNumber: json["primaryPhoneNumber"],
+        secondaryPhoneNumber: json["secondaryPhoneNumber"],
+        whatsappPhoneNumber: json["whatsappPhoneNumber"],
+        primaryColor: json["primaryColor"],
+        secondaryColor: json["secondaryColor"],
+        numberOfItemsOnMobileGridView: json["numberOfItemsOnMobileGridView"],
+        media: Media.fromJson(json["media"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "regionId": regionId,
-    "cityId": cityId,
-    "currencyId": currencyId,
-    "primaryPhoneNumber": primaryPhoneNumber,
-    "secondaryPhoneNumber": secondaryPhoneNumber,
-    "whatsappPhoneNumber": whatsappPhoneNumber,
-    "primaryColor": primaryColor,
-    "secondaryColor": secondaryColor,
-    "numberOfItemsOnMobileGridView": numberOfItemsOnMobileGridView,
-    "media": media.toJson(),
-  };
+        "id": id,
+        "regionId": regionId,
+        "cityId": cityId,
+        "currencyId": currencyId,
+        "primaryPhoneNumber": primaryPhoneNumber,
+        "secondaryPhoneNumber": secondaryPhoneNumber,
+        "whatsappPhoneNumber": whatsappPhoneNumber,
+        "primaryColor": primaryColor,
+        "secondaryColor": secondaryColor,
+        "numberOfItemsOnMobileGridView": numberOfItemsOnMobileGridView,
+        "media": media.toJson(),
+      };
+}
+
+class Slide {
+  Slide({
+    this.title,
+    this.description,
+    this.linkValue,
+    this.linkType,
+    this.image,
+  });
+
+  String title;
+  Description description;
+  String linkValue;
+  int linkType;
+  String image;
+
+  factory Slide.fromJson(Map<String, dynamic> json) => Slide(
+        title: json["title"],
+        description: Description.fromJson(json["description"]),
+        linkValue: json["linkValue"],
+        linkType: json["linkType"],
+        image: json["image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "description": description.toJson(),
+        "linkValue": linkValue,
+        "linkType": linkType,
+        "image": image,
+      };
+}
+
+class Description {
+  Description({
+    this.raw,
+    this.formatted,
+  });
+
+  String raw;
+  String formatted;
+
+  factory Description.fromJson(Map<String, dynamic> json) => Description(
+        raw: json["raw"],
+        formatted: json["formatted"] == null ? null : json["formatted"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "raw": raw,
+        "formatted": formatted == null ? null : formatted,
+      };
 }
