@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -20,6 +22,35 @@ class AppWrapper extends StatefulWidget {
 class _AppWrapperState extends State<AppWrapper> {
   final CupertinoTabController _cupertinoTabController = CupertinoTabController();
   int currentTabIndex = 0;
+
+  //The keys were added for android onBackPressed function (source: https://github.com/flutter/flutter/issues/24105)
+  final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> thirdTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fourthTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fifthTabNavKey = GlobalKey<NavigatorState>();
+
+  GlobalKey<NavigatorState> currentNavigatorKey() {
+    switch (_cupertinoTabController.index) {
+      case 0:
+        return firstTabNavKey;
+        break;
+      case 1:
+        return secondTabNavKey;
+        break;
+      case 2:
+        return thirdTabNavKey;
+        break;
+      case 3:
+        return fourthTabNavKey;
+        break;
+      case 4:
+        return fifthTabNavKey;
+        break;
+    }
+
+    return null;
+  }
 
   void onTabItemTapped(int index) {
     setState(() {
@@ -72,22 +103,28 @@ class _AppWrapperState extends State<AppWrapper> {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
-      builder: (c, homeProvider, _) => CupertinoTabScaffold(
-        controller: _cupertinoTabController,
-        tabBar: CupertinoTabBar(
-          onTap: onTabItemTapped,
-          backgroundColor: AppColors.primary,
-          activeColor: AppColors.secondaryDark,
-          inactiveColor: AppColors.white.withOpacity(0.5),
-          items: _getCupertinoTabBarItems(),
-        ),
-        tabBuilder: (BuildContext context, int index) {
-          return CupertinoTabView(
-            builder: (BuildContext context) {
-              return _cupertinoTabsList[index]['page'];
-            },
-          );
+      //TODO: test on iOS
+      builder: (c, homeProvider, _) => WillPopScope(
+        onWillPop: () async {
+          return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;
         },
+        child: CupertinoTabScaffold(
+          controller: _cupertinoTabController,
+          tabBar: CupertinoTabBar(
+            onTap: onTabItemTapped,
+            backgroundColor: AppColors.primary,
+            activeColor: AppColors.secondaryDark,
+            inactiveColor: AppColors.white.withOpacity(0.5),
+            items: _getCupertinoTabBarItems(),
+          ),
+          tabBuilder: (BuildContext context, int index) {
+            return CupertinoTabView(
+              builder: (BuildContext context) {
+                return _cupertinoTabsList[index]['page'];
+              },
+            );
+          },
+        ),
       ),
     );
   }
