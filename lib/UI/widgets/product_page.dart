@@ -14,15 +14,11 @@ import 'formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   final Product product;
-  final bool disableAddition;
-  final int quantity;
-  final Function editCartAction;
+  final CartControls cartControls;
 
   ProductPage({
     @required this.product,
-    @required this.disableAddition,
-    @required this.quantity,
-    @required this.editCartAction,
+    @required this.cartControls,
   });
 
   @override
@@ -126,14 +122,7 @@ class _ProductPageState extends State<ProductPage> {
               padding: EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
               height: 45,
               color: AppColors.bg,
-              child: CartControls(
-                isModalControls: true,
-                product: widget.product,
-                cartButtonHeight: 45,
-                editCartAction: widget.editCartAction,
-                quantity: widget.quantity,
-                disableAddition: widget.disableAddition,
-              ),
+              child: widget.cartControls,
             ),
           )
         ],
