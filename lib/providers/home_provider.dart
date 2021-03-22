@@ -21,14 +21,6 @@ class HomeProvider with ChangeNotifier {
 
   LocalStorage storageActions = LocalStorage.getActions();
 
-  Future<void> selectCategory(int categoryId) async {
-    selectedParentCategoryId = categoryId;
-    categorySelected = categoryId != null;
-    await storageActions.save(key: 'selected_category_id', data: selectedParentCategoryId);
-    print('selected category saved in provider $categoryId');
-    notifyListeners();
-  }
-
   Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
     final endpoint = 'home';
     final body = {

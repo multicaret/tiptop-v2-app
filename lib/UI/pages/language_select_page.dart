@@ -56,7 +56,6 @@ List<Widget> _languageItems(
       child: ElevatedButton(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i]['locale']);
-          homeProvider.selectCategory(null);
           //Todo: remove this when profile screen has language selection
           if(appProvider.localeSelected) {
             Navigator.of(context).pushNamed(AppWrapper.routeName);

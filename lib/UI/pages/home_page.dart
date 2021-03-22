@@ -71,10 +71,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> selectCategory(int categoryId) async {
-    await homeProvider.selectCategory(categoryId);
-  }
-
   @override
   void didChangeDependencies() {
     if (_isInit) {
