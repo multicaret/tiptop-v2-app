@@ -21,7 +21,7 @@ class AppBarCartTotal extends StatelessWidget {
 
     return Consumer<CartProvider>(
       builder: (c, cart, _) {
-        bool noCart = cart.noCart();
+        bool noCart = cart.noCart;
 
         return AnimatedOpacity(
           duration: Duration(milliseconds: 300),

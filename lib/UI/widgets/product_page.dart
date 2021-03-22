@@ -107,7 +107,6 @@ class _ProductPageState extends State<ProductPage> {
                       data: """${widget.product.description.formatted}""",
                     ),
                   ),
-                SizedBox(height: 100),
               ],
             ),
           ),

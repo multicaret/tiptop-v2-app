@@ -25,9 +25,7 @@ class CartProvider with ChangeNotifier {
     cartProducts = _cart.products == null ? [] : _cart.products;
   }
 
-  bool noCart() {
-    return cart == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
-  }
+  bool get noCart => cart == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
 
   int getProductQuantity(int productId) {
     if (cart != null && cartProducts != null && cartProducts.length != 0) {

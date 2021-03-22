@@ -17,7 +17,8 @@ class CartFAB extends StatelessWidget {
         right: 0,
         left: 0,
         child: GestureDetector(
-          onTap: () {
+          //Todo: implement no cart view
+          onTap: cart.noCart ? null : () {
             Navigator.of(context, rootNavigator: true).push(
               CupertinoPageRoute(
                 fullscreenDialog: true,
