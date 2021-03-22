@@ -207,14 +207,14 @@ class Slide {
   });
 
   String title;
-  Description description;
+  StringRawStringFormatted description;
   String linkValue;
   int linkType;
   String image;
 
   factory Slide.fromJson(Map<String, dynamic> json) => Slide(
         title: json["title"],
-        description: Description.fromJson(json["description"]),
+        description: StringRawStringFormatted.fromJson(json["description"]),
         linkValue: json["linkValue"],
         linkType: json["linkType"],
         image: json["image"],
@@ -226,25 +226,5 @@ class Slide {
         "linkValue": linkValue,
         "linkType": linkType,
         "image": image,
-      };
-}
-
-class Description {
-  Description({
-    this.raw,
-    this.formatted,
-  });
-
-  String raw;
-  String formatted;
-
-  factory Description.fromJson(Map<String, dynamic> json) => Description(
-        raw: json["raw"],
-        formatted: json["formatted"] == null ? null : json["formatted"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "raw": raw,
-        "formatted": formatted == null ? null : formatted,
       };
 }
