@@ -42,8 +42,8 @@ class LoginHeaderContainer extends StatelessWidget {
           appProvider.isAuth
               ? UserInfo(
                   appProvider: appProvider,
-                  name: 'John Doe',
-                  phoneNumber: '+961 539 533 43 25',
+                  name: appProvider.authUser.name,
+                  phoneNumber: '${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
                 )
               : SignUpContainer(appProvider: appProvider),
         ],

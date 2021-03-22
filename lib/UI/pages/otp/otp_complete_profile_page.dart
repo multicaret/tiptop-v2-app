@@ -40,7 +40,7 @@ class OTPCompleteProfile extends StatelessWidget {
             children: [
               SizedBox(height: 40),
               Text(
-                'John Doe',
+                appProvider.isAuth ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
                 style: AppTextStyles.bodyBold,
                 textAlign: TextAlign.center,
               ),
@@ -102,13 +102,9 @@ class OTPCompleteProfile extends StatelessWidget {
     _formKeyFoo.currentState.save();
     print(formData);
     try {
-      final responseData = await appProvider.put(
-        endpoint: 'profile',
-        body: formData,
-        withToken: true,
-      );
-      print(responseData);
       // Todo: store user
+      // Response is received as null
+      await appProvider.updateProfile(formData);
       getLocationPermissionStatus().then((isGranted) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(
           isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,
