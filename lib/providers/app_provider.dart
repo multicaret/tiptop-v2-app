@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiptop_v2/models/user.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'local_storage.dart';
 
@@ -187,6 +188,33 @@ class AppProvider with ChangeNotifier {
       print('Error saving user data to local storage');
       throw error;
     });
+  }
+
+  Future<void> updateProfile(Map<String, dynamic> userData) async {
+    try {
+      final dynamic responseData = await this.put(
+        withToken: true,
+        endpoint: 'profile',
+        body: userData,
+      );
+
+      print('Response: $responseData');
+
+      if (responseData['data'] == null) {
+        throw HttpException(
+          title: 'Error',
+          message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
+        );
+      }
+
+      User updatedUser = User.fromJson(responseData['data']['user']);
+      updateUserData(updatedUser, token);
+
+      print('name : ${updatedUser.name}');
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> autoLogin() async {
