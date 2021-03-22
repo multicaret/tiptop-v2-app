@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -13,7 +14,6 @@ class CartProvider with ChangeNotifier {
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
-  bool requestedMoreThanAvailableQuantity = false;
 
   void setCart(Cart _cart) {
     print('setting cart, products count: ${_cart.products.length}');
@@ -37,22 +37,53 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  Map<int, bool> requestedMoreThanAvailableQuantity = {};
+
+  //Todo: optimize this function's code
   Future<int> addRemoveProduct({
     @required BuildContext context,
     @required AppProvider appProvider,
     @required HomeProvider homeProvider,
     @required bool isAdding,
-    @required int productId,
+    @required Product product,
   }) async {
     final endpoint = 'carts/add-remove-product';
     Map<String, dynamic> body = {
-      'product_id': productId,
+      'product_id': product.id,
       'chain_id': homeProvider.chainId,
       'branch_id': homeProvider.branchId,
       'is_adding': isAdding,
     };
 
-    requestedMoreThanAvailableQuantity = false;
+    requestedMoreThanAvailableQuantity[product.id] = false;
+    List<CartProduct> _oldCartProducts = cartProducts;
+    int oldProductQuantity = getProductQuantity(product.id);
+    if (!isAdding && oldProductQuantity == 0) {
+      return 0;
+    }
+
+    int requestedProductQuantity = isAdding
+        ? oldProductQuantity + 1
+        : oldProductQuantity == 1
+            ? 0
+            : oldProductQuantity - 1;
+
+    if (!isAdding && oldProductQuantity == 1) {
+      cartProducts = cartProducts.where((cartProduct) => cartProduct.product.id != product.id).toList();
+      notifyListeners();
+    } else if (oldProductQuantity == 0) {
+      CartProduct _newTempCartProduct = CartProduct(
+        product: product,
+        quantity: requestedProductQuantity,
+      );
+      cartProducts.add(_newTempCartProduct);
+      notifyListeners();
+    } else {
+      int requestedCartProductIndex = cartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
+      cartProducts[requestedCartProductIndex].quantity = requestedProductQuantity;
+      notifyListeners();
+    }
+
     // try {
     final responseData = await appProvider.post(
       endpoint: endpoint,
@@ -63,33 +94,45 @@ class CartProvider with ChangeNotifier {
 
     if (responseData == 401) {
       //Sending authenticated request without logging in!
+      cartProducts = _oldCartProducts;
+      notifyListeners();
       showToast(msg: 'You need to log in first!');
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       return null;
     }
-    //Todo: optimize this code
+
     if (responseData == null) {
+      cartProducts = _oldCartProducts;
+      notifyListeners();
       return null;
     }
 
     addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
 
     if (addRemoveProductDataResponse.status == 422) {
-      requestedMoreThanAvailableQuantity = true;
+      requestedMoreThanAvailableQuantity[product.id] = true;
       int productAvailableQuantity = addRemoveProductDataResponse.cartData.availableQuantity;
-      print('product is not available, available quantity: $productAvailableQuantity');
+      int requestedCartProductIndex = cartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
+      cartProducts[requestedCartProductIndex].quantity = productAvailableQuantity;
+      notifyListeners();
+      showToast(msg: 'There are only $productAvailableQuantity available ${product.title}');
       return productAvailableQuantity;
     }
 
     if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
+      cartProducts = _oldCartProducts;
+      notifyListeners();
       throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
     }
 
-    setCart(addRemoveProductDataResponse.cartData.cart);
-
+    // setCart(addRemoveProductDataResponse.cartData.cart);
+    cart = addRemoveProductDataResponse.cartData.cart;
+    cartTotal = cart.total.formatted;
+    doubleCartTotal = cart.total.raw;
+    cartProductsCount = cart.productsCount > 0 ? cart.productsCount : 0;
     notifyListeners();
 
-    return getProductQuantity(productId);
+    return getProductQuantity(product.id);
     // } catch (e) {
     //   throw e;
     // }
