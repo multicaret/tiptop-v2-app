@@ -1,7 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
@@ -11,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/dialogs/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
+import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -20,7 +18,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class CheckoutPage extends StatefulWidget {
   static const routeName = '/checkout-page';
@@ -127,7 +124,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     isRTL: appProvider.isRTL,
                                   ),
                                   SectionTitle('Payment Summary'),
-                                  ..._getTotalsItems(),
+                                  PaymentSummary(
+                                    totals: totals,
+                                    isRTL: appProvider.isRTL,
+                                  ),
                                 ],
                               ),
                             ),
@@ -148,9 +148,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Future<void> _submitOrder() async {
-    print(selectedPaymentMethodId);
     _formKey.currentState.save();
-    print(notes);
     try {
       setState(() => _isLoadingOrderSubmit = true);
       await ordersProvider.submitOrder(
@@ -175,46 +173,5 @@ class _CheckoutPageState extends State<CheckoutPage> {
       showToast(msg: 'An error occurred while submitting your order!');
       throw e;
     }
-  }
-
-  List<Widget> _getTotalsItems() {
-    return List.generate(totals.length, (i) {
-      bool isLastItem = i == totals.length - 1;
-
-      return Container(
-        width: double.infinity,
-        padding: EdgeInsets.only(
-          top: 10,
-          bottom: 10,
-          right: appProvider.isRTL ? 17 : 7,
-          left: appProvider.isRTL ? 7 : 17,
-        ),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
-          color: AppColors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              Translations.of(context).get(totals[i]['title']),
-              style: isLastItem ? AppTextStyles.bodyBoldSecondaryDark : AppTextStyles.body,
-            ),
-            Expanded(
-              child: Html(
-                data: """${totals[i]['value']}""",
-                style: {
-                  "body": Style(
-                    textAlign: TextAlign.end,
-                    color: isLastItem ? AppColors.secondaryDark : AppColors.primary,
-                    fontWeight: isLastItem ? FontWeight.w600 : FontWeight.w400,
-                  ),
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-    });
   }
 }
