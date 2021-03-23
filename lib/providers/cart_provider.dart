@@ -16,6 +16,9 @@ class CartProvider with ChangeNotifier {
   AddRemoveProductDataResponse addRemoveProductDataResponse;
   bool isLoadingAddRemoveRequest = false;
 
+  CreateCheckoutResponse createCheckoutResponse;
+  CheckoutData checkoutData;
+
   void setCart(Cart _cart) {
     print('setting cart, products count: ${_cart.products.length}');
     cart = _cart;
@@ -137,5 +140,31 @@ class CartProvider with ChangeNotifier {
     // } catch (e) {
     //   throw e;
     // }
+  }
+
+  Future<void> createCheckout(AppProvider appProvider, HomeProvider homeProvider) async {
+    final endpoint = 'orders/checkout';
+    Map<String, String> body = {
+      'chain_id': '${homeProvider.chainId}',
+      'branch_id': '${homeProvider.branchId}',
+    };
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+
+    if (responseData == null) {
+      return;
+    }
+
+    createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
+
+    if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
+      throw HttpException(title: 'Error', message: createCheckoutResponse.message);
+    }
+
+    checkoutData = createCheckoutResponse.checkoutData;
+    notifyListeners();
   }
 }

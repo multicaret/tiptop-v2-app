@@ -120,3 +120,87 @@ class CartProduct {
         "quantity": quantity,
       };
 }
+
+class CreateCheckoutResponse {
+  CreateCheckoutResponse({
+    this.checkoutData,
+    this.errors,
+    this.message,
+    this.status,
+  });
+
+  CheckoutData checkoutData;
+  String errors;
+  String message;
+  int status;
+
+  factory CreateCheckoutResponse.fromJson(Map<String, dynamic> json) => CreateCheckoutResponse(
+    checkoutData: json["data"] == null ? null : CheckoutData.fromJson(json["data"]),
+    errors: json["errors"],
+    message: json["message"],
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "data": checkoutData == null ? null : checkoutData.toJson(),
+    "errors": errors,
+    "message": message,
+    "status": status,
+  };
+}
+
+class CheckoutData {
+  CheckoutData({
+    this.paymentMethods,
+    this.deliveryFee,
+    this.total,
+    this.grandTotal,
+  });
+
+  List<PaymentMethod> paymentMethods;
+  Price deliveryFee;
+  Price total;
+  Price grandTotal;
+
+  factory CheckoutData.fromJson(Map<String, dynamic> json) => CheckoutData(
+    paymentMethods: List<PaymentMethod>.from(json["paymentMethods"].map((x) => PaymentMethod.fromJson(x))),
+    deliveryFee: Price.fromJson(json["deliveryFee"]),
+    total: Price.fromJson(json["total"]),
+    grandTotal: Price.fromJson(json["grandTotal"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "paymentMethods": List<dynamic>.from(paymentMethods.map((x) => x.toJson())),
+    "deliveryFee": deliveryFee,
+    "total": total,
+    "grandTotal": grandTotal,
+  };
+}
+
+class PaymentMethod {
+  PaymentMethod({
+    this.title,
+    this.description,
+    this.instructions,
+    this.logo,
+  });
+
+  String title;
+  dynamic description;
+  dynamic instructions;
+  String logo;
+
+  factory PaymentMethod.fromJson(Map<String, dynamic> json) => PaymentMethod(
+    title: json["title"],
+    description: json["description"],
+    instructions: json["instructions"],
+    logo: json["logo"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "description": description,
+    "instructions": instructions,
+    "logo": logo,
+  };
+}

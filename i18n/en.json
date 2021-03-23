@@ -61,5 +61,11 @@
   "results match your search": "Results match your search",
   "result match your search": "Result match your search",
   "Order Now": "Order Now",
-  "Details": "Details"
+  "Details": "Details",
+  "Notes": "Notes",
+  "You can write your order notes here": "You can write your order notes here",
+  "Total": "Total",
+  "Grand Total": "Grand Total",
+  "Delivery Fee": "Delivery Fee",
+  "Payment Summary": "Payment Summary"
 }

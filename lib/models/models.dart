@@ -91,7 +91,7 @@ class IntRawStringFormatted {
 }
 
 class Price {
-  int amountRaw;
+  double amountRaw;
   String amountFormatted;
 
   Price({
@@ -100,7 +100,7 @@ class Price {
   });
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
-        amountRaw: json["amountRaw"] == null ? null : json["amountRaw"],
+        amountRaw: json["amountRaw"] == null ? null : json["amountRaw"].toDouble(),
         amountFormatted: json["amountFormatted"] == null ? null : json["amountFormatted"],
       );
 
