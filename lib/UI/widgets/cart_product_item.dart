@@ -20,6 +20,8 @@ class CartProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17, vertical: 15),
       decoration: BoxDecoration(
@@ -75,13 +77,13 @@ class CartProductItem extends StatelessWidget {
                     Text(product.title),
                     SizedBox(height: 10),
                     if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
-                    if (product.discountedPrice != null)
+                    if (hasDiscountedPrice)
                       FormattedPrice(
                         price: product.discountedPrice.formatted,
                       ),
                     FormattedPrice(
                       price: product.price.formatted,
-                      isDiscounted: product.discountedPrice != null,
+                      isDiscounted: hasDiscountedPrice,
                     ),
                   ],
                 ),

@@ -57,6 +57,7 @@ class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
+    bool hasDiscountedPrice = widget.product.discountedPrice != null && widget.product.discountedPrice.raw != 0;
     double cartButtonHeight = getCartControlButtonHeight(context);
 
     return Column(
@@ -127,11 +128,11 @@ class _ProductItemState extends State<ProductItem> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 10),
-                if (widget.product.discountedPrice != null)
+                if (hasDiscountedPrice)
                   FormattedPrice(
                     price: widget.product.discountedPrice.formatted,
                   ),
-                FormattedPrice(price: widget.product.price.formatted, isDiscounted: widget.product.discountedPrice != null),
+                FormattedPrice(price: widget.product.price.formatted, isDiscounted: hasDiscountedPrice),
                 if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
               ],
             ),
