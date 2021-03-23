@@ -117,7 +117,7 @@ class _CartControlsState extends State<CartControls> {
           ),
           if (widget.isModalControls)
             AnimatedPositioned(
-              duration: Duration(milliseconds: 200),
+              duration: Duration(milliseconds: 300),
               right: 0,
               left: 0,
               top: quantity == 0 ? 0 : widget.cartButtonHeight,
