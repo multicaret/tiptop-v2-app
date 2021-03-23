@@ -54,6 +54,7 @@ class _ProductPageState extends State<ProductPage> {
     bool hasDiscountedPrice = widget.product.discountedPrice != null && widget.product.discountedPrice.raw != 0;
 
     return AppScaffold(
+      bgColor: AppColors.white,
       appBar: AppBar(
         title: Text(widget.product.title),
         leading: IconButton(
