@@ -24,6 +24,9 @@ class HomeProvider with ChangeNotifier {
   bool homeDataRequestError = false;
   bool noBranchFound = false;
 
+  static double branchLat;
+  static double branchLong;
+
   LocalStorage storageActions = LocalStorage.getActions();
 
   Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
@@ -58,14 +61,14 @@ class HomeProvider with ChangeNotifier {
 
       if (homeData.branch == null) {
         noBranchFound = true;
+      } else {
+        branchId = homeData.branch.id;
+        if (homeData.branch.chain != null) {
+          chainId = homeData.branch.chain.id;
+        }
+        branchLat = homeData.branch.latitude;
+        branchLong = homeData.branch.longitude;
       }
-
-      branchId = homeData.branch == null ? null : homeData.branch.id;
-      chainId = branchId == null
-          ? null
-          : homeData.branch.chain == null
-              ? null
-              : homeData.branch.chain.id;
 
       if (homeData.cart != null) {
         cartProvider.setCart(homeData.cart);

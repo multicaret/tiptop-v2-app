@@ -25,6 +25,7 @@ List<String> carouselImages = [
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
+  static double sliderHeight = 212;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -105,12 +106,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         hideContent
                             ? Container(
-                                height: 212,
+                                height: HomePage.sliderHeight,
                                 color: AppColors.bg,
                               )
                             : AppCarousel(
                                 images: slides.map((slide) => slide.image).toList(),
                                 autoplayDuration: Duration(milliseconds: 3000),
+                                hasMap: true,
                               ),
                         ChannelsButtons(),
                         hideContent
