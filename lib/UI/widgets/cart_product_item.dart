@@ -23,6 +23,7 @@ class CartProductItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17, vertical: 15),
       decoration: BoxDecoration(
+        color: AppColors.white,
         border: Border(
           bottom: BorderSide(width: 1.5, color: AppColors.border),
         ),

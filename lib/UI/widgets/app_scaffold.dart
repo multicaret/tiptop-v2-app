@@ -12,6 +12,7 @@ class AppScaffold extends StatelessWidget {
   final List<Widget> appBarActions;
   final bool hasOverlay;
   final bool hasOverlayLoader;
+  final Color bgColor;
 
   const AppScaffold({
     this.body,
@@ -23,6 +24,7 @@ class AppScaffold extends StatelessWidget {
     this.appBarActions,
     this.hasOverlay = false,
     this.hasOverlayLoader = false,
+    this.bgColor = AppColors.bg,
   });
 
   @override
@@ -68,7 +70,7 @@ class AppScaffold extends StatelessWidget {
                 width: screenSize.width,
                 height: screenSize.height,
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: bgColor,
                   image: bgImage != null
                       ? DecorationImage(
                           image: AssetImage(bgImage),
