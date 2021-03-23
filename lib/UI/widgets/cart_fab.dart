@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -12,9 +13,9 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class CartFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<CartProvider, HomeProvider>(
-      builder: (c, cartProvider, homeProvider, _) {
-        bool hideCart = cartProvider.noCart || homeProvider.homeDataRequestError || homeProvider.noBranchFound;
+    return Consumer3<AppProvider, CartProvider, HomeProvider>(
+      builder: (c, appProvider, cartProvider, homeProvider, _) {
+        bool hideCart = cartProvider.noCart || homeProvider.homeDataRequestError || homeProvider.noBranchFound || !appProvider.isAuth;
 
         return Positioned(
           bottom: 0,
@@ -22,14 +23,16 @@ class CartFAB extends StatelessWidget {
           left: 0,
           child: GestureDetector(
             //Todo: implement no cart view
-            onTap: hideCart ? null : () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  fullscreenDialog: true,
-                  builder: (c) => CartPage(),
-                ),
-              );
-            },
+            onTap: hideCart
+                ? null
+                : () {
+                    Navigator.of(context, rootNavigator: true).push(
+                      CupertinoPageRoute(
+                        fullscreenDialog: true,
+                        builder: (c) => CartPage(),
+                      ),
+                    );
+                  },
             child: Container(
               alignment: Alignment.center,
               child: Stack(
