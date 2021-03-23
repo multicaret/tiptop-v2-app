@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tiptop_v2">
+    package="app.trytiptop.tiptop_v2">
    <application
         android:label="tiptop_v2"
         android:icon="@mipmap/ic_launcher">
