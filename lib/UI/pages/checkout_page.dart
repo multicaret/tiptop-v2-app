@@ -12,10 +12,11 @@ import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -33,6 +34,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool _isLoadingOrderSubmit = false;
 
   CartProvider cartProvider;
+  OrdersProvider ordersProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
   CheckoutData checkoutData;
@@ -44,10 +46,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  Future<void> _createCheckout() async {
+  Future<void> _getCheckoutData() async {
     setState(() => _isLoading = true);
-    await cartProvider.createCheckout(appProvider, homeProvider);
-    checkoutData = cartProvider.checkoutData;
+    await ordersProvider.getCheckoutData(appProvider, homeProvider);
+    checkoutData = ordersProvider.checkoutData;
     totals = [
       {
         "title": "Total",
@@ -72,7 +74,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
-      _createCheckout();
+      ordersProvider = Provider.of<OrdersProvider>(context);
+      _getCheckoutData();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -144,13 +147,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
     print(notes);
     try {
       setState(() => _isLoadingOrderSubmit = true);
-      await cartProvider.submitOrder(
+      await ordersProvider.submitOrder(
         appProvider,
         homeProvider,
+        cartProvider,
         paymentMethodId: selectedPaymentMethodId,
         notes: notes,
       );
-      submittedOrder = cartProvider.submittedOrder;
+      submittedOrder = ordersProvider.submittedOrder;
       setState(() => _isLoadingOrderSubmit = false);
       showDialog(
         context: context,

@@ -14,13 +14,8 @@ class CartProvider with ChangeNotifier {
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
-  SubmitOrderResponse submitOrderResponse;
-  Order submittedOrder;
 
   bool isLoadingAddRemoveRequest = false;
-
-  CreateCheckoutResponse createCheckoutResponse;
-  CheckoutData checkoutData;
 
   void setCart(Cart _cart) {
     print('setting cart, products count: ${_cart.products.length}');
@@ -92,13 +87,12 @@ class CartProvider with ChangeNotifier {
       notifyListeners();
     }
 
-    // try {
     final responseData = await appProvider.post(
       endpoint: endpoint,
       body: body,
       withToken: true,
     );
-    // print(responseData);
+
     isLoadingAddRemoveRequest = false;
     if (responseData == 401) {
       //Sending authenticated request without logging in!
@@ -133,7 +127,6 @@ class CartProvider with ChangeNotifier {
       throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
     }
 
-    // setCart(addRemoveProductDataResponse.cartData.cart);
     cart = addRemoveProductDataResponse.cartData.cart;
     cartTotal = cart.total.formatted;
     doubleCartTotal = cart.total.raw;
@@ -141,73 +134,5 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     return getProductQuantity(product.id);
-    // } catch (e) {
-    //   throw e;
-    // }
-  }
-
-  Future<void> createCheckout(AppProvider appProvider, HomeProvider homeProvider) async {
-    final endpoint = 'orders/checkout';
-    Map<String, String> body = {
-      'chain_id': '${homeProvider.chainId}',
-      'branch_id': '${homeProvider.branchId}',
-    };
-    final responseData = await appProvider.get(
-      endpoint: endpoint,
-      body: body,
-      withToken: true,
-    );
-
-    if (responseData == null) {
-      return;
-    }
-
-    createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
-
-    if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(title: 'Error', message: createCheckoutResponse.message);
-    }
-
-    checkoutData = createCheckoutResponse.checkoutData;
-    notifyListeners();
-  }
-
-  Future<void> submitOrder(
-    AppProvider appProvider,
-    HomeProvider homeProvider, {
-    @required int paymentMethodId,
-    @required String notes,
-  }) async {
-    if (noCart) {
-      print('No current cart!');
-      return false;
-    }
-
-    Map<String, dynamic> body = {
-      'branch_id': homeProvider.branchId,
-      'chain_id': homeProvider.chainId,
-      'cart_id': cart.id,
-      'payment_method_id': paymentMethodId,
-      'address_id': 1,
-      'notes': notes,
-    };
-
-    print('Order submit request body:');
-    print(body);
-
-    final endpoint = 'orders/checkout';
-    final responseData = await appProvider.post(
-      endpoint: endpoint,
-      body: body,
-      withToken: true,
-    );
-
-    submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
-    if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(title: 'Error', message: submitOrderResponse.message);
-    }
-
-    submittedOrder = submitOrderResponse.submittedOrder;
-    notifyListeners();
   }
 }
