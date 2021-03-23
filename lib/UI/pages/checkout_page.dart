@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
+import 'package:tiptop_v2/UI/widgets/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -27,12 +30,19 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   bool _isInit = true;
   bool _isLoading = false;
+  bool _isLoadingOrderSubmit = false;
 
   CartProvider cartProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
   CheckoutData checkoutData;
   List<Map<String, String>> totals = [];
+  Order submittedOrder;
+
+  String notes;
+  int selectedPaymentMethodId;
+
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   Future<void> _createCheckout() async {
     setState(() => _isLoading = true);
@@ -41,18 +51,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
     totals = [
       {
         "title": "Total",
-        "value": checkoutData.total.amountFormatted,
+        "value": checkoutData.total.formatted,
       },
       {
         "title": "Delivery Fee",
-        "value": checkoutData.deliveryFee.amountFormatted,
+        "value": checkoutData.deliveryFee.formatted,
       },
       {
         "title": "Grand Total",
-        "value": checkoutData.grandTotal.amountFormatted,
+        "value": checkoutData.grandTotal.formatted,
       },
     ];
-    print(checkoutData.paymentMethods[0].title);
+    selectedPaymentMethodId = checkoutData.paymentMethods[0].id;
     setState(() => _isLoading = false);
   }
 
@@ -71,45 +81,50 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
         title: Text('Checkout'),
       ),
       body: _isLoading
-          ? AppLoader(
-              width: 70,
-            )
+          ? AppLoader()
           : Stack(
               children: [
                 Positioned.fill(
                   child: Container(
                     color: AppColors.bg,
                     padding: EdgeInsets.only(bottom: 105),
-                    child: Column(
-                      children: [
-                        AddressSelectButton(isDisabled: true),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(17),
-                                  color: AppColors.white,
-                                  child: AppTextField(
-                                    labelText: 'Notes',
-                                    maxLines: 3,
-                                    hintText: Translations.of(context).get('You can write your order notes here'),
-                                    fit: true,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          AddressSelectButton(isDisabled: true),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(17),
+                                    color: AppColors.white,
+                                    child: AppTextField(
+                                      labelText: 'Notes',
+                                      maxLines: 3,
+                                      hintText: Translations.of(context).get('You can write your order notes here'),
+                                      fit: true,
+                                      onSaved: (value) {
+                                        notes = value;
+                                      },
+                                    ),
                                   ),
-                                ),
-                                SectionTitle('Payment Methods'),
-                                ..._getPaymentMethodsRadioButtons(),
-                                SectionTitle('Payment Summary'),
-                                ..._getTotalsItems(),
-                              ],
+                                  SectionTitle('Payment Methods'),
+                                  ..._getPaymentMethodsRadioButtons(),
+                                  SectionTitle('Payment Summary'),
+                                  ..._getTotalsItems(),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -124,16 +139,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Future<void> _submitOrder() async {
-    //Todo: send submit order post request
+    print(selectedPaymentMethodId);
+    _formKey.currentState.save();
+    print(notes);
+    try {
+      setState(() => _isLoadingOrderSubmit = true);
+      await cartProvider.submitOrder(
+        appProvider,
+        homeProvider,
+        paymentMethodId: selectedPaymentMethodId,
+        notes: notes,
+      );
+      submittedOrder = cartProvider.submittedOrder;
+      setState(() => _isLoadingOrderSubmit = false);
+      showDialog(
+        context: context,
+        builder: (context) => OrderConfirmedDialog(),
+      ).then((_) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      });
+    } catch (e) {
+      setState(() => _isLoadingOrderSubmit = false);
+      showToast(msg: 'An error occurred while submitting your order!');
+      throw e;
+    }
   }
-
-  int _selectedPaymentMethodIndex = 0;
 
   List<Widget> _getPaymentMethodsRadioButtons() {
     return List.generate(checkoutData.paymentMethods.length, (i) {
       return InkWell(
         onTap: () {
-          setState(() => _selectedPaymentMethodIndex = i);
+          setState(() => selectedPaymentMethodId = checkoutData.paymentMethods[i].id);
         },
         child: Container(
           width: double.infinity,
@@ -153,12 +189,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Row(
                 children: [
                   Radio(
-                    value: i,
+                    value: checkoutData.paymentMethods[i].id,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    groupValue: _selectedPaymentMethodIndex,
+                    groupValue: selectedPaymentMethodId,
                     activeColor: AppColors.secondaryDark,
                     onChanged: (value) {
-                      setState(() => _selectedPaymentMethodIndex = value);
+                      setState(() => selectedPaymentMethodId = value);
                     },
                   ),
                   SizedBox(width: 10),

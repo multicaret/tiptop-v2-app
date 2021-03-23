@@ -158,15 +158,15 @@ class CheckoutData {
   });
 
   List<PaymentMethod> paymentMethods;
-  Price deliveryFee;
-  Price total;
-  Price grandTotal;
+  DoubleRawIntFormatted deliveryFee;
+  DoubleRawIntFormatted total;
+  DoubleRawIntFormatted grandTotal;
 
   factory CheckoutData.fromJson(Map<String, dynamic> json) => CheckoutData(
     paymentMethods: List<PaymentMethod>.from(json["paymentMethods"].map((x) => PaymentMethod.fromJson(x))),
-    deliveryFee: Price.fromJson(json["deliveryFee"]),
-    total: Price.fromJson(json["total"]),
-    grandTotal: Price.fromJson(json["grandTotal"]),
+    deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
+    total: DoubleRawIntFormatted.fromJson(json["total"]),
+    grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -179,18 +179,21 @@ class CheckoutData {
 
 class PaymentMethod {
   PaymentMethod({
+    this.id,
     this.title,
     this.description,
     this.instructions,
     this.logo,
   });
 
+  int id;
   String title;
   dynamic description;
   dynamic instructions;
   String logo;
 
   factory PaymentMethod.fromJson(Map<String, dynamic> json) => PaymentMethod(
+    id: json["id"],
     title: json["title"],
     description: json["description"],
     instructions: json["instructions"],
@@ -198,9 +201,74 @@ class PaymentMethod {
   );
 
   Map<String, dynamic> toJson() => {
+    "id": id,
     "title": title,
     "description": description,
     "instructions": instructions,
     "logo": logo,
+  };
+}
+
+class SubmitOrderResponse {
+  SubmitOrderResponse({
+    this.submittedOrder,
+    this.errors,
+    this.message,
+    this.status,
+  });
+
+  Order submittedOrder;
+  String errors;
+  String message;
+  int status;
+
+  factory SubmitOrderResponse.fromJson(Map<String, dynamic> json) => SubmitOrderResponse(
+    submittedOrder: json["data"] == null ? null : Order.fromJson(json["data"]),
+    errors: json["errors"],
+    message: json["message"],
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "data": submittedOrder.toJson(),
+    "errors": errors,
+    "message": message,
+    "status": status,
+  };
+}
+
+class Order {
+  Order({
+    this.id,
+    this.completedAt,
+    this.deliveryFee,
+    this.grandTotal,
+    this.cart,
+    this.paymentMethod,
+  });
+
+  int id;
+  EdAt completedAt;
+  DoubleRawIntFormatted deliveryFee;
+  DoubleRawIntFormatted grandTotal;
+  Cart cart;
+  PaymentMethod paymentMethod;
+
+  factory Order.fromJson(Map<String, dynamic> json) => Order(
+      id: json["id"],
+      completedAt: EdAt.fromJson(json["completedAt"]),
+      deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
+      grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+      cart: Cart.fromJson(json["cart"]),
+      paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "completedAt": completedAt,
+    "deliveryFee": deliveryFee,
+    "grandTotal": grandTotal,
+    "cart": cart,
+    "paymentMethod": paymentMethod,
   };
 }

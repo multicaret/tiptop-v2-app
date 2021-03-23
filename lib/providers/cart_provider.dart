@@ -14,6 +14,9 @@ class CartProvider with ChangeNotifier {
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
+  SubmitOrderResponse submitOrderResponse;
+  Order submittedOrder;
+
   bool isLoadingAddRemoveRequest = false;
 
   CreateCheckoutResponse createCheckoutResponse;
@@ -28,7 +31,8 @@ class CartProvider with ChangeNotifier {
     cartProducts = _cart.products == null ? [] : _cart.products;
   }
 
-  bool get noCart => cart == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
+  bool get noCart =>
+      cart == null || cart.id == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
 
   int getProductQuantity(int productId) {
     if (cart != null && cartProducts != null && cartProducts.length != 0) {
@@ -165,6 +169,45 @@ class CartProvider with ChangeNotifier {
     }
 
     checkoutData = createCheckoutResponse.checkoutData;
+    notifyListeners();
+  }
+
+  Future<void> submitOrder(
+    AppProvider appProvider,
+    HomeProvider homeProvider, {
+    @required int paymentMethodId,
+    @required String notes,
+  }) async {
+    if (noCart) {
+      print('No current cart!');
+      return false;
+    }
+
+    Map<String, dynamic> body = {
+      'branch_id': homeProvider.branchId,
+      'chain_id': homeProvider.chainId,
+      'cart_id': cart.id,
+      'payment_method_id': paymentMethodId,
+      'address_id': 1,
+      'notes': notes,
+    };
+
+    print('Order submit request body:');
+    print(body);
+
+    final endpoint = 'orders/checkout';
+    final responseData = await appProvider.post(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+
+    submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
+    if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
+      throw HttpException(title: 'Error', message: submitOrderResponse.message);
+    }
+
+    submittedOrder = submitOrderResponse.submittedOrder;
     notifyListeners();
   }
 }
