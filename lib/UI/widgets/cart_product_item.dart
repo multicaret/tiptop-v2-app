@@ -76,10 +76,10 @@ class CartProductItem extends StatelessWidget {
                     if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
                     if (product.discountedPrice != null)
                       FormattedPrice(
-                        price: product.discountedPrice.amountFormatted,
+                        price: product.discountedPrice.formatted,
                       ),
                     FormattedPrice(
-                      price: product.price.amountFormatted,
+                      price: product.price.formatted,
                       isDiscounted: product.discountedPrice != null,
                     ),
                   ],

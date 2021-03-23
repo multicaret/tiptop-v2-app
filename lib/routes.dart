@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/pages/about_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/checkout_page.dart';
 import 'package:tiptop_v2/UI/pages/favorites_page.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
@@ -45,4 +46,5 @@ final routes = <String, WidgetBuilder>{
   SearchPage.routeName: (BuildContext context) => SearchPage(),
   ProfilePage.routeName: (BuildContext context) => ProfilePage(),
   CartPage.routeName: (BuildContext context) => CartPage(),
+  CheckoutPage.routeName: (BuildContext context) => CheckoutPage(),
 };

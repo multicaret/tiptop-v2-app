@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -48,8 +47,6 @@ List<Widget> _languageItems(
   List<Map<String, String>> _appLanguages,
   AppProvider appProvider,
 ) {
-  HomeProvider homeProvider = Provider.of<HomeProvider>(context);
-
   return List.generate(_appLanguages.length, (i) {
     return Container(
       padding: EdgeInsets.only(bottom: i == _appLanguages.length - 1 ? 0 : 15),
@@ -57,7 +54,7 @@ List<Widget> _languageItems(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i]['locale']);
           //Todo: remove this when profile screen has language selection
-          if(appProvider.localeSelected) {
+          if (appProvider.localeSelected) {
             Navigator.of(context).pushNamed(AppWrapper.routeName);
           }
         },

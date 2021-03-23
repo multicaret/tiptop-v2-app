@@ -129,9 +129,9 @@ class _ProductItemState extends State<ProductItem> {
                 SizedBox(height: 10),
                 if (widget.product.discountedPrice != null)
                   FormattedPrice(
-                    price: widget.product.discountedPrice.amountFormatted,
+                    price: widget.product.discountedPrice.formatted,
                   ),
-                FormattedPrice(price: widget.product.price.amountFormatted, isDiscounted: widget.product.discountedPrice != null),
+                FormattedPrice(price: widget.product.price.formatted, isDiscounted: widget.product.discountedPrice != null),
                 if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
               ],
             ),

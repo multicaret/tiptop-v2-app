@@ -12,9 +12,11 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressSelectButton extends StatelessWidget {
   final bool isLoadingHomeData;
+  final bool isDisabled;
 
   AddressSelectButton({
-    this.isLoadingHomeData,
+    this.isLoadingHomeData = false,
+    this.isDisabled = false,
   });
 
   @override
@@ -82,9 +84,11 @@ class AddressSelectButton extends StatelessWidget {
                 left: appDir == 'ltr' ? 0 : null,
                 right: appDir == 'ltr' ? null : 0,
                 child: InkWell(
-                  onTap: () {
-                    //Todo: Open Addresses modal/bottom sheet
-                  },
+                  onTap: isDisabled
+                      ? null
+                      : () {
+                          //Todo: Open Addresses modal/bottom sheet
+                        },
                   child: AnimatedContainer(
                     padding: EdgeInsets.only(
                       left: appDir == 'ltr' ? 17 : 0,
@@ -172,6 +176,7 @@ class AddressSelectButton extends StatelessWidget {
                                   ],
                                 ),
                               ),
+                              if(!isDisabled)
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),

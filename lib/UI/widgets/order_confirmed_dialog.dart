@@ -3,10 +3,10 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class LocationPermissionDialog extends StatelessWidget {
-  final Function action;
+class OrderConfirmedDialog extends StatelessWidget {
+  final bool isLargeOrder;
 
-  LocationPermissionDialog({this.action});
+  OrderConfirmedDialog({this.isLargeOrder = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +20,32 @@ class LocationPermissionDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              child: Image(
+                image: AssetImage('assets/images/order-cart${isLargeOrder ? '-large' : ''}.png'),
+              ),
+            ),
+            SizedBox(height: 20),
             Text(
-              Translations.of(context).get('Location Permission'),
+              Translations.of(context).get('Order Received'),
               style: AppTextStyles.bodyBold,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
-            Text(
-              Translations.of(context).get('Location services must be turned on in order to use the app'),
-              textAlign: TextAlign.center,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                Translations.of(context).get('You can track your order live on the map'),
+                textAlign: TextAlign.center,
+              ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: action,
-              child: Text(Translations.of(context).get('Go to Settings')),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(Translations.of(context).get('Done')),
             ),
           ],
         ),

@@ -10,9 +10,15 @@ class AppLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      child: Lottie.asset('assets/images/lottie-loader/data.json'),
+    return Center(
+      child: Container(
+        width: width,
+        child: Lottie.asset(
+          'assets/images/lottie-loader/data.json',
+          fit: BoxFit.cover,
+          width: width,
+        ),
+      ),
     );
   }
 }

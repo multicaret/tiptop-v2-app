@@ -59,5 +59,14 @@
   "Profile": "الملف الشخصي",
   "This field is required": "هذا الحقل مطلوب",
   "Order Now": "اطلب الآن",
-  "Details": "التفاصيل"
+  "Details": "التفاصيل",
+  "Notes": "ملاحظات",
+  "You can write your order notes here": "يمكنك كتابة ملاحظاتك حول الطلب هنا",
+  "Total": "المجموع",
+  "Grand Total": "المجموع الاجمالي",
+  "Delivery Fee": "تكلفة التوصيل",
+  "Payment Summary": "ملخص الدفع",
+  "Order Received": "تم استقبال طلبك",
+  "You can track your order live on the map": "يمكنك متابعة طلبك مباشرة على الخريطة",
+  "Done": "تم"
 }

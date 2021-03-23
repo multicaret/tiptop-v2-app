@@ -90,23 +90,23 @@ class IntRawStringFormatted {
       };
 }
 
-class Price {
-  int amountRaw;
-  String amountFormatted;
+class DoubleRawIntFormatted {
+  double raw;
+  String formatted;
 
-  Price({
-    this.amountRaw,
-    this.amountFormatted,
+  DoubleRawIntFormatted({
+    this.raw,
+    this.formatted,
   });
 
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-        amountRaw: json["amountRaw"] == null ? null : json["amountRaw"],
-        amountFormatted: json["amountFormatted"] == null ? null : json["amountFormatted"],
+  factory DoubleRawIntFormatted.fromJson(Map<String, dynamic> json) => DoubleRawIntFormatted(
+        raw: json["raw"] == null ? null : json["raw"].toDouble(),
+        formatted: json["formatted"] == null ? null : json["formatted"],
       );
 
   Map<String, dynamic> toJson() => {
-        "amountRaw": amountRaw == null ? null : amountRaw,
-        "amountFormatted": amountFormatted == null ? null : amountFormatted,
+        "raw": raw == null ? null : raw,
+        "formatted": formatted == null ? null : formatted,
       };
 }
 

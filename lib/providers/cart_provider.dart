@@ -14,6 +14,7 @@ class CartProvider with ChangeNotifier {
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
   AddRemoveProductDataResponse addRemoveProductDataResponse;
+
   bool isLoadingAddRemoveRequest = false;
 
   void setCart(Cart _cart) {
@@ -25,7 +26,8 @@ class CartProvider with ChangeNotifier {
     cartProducts = _cart.products == null ? [] : _cart.products;
   }
 
-  bool get noCart => cart == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
+  bool get noCart =>
+      cart == null || cart.id == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
 
   int getProductQuantity(int productId) {
     if (cart != null && cartProducts != null && cartProducts.length != 0) {
@@ -85,13 +87,12 @@ class CartProvider with ChangeNotifier {
       notifyListeners();
     }
 
-    // try {
     final responseData = await appProvider.post(
       endpoint: endpoint,
       body: body,
       withToken: true,
     );
-    // print(responseData);
+
     isLoadingAddRemoveRequest = false;
     if (responseData == 401) {
       //Sending authenticated request without logging in!
@@ -126,7 +127,6 @@ class CartProvider with ChangeNotifier {
       throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
     }
 
-    // setCart(addRemoveProductDataResponse.cartData.cart);
     cart = addRemoveProductDataResponse.cartData.cart;
     cartTotal = cart.total.formatted;
     doubleCartTotal = cart.total.raw;
@@ -134,8 +134,5 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     return getProductQuantity(product.id);
-    // } catch (e) {
-    //   throw e;
-    // }
   }
 }

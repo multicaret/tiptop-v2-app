@@ -35,6 +35,7 @@ class HomeProvider with ChangeNotifier {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',
       'channel': 'grocery',
+      //Todo: send dynamically
       'selected_address_id': '1',
     };
 
@@ -72,6 +73,7 @@ class HomeProvider with ChangeNotifier {
 
       if (homeData.cart != null) {
         cartProvider.setCart(homeData.cart);
+        print(homeData.cart.id);
       }
 
       notifyListeners();
