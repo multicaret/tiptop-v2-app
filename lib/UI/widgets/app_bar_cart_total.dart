@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -17,11 +18,9 @@ class AppBarCartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-
-    return Consumer<CartProvider>(
-      builder: (c, cart, _) {
-        bool noCart = cart.noCart;
+    return Consumer3<CartProvider, HomeProvider, AppProvider>(
+      builder: (c, cartProvider, homeProvider, appProvider, _) {
+        bool noCart = cartProvider.noCart || homeProvider.noBranchFound || homeProvider.homeDataRequestError;
 
         return AnimatedOpacity(
           duration: Duration(milliseconds: 300),
@@ -55,16 +54,16 @@ class AppBarCartTotal extends StatelessWidget {
                       ),
                       child: isLoadingHomeData || noCart
                           ? Text('')
-                          : cart.isLoadingAddRemoveRequest
+                          : cartProvider.isLoadingAddRemoveRequest
                               ? SpinKitThreeBounce(
                                   color: AppColors.white,
                                   size: 20,
                                 )
                               : Text(
-                                  cart.cartTotal,
+                                  cartProvider.cartTotal,
                                   maxLines: 1,
                                   overflow: TextOverflow.visible,
-                                  style: cart.cartTotal != null && cart.cartTotal.length > 12
+                                  style: cartProvider.cartTotal != null && cartProvider.cartTotal.length > 12
                                       ? AppTextStyles.subtitleXxsWhite
                                       : AppTextStyles.subtitleXsWhiteBold,
                                   textAlign: TextAlign.center,
