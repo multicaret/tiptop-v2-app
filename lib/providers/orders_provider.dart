@@ -9,13 +9,14 @@ import 'home_provider.dart';
 class OrdersProvider with ChangeNotifier {
   SubmitOrderResponse submitOrderResponse;
   Order submittedOrder;
+  PreviousOrdersResponseData previousOrdersResponseData;
+  List<Order> previousOrders = [];
 
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
 
-
-  Future<void> getCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
-    final endpoint = 'orders/checkout';
+  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
+    final endpoint = 'orders/create';
     Map<String, String> body = {
       'chain_id': '${homeProvider.chainId}',
       'branch_id': '${homeProvider.branchId}',
@@ -41,13 +42,12 @@ class OrdersProvider with ChangeNotifier {
   }
 
   Future<void> submitOrder(
-      AppProvider appProvider,
-      HomeProvider homeProvider,
-      CartProvider cartProvider,
-      {
-        @required int paymentMethodId,
-        @required String notes,
-      }) async {
+    AppProvider appProvider,
+    HomeProvider homeProvider,
+    CartProvider cartProvider, {
+    @required int paymentMethodId,
+    @required String notes,
+  }) async {
     if (cartProvider.noCart) {
       print('No current cart!');
       return false;
@@ -65,7 +65,7 @@ class OrdersProvider with ChangeNotifier {
     print('Order submit request body:');
     print(body);
 
-    final endpoint = 'orders/checkout';
+    final endpoint = 'orders';
     final responseData = await appProvider.post(
       endpoint: endpoint,
       body: body,
@@ -78,6 +78,27 @@ class OrdersProvider with ChangeNotifier {
     }
 
     submittedOrder = submitOrderResponse.submittedOrder;
+    notifyListeners();
+  }
+
+  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider) async {
+    final endpoint = 'orders';
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      withToken: true,
+    );
+    // print(responseData);
+    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
+
+    if (responseData == 401) {
+      return 401;
+    }
+
+    if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
+      throw HttpException(title: 'Error', message: previousOrdersResponseData.message ?? 'Unknown');
+    }
+
+    previousOrders = previousOrdersResponseData.previousOrders;
     notifyListeners();
   }
 }

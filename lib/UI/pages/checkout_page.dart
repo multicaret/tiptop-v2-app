@@ -46,9 +46,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  Future<void> _getCheckoutData() async {
+  Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoading = true);
-    await ordersProvider.getCheckoutData(appProvider, homeProvider);
+    await ordersProvider.createOrderAndGetCheckoutData(appProvider, homeProvider);
     checkoutData = ordersProvider.checkoutData;
     totals = [
       {
@@ -75,7 +75,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
-      _getCheckoutData();
+      _createOrderAndGetCheckoutData();
     }
     _isInit = false;
     super.didChangeDependencies();
