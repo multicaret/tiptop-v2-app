@@ -14,10 +14,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class AddressSelectButton extends StatelessWidget {
   final bool isLoadingHomeData;
   final bool isDisabled;
+  final bool hasETA;
 
   AddressSelectButton({
     this.isLoadingHomeData = false,
     this.isDisabled = false,
+    this.hasETA = true,
   });
 
   @override
@@ -60,7 +62,7 @@ class AddressSelectButton extends StatelessWidget {
                         style: AppTextStyles.subtitleWhite,
                       ),
                       SizedBox(height: 5),
-                      if (!showSelectAddress)
+                      if (!showSelectAddress && hasETA)
                         RichText(
                           overflow: TextOverflow.visible,
                           text: TextSpan(
@@ -101,7 +103,7 @@ class AddressSelectButton extends StatelessWidget {
                     curve: Curves.fastOutSlowIn,
                     color: AppColors.white,
                     height: 70,
-                    width: showSelectAddress ? screenSize.width : screenSize.width * 0.75,
+                    width: showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
                     child: showSelectAddress
                         ? InkWell(
                             child: Container(

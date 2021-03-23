@@ -12,10 +12,12 @@ import 'formatted_price.dart';
 class CartProductItem extends StatelessWidget {
   final int quantity;
   final Product product;
+  final bool hasControls;
 
   CartProductItem({
     @required this.quantity,
     @required this.product,
+    this.hasControls = true,
   });
 
   @override
@@ -90,11 +92,20 @@ class CartProductItem extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 99,
-            height: 33,
-            child: CartControls(product: product, cartButtonHeight: 33),
-          )
+          hasControls
+              ? Container(
+                  width: 99,
+                  height: 33,
+                  child: CartControls(product: product, cartButtonHeight: 33),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.bg,
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: Text('$quantity'),
+                )
         ],
       ),
     );

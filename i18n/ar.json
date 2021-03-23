@@ -75,5 +75,8 @@
   "Are you sure you want to empty your cart?": "هل انت متأكد من انك تريد تغرغة السلة",
   "Yes": "نعم",
   "No": "لا",
-  "Version": "الاصدار"
+  "Version": "الاصدار",
+  "Order Details": "تفاصيل الطلب",
+  "Are you sure you want to delete this order from your order history?": "هل انت متأكد من انك تريد حذف هذا الطلب من قائمة طلباتك السابقة؟",
+  "Please Rate Your Experience": "الرجاء تقييم تجربتك"
 }

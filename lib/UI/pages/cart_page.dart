@@ -73,29 +73,32 @@ class _CartPageState extends State<CartPage> {
     return AppScaffold(
       hasCurve: false,
       hasOverlayLoader: _isLoadingClearCartRequest,
-      appBar: AppBar(title: Text(Translations.of(context).get('Cart')), actions: [
-        IconButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => ConfirmAlertDialog(
-                title: 'Are you sure you want to empty your cart?',
-              ),
-            ).then((response) {
-              if (response) {
-                _clearCart().then((_) {
-                  showToast(msg: 'Cart Cleared Successfully!');
-                  Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-                }).catchError((e) {
-                  showToast(msg: 'Error clearing cart!');
-                  setState(() => _isLoadingClearCartRequest = false);
-                });
-              }
-            });
-          },
-          icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
-        )
-      ]),
+      appBar: AppBar(
+        title: Text(Translations.of(context).get('Cart')),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => ConfirmAlertDialog(
+                  title: 'Are you sure you want to empty your cart?',
+                ),
+              ).then((response) {
+                if (response) {
+                  _clearCart().then((_) {
+                    showToast(msg: 'Cart Cleared Successfully!');
+                    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+                  }).catchError((e) {
+                    showToast(msg: 'Error clearing cart!');
+                    setState(() => _isLoadingClearCartRequest = false);
+                  });
+                }
+              });
+            },
+            icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
+          )
+        ],
+      ),
       body: Stack(
         children: [
           Positioned.fill(

@@ -14,6 +14,7 @@ import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_three_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_two_page.dart';
 import 'package:tiptop_v2/UI/pages/payment_methods_page.dart';
+import 'package:tiptop_v2/UI/pages/previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/profile_page.dart';
@@ -47,4 +48,5 @@ final routes = <String, WidgetBuilder>{
   ProfilePage.routeName: (BuildContext context) => ProfilePage(),
   CartPage.routeName: (BuildContext context) => CartPage(),
   CheckoutPage.routeName: (BuildContext context) => CheckoutPage(),
+  PreviousOrderPage.routeName: (BuildContext context) => PreviousOrderPage(),
 };
