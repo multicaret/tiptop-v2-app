@@ -280,6 +280,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  instabug_flutter:
+    dependency: "direct main"
+    description:
+      name: instabug_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.1.8"
   intl:
     dependency: "direct main"
     description:
@@ -564,7 +571,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   sqflite:
     dependency: transitive
     description:

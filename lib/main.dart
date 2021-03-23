@@ -23,6 +23,7 @@ void main() async {
       // Uncomment when you want to clear local storage on app launch
       // LocalStorage().clear();
       AppProvider appProvider = AppProvider();
+      appProvider.initInstaBug();
       await appProvider.fetchLocale();
       runApp(MyApp(
         appProvider: appProvider,
