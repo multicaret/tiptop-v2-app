@@ -59,6 +59,7 @@ class AppBarCartTotal extends StatelessWidget {
                                   color: AppColors.white,
                                   size: 20,
                                 )
+                              //Todo: convert to Html widget
                               : Text(
                                   cartProvider.cartTotal,
                                   maxLines: 1,

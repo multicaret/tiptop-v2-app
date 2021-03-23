@@ -117,6 +117,34 @@ class SubmitOrderResponse {
       };
 }
 
+class PreviousOrdersResponseData {
+  PreviousOrdersResponseData({
+    this.previousOrders,
+    this.errors,
+    this.message,
+    this.status,
+  });
+
+  List<Order> previousOrders;
+  String errors;
+  String message;
+  int status;
+
+  factory PreviousOrdersResponseData.fromJson(Map<String, dynamic> json) => PreviousOrdersResponseData(
+    previousOrders: json["data"] == null ? null : List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
+    errors: json["errors"],
+    message: json["message"],
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "data": previousOrders == null ? null : List<dynamic>.from(previousOrders.map((x) => x.toJson())),
+    "errors": errors,
+    "message": message,
+    "status": status,
+  };
+}
+
 class Order {
   Order({
     this.id,
