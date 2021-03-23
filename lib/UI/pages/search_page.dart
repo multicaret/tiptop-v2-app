@@ -44,6 +44,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     productsProvider = Provider.of<ProductsProvider>(context);
     return AppScaffold(
+      hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Search')),
       ),
@@ -53,6 +54,7 @@ class _SearchPageState extends State<SearchPage> {
           hasInnerLabel: true,
           prefixIconData: FontAwesomeIcons.search,
           hasClearIcon: true,
+          required: true,
           onFieldSubmitted: (String searchQuery) => _mainSearch(searchQuery),
         ),
       ),
