@@ -13,9 +13,8 @@ class LocationPermissionDialog extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       backgroundColor: AppColors.white,
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: EdgeInsets.all(10),
       content: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
