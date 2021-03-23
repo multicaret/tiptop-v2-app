@@ -84,8 +84,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/lottie-loader/
-    - assets/images/lottie-loader/images/
-    - assets/images/lottie-loader.zip
     - i18n/
 
   fonts:
