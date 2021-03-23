@@ -95,14 +95,16 @@ class ProfilePage extends StatelessWidget {
               if (appProvider.isAuth) ..._getProfileSettingItems(context, authProfileItems),
               SectionTitle('Languages'),
               //Todo: add languages select
+              SizedBox(height: 30),
+              ..._getProfileSettingItems(context, profileItems),
+              SizedBox(height: 30),
               if (appProvider.isAuth)
                 ProfileSettingItem(
                   title: 'Logout',
                   icon: FontAwesomeIcons.doorOpen,
                   action: appProvider.logout,
+                  hasTrailing: false,
                 ),
-              SizedBox(height: 30),
-              ..._getProfileSettingItems(context, profileItems),
               SizedBox(height: 50),
               ProfileSettingItem(
                 title: 'Version',

@@ -12,6 +12,7 @@ class ProfileSettingItem extends StatelessWidget {
   final String route;
   final Function action;
   final Widget trailing;
+  final bool hasTrailing;
 
   ProfileSettingItem({
     @required this.icon,
@@ -19,6 +20,7 @@ class ProfileSettingItem extends StatelessWidget {
     this.route,
     this.action,
     this.trailing,
+    this.hasTrailing = true,
   });
 
   @override
@@ -27,9 +29,10 @@ class ProfileSettingItem extends StatelessWidget {
       builder: (c, appProvider, _) => Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: action ?? () {
-            Navigator.of(context, rootNavigator: true).pushNamed(route);
-          },
+          onTap: action ??
+              () {
+                Navigator.of(context, rootNavigator: true).pushNamed(route);
+              },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
@@ -51,7 +54,7 @@ class ProfileSettingItem extends StatelessWidget {
                     Text(Translations.of(context).get(title)),
                   ],
                 ),
-                trailing ?? AppIcon.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                if (hasTrailing) trailing ?? AppIcon.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
               ],
             ),
           ),
