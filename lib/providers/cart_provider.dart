@@ -48,7 +48,7 @@ class CartProvider with ChangeNotifier {
     @required bool isAdding,
     @required Product product,
   }) async {
-    final endpoint = 'carts/add-remove-product';
+    final endpoint = 'carts/${cart.id}/products/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
       'chain_id': homeProvider.chainId,
