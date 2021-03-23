@@ -106,11 +106,10 @@ class AppProvider with ChangeNotifier {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
           logout();
-          return;
         } else {
           print('Sending authenticated request without logging in!');
-          return 401;
         }
+        return 401;
       }
 
       final responseData = json.decode(response.body);
@@ -153,11 +152,10 @@ class AppProvider with ChangeNotifier {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
           logout();
-          return null;
         } else {
           print('Sending authenticated request without logging in!');
-          return 401;
         }
+        return 401;
       }
       return responseData;
     } catch (error) {
