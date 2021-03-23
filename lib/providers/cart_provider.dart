@@ -9,7 +9,7 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 
 class CartProvider with ChangeNotifier {
   Cart cart;
-  List<CartProduct> cartProducts;
+  List<CartProduct> cartProducts = [];
   String cartTotal = '';
   double doubleCartTotal = 0.0;
   int cartProductsCount = 0;
@@ -134,5 +134,24 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     return getProductQuantity(product.id);
+  }
+
+  Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
+    final endpoint = 'carts/clear-cart';
+
+    Map<String, dynamic> body = {
+      'branch_id': homeProvider.branchId,
+      'chain_id': homeProvider.chainId,
+    };
+
+    final responseData = await appProvider.post(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+
+    if(responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"]);
+    }
   }
 }

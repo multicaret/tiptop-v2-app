@@ -9,7 +9,7 @@ import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
-import 'package:tiptop_v2/UI/widgets/order_confirmed_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/dialogs/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';

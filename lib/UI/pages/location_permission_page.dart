@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/location_permission_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/dialogs/location_permission_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 

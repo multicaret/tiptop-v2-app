@@ -70,5 +70,8 @@
   "Payment Summary": "ملخص الدفع",
   "Order Received": "تم استقبال طلبك",
   "You can track your order live on the map": "يمكنك متابعة طلبك مباشرة على الخريطة",
-  "Done": "تم"
+  "Done": "تم",
+  "Are you sure you want to empty your cart?": "هل انت متأكد من انك تريد تغرغة السلة",
+  "Yes": "نعم",
+  "No": "لا"
 }

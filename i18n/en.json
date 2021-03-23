@@ -70,5 +70,8 @@
   "Payment Summary": "Payment Summary",
   "Order Received": "Order Received",
   "You can track your order live on the map": "You can track your order live on the map",
-  "Done": "Done"
+  "Done": "Done",
+  "Are you sure you want to empty your cart?": "Are you sure you want to empty your cart?",
+  "Yes": "Yes",
+  "No": "No"
 }
