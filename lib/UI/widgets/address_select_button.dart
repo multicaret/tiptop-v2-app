@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
+import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -119,33 +120,9 @@ class AddressSelectButton extends StatelessWidget {
                         : Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                  right: appDir == 'ltr' ? 10 : 0,
-                                  left: appDir == 'ltr' ? 0 : 10,
-                                ),
-                                margin: EdgeInsets.only(
-                                  right: appDir == 'ltr' ? 10 : 0,
-                                  left: appDir == 'ltr' ? 0 : 10,
-                                ),
-                                child: Image(
-                                  image: AssetImage('assets/images/address-home-icon.png'),
-                                  width: 37,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: appDir == 'ltr'
-                                      ? Border(
-                                          right: BorderSide(
-                                            width: 1,
-                                            color: AppColors.border,
-                                          ),
-                                        )
-                                      : Border(
-                                          left: BorderSide(
-                                          width: 1,
-                                          color: AppColors.border,
-                                        )),
-                                ),
+                              AddressIcon(
+                                isRTL: appProvider.isRTL,
+                                icon: 'assets/images/address-home-icon.png',
                               ),
                               Expanded(
                                 child: Column(
@@ -176,11 +153,11 @@ class AddressSelectButton extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              if(!isDisabled)
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
-                              ),
+                              if (!isDisabled)
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
+                                ),
                             ],
                           ),
                   ),
