@@ -51,6 +51,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     List<String> productGallery = [widget.product.media.cover, ...widget.product.media.gallery.map((galleryItem) => galleryItem.file)];
+    bool hasDiscountedPrice = widget.product.discountedPrice != null && widget.product.discountedPrice.raw != 0;
 
     return AppScaffold(
       appBar: AppBar(
@@ -79,14 +80,14 @@ class _ProductPageState extends State<ProductPage> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 20),
-                if (widget.product.discountedPrice != null)
+                if (hasDiscountedPrice)
                   FormattedPrice(
-                    price: widget.product.discountedPrice.amountFormatted,
+                    price: widget.product.discountedPrice.formatted,
                     isLarge: true,
                   ),
                 FormattedPrice(
-                  price: widget.product.price.amountFormatted,
-                  isDiscounted: widget.product.discountedPrice != null,
+                  price: widget.product.price.formatted,
+                  isDiscounted: hasDiscountedPrice,
                   isLarge: true,
                 ),
                 if (widget.product.unitText != null) Text(widget.product.unitText, style: AppTextStyles.subtitleXs50),
