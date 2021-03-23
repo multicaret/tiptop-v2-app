@@ -106,8 +106,8 @@ class Branch {
   String primaryPhoneNumber;
   String secondaryPhoneNumber;
   String whatsappPhoneNumber;
-  String latitude;
-  String longitude;
+  double latitude;
+  double longitude;
   Chain chain;
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
