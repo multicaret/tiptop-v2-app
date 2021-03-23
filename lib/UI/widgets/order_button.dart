@@ -40,7 +40,7 @@ class OrderButton extends StatelessWidget {
                 Expanded(
                   child: Container(
                     height: 45,
-                    child: Text(Translations.of(context).get('Order Now')),
+                    child: Text(Translations.of(context).get(submitAction == null ? 'Continue' : 'Order Now')),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.secondaryDark,
