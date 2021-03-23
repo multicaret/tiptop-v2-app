@@ -7,9 +7,10 @@ import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/dialogs/order_confirmed_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
+import 'package:tiptop_v2/UI/widgets/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -119,7 +120,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     ),
                                   ),
                                   SectionTitle('Payment Methods'),
-                                  ..._getPaymentMethodsRadioButtons(),
+                                  RadioSelectItems(
+                                    items: checkoutData.paymentMethods,
+                                    selectedId: selectedPaymentMethodId,
+                                    action: (value) => setState(() => selectedPaymentMethodId = value),
+                                    isRTL: appProvider.isRTL,
+                                  ),
                                   SectionTitle('Payment Summary'),
                                   ..._getTotalsItems(),
                                 ],
@@ -169,54 +175,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       showToast(msg: 'An error occurred while submitting your order!');
       throw e;
     }
-  }
-
-  List<Widget> _getPaymentMethodsRadioButtons() {
-    return List.generate(checkoutData.paymentMethods.length, (i) {
-      return InkWell(
-        onTap: () {
-          setState(() => selectedPaymentMethodId = checkoutData.paymentMethods[i].id);
-        },
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            top: 10,
-            bottom: 10,
-            left: appProvider.isRTL ? 17 : 7,
-            right: appProvider.isRTL ? 7 : 17,
-          ),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: AppColors.border)),
-            color: AppColors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Radio(
-                    value: checkoutData.paymentMethods[i].id,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    groupValue: selectedPaymentMethodId,
-                    activeColor: AppColors.secondaryDark,
-                    onChanged: (value) {
-                      setState(() => selectedPaymentMethodId = value);
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  Text(checkoutData.paymentMethods[i].title),
-                ],
-              ),
-              CachedNetworkImage(
-                imageUrl: checkoutData.paymentMethods[i].logo,
-                width: 40,
-                fit: BoxFit.cover,
-              ),
-            ],
-          ),
-        ),
-      );
-    });
   }
 
   List<Widget> _getTotalsItems() {
