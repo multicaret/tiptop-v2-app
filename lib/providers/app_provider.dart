@@ -249,7 +249,7 @@ class AppProvider with ChangeNotifier {
 
   void initInstaBug() {
     if (Platform.isIOS) {
-      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake, InvocationEvent.floatingButton]);
+      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
     }
   }
 }
