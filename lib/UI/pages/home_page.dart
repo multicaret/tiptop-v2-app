@@ -61,9 +61,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       //Todo: translate this string/reconsider what to do
       showToast(msg: 'An Error Occurred! Please try again later');
-      setState(() {
-        isLoadingHomeData = false;
-      });
+      setState(() => isLoadingHomeData = false);
       throw e;
     }
   }
