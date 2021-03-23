@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
-import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -91,16 +91,7 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 if (widget.product.unitText != null) Text(widget.product.unitText, style: AppTextStyles.subtitleXs50),
                 SizedBox(height: 20),
-                if (widget.product.description != null)
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
-                    color: AppColors.bg,
-                    child: Text(
-                      Translations.of(context).get('Details'),
-                      style: AppTextStyles.body50,
-                    ),
-                  ),
+                if (widget.product.description != null) SectionTitle('Details'),
                 if (widget.product.description != null)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 9),
