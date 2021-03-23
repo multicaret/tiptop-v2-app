@@ -103,12 +103,6 @@ class CartProvider with ChangeNotifier {
       return null;
     }
 
-    if (responseData == null) {
-      cartProducts = _oldCartProducts;
-      notifyListeners();
-      return null;
-    }
-
     addRemoveProductDataResponse = AddRemoveProductDataResponse.fromJson(responseData);
 
     if (addRemoveProductDataResponse.status == 422) {
