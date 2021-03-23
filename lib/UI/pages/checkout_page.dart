@@ -158,7 +158,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       setState(() => _isLoadingOrderSubmit = false);
       showDialog(
         context: context,
-        builder: (context) => OrderConfirmedDialog(),
+        builder: (context) => OrderConfirmedDialog(
+          isLargeOrder: submittedOrder.cart.productsCount >= 10,
+        ),
       ).then((_) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
       });
