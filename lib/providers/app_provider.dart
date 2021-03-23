@@ -23,18 +23,21 @@ class AppProvider with ChangeNotifier {
   // Locale
   List<Language> appLanguages = [
     Language(
+      id: 1,
       title: 'English',
       locale: 'en',
       countryCode: 'US',
       logo: 'assets/images/en-flag.png',
     ),
     Language(
+      id: 2,
       title: 'العربية',
       locale: 'ar',
       countryCode: '',
       logo: 'assets/images/ar-flag.png',
     ),
     Language(
+      id: 3,
       title: 'كوردي',
       locale: 'fa',
       countryCode: 'US',
