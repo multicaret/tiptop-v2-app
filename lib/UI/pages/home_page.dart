@@ -17,12 +17,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-List<String> carouselImages = [
-  'https://cdn.pixabay.com/photo/2016/12/26/17/28/food-1932466_1280.jpg',
-  'https://cdn.pixabay.com/photo/2014/06/11/17/00/food-366875_1280.jpg',
-  'https://cdn.pixabay.com/photo/2015/03/26/09/39/cupcakes-690040_1280.jpg'
-];
-
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
   static double sliderHeight = 212;
@@ -109,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                               )
                             : AppCarousel(
                                 images: slides.map((slide) => slide.image).toList(),
-                                autoplayDuration: Duration(milliseconds: 3000),
+                                autoplayDuration: Duration(milliseconds: 4000),
                                 hasMap: true,
                               ),
                         ChannelsButtons(),
