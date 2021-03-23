@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:instabug_flutter/Instabug.dart';
 import 'package:tiptop_v2/models/user.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
@@ -39,20 +40,35 @@ class AppProvider with ChangeNotifier {
     },
   ];
 
+  // Locale Related.
   bool localeSelected = false;
-
   static const String DEFAULT_LOCALE = 'en';
   Locale _appLocale = Locale(DEFAULT_LOCALE);
 
   Locale get appLocal => _appLocale ?? Locale(DEFAULT_LOCALE);
 
+  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+
+  bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
+
   set appLocal(value) {
     _appLocale = value;
   }
 
-  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+  // Auth Related.
+  static const DOMAIN = 'https://titan.trytiptop.app/';
+  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
+  User authUser;
+  int userId;
+  String token;
 
-  bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
+  bool get isAuth => token != null;
+
+  Map<String, String> get authHeader {
+    var myHeader = headers;
+    myHeader.addAll({"Authorization": "Bearer " + token});
+    return myHeader;
+  }
 
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
@@ -72,15 +88,6 @@ class AppProvider with ChangeNotifier {
     await storageActions.save(key: 'language_code', data: localeString);
     localeSelected = true;
     notifyListeners();
-  }
-
-  static const DOMAIN = 'https://titan.trytiptop.app/';
-  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
-
-  Map<String, String> get authHeader {
-    var myHeader = headers;
-    myHeader.addAll({"Authorization": "Bearer " + token});
-    return myHeader;
   }
 
   Future<String> endpointRoot() async {
@@ -163,12 +170,6 @@ class AppProvider with ChangeNotifier {
     }
   }
 
-  User authUser;
-  int userId;
-  String token;
-
-  bool get isAuth => token != null;
-
   Future<void> updateUserData(User _authUser, String accessToken) async {
     print('accessToken');
     print(accessToken);
@@ -245,4 +246,10 @@ class AppProvider with ChangeNotifier {
   }
 
   void isAttemptingRequestWithExpiredToken() {}
+
+  void initInstaBug() {
+    if (Platform.isIOS) {
+      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
+    }
+  }
 }

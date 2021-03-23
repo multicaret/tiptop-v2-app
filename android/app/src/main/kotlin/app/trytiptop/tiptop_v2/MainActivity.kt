@@ -1,4 +1,4 @@
-package com.example.tiptop_v2
+package app.trytiptop.tiptop_v2
 
 import io.flutter.embedding.android.FlutterActivity
 
