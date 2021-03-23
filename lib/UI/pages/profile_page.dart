@@ -9,6 +9,7 @@ import 'package:tiptop_v2/UI/widgets/profile-screen/profile_setting_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'otp/otp_complete_profile_page.dart';
@@ -67,59 +68,63 @@ class LoginHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-      height: 80.0,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [containerShadow()],
-      ),
-      child: Row(
-        children: [
-          Container(
-            child: Icon(Icons.person_rounded),
-            height: 55.0,
-            width: 55.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [containerShadow()],
-              borderRadius: BorderRadius.circular(8.0),
+    return Material(
+      color: AppColors.white,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context, rootNavigator: true).pushNamed(appProvider.isAuth ? OTPCompleteProfile.routeName : WalkthroughPage.routeName);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+          height: 80.0,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.border),
             ),
           ),
-          SizedBox(width: 10.0),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                appProvider.isAuth
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            appProvider.authUser.name,
-                            style: AppTextStyles.bodyBoldSecondaryDark,
-                          ),
-                          Text(
-                            '${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
-                            style: AppTextStyles.subtitle,
-                          ),
-                        ],
-                      )
-                    : Text(Translations.of(context).get("Sign Up"), style: AppTextStyles.bodyBold),
-                IconButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true)
-                        .pushNamed(appProvider.isAuth ? OTPCompleteProfile.routeName : WalkthroughPage.routeName),
-                    icon: appProvider.isAuth
-                        ? Icon(FontAwesomeIcons.pen, color: AppColors.secondaryDark, size: 20)
-                        : appProvider.dir == 'ltr'
-                            ? Icon(FontAwesomeIcons.angleRight)
-                            : FontAwesomeIcons.angleLeft),
-              ],
-            ),
+          child: Row(
+            children: [
+              Container(
+                child: Icon(Icons.person_rounded),
+                height: 55.0,
+                width: 55.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [containerShadow()],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              SizedBox(width: 10.0),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    appProvider.isAuth
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                appProvider.authUser.name,
+                                style: AppTextStyles.bodyBoldSecondaryDark,
+                              ),
+                              Text(
+                                '${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
+                                style: AppTextStyles.subtitle,
+                              ),
+                            ],
+                          )
+                        : Text(Translations.of(context).get("Sign Up"), style: AppTextStyles.bodyBold),
+                    appProvider.isAuth
+                        ? AppIcon.iconSecondary(FontAwesomeIcons.pen)
+                        : AppIcon.iconSecondary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight)
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
