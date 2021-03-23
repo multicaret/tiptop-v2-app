@@ -551,3 +551,19 @@ class Gallery {
         "thumbnail": thumbnail,
       };
 }
+
+class Language {
+  int id;
+  String title;
+  String logo;
+  String locale;
+  String countryCode;
+
+  Language({
+    this.id,
+    this.title,
+    this.logo,
+    this.locale,
+    this.countryCode,
+  });
+}

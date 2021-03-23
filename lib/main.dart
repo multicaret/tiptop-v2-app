@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           locale: app.appLocal,
-          supportedLocales: app.appLanguages.map((language) => Locale(language['locale'], language['country_code'])).toList(),
+          supportedLocales: app.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: AppColors.primary,

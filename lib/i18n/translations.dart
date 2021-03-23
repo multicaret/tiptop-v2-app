@@ -49,7 +49,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<Translations> {
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    return AppProvider().appLanguages.map((language) => language['locale']).toList().contains(locale.languageCode);
+    return AppProvider().appLanguages.map((language) => language.locale).toList().contains(locale.languageCode);
   }
 
   @override

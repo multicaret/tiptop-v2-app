@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/user.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
@@ -19,25 +21,25 @@ class AppProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
 
   // Locale
-  List<Map<String, String>> appLanguages = [
-    {
-      'title': 'English',
-      'locale': 'en',
-      'country_code': 'US',
-      'flag': 'assets/images/en-flag.png',
-    },
-    {
-      'title': 'العربية',
-      'locale': 'ar',
-      'country_code': '',
-      'flag': 'assets/images/ar-flag.png',
-    },
-    {
-      'title': 'كوردي',
-      'locale': 'fa',
-      'country_code': '',
-      'flag': 'assets/images/ku-flag.png',
-    },
+  List<Language> appLanguages = [
+    Language(
+      title: 'English',
+      locale: 'en',
+      countryCode: 'US',
+      logo: 'assets/images/en-flag.png',
+    ),
+    Language(
+      title: 'العربية',
+      locale: 'ar',
+      countryCode: '',
+      logo: 'assets/images/ar-flag.png',
+    ),
+    Language(
+      title: 'كوردي',
+      locale: 'fa',
+      countryCode: 'US',
+      logo: 'assets/images/ku-flag.png',
+    ),
   ];
 
   // Locale Related.
