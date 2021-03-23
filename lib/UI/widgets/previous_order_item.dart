@@ -26,6 +26,7 @@ class PreviousOrderItem extends StatelessWidget {
         onTap: () {
           //Todo: show order show page
         },
+        //Todo: implement swipe to delete order
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
           decoration: BoxDecoration(

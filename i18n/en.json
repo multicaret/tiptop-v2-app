@@ -1,6 +1,7 @@
 {
   "Submit": "Submit",
   "Login": "Login",
+  "Log In": "Log In",
   "Logout": "Logout",
   "Register": "Register",
   "Sign Up" : "Sign Up",
@@ -73,5 +74,6 @@
   "Done": "Done",
   "Are you sure you want to empty your cart?": "Are you sure you want to empty your cart?",
   "Yes": "Yes",
-  "No": "No"
+  "No": "No",
+  "Version": "Version"
 }

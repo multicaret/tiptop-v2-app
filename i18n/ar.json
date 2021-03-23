@@ -1,6 +1,7 @@
 {
   "Submit": "إرسال",
   "Login": "تسجيل الدخول",
+  "Log In": "تسجيل الدخول",
   "Logout": "تسجيل الخروج",
   "Register": "تسجيل",
   "Sign Up": "تسجيل",
@@ -73,5 +74,6 @@
   "Done": "تم",
   "Are you sure you want to empty your cart?": "هل انت متأكد من انك تريد تغرغة السلة",
   "Yes": "نعم",
-  "No": "لا"
+  "No": "لا",
+  "Version": "الاصدار"
 }
