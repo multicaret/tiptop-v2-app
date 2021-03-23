@@ -123,6 +123,8 @@ class _ProductItemState extends State<ProductItem> {
                   widget.product.title,
                   style: AppTextStyles.subtitle,
                   textAlign: TextAlign.start,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 10),
                 if (widget.product.discountedPrice != null)

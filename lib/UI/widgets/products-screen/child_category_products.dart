@@ -99,7 +99,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             crossAxisCount: 3,
-            childAspectRatio: 0.5,
+            childAspectRatio: 0.45,
             children: <Widget>[...products.map((product) => ProductItem(product: product))],
           ),
         ),
