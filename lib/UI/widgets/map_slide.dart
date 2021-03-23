@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/home_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class MapSlide extends StatefulWidget {
   @override
@@ -54,15 +58,68 @@ class _MapSlideState extends State<MapSlide> {
   Widget build(BuildContext context) {
     return Container(
       height: HomePage.sliderHeight,
-      child: GoogleMap(
-        initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
-        mapType: MapType.normal,
-        markers: {userLocationMarker, branchMarker},
-        compassEnabled: false,
-        zoomControlsEnabled: false,
-        myLocationButtonEnabled: false,
-        indoorViewEnabled: false,
-        onMapCreated: _onMapCreated,
+      child: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
+            mapType: MapType.normal,
+            markers: {userLocationMarker, branchMarker},
+            compassEnabled: false,
+            zoomControlsEnabled: false,
+            myLocationButtonEnabled: false,
+            indoorViewEnabled: false,
+            onMapCreated: _onMapCreated,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Container(
+                //TODO: Add shadow
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                height: 40,
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        children: [
+                          Text('Minimum ', style: AppTextStyles.subtitleXs),
+                          Expanded(
+                            child: Html(
+                              data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
+                              style: {"body": AppTextStyles.htmlXsBold},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    VerticalDivider(thickness: 1.5),
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        children: [
+                          Text('Delivery ', style: AppTextStyles.subtitleXs),
+                          Expanded(
+                            child: Html(
+                              data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
+                              style: {"body": AppTextStyles.htmlXsBold},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
