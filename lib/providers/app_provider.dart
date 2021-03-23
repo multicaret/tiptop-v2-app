@@ -8,7 +8,7 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 import 'local_storage.dart';
 
 class AppProvider with ChangeNotifier {
-  static const String GOOGLE_API_KEY = '';
+  static const String GOOGLE_API_KEY = 'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
   //  Location
   /*Todo: set these coordinates to be a proper place*/

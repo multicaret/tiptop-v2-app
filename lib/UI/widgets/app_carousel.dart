@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppCarousel extends StatelessWidget {
@@ -14,6 +15,7 @@ class AppCarousel extends StatelessWidget {
   final bool imageOverlay;
   final bool hasDots;
   final Duration autoplayDuration;
+  final bool hasMap;
 
   AppCarousel({
     this.height = 212,
@@ -26,6 +28,7 @@ class AppCarousel extends StatelessWidget {
     this.imageOverlay = false,
     this.hasDots = false,
     this.autoplayDuration,
+    this.hasMap = false,
   });
 
   @override
@@ -36,7 +39,11 @@ class AppCarousel extends StatelessWidget {
       child: Carousel(
         animationDuration: Duration(milliseconds: 400),
         boxFit: BoxFit.cover,
-        dotSize: hasDots ? images.length > 1 ? dotSize : 0 : 0,
+        dotSize: hasDots
+            ? images.length > 1
+                ? dotSize
+                : 0
+            : 0,
         dotIncreaseSize: 1.6,
         dotSpacing: 12,
         dotVerticalPadding: dotVerticalPadding,
@@ -47,17 +54,21 @@ class AppCarousel extends StatelessWidget {
         autoplay: autoplayDuration != null,
         autoplayDuration: autoplayDuration,
         dotBgColor: hasDots ? dotBgColor : Colors.transparent,
-        images: images
-            .map((image) => imageOverlay
-                ? CachedNetworkImage(
-                    imageUrl: image,
-                    fit: BoxFit.cover,
-                    color: AppColors.text.withOpacity(0.3),
-                    colorBlendMode: BlendMode.darken,
-                  )
-                : CachedNetworkImageProvider(image))
-            .toList(),
+        images: hasMap ? [MapSlide(), ..._getImagesList()] : _getImagesList(),
       ),
     );
+  }
+
+  List<dynamic> _getImagesList() {
+    return List.generate(
+        images.length,
+        (i) => imageOverlay
+            ? CachedNetworkImage(
+                imageUrl: images[i],
+                fit: BoxFit.cover,
+                color: AppColors.text.withOpacity(0.3),
+                colorBlendMode: BlendMode.darken,
+              )
+            : CachedNetworkImageProvider(images[i]));
   }
 }

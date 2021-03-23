@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/style.dart';
 
 import 'app_colors.dart';
 
@@ -194,7 +195,6 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
-
   static const TextStyle subtitleXsWhiteBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
@@ -209,6 +209,15 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
+  );
+
+  static Style htmlXsBold = Style(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: FontSize(12),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    textAlign: TextAlign.end,
   );
 
   static TextStyle dynamicValues({
