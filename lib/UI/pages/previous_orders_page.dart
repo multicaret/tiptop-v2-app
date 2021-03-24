@@ -66,17 +66,28 @@ class _PreviousOrdersPageState extends State<PreviousOrdersPage> {
                     physics: AlwaysScrollableScrollPhysics(),
                     itemCount: previousOrders.length,
                     itemBuilder: (context, i) => PreviousOrderItem(
-                        order: previousOrders[i],
-                        isRTL: appProvider.isRTL,
-                        action: () {
-                          Navigator.of(context, rootNavigator: true)
-                              .pushNamed(PreviousOrderPage.routeName, arguments: previousOrders[i])
-                              .then((value) {
-                            if (value != null && value) {
-                              _fetchAndSetPreviousOrders();
-                            }
-                          });
-                        }),
+                      order: previousOrders[i],
+                      isRTL: appProvider.isRTL,
+                      action: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed(PreviousOrderPage.routeName, arguments: previousOrders[i]).then((value) {
+                          if (value != null && value) {
+                            _fetchAndSetPreviousOrders();
+                          }
+                        });
+                      },
+                      dismissAction: () {
+                        int orderIdToRemove = previousOrders[i].id;
+                        setState(() {
+                          previousOrders.removeAt(i);
+                        });
+                        ordersProvider.deletePreviousOrder(appProvider, orderIdToRemove).then((_) {
+                          showToast(msg: 'Successfully Deleted Order From History!');
+                          return true;
+                        }).catchError((e) {
+                          showToast(msg: 'Error deleting order!');
+                        });
+                      },
+                    ),
                   ),
                 ),
     );
