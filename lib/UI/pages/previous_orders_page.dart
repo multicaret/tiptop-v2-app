@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
@@ -65,9 +66,17 @@ class _PreviousOrdersPageState extends State<PreviousOrdersPage> {
                     physics: AlwaysScrollableScrollPhysics(),
                     itemCount: previousOrders.length,
                     itemBuilder: (context, i) => PreviousOrderItem(
-                      order: previousOrders[i],
-                      isRTL: appProvider.isRTL,
-                    ),
+                        order: previousOrders[i],
+                        isRTL: appProvider.isRTL,
+                        action: () {
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamed(PreviousOrderPage.routeName, arguments: previousOrders[i])
+                              .then((value) {
+                            if (value != null && value) {
+                              _fetchAndSetPreviousOrders();
+                            }
+                          });
+                        }),
                   ),
                 ),
     );

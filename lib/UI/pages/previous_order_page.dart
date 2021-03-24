@@ -10,6 +10,8 @@ import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
@@ -50,8 +52,9 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
-      builder: (c, appProvider, _) => AppScaffold(
+    return Consumer2<AppProvider, OrdersProvider>(
+      builder: (c, appProvider, ordersProvider, _) => AppScaffold(
+        hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
         appBar: AppBar(
           title: Text(Translations.of(context).get('Order Details')),
           actions: [
@@ -64,14 +67,12 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                   ),
                 ).then((response) {
                   if (response) {
-                    //Todo: implement deleting an order
-                    /*_deleteOrder().then((_) {
+                    ordersProvider.deletePreviousOrder(appProvider, order.id).then((_) {
                       showToast(msg: 'Successfully Deleted Order From History!');
-                      Navigator.of(context, rootNavigator: true).pushReplacementNamed(PreviousOrdersPage.routeName);
+                      Navigator.of(context).pop(true);
                     }).catchError((e) {
-                      showToast(msg: 'Error clearing cart!');
-                      setState(() => _isLoadingClearCartRequest = false);
-                    });*/
+                      showToast(msg: 'Error deleting order!');
+                    });
                   }
                 });
               },

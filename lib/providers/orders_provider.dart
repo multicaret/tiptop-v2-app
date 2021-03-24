@@ -14,6 +14,7 @@ class OrdersProvider with ChangeNotifier {
 
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
+  bool isLoadingDeleteOrderRequest  = false;
 
   Future<void> createOrderAndGetCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
     final endpoint = 'orders/create';
@@ -99,6 +100,20 @@ class OrdersProvider with ChangeNotifier {
     }
 
     previousOrders = previousOrdersResponseData.previousOrders;
+    notifyListeners();
+  }
+
+  Future<void> deletePreviousOrder(AppProvider appProvider, int orderId) async {
+    isLoadingDeleteOrderRequest = true;
+    notifyListeners();
+
+    final endpoint = 'orders/$orderId/delete';
+    final responseData = await appProvider.post(endpoint: endpoint, withToken: true);
+
+    if (responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] == null ? 'Unknown' : responseData["message"]);
+    }
+    isLoadingDeleteOrderRequest = false;
     notifyListeners();
   }
 }

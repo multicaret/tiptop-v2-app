@@ -3,7 +3,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:tiptop_v2/UI/pages/previous_order_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -13,10 +12,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class PreviousOrderItem extends StatelessWidget {
   final Order order;
   final bool isRTL;
+  final Function action;
 
   PreviousOrderItem({
     @required this.order,
     @required this.isRTL,
+    this.action,
   });
 
   @override
@@ -24,9 +25,7 @@ class PreviousOrderItem extends StatelessWidget {
     return Material(
       color: AppColors.white,
       child: InkWell(
-        onTap: () {
-          Navigator.of(context, rootNavigator: true).pushNamed(PreviousOrderPage.routeName, arguments: order);
-        },
+        onTap: action,
         //Todo: implement swipe to delete order
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
