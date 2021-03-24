@@ -30,7 +30,6 @@ class HomeDataResponse {
 
 class HomeData {
   HomeData({
-    this.addresses,
     this.slides,
     this.cart,
     this.estimatedArrivalTime,
@@ -40,7 +39,6 @@ class HomeData {
     this.categories,
   });
 
-  List<dynamic> addresses;
   List<Slide> slides;
   Cart cart;
   EstimatedArrivalTime estimatedArrivalTime;
@@ -50,7 +48,6 @@ class HomeData {
   List<Category> categories;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
         slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
