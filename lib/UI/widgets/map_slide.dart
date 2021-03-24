@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/home_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class MapSlide extends StatefulWidget {
@@ -73,13 +74,13 @@ class _MapSlideState extends State<MapSlide> {
             child: Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Container(
-                //TODO: Add shadow
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
                 height: 40,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white,
+                  boxShadow: [BoxShadow(blurRadius: 10, color: AppColors.shadow)],
                 ),
                 child: Row(
                   children: [
@@ -87,7 +88,7 @@ class _MapSlideState extends State<MapSlide> {
                       flex: 1,
                       child: Row(
                         children: [
-                          Text('Minimum ', style: AppTextStyles.subtitleXs),
+                          Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                           Expanded(
                             child: Html(
                               data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
@@ -102,7 +103,7 @@ class _MapSlideState extends State<MapSlide> {
                       flex: 1,
                       child: Row(
                         children: [
-                          Text('Delivery ', style: AppTextStyles.subtitleXs),
+                          Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                           Expanded(
                             child: Html(
                               data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
