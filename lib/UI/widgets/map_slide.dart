@@ -67,6 +67,7 @@ class _MapSlideState extends State<MapSlide> {
             markers: {userLocationMarker, branchMarker},
             compassEnabled: false,
             zoomControlsEnabled: false,
+            zoomGesturesEnabled: false,
             myLocationButtonEnabled: false,
             indoorViewEnabled: false,
             onMapCreated: _onMapCreated,
