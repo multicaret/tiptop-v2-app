@@ -21,13 +21,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  bool _isInit = true;
-  CartProvider cartProvider;
-  AppProvider appProvider;
-  HomeProvider homeProvider;
-
-  bool _isLoadingClearCartRequest = false;
-
   ScrollController _controller;
   bool popFlag = false;
 
@@ -52,75 +45,59 @@ class _CartPageState extends State<CartPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      cartProvider = Provider.of<CartProvider>(context);
-      appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
-  Future<void> _clearCart() async {
-    setState(() => _isLoadingClearCartRequest = true);
-    await cartProvider.clearCart(appProvider, homeProvider);
-    setState(() => _isLoadingClearCartRequest = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      hasCurve: false,
-      hasOverlayLoader: _isLoadingClearCartRequest,
-      appBar: AppBar(
-        title: Text(Translations.of(context).get('Cart')),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => ConfirmAlertDialog(
-                  title: 'Are you sure you want to empty your cart?',
+    return Consumer3<AppProvider, HomeProvider, CartProvider>(
+      builder: (c, appProvider, homeProvider, cartProvider, _) => AppScaffold(
+        hasCurve: false,
+        hasOverlayLoader: cartProvider.isLoadingClearCartRequest,
+        appBar: AppBar(
+          title: Text(Translations.of(context).get('Cart')),
+          actions: [
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ConfirmAlertDialog(
+                    title: 'Are you sure you want to empty your cart?',
+                  ),
+                ).then((response) {
+                  if (response != null && response) {
+                    cartProvider.clearCart(appProvider, homeProvider).then((_) {
+                      showToast(msg: 'Cart Cleared Successfully!');
+                      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+                    }).catchError((e) {
+                      showToast(msg: 'Error clearing cart!');
+                    });
+                  }
+                });
+              },
+              icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
+            )
+          ],
+        ),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 105),
+                child: ListView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  controller: _controller,
+                  children: cartProvider.cartProducts
+                      .map((cartProduct) => CartProductItem(
+                            product: cartProduct.product,
+                            quantity: cartProduct.quantity,
+                          ))
+                      .toList(),
                 ),
-              ).then((response) {
-                if (response != null && response) {
-                  _clearCart().then((_) {
-                    showToast(msg: 'Cart Cleared Successfully!');
-                    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-                  }).catchError((e) {
-                    showToast(msg: 'Error clearing cart!');
-                    setState(() => _isLoadingClearCartRequest = false);
-                  });
-                }
-              });
-            },
-            icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 105),
-              child: ListView(
-                physics: AlwaysScrollableScrollPhysics(),
-                controller: _controller,
-                children: cartProvider.cartProducts
-                    .map((cartProduct) => CartProductItem(
-                          product: cartProduct.product,
-                          quantity: cartProduct.quantity,
-                        ))
-                    .toList(),
               ),
             ),
-          ),
-          OrderButton(
-            cartProvider: cartProvider,
-            isRTL: appProvider.isRTL,
-          ),
-        ],
+            OrderButton(
+              cartProvider: cartProvider,
+              isRTL: appProvider.isRTL,
+            ),
+          ],
+        ),
       ),
     );
   }

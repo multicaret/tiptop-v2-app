@@ -16,6 +16,7 @@ class CartProvider with ChangeNotifier {
   AddRemoveProductDataResponse addRemoveProductDataResponse;
 
   bool isLoadingAddRemoveRequest = false;
+  bool isLoadingClearCartRequest = false;
 
   void setCart(Cart _cart) {
     print('setting cart${_cart == null ? ' (null)' : ', cart id: ${_cart.id}'}, products count: ${_cart.products.length}');
@@ -24,6 +25,7 @@ class CartProvider with ChangeNotifier {
     doubleCartTotal = _cart.total.raw;
     cartProductsCount = _cart.productsCount > 0 ? _cart.productsCount : 0;
     cartProducts = _cart.products == null ? [] : _cart.products;
+    clearRequestedMoreThanAvailableQuantity();
   }
 
   bool get noCart =>
@@ -139,6 +141,8 @@ class CartProvider with ChangeNotifier {
   Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
     final endpoint = 'carts/${cart.id}/delete';
     clearRequestedMoreThanAvailableQuantity();
+    isLoadingClearCartRequest = true;
+    notifyListeners();
 
     Map<String, dynamic> body = {
       'branch_id': homeProvider.branchId,
@@ -151,9 +155,13 @@ class CartProvider with ChangeNotifier {
       withToken: true,
     );
 
-    if (responseData["data"] == null || responseData["status"] != 200) {
+    if (responseData["status"] != 200) {
+      isLoadingClearCartRequest = true;
+      notifyListeners();
       throw HttpException(title: 'Error', message: responseData["message"]);
     }
+
+    isLoadingClearCartRequest = true;
     notifyListeners();
   }
 }
