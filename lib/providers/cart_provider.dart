@@ -130,11 +130,15 @@ class CartProvider with ChangeNotifier {
     return getProductQuantity(product.id);
   }
 
-  Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
-    final endpoint = 'carts/${cart.id}/delete';
+  void clearRequestedMoreThanAvailableQuantity() {
     if (cartProducts != null && cartProducts.length > 0) {
       cartProducts.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
     }
+  }
+
+  Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
+    final endpoint = 'carts/${cart.id}/delete';
+    clearRequestedMoreThanAvailableQuantity();
 
     Map<String, dynamic> body = {
       'branch_id': homeProvider.branchId,

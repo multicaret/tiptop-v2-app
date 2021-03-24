@@ -54,6 +54,8 @@ class OrdersProvider with ChangeNotifier {
       return false;
     }
 
+    cartProvider.clearRequestedMoreThanAvailableQuantity();
+
     Map<String, dynamic> body = {
       'branch_id': homeProvider.branchId,
       'chain_id': homeProvider.chainId,
