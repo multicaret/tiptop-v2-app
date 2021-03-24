@@ -24,7 +24,7 @@ class _MapSlideState extends State<MapSlide> {
   LatLng initCameraPosition;
 
   Completer<GoogleMapController> _controller = Completer();
-
+  GoogleMapController _mapController;
   double defaultZoom = 4.0;
 
   @override
@@ -44,6 +44,8 @@ class _MapSlideState extends State<MapSlide> {
   Marker branchMarker = Marker(
     markerId: MarkerId('main-marker'),
     position: LatLng(HomeProvider.branchLat, HomeProvider.branchLong),
+    // Added to test a LatLng closer to the AppProivder LatLng.
+    // position: LatLng(41.01651992458213, 28.97052218328264),
     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
   );
 
@@ -123,12 +125,40 @@ class _MapSlideState extends State<MapSlide> {
     );
   }
 
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    final CameraPosition _cameraPosition = CameraPosition(
-      target: initCameraPosition,
-      zoom: defaultZoom,
-    );
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
     _controller.complete(controller);
+
+    var userLatLng = LatLng(AppProvider.latitude, AppProvider.longitude);
+    var branchLatLng = LatLng(HomeProvider.branchLat, HomeProvider.branchLong);
+
+    // Added to test
+    // var branchLatLng = LatLng(41.01651992458213, 28.97052218328264);
+
+    LatLngBounds bound;
+    if (userLatLng.latitude > branchLatLng.latitude && userLatLng.longitude > branchLatLng.longitude) {
+      bound = LatLngBounds(southwest: branchLatLng, northeast: userLatLng);
+    } else if (userLatLng.longitude > branchLatLng.longitude) {
+      bound = LatLngBounds(
+          southwest: LatLng(userLatLng.latitude, branchLatLng.longitude), northeast: LatLng(branchLatLng.latitude, userLatLng.longitude));
+    } else if (userLatLng.latitude > branchLatLng.latitude) {
+      bound = LatLngBounds(
+          southwest: LatLng(branchLatLng.latitude, userLatLng.longitude), northeast: LatLng(userLatLng.latitude, branchLatLng.longitude));
+    } else {
+      bound = LatLngBounds(southwest: userLatLng, northeast: branchLatLng);
+    }
+
+    CameraUpdate _cameraUpdate = CameraUpdate.newLatLngBounds(bound, 50);
+    this._mapController.animateCamera(_cameraUpdate).then((void v) {
+      animate(_cameraUpdate, this._mapController);
+    });
+  }
+
+  void animate(CameraUpdate cameraUpdate, GoogleMapController controller) async {
+    controller.animateCamera(cameraUpdate);
+    _mapController.animateCamera(cameraUpdate);
+    LatLngBounds firstLatLng = await controller.getVisibleRegion();
+    LatLngBounds secondLatLng = await controller.getVisibleRegion();
+    if (firstLatLng.southwest.latitude == -90 || secondLatLng.southwest.latitude == -90) animate(cameraUpdate, controller);
   }
 }
