@@ -84,7 +84,7 @@ class _CartPageState extends State<CartPage> {
                   title: 'Are you sure you want to empty your cart?',
                 ),
               ).then((response) {
-                if (response) {
+                if (response != null && response) {
                   _clearCart().then((_) {
                     showToast(msg: 'Cart Cleared Successfully!');
                     Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);

@@ -66,7 +66,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                     title: 'Are you sure you want to delete this order from your order history?',
                   ),
                 ).then((response) {
-                  if (response) {
+                  if (response != null && response) {
                     ordersProvider.deletePreviousOrder(appProvider, order.id).then((_) {
                       showToast(msg: 'Successfully Deleted Order From History!');
                       Navigator.of(context).pop(true);
