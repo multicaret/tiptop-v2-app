@@ -132,6 +132,9 @@ class CartProvider with ChangeNotifier {
 
   Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
     final endpoint = 'carts/${cart.id}/delete';
+    if (cartProducts != null && cartProducts.length > 0) {
+      cartProducts.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
+    }
 
     Map<String, dynamic> body = {
       'branch_id': homeProvider.branchId,
@@ -144,8 +147,9 @@ class CartProvider with ChangeNotifier {
       withToken: true,
     );
 
-    if(responseData["data"] == null || responseData["status"] != 200) {
+    if (responseData["data"] == null || responseData["status"] != 200) {
       throw HttpException(title: 'Error', message: responseData["message"]);
     }
+    notifyListeners();
   }
 }
