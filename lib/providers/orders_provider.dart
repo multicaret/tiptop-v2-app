@@ -91,11 +91,11 @@ class OrdersProvider with ChangeNotifier {
       withToken: true,
     );
     // print(responseData);
-    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
-
     if (responseData == 401) {
       return 401;
     }
+
+    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
 
     if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
       throw HttpException(title: 'Error', message: previousOrdersResponseData.message ?? 'Unknown');
