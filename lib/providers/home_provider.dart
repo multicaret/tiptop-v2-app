@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -29,12 +30,16 @@ class HomeProvider with ChangeNotifier {
   static double branchLong;
 
   LocalStorage storageActions = LocalStorage.getActions();
+  bool isLocationPermissionGranted = false;
 
-  Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
+  Future<void> fetchAndSetHomeData(BuildContext context, AppProvider appProvider, CartProvider cartProvider) async {
     final endpoint = 'home';
 
-    if(AppProvider.latitude == null || AppProvider.longitude == null) {
-      await handleLocationPermission();
+    if (AppProvider.latitude == null || AppProvider.longitude == null) {
+      bool isEnabled = await handleLocationPermission();
+      if (!isEnabled) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
+      }
     }
 
     final body = {

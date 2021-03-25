@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
     try {
-      await homeProvider.fetchAndSetHomeData(appProvider, cartProvider);
+      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
       slides = homeProvider.homeData.slides;

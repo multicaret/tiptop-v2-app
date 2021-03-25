@@ -14,6 +14,7 @@ import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import 'add_address_step_two_page.dart';
+import 'location_permission_page.dart';
 
 class AddAddressStepOnePage extends StatefulWidget {
   static const routeName = '/add-address-step-one';
@@ -69,7 +70,7 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
               mapType: MapType.normal,
               markers: Set.from(markers),
               onMapCreated: _onMapCreated,
-              onCameraMove: ((_position) => _updatePosition(_position)),
+              onCameraMove: (_position) => _updatePosition(_position),
             ),
           ),
           Positioned(
@@ -117,6 +118,12 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
+    if (AppProvider.latitude == null || AppProvider.longitude == null) {
+      bool isEnabled = await handleLocationPermission();
+      if (!isEnabled) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
+      }
+    }
     final CameraPosition _cameraPosition = CameraPosition(
       target: LatLng(AppProvider.latitude, AppProvider.longitude),
       zoom: defaultZoom,
