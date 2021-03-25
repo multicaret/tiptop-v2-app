@@ -16,7 +16,6 @@ class AddAddressMap extends StatefulWidget {
   final Function setPickedPosition;
   final Function onCameraMoveStarted;
   final Marker defaultMarker;
-  final Function setDefaultMarker;
 
   AddAddressMap({
     this.defaultZoom = 12,
@@ -27,7 +26,6 @@ class AddAddressMap extends StatefulWidget {
     this.setPickedPosition,
     this.onCameraMoveStarted,
     this.defaultMarker,
-    this.setDefaultMarker,
   });
 
   @override
@@ -36,11 +34,13 @@ class AddAddressMap extends StatefulWidget {
 
 class _AddAddressMapState extends State<AddAddressMap> {
   static LatLng _defaultMarkerPosition = LatLng(AppProvider.latitude, AppProvider.longitude);
+  Marker defaultMarker;
 
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      myLocationEnabled: true,
+      myLocationEnabled: false,
+      myLocationButtonEnabled: false,
       initialCameraPosition: CameraPosition(
         target: _defaultMarkerPosition,
         zoom: widget.defaultZoom,
@@ -71,14 +71,12 @@ class _AddAddressMapState extends State<AddAddressMap> {
 
     if (widget.customMarkerIcon != null) {
       Uint8List markerIconBytes = await getAndCacheMarkerIcon(widget.customMarkerIcon);
-
-      widget.setDefaultMarker(Marker(
+      defaultMarker = Marker(
         markerId: MarkerId('main-marker'),
         position: _defaultMarkerPosition,
         icon: BitmapDescriptor.fromBytes(markerIconBytes),
-      ));
-
-      widget.setMarkersArray([widget.defaultMarker]);
+      );
+      widget.setMarkersArray([defaultMarker]);
     }
   }
 
@@ -89,9 +87,9 @@ class _AddAddressMapState extends State<AddAddressMap> {
     double pickedLng = newMarkerPosition.longitude;
     widget.setPickedPosition(LatLng(pickedLat, pickedLng));
 
-    if (widget.defaultMarker != null) {
-      widget.setDefaultMarker(widget.defaultMarker.copyWith(positionParam: widget.pickedPosition));
-      widget.setMarkersArray([widget.defaultMarker]);
+    if (defaultMarker != null) {
+      defaultMarker = defaultMarker.copyWith(positionParam: widget.pickedPosition);
+      widget.setMarkersArray([defaultMarker]);
     }
   }
 }

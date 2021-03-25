@@ -13,11 +13,6 @@ class AddressesProvider with ChangeNotifier {
   CreateAddressResponseData createAddressResponseData;
   CreateAddressData createAddressData;
 
-  List<City> cities = [];
-  List<Region> regions = [];
-  City selectedCity;
-  Region selectedRegion;
-
   AddressesResponseData addressesResponseData;
   List<Address> addresses = [];
   List<Kind> kinds = [];
@@ -63,10 +58,6 @@ class AddressesProvider with ChangeNotifier {
     }
 
     createAddressData = createAddressResponseData.createAddressData;
-    cities = createAddressData.cities;
-    regions = createAddressData.regions;
-    selectedCity = createAddressData.selectedCity;
-    selectedRegion = createAddressData.selectedRegion;
 
     notifyListeners();
   }

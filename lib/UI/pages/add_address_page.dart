@@ -17,6 +17,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AddAddressPage extends StatefulWidget {
   static const routeName = '/add-address-step-one';
+  static double addressDetailsFormContainerHeight = 320.0;
 
   @override
   _AddAddressPageState createState() => _AddAddressPageState();
@@ -32,17 +33,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   List<Marker> markers = [];
   LatLng pickedPosition;
-  Marker defaultMarker;
 
   bool addressLocationConfirmed = false;
   double useAddressButtonHeight = 115.0;
-  double addressDetailsFormContainerHeight = 300.0;
   bool _isLoadingCreateAddressRequest = false;
 
-  List<City> cities = [];
-  List<Region> regions = [];
   City selectedCity;
   Region selectedRegion;
+  CreateAddressData createAddressData;
 
   Future<bool> _createAddress() async {
     setState(() => _isLoadingCreateAddressRequest = true);
@@ -53,13 +51,27 @@ class _AddAddressPageState extends State<AddAddressPage> {
         Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
         return false;
       }
-      cities = addressesProvider.cities;
-      regions = addressesProvider.regions;
-      selectedCity = addressesProvider.selectedCity;
-      selectedRegion = addressesProvider.selectedRegion;
+      createAddressData = addressesProvider.createAddressData;
+      selectedCity = addressesProvider.createAddressData.selectedCity;
+      selectedRegion = addressesProvider.createAddressData.selectedRegion;
+      setState(() {
+        //Todo: find a way to save user data
+        addressDetailsFormData = {
+          'kind': selectedKind.id,
+          'alias': selectedKind.title,
+          'region_id': selectedRegion.id,
+          'city_id': selectedCity.id,
+          'address1': '',
+          'latitude': pickedPosition.latitude,
+          'longitude': pickedPosition.longitude,
+          'notes': '',
+        };
+      });
+      print(addressDetailsFormData);
       setState(() => _isLoadingCreateAddressRequest = false);
       return true;
     } catch (e) {
+      throw e;
       showToast(msg: 'An error occurred!');
       setState(() => _isLoadingCreateAddressRequest = false);
       return false;
@@ -69,8 +81,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
   Map<String, dynamic> addressDetailsFormData = {
     'kind': '',
     'alias': '',
-    'region_id': '',
-    'city_id': '',
+    'region_id': null,
+    'city_id': null,
     'address1': '',
     'latitude': '',
     'longitude': '',
@@ -90,54 +102,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   void _switchToLocationSelect() {
-    //User started moving the map while in form view
-    LatLng _currentPickedPosition = pickedPosition;
-    addressDetailsFormKey.currentState.save();
-    if (!addressDetailsFormData['address1'].isEmpty || !addressDetailsFormData['notes'].isEmpty) {
-      //User has entered data in the form
-      showDialog(
-        context: context,
-        builder: (context) => ConfirmAlertDialog(
-          title: 'Are you sure you want to change your pin location? Your entered data will be lost',
-        ),
-      ).then((response) {
-        if (response != null && response) {
-          //User agreed to reset data and change pin
-          setState(() {
-            addressLocationConfirmed = false;
-            addressDetailsFormData = {
-              'kind': '',
-              'alias': '',
-              'region_id': '',
-              'city_id': '',
-              'address1': '',
-              'latitude': '',
-              'longitude': '',
-              'notes': '',
-            };
-          });
-        } else {
-          //User disagreed, return the pin to the previous position
-          setState(() {
-            if (defaultMarker != null) {
-              defaultMarker = defaultMarker.copyWith(positionParam: _currentPickedPosition);
-              markers = [defaultMarker];
-            }
-            pickedPosition = _currentPickedPosition;
-          });
-        }
-      });
-    } else {
-      setState(() {
-        addressLocationConfirmed = false;
-      });
-    }
+    addressDetailsFormKey.currentState.reset();
+    setState(() {
+      addressLocationConfirmed = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Add New Address')),
       ),
@@ -151,10 +124,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
             child: AddAddressMap(
               setMarkersArray: (_markers) => setState(() => markers = _markers),
               setPickedPosition: (_pickedPosition) => setState(() => pickedPosition = _pickedPosition),
+              onCameraMoveStarted: _switchToLocationSelect,
               customMarkerIcon: selectedKind.markerIcon,
               markers: markers,
               pickedPosition: pickedPosition,
-              onCameraMoveStarted: _switchToLocationSelect,
             ),
           ),
           Positioned(
@@ -164,7 +137,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             child: Container(
               padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: AppColors.shadowDark, blurRadius: 6)],
+                boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,
               ),
               child: ElevatedButton(
@@ -184,21 +157,18 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
-            bottom: addressLocationConfirmed ? 0 : -addressDetailsFormContainerHeight,
+            bottom: addressLocationConfirmed ? 0 : -AddAddressPage.addressDetailsFormContainerHeight,
             right: 0,
             left: 0,
-            height: addressDetailsFormContainerHeight,
-            child: Container(
-              height: addressDetailsFormContainerHeight,
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: AppColors.shadowDark, blurRadius: 6)],
-                color: AppColors.white,
-              ),
-              child: AddressDetailsForm(
-                formKey: addressDetailsFormKey,
-                addressDetailsFormData: addressDetailsFormData,
-                selectedKind: selectedKind,
-              ),
+            height: AddAddressPage.addressDetailsFormContainerHeight,
+            child: AddressDetailsForm(
+              formKey: addressDetailsFormKey,
+              addressDetailsFormData: addressDetailsFormData,
+              selectedKind: selectedKind,
+              submitForm: submitAddressDetailsForm,
+              createAddressData: createAddressData,
+              setRegionId: (id) => setState(() => addressDetailsFormData['region_id'] = id),
+              setCityId: (id) => setState(() => addressDetailsFormData['city_id'] = id),
             ),
           )
         ],
@@ -221,5 +191,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
         setState(() => addressLocationConfirmed = true);
       }
     }
+  }
+
+  Future<void> submitAddressDetailsForm() async {
+    if (!addressDetailsFormKey.currentState.validate()) {
+      showToast(msg: Translations.of(context).get('Invalid Form'));
+      return;
+    }
+    addressDetailsFormKey.currentState.save();
+    print(addressDetailsFormData);
   }
 }
