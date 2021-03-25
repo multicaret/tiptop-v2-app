@@ -51,7 +51,7 @@ class CartProvider with ChangeNotifier {
     @required Product product,
   }) async {
     
-    if(noCart) {
+    if(cart == null || cart.id == null) {
       print('No cart');
       showToast(msg: 'An Error Occurred! Please try logging out and in again');
       return null;  
