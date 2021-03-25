@@ -140,9 +140,11 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
     double pickedLat = newMarkerPosition.latitude;
     double pickedLong = newMarkerPosition.longitude;
 
+    if (defaultMarker != null) {
+      defaultMarker = defaultMarker.copyWith(positionParam: pickedPosition);
+    }
     setState(() {
       pickedPosition = LatLng(pickedLat, pickedLong);
-      defaultMarker = defaultMarker.copyWith(positionParam: pickedPosition);
       if (defaultMarker != null) {
         markers = [defaultMarker];
       }
