@@ -30,11 +30,7 @@ class ProfileSettingItem extends StatelessWidget {
       builder: (c, appProvider, _) => Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: !isCallable(action)
-              ? null
-              : () {
-                  Navigator.of(context, rootNavigator: true).pushNamed(route);
-                },
+          onTap: _determineTapMethod(context: context, action: action, route: route),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
@@ -63,5 +59,17 @@ class ProfileSettingItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _determineTapMethod({BuildContext context, Function action, String route}) {
+    if (action != null) {
+      return action;
+    }
+    if (route != null) {
+      return () {
+        Navigator.of(context, rootNavigator: true).pushNamed(route);
+      };
+    }
+    return null;
   }
 }
