@@ -91,3 +91,5 @@ double getCartControlsWidth(BuildContext context, {int colCount = 3}) {
 double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
   return getCartControlsWidth(context, colCount: colCount) / 3;
 }
+
+bool isCallable(v) => v is Function;

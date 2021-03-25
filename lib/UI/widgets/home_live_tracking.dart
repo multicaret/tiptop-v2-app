@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/check_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -12,7 +13,7 @@ class HomeLiveTracking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return                         Padding(
+    return Padding(
       //ExpansionTile is showing the color of this container behind the children container when expanding
       padding: EdgeInsets.only(right: 17, left: 17, top: 10),
       child: Container(
@@ -94,7 +95,7 @@ class HomeLiveTracking extends StatelessWidget {
                       SizedBox(width: 5),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(minimumSize: Size(120, 45)),
-                        onPressed: () {},
+                        onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(CheckOrderPage.routeName),
                         child: Text('Track Order'),
                       )
                     ],
