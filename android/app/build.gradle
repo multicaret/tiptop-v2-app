@@ -57,11 +57,3 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-
-allprojects {
-    repositories {
-        maven {
-            url "https://sdks.instabug.com/nexus/repository/instabug-cp"
-        }
-    }
-}
