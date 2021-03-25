@@ -94,7 +94,7 @@ class _SearchPageState extends State<SearchPage> {
                 _searchedProducts.length >= 1
                     ? SectionTitle(
                         'Search Results',
-                        suffix: '(${_searchedProducts.length})',
+                        suffix: ' (${_searchedProducts.length})',
                       )
                     : SectionTitle('Most Searched Terms'),
                 _searchedProducts.length >= 1
