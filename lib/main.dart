@@ -108,6 +108,12 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.primary,
+                textStyle: AppTextStyles.textButton
+              )
+            )
           ),
           home: app.localeSelected
               ? app.isAuth
