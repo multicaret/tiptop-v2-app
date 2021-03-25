@@ -1,40 +1,31 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/add_address_map.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import 'add_address_step_two_page.dart';
-import 'location_permission_page.dart';
 
-class AddAddressStepOnePage extends StatefulWidget {
+class AddAddressPage extends StatefulWidget {
   static const routeName = '/add-address-step-one';
 
   @override
-  _AddAddressStepOnePageState createState() => _AddAddressStepOnePageState();
+  _AddAddressPageState createState() => _AddAddressPageState();
 }
 
-class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
+class _AddAddressPageState extends State<AddAddressPage> {
   bool _isInit = true;
-  BitmapDescriptor currentLocationIcon;
   List<Marker> markers = [];
   AddressesProvider addressesProvider;
   Kind selectedKind;
   LatLng pickedPosition;
-
-  static LatLng _defaultMarkerPosition = LatLng(AppProvider.latitude, AppProvider.longitude);
-  double defaultZoom = 12.0;
-
-  Marker defaultMarker;
+  bool addressLocationConfirmed = false;
 
   @override
   void didChangeDependencies() {
@@ -61,16 +52,12 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
             right: 0,
             left: 0,
             top: 0,
-            child: GoogleMap(
-              myLocationEnabled: true,
-              initialCameraPosition: CameraPosition(
-                target: _defaultMarkerPosition,
-                zoom: defaultZoom,
-              ),
-              mapType: MapType.normal,
-              markers: Set.from(markers),
-              onMapCreated: _onMapCreated,
-              onCameraMove: (_position) => _updatePosition(_position),
+            child: AddAddressMap(
+              setMarkersArray: (_markers) => setState(() => markers = _markers),
+              setPickedPosition: (_pickedPosition) => setState(() => pickedPosition = _pickedPosition),
+              customMarkerIcon: selectedKind.markerIcon,
+              markers: markers,
+              pickedPosition: pickedPosition,
             ),
           ),
           Positioned(
@@ -113,47 +100,6 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
             'pickedPosition': pickedPosition,
           },
         );
-      }
-    });
-  }
-
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    if (AppProvider.latitude == null || AppProvider.longitude == null) {
-      bool isEnabled = await handleLocationPermission();
-      if (!isEnabled) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
-      }
-    }
-    final CameraPosition _cameraPosition = CameraPosition(
-      target: LatLng(AppProvider.latitude, AppProvider.longitude),
-      zoom: defaultZoom,
-    );
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-    Uint8List markerIconBytes = await getAndCacheMarkerIcon(selectedKind.markerIcon);
-    defaultMarker = Marker(
-      markerId: MarkerId('main-marker'),
-      position: _defaultMarkerPosition,
-      icon: BitmapDescriptor.fromBytes(markerIconBytes),
-    );
-    setState(() {
-      _defaultMarkerPosition = LatLng(AppProvider.latitude, AppProvider.longitude);
-      markers = [defaultMarker];
-    });
-  }
-
-  void _updatePosition(CameraPosition _position) {
-    LatLng newMarkerPosition = LatLng(_position.target.latitude, _position.target.longitude);
-
-    double pickedLat = newMarkerPosition.latitude;
-    double pickedLong = newMarkerPosition.longitude;
-
-    if (defaultMarker != null) {
-      defaultMarker = defaultMarker.copyWith(positionParam: pickedPosition);
-    }
-    setState(() {
-      pickedPosition = LatLng(pickedLat, pickedLong);
-      if (defaultMarker != null) {
-        markers = [defaultMarker];
       }
     });
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/add_address_step_one_page.dart';
+import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
@@ -82,7 +82,7 @@ class _AddressesPageState extends State<AddressesPage> {
         child: InkWell(
           onTap: () {
             Navigator.of(context).pushNamed(
-              AddAddressStepOnePage.routeName,
+              AddAddressPage.routeName,
               arguments: {
                 'kind': kinds[i],
               },
