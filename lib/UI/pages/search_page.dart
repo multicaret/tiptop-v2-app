@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   FocusNode searchFieldFocusNote = new FocusNode();
 
   ProductsProvider productsProvider;
-  List<Product> _products = [];
+  List<Product> _searchedProducts = [];
   bool _isLoading = false;
 
   @override
@@ -36,12 +36,12 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  Future<void> _fetchProductsData(String _searchQuery) async {
+  Future<void> _fetchSearchedProducts(String _searchQuery) async {
     setState(() {
       _isLoading = true;
     });
     await productsProvider.fetchSearchedProducts(_searchQuery);
-    _products = productsProvider.searchedProducts == null ? [] : productsProvider.searchedProducts;
+    _searchedProducts = productsProvider.searchedProducts;
     setState(() {
       _isLoading = false;
     });
@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
     searchFieldController.clear();
     searchFieldFocusNote.unfocus();
     setState(() {
-      _products = [];
+      _searchedProducts = [];
       searchQuery = '';
     });
   }
@@ -75,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: Text(Translations.of(context).get('Search')),
         actions: [
-          if (_products.length > 0)
+          if (_searchedProducts.length > 0)
             IconButton(
               onPressed: _clearSearchResults,
               icon: AppIcon.icon(FontAwesomeIcons.eraser),
@@ -91,19 +91,24 @@ class _SearchPageState extends State<SearchPage> {
                   controller: searchFieldController,
                   focusNode: searchFieldFocusNote,
                 ),
-                _products.length >= 1
+                _searchedProducts.length >= 1
+                    ? SectionTitle(
+                        'Search Results',
+                        suffix: '(${_searchedProducts.length})',
+                      )
+                    : SectionTitle('Most Searched Terms'),
+                _searchedProducts.length >= 1
                     ? Expanded(
                         child: Container(
                           color: AppColors.white,
                           child: ProductsGridView(
-                            products: _products,
+                            products: _searchedProducts,
                             physics: AlwaysScrollableScrollPhysics(),
                           ),
                         ),
                       )
                     : Column(
                         children: [
-                          SectionTitle('Most Searched Terms'),
                           ..._getMostSearchedTermsList(),
                         ],
                       ),
@@ -146,12 +151,12 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         searchQuery = _searchQuery;
       });
-      _fetchProductsData(searchQuery).then((_) {
-        if (_products.length == 0) {
+      _fetchSearchedProducts(searchQuery).then((_) {
+        if (_searchedProducts.length == 0) {
           showToast(msg: Translations.of(context).get('No results match your search'));
         } else {
-          var key = 'result${_products.length > 1 ? "s" : ""} match your search';
-          showToast(msg: '${_products.length} ${Translations.of(context).get(key)}');
+          var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
+          showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
         }
       }).catchError((error) {
         print('@error Error');
