@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
+import 'add_address_step_two_page.dart';
 
 class AddAddressStepOnePage extends StatefulWidget {
   static const routeName = '/add-address-step-one';
@@ -24,6 +28,7 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
   List<Marker> markers = [];
   AddressesProvider addressesProvider;
   Kind selectedKind;
+  LatLng pickedPosition;
 
   static LatLng _defaultMarkerPosition = LatLng(AppProvider.latitude, AppProvider.longitude);
   double defaultZoom = 12.0;
@@ -50,7 +55,11 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
       ),
       body: Stack(
         children: [
-          Positioned.fill(
+          Positioned(
+            bottom: 115,
+            right: 0,
+            left: 0,
+            top: 0,
             child: GoogleMap(
               myLocationEnabled: true,
               initialCameraPosition: CameraPosition(
@@ -63,9 +72,48 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
               onCameraMove: ((_position) => _updatePosition(_position)),
             ),
           ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+              decoration: BoxDecoration(
+                boxShadow: [BoxShadow(color: AppColors.shadowDark, blurRadius: 6)],
+                color: AppColors.white,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: AppColors.secondaryDark,
+                  onPrimary: AppColors.primary,
+                ),
+                onPressed: _submitAddressLocation,
+                child: Text(Translations.of(context).get('Use This Address')),
+              ),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  void _submitAddressLocation() {
+    showDialog(
+      context: context,
+      builder: (context) => ConfirmAlertDialog(
+        image: 'assets/images/map-and-marker.png',
+        title: 'Your order will be delivered to the pinned location on the map, please confirm your pinned location',
+      ),
+    ).then((response) {
+      if (response != null && response) {
+        Navigator.of(context, rootNavigator: true).pushNamed(
+          AddAddressStepTwoPage.routeName,
+          arguments: {
+            'pickedPosition': pickedPosition,
+          },
+        );
+      }
+    });
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
@@ -85,8 +133,6 @@ class _AddAddressStepOnePageState extends State<AddAddressStepOnePage> {
       markers = [defaultMarker];
     });
   }
-
-  LatLng pickedPosition;
 
   void _updatePosition(CameraPosition _position) {
     LatLng newMarkerPosition = LatLng(_position.target.latitude, _position.target.longitude);

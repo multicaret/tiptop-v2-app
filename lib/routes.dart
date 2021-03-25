@@ -25,6 +25,7 @@ import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
+import 'UI/pages/add_address_step_two_page.dart';
 import 'UI/pages/faq_page.dart';
 
 final routes = <String, WidgetBuilder>{
@@ -53,4 +54,5 @@ final routes = <String, WidgetBuilder>{
   PreviousOrderPage.routeName: (BuildContext context) => PreviousOrderPage(),
   CheckOrderPage.routeName: (BuildContext context) => CheckOrderPage(),
   AddAddressStepOnePage.routeName: (BuildContext context) => AddAddressStepOnePage(),
+  AddAddressStepTwoPage.routeName: (BuildContext context) => AddAddressStepTwoPage(),
 };
