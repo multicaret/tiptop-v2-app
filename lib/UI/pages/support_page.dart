@@ -16,7 +16,7 @@ class SupportPage extends StatelessWidget {
         title: Text(Translations.of(context).get('Support')),
       ),
       body: WebView(
-        initialUrl: 'https://titan.trytiptop.app/en/support',
+        initialUrl: 'https://bongo.cat/',
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller.complete(webViewController);

@@ -39,20 +39,12 @@ class ProductsProvider with ChangeNotifier {
       searchedProductsDataResponse = ProductsResponse.fromJson(responseData);
       searchedProducts = searchedProductsDataResponse.data;
 
-      if (searchedProductsDataResponse.data == null || searchedProductsDataResponse.status != 200) {
+      if (searchedProductsDataResponse.status != 200) {
         throw HttpException(title: 'Error', message: searchedProductsDataResponse.message);
       }
     } catch (e) {
       print('@e Error');
       print(e);
     }
-
-    // searchedProductsResponse = productDataResponseFromJson(json.encode(responseData));
-
-    // if (searchedProductsResponse == null || productsDataResponse.status != 200) {
-    //   throw HttpException(title: 'Error', message: productsDataResponse.message);
-    // }
-    //
-    // searchedProducts =
   }
 }

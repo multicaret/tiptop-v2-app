@@ -3,13 +3,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/product_item.dart';
-import 'package:tiptop_v2/UI/widgets/products-screen/child_category_products.dart';
+import 'package:tiptop_v2/UI/widgets/input/app_search_field.dart';
+import 'package:tiptop_v2/UI/widgets/products_grid_view.dart';
+import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
 class SearchPage extends StatefulWidget {
   static const routeName = '/search';
@@ -20,6 +22,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String searchQuery = '';
+  TextEditingController searchFieldController = new TextEditingController();
+  FocusNode searchFieldFocusNote = new FocusNode();
 
   ProductsProvider productsProvider;
   List<Product> _products = [];
@@ -27,21 +31,17 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
+    searchFieldController.dispose();
+    searchFieldFocusNote.dispose();
     super.dispose();
-    setState(() {
-      _products = [];
-    });
-    print("Dispose Search");
   }
-
 
   Future<void> _fetchProductsData(String _searchQuery) async {
     setState(() {
       _isLoading = true;
     });
     await productsProvider.fetchSearchedProducts(_searchQuery);
-    _products = productsProvider.searchedProducts;
-    // Todo: for UI
+    _products = productsProvider.searchedProducts == null ? [] : productsProvider.searchedProducts;
     setState(() {
       _isLoading = false;
     });
@@ -52,6 +52,21 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
   }
 
+  List<String> _terms = [
+    'apple',
+    'water',
+    'banana',
+  ];
+
+  void _clearSearchResults() {
+    searchFieldController.clear();
+    searchFieldFocusNote.unfocus();
+    setState(() {
+      _products = [];
+      searchQuery = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     productsProvider = Provider.of<ProductsProvider>(context);
@@ -59,28 +74,74 @@ class _SearchPageState extends State<SearchPage> {
       hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Search')),
+        actions: [
+          if (_products.length > 0)
+            IconButton(
+              onPressed: _clearSearchResults,
+              icon: AppIcon.icon(FontAwesomeIcons.eraser),
+            )
+        ],
       ),
       body: _isLoading
           ? AppLoader()
-          : Center(
-              child: Column(
-                children: [
-                  AppTextField(
-                    labelText: 'Quick Search',
-                    hasInnerLabel: true,
-                    prefixIconData: FontAwesomeIcons.search,
-                    hasClearIcon: true,
-                    required: true,
-                    onFieldSubmitted: (String searchQuery) => _mainSearch(searchQuery),
-                  ),
-                  if (_products.length > 1) ProductsGridView(products: _products),
-                ],
-              ),
+          : Column(
+              children: [
+                AppSearchField(
+                  submitAction: (String searchQuery) => _mainSearch(searchQuery),
+                  controller: searchFieldController,
+                  focusNode: searchFieldFocusNote,
+                ),
+                _products.length >= 1
+                    ? Expanded(
+                        child: Container(
+                          color: AppColors.white,
+                          child: ProductsGridView(
+                            products: _products,
+                            physics: AlwaysScrollableScrollPhysics(),
+                          ),
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          SectionTitle('Most Searched Terms'),
+                          ..._getMostSearchedTermsList(),
+                        ],
+                      ),
+              ],
             ),
     );
   }
 
+  List<Widget> _getMostSearchedTermsList() {
+    return List.generate(
+      _terms.length,
+      (i) => Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () {
+            searchFieldController.text = _terms[i];
+            searchFieldFocusNote.requestFocus();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: AppColors.border)),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            child: Row(
+              children: [
+                AppIcon.iconSecondary(FontAwesomeIcons.infoCircle),
+                SizedBox(width: 10),
+                Text(_terms[i]),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _mainSearch(String _searchQuery) {
+    print(_searchQuery);
     if (searchQuery != _searchQuery) {
       setState(() {
         searchQuery = _searchQuery;

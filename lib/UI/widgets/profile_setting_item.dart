@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
@@ -29,10 +30,7 @@ class ProfileSettingItem extends StatelessWidget {
       builder: (c, appProvider, _) => Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: action ??
-              () {
-                Navigator.of(context, rootNavigator: true).pushNamed(route);
-              },
+          onTap: _determineTapMethod(context: context, action: action, route: route),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
@@ -61,5 +59,17 @@ class ProfileSettingItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _determineTapMethod({BuildContext context, Function action, String route}) {
+    if (action != null) {
+      return action;
+    }
+    if (route != null) {
+      return () {
+        Navigator.of(context, rootNavigator: true).pushNamed(route);
+      };
+    }
+    return null;
   }
 }

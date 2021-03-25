@@ -60,15 +60,15 @@ String formatDate(BuildContext context, dynamic dateTime, {bool withWeekDay = fa
   AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
   String formattedDate = withWeekDay
-      ? DateFormat.yMMMEd(appProvider.appLocal.languageCode).format(_dateTime)
-      : DateFormat.yMMMd(appProvider.appLocal.languageCode).format(_dateTime);
+      ? DateFormat.yMMMEd(appProvider.appLocale.languageCode).format(_dateTime)
+      : DateFormat.yMMMd(appProvider.appLocale.languageCode).format(_dateTime);
   return formattedDate;
 }
 
 String formatTime(BuildContext context, dynamic dateTime) {
   AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
-  String formattedTime = DateFormat('hh:mm a', appProvider.appLocal.languageCode).format(_dateTime);
+  String formattedTime = DateFormat('hh:mm a', appProvider.appLocale.languageCode).format(_dateTime);
   return formattedTime;
 }
 
@@ -91,3 +91,5 @@ double getCartControlsWidth(BuildContext context, {int colCount = 3}) {
 double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
   return getCartControlsWidth(context, colCount: colCount) / 3;
 }
+
+bool isCallable(v) => v is Function;

@@ -50,13 +50,13 @@ class AppProvider with ChangeNotifier {
   static const String DEFAULT_LOCALE = 'en';
   Locale _appLocale = Locale(DEFAULT_LOCALE);
 
-  Locale get appLocal => _appLocale ?? Locale(DEFAULT_LOCALE);
+  Locale get appLocale => _appLocale ?? Locale(DEFAULT_LOCALE);
 
   String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
 
   bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
 
-  set appLocal(value) {
+  set appLocale(value) {
     _appLocale = value;
   }
 

@@ -385,24 +385,24 @@ class Region {
 class MobileApp {
   MobileApp({
     this.device,
-    this.versionCode,
-    this.versionNumber,
+    this.version,
+    this.buildNumber,
   });
 
   Device device;
-  String versionCode;
-  String versionNumber;
+  String version;
+  int buildNumber;
 
   factory MobileApp.fromJson(Map<String, dynamic> json) => MobileApp(
         device: Device.fromJson(json["device"]),
-        versionCode: json["versionCode"],
-        versionNumber: json["versionNumber"],
+        version: json["version"],
+        buildNumber: json["buildNumber"],
       );
 
   Map<String, dynamic> toJson() => {
         "device": device.toJson(),
-        "versionCode": versionCode,
-        "versionNumber": versionNumber,
+        "version": version,
+        "buildNumber": buildNumber,
       };
 }
 

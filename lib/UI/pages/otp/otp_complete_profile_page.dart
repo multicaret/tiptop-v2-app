@@ -26,6 +26,7 @@ class OTPCompleteProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
 
+    bool isProfileComplete = !appProvider.authUser.name.contains(appProvider.authUser.phone);
     return AppScaffold(
       bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
@@ -41,7 +42,7 @@ class OTPCompleteProfile extends StatelessWidget {
             children: [
               SizedBox(height: 40),
               Text(
-                appProvider.isAuth ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
+                isProfileComplete ? Translations.of(context).get("Final Step") : appProvider.authUser.name,
                 style: AppTextStyles.bodyBold,
                 textAlign: TextAlign.center,
               ),
@@ -51,10 +52,12 @@ class OTPCompleteProfile extends StatelessWidget {
               ),
               SizedBox(height: 30),
               AppTextField(
+                keyboardType: TextInputType.name,
                 required: true,
                 // validator: (val) => val.isEmpty ? Translations.of(context).get('Invalid') : null,
                 labelText: 'Full Name',
                 hintText: 'John Doe',
+                initialValue: isProfileComplete ? appProvider.authUser.name : null,
                 onSaved: (value) {
                   formData['full_name'] = value;
                 },
@@ -64,25 +67,28 @@ class OTPCompleteProfile extends StatelessWidget {
                 labelText: 'Email (Optional)',
                 hintText: 'Johndoe@domain.com',
                 keyboardType: TextInputType.emailAddress,
+                initialValue: isProfileComplete ? appProvider.authUser.email : null,
                 // validator: (val) => !val.contains("@") ? "Enter a valid email" : null,
                 onSaved: (value) {
                   formData['email'] = value;
                 },
               ),
-              /*AppTextField(
+              /*
+              AppTextField(
                 labelText: 'City',
                 hintText: 'Erbil',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['region_id'] = value;
-                },*/ /*
+                },
               ),
               AppTextField(
                 labelText: 'Neighborhood',
                 hintText: 'Italian Town',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['city_id'] = value;
-                },*/ /*
-              ),*/
+                },
+              ),
+              */
               ElevatedButton(
                 child: Text(Translations.of(context).get('Save')),
                 onPressed: () => _submit(context, appProvider),
@@ -112,6 +118,8 @@ class OTPCompleteProfile extends StatelessWidget {
         );
       });
     } catch (e) {
+      print("error @submit complete profile");
+      print(e.toString());
       throw e;
     }
   }
