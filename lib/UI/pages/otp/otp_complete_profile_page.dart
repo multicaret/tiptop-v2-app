@@ -73,20 +73,22 @@ class OTPCompleteProfile extends StatelessWidget {
                   formData['email'] = value;
                 },
               ),
-              /*AppTextField(
+              /*
+              AppTextField(
                 labelText: 'City',
                 hintText: 'Erbil',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['region_id'] = value;
-                },*/ /*
+                },
               ),
               AppTextField(
                 labelText: 'Neighborhood',
                 hintText: 'Italian Town',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['city_id'] = value;
-                },*/ /*
-              ),*/
+                },
+              ),
+              */
               ElevatedButton(
                 child: Text(Translations.of(context).get('Save')),
                 onPressed: () => _submit(context, appProvider),

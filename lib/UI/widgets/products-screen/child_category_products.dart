@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:tiptop_v2/UI/widgets/product_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import '../products_grid_view.dart';
 
 class ChildCategoryProducts extends StatefulWidget {
   final Category child;
@@ -98,29 +99,6 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ProductsGridView extends StatelessWidget {
-  const ProductsGridView({
-    Key key,
-    @required this.products,
-  }) : super(key: key);
-
-  final List<Product> products;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      crossAxisCount: 3,
-      childAspectRatio: 0.45,
-      children: <Widget>[...products.map((product) => ProductItem(product: product))],
     );
   }
 }

@@ -50,6 +50,13 @@ class CartProvider with ChangeNotifier {
     @required bool isAdding,
     @required Product product,
   }) async {
+    
+    if(cart == null || cart.id == null) {
+      print('No cart');
+      showToast(msg: 'An Error Occurred! Please try logging out and in again');
+      return null;  
+    }
+    
     final endpoint = 'carts/${cart.id}/products/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,

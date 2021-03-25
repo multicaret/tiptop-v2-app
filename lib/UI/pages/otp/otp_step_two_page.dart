@@ -188,6 +188,13 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
             ),
             SizedBox(height: 20),
             ..._verificationMethodsList(context, appProvider),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+              },
+              child: Text(Translations.of(context).get('Continue Without Login')),
+            ),
           ],
         ),
       ),
