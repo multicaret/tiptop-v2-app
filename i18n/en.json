@@ -86,5 +86,12 @@
   "Add": "Add",
   "Add New Address": "Add New Address",
   "Use This Address": "Use This Address",
-  "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "Your order will be delivered to the pinned location on the map, please confirm your pinned location"
+  "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "Your order will be delivered to the pinned location on the map, please confirm your pinned location",
+  "Track Order": "Track Order",
+  "Live Order" : "Live Order",
+  "Check your order" : "Check your order",
+  "Preparing" : "Preparing",
+  "On the way": "On the way",
+  "At the address" : "At the address",
+  "Delivered" : "Delivered"
 }

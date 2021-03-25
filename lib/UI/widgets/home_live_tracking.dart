@@ -45,7 +45,7 @@ class HomeLiveTracking extends StatelessWidget {
                   child: Text('1', style: AppTextStyles.subtitleBold),
                 ),
               ),
-              title: Text('Live Order', style: AppTextStyles.bodyBold),
+              title: Text(Translations.of(context).get("Live Order"), style: AppTextStyles.bodyBold),
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -96,8 +96,8 @@ class HomeLiveTracking extends StatelessWidget {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(minimumSize: Size(120, 45)),
                         onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName),
-                        child: Text('Track Order'),
-                      )
+                        child: Text(Translations.of(context).get("Track Order")),
+                      ),
                     ],
                   ),
                 )

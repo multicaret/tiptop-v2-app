@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -63,7 +64,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppBar(
-        title: Text('Check your order'),
+        title: Text(Translations.of(context).get("Check your order")),
       ),
       body: Column(
         children: [
@@ -83,7 +84,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 AnimatedPositioned(
                   duration: Duration(milliseconds: 300),
                   bottom: 225,
-                  left: getLeftPosition(leftPosition, sliderValue),
+                  left: appProvider.isRTL ? null : getPosition(leftPosition, sliderValue),
+                  right: appProvider.isRTL ? getPosition(leftPosition, sliderValue) : null,
                   child: Column(
                     children: [
                       Container(
@@ -146,7 +148,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                                     return Padding(
                                       padding: const EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        _stepsText[i],
+                                        Translations.of(context).get(_stepsText[i]),
                                         style: AppTextStyles.subtitleXs,
                                       ),
                                     );
@@ -259,17 +261,17 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   }
 }
 
-double getLeftPosition(double leftPosition, double sliderValue) {
+double getPosition(double position, double sliderValue) {
   if (sliderValue == 1) {
-    leftPosition = 30;
+    position = 30;
   } else if (sliderValue == 2) {
-    leftPosition = 110;
+    position = 110;
   } else if (sliderValue == 3) {
-    leftPosition = 190;
+    position = 190;
   } else if (sliderValue == 4) {
-    leftPosition = 275;
+    position = 275;
   }
-  return leftPosition;
+  return position;
 }
 
 class TrianglePainter extends CustomPainter {
