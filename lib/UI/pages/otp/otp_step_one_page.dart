@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_step_two_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OTPStepOnePage extends StatelessWidget {
   static const routeName = '/otp-step-one';
@@ -15,6 +17,8 @@ class OTPStepOnePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bgColor: AppColors.white,
+      bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       body: Form(
         key: _formKey,
@@ -62,6 +66,13 @@ class OTPStepOnePage extends StatelessWidget {
             ElevatedButton(
               onPressed: () => _submit(context),
               child: Text(Translations.of(context).get('Continue')),
+            ),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+              },
+              child: Text(Translations.of(context).get('Continue Without Login')),
             ),
           ],
         ),

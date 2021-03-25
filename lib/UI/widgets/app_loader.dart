@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:lottie/lottie.dart';
 
 class AppLoader extends StatelessWidget {
-  final Color color;
-  final double size;
-  final Duration duration;
-  final bool isFitted;
+  final double width;
 
   const AppLoader({
-    Key key,
-    this.color = AppColors.secondaryDark,
-    this.size = 50.0,
-    this.isFitted = false,
-    this.duration = const Duration(milliseconds: 1400),
-  }) : super(key: key);
+    this.width = 200.0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      child: Image(image: AssetImage('assets/images/tiptop-loader.gif')),
+    return Center(
+      child: Container(
+        width: width,
+        child: Lottie.asset(
+          'assets/images/lottie-loader/data.json',
+          fit: BoxFit.cover,
+          width: width,
+        ),
+      ),
     );
   }
 }

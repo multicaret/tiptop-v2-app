@@ -9,6 +9,7 @@ import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/category_item.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
+import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -17,14 +18,9 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-List<String> carouselImages = [
-  'https://cdn.pixabay.com/photo/2016/12/26/17/28/food-1932466_1280.jpg',
-  'https://cdn.pixabay.com/photo/2014/06/11/17/00/food-366875_1280.jpg',
-  'https://cdn.pixabay.com/photo/2015/03/26/09/39/cupcakes-690040_1280.jpg'
-];
-
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
+  static double sliderHeight = 212;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -39,8 +35,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isLoadingHomeData = false;
-  bool homeDataRequestError = false;
-  bool _noBranchFound = false;
   bool _isInit = true;
 
   AppProvider appProvider;
@@ -49,6 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
+  List<Slide> slides;
 
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
@@ -56,23 +51,15 @@ class _HomePageState extends State<HomePage> {
       await homeProvider.fetchAndSetHomeData(appProvider, cartProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
-
-      if (homeProvider.branchId == null) setState(() => _noBranchFound = true);
+      slides = homeProvider.homeData.slides;
 
       setState(() => isLoadingHomeData = false);
     } catch (e) {
       //Todo: translate this string/reconsider what to do
       showToast(msg: 'An Error Occurred! Please try again later');
-      setState(() {
-        homeDataRequestError = true;
-        isLoadingHomeData = false;
-      });
+      setState(() => isLoadingHomeData = false);
       throw e;
     }
-  }
-
-  Future<void> selectCategory(int categoryId) async {
-    await homeProvider.selectCategory(categoryId);
   }
 
   @override
@@ -96,75 +83,79 @@ class _HomePageState extends State<HomePage> {
             ]
           : null,
       bodyPadding: EdgeInsets.all(0),
-      body: Column(
-        children: [
-          AddressSelectButton(
-            isLoadingHomeData: isLoadingHomeData || homeDataRequestError || _noBranchFound,
-            estimatedArrivalTime: estimatedArrivalTime,
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: fetchAndSetHomeData,
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    isLoadingHomeData || homeDataRequestError || _noBranchFound
-                        ? Container(
-                            height: 212,
-                            color: AppColors.bg,
-                          )
-                        : AppCarousel(
-                            images: carouselImages,
-                            autoplayDuration: Duration(milliseconds: 3000),
-                          ),
-                    ChannelsButtons(),
-                    isLoadingHomeData || homeDataRequestError || _noBranchFound
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(vertical: 50),
-                            child: _noBranchFound
-                                ? Text('No Branch Found')
-                                : homeDataRequestError
-                                    //Todo: translate this string/reconsider what to do
-                                    ? Text('An error occurred! Please try again later')
-                                    : AppLoader(),
-                          )
-                        : GridView.count(
-                            padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
-                            shrinkWrap: true,
-                            childAspectRatio: 0.78,
-                            physics: NeverScrollableScrollPhysics(),
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 15,
-                            mainAxisSpacing: 16,
-                            children: categories
-                                .map((category) => GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          CupertinoPageRoute<void>(
-                                            builder: (BuildContext context) => ProductsPage(
-                                              selectedParentCategoryId: category.id,
-                                              parents: categories,
-                                              refreshHomeData: fetchAndSetHomeData,
-                                              isLoadingHomeData: isLoadingHomeData,
-                                            ),
+      body: Consumer<HomeProvider>(
+        builder: (c, homeProvider, _) {
+          bool hideContent = isLoadingHomeData || homeProvider.homeDataRequestError || homeProvider.noBranchFound;
+          return Column(
+            children: [
+              AddressSelectButton(isLoadingHomeData: isLoadingHomeData),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: fetchAndSetHomeData,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        hideContent
+                            ? Container(
+                                height: HomePage.sliderHeight,
+                                color: AppColors.bg,
+                              )
+                            : AppCarousel(
+                                images: slides.map((slide) => slide.image).toList(),
+                                autoplayDuration: Duration(milliseconds: 4000),
+                                hasMap: true,
+                              ),
+                        ChannelsButtons(),
+                        HomeLiveTracking(isRTL: appProvider.isRTL),
+                        hideContent
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 50),
+                                child: homeProvider.noBranchFound
+                                    ? Text('No Branch Found')
+                                    : homeProvider.homeDataRequestError
+                                        //Todo: translate this string/reconsider what to do
+                                        ? Text('An error occurred! Please try again later')
+                                        : AppLoader(),
+                              )
+                            : GridView.count(
+                                padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
+                                shrinkWrap: true,
+                                childAspectRatio: 0.78,
+                                physics: NeverScrollableScrollPhysics(),
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 15,
+                                mainAxisSpacing: 16,
+                                children: categories
+                                    .map((category) => GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              CupertinoPageRoute<void>(
+                                                builder: (BuildContext context) => ProductsPage(
+                                                  selectedParentCategoryId: category.id,
+                                                  parents: categories,
+                                                  refreshHomeData: fetchAndSetHomeData,
+                                                  isLoadingHomeData: isLoadingHomeData,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: CategoryItem(
+                                            title: category.title,
+                                            imageUrl: category.cover,
                                           ),
-                                        );
-                                      },
-                                      child: CategoryItem(
-                                        title: category.title,
-                                        imageUrl: category.cover,
-                                      ),
-                                    ))
-                                .toList(),
-                          )
-                  ],
+                                        ))
+                                    .toList(),
+                              )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -17,17 +18,22 @@ class AppBarCartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-
-    return Consumer<CartProvider>(
-      builder: (c, cart, _) {
-        bool noCart = cart.noCart();
+    return Consumer3<CartProvider, HomeProvider, AppProvider>(
+      builder: (c, cartProvider, homeProvider, appProvider, _) {
+        bool noCart = cartProvider.noCart || homeProvider.noBranchFound || homeProvider.homeDataRequestError;
 
         return AnimatedOpacity(
           duration: Duration(milliseconds: 300),
           opacity: isLoadingHomeData || noCart ? 0 : 1,
           child: GestureDetector(
-            onTap: () => appWrapperKey.currentState.onTabItemTapped(2),
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (c) => CartPage(),
+                ),
+              );
+            },
             child: Container(
               width: 130,
               alignment: Alignment.center,
@@ -39,7 +45,7 @@ class AppBarCartTotal extends StatelessWidget {
                     width: 130,
                     bottom: 10,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
@@ -48,15 +54,21 @@ class AppBarCartTotal extends StatelessWidget {
                       ),
                       child: isLoadingHomeData || noCart
                           ? Text('')
-                          : Text(
-                              cart.cartTotal,
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: cart.cartTotal != null && cart.cartTotal.length > 12
-                                  ? AppTextStyles.subtitleXxsWhite
-                                  : AppTextStyles.subtitleXsWhiteBold,
-                              textAlign: TextAlign.center,
-                            ),
+                          : cartProvider.isLoadingAddRemoveRequest
+                              ? SpinKitThreeBounce(
+                                  color: AppColors.white,
+                                  size: 20,
+                                )
+                              //Todo: convert to Html widget
+                              : Text(
+                                  cartProvider.cartTotal,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
+                                  style: cartProvider.cartTotal != null && cartProvider.cartTotal.length > 12
+                                      ? AppTextStyles.subtitleXxsWhite
+                                      : AppTextStyles.subtitleXsWhiteBold,
+                                  textAlign: TextAlign.center,
+                                ),
                     ),
                   ),
                   Positioned(

@@ -94,12 +94,11 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      try {
+      // try {
         await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
         isValid = otpProvider.validationStatus;
         isNewUser = otpProvider.isNewUser;
         if (isValid == true) {
-          homeProvider.selectCategory(null);
           if (isNewUser) {
             print('New user, navigating to complete profile page');
             Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
@@ -110,10 +109,12 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
         } else {
           showToast(msg: 'OTP Validation Failed');
         }
-      } catch (error) {
+      /*} catch (error) {
+        print("@error checkOTPValidation");
+        print(error.toString());
         showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
         throw error;
-      }
+      }*/
     }
   }
 
@@ -187,6 +188,13 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
             ),
             SizedBox(height: 20),
             ..._verificationMethodsList(context, appProvider),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+              },
+              child: Text(Translations.of(context).get('Continue Without Login')),
+            ),
           ],
         ),
       ),

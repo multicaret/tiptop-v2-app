@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'package:tiptop_v2/UI/app_wrapper.dart';
@@ -17,6 +18,7 @@ class WalkthroughPage extends StatelessWidget {
 
     return AppScaffold(
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bgColor: AppColors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

@@ -1,61 +1,84 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show Platform;
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:instabug_flutter/Instabug.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/user.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
 import 'local_storage.dart';
 
 class AppProvider with ChangeNotifier {
-  static const String GOOGLE_API_KEY = '';
+  static const String GOOGLE_API_KEY = 'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
   //  Location
   /*Todo: set these coordinates to be a proper place*/
-  static double latitude = 41.017827;
-  static double longitude = 28.971372;
+  static double latitude;
+  static double longitude;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
   // Locale
-  List<Map<String, String>> appLanguages = [
-    {
-      'title': 'English',
-      'locale': 'en',
-      'country_code': 'US',
-      'flag': 'assets/images/en-flag.png',
-    },
-    {
-      'title': 'العربية',
-      'locale': 'ar',
-      'country_code': '',
-      'flag': 'assets/images/ar-flag.png',
-    },
-    {
-      'title': 'كوردي',
-      'locale': 'fa',
-      'country_code': '',
-      'flag': 'assets/images/ku-flag.png',
-    },
+  List<Language> appLanguages = [
+    Language(
+      id: 1,
+      title: 'English',
+      locale: 'en',
+      countryCode: 'US',
+      logo: 'assets/images/en-flag.png',
+    ),
+    Language(
+      id: 2,
+      title: 'العربية',
+      locale: 'ar',
+      countryCode: '',
+      logo: 'assets/images/ar-flag.png',
+    ),
+    Language(
+      id: 3,
+      title: 'كوردي',
+      locale: 'fa',
+      countryCode: 'US',
+      logo: 'assets/images/ku-flag.png',
+    ),
   ];
 
+  // Locale Related.
   bool localeSelected = false;
-
   static const String DEFAULT_LOCALE = 'en';
   Locale _appLocale = Locale(DEFAULT_LOCALE);
 
-  Locale get appLocal => _appLocale ?? Locale(DEFAULT_LOCALE);
-
-  set appLocal(value) {
-    _appLocale = value;
-  }
+  Locale get appLocale => _appLocale ?? Locale(DEFAULT_LOCALE);
 
   String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
 
   bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
+
+  set appLocale(value) {
+    _appLocale = value;
+  }
+
+  // Auth Related.
+  static const DOMAIN = 'https://titan.trytiptop.app/';
+  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
+  User authUser;
+  int userId;
+  String token;
+
+  bool get isAuth => token != null;
+
+  Map<String, String> get authHeader {
+    var myHeader = headers;
+    myHeader.addAll({"Authorization": "Bearer " + token});
+    return myHeader;
+  }
 
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
@@ -70,20 +93,18 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
+  Future<void> bootActions() async {
+    initInstaBug();
+    await fetchLocale();
+    await handleLocationPermission();
+    await AddressesProvider().fetchSelectedAddress();
+  }
+
   Future<void> changeLanguage(String localeString) async {
     _appLocale = Locale(localeString);
     await storageActions.save(key: 'language_code', data: localeString);
     localeSelected = true;
     notifyListeners();
-  }
-
-  static const DOMAIN = 'https://titan.trytiptop.app/';
-  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
-
-  Map<String, String> get authHeader {
-    var myHeader = headers;
-    myHeader.addAll({"Authorization": "Bearer " + token});
-    return myHeader;
   }
 
   Future<String> endpointRoot() async {
@@ -109,11 +130,10 @@ class AppProvider with ChangeNotifier {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
           logout();
-          return;
         } else {
           print('Sending authenticated request without logging in!');
-          return 401;
         }
+        return 401;
       }
 
       final responseData = json.decode(response.body);
@@ -152,29 +172,20 @@ class AppProvider with ChangeNotifier {
         response = await http.put(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
       }
       final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
-      print("response.statusCode");
-      print(response.statusCode);
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
           logout();
-          return null;
         } else {
           print('Sending authenticated request without logging in!');
-          return 401;
         }
+        return 401;
       }
       return responseData;
     } catch (error) {
       throw error;
     }
   }
-
-  User authUser;
-  int userId;
-  String token;
-
-  bool get isAuth => token != null;
 
   Future<void> updateUserData(User _authUser, String accessToken) async {
     print('accessToken');
@@ -195,6 +206,33 @@ class AppProvider with ChangeNotifier {
     });
   }
 
+  Future<void> updateProfile(Map<String, dynamic> userData) async {
+    try {
+      final dynamic responseData = await this.post(
+        withToken: true,
+        endpoint: 'profile',
+        body: userData,
+      );
+
+      print('Response: $responseData');
+
+      if (responseData['data'] == null) {
+        throw HttpException(
+          title: 'Error',
+          message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
+        );
+      }
+
+      User updatedUser = User.fromJson(responseData['data']['user']);
+      updateUserData(updatedUser, token);
+
+      print('name : ${updatedUser.name}');
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> autoLogin() async {
     print("Trying to auto login....");
     var checkUserDataKey = storageActions.checkKey(key: 'userData');
@@ -202,7 +240,7 @@ class AppProvider with ChangeNotifier {
       print('Not logged in! (No local storage key)');
       return;
     }
-    var userDataString = await storageActions.getDataType(key: 'userData', type: String);
+    var userDataString = await storageActions.getDataOfType(key: 'userData', type: String);
     final responseData = json.decode(userDataString) as Map<String, dynamic>;
     authUser = User.fromJson(json.decode(responseData['data']));
     userId = LocalStorage.userId = responseData['userId'];
@@ -225,6 +263,12 @@ class AppProvider with ChangeNotifier {
   }
 
   void isAttemptingRequestWithExpiredToken() {}
+
+  void initInstaBug() {
+    if (Platform.isIOS) {
+      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
+    }
+  }
 
   Future<PackageInfo> getDeviceData() async {
     return await PackageInfo.fromPlatform();
@@ -256,5 +300,4 @@ class AppProvider with ChangeNotifier {
     return getMobileApp(deviceData, platformState);
 
   }
-
 }

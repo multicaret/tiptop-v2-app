@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
@@ -23,7 +24,11 @@ class OTPCompleteProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
+    bool isProfileComplete = !appProvider.authUser.name.contains(appProvider.authUser.phone);
     return AppScaffold(
+      bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
         //Todo: Uncomment this line when OTP is implemented
@@ -37,7 +42,7 @@ class OTPCompleteProfile extends StatelessWidget {
             children: [
               SizedBox(height: 40),
               Text(
-                'John Doe',
+                isProfileComplete ? Translations.of(context).get("Final Step") : appProvider.authUser.name,
                 style: AppTextStyles.bodyBold,
                 textAlign: TextAlign.center,
               ),
@@ -47,10 +52,12 @@ class OTPCompleteProfile extends StatelessWidget {
               ),
               SizedBox(height: 30),
               AppTextField(
+                keyboardType: TextInputType.name,
                 required: true,
                 // validator: (val) => val.isEmpty ? Translations.of(context).get('Invalid') : null,
                 labelText: 'Full Name',
                 hintText: 'John Doe',
+                initialValue: isProfileComplete ? appProvider.authUser.name : null,
                 onSaved: (value) {
                   formData['full_name'] = value;
                 },
@@ -60,28 +67,31 @@ class OTPCompleteProfile extends StatelessWidget {
                 labelText: 'Email (Optional)',
                 hintText: 'Johndoe@domain.com',
                 keyboardType: TextInputType.emailAddress,
+                initialValue: isProfileComplete ? appProvider.authUser.email : null,
                 // validator: (val) => !val.contains("@") ? "Enter a valid email" : null,
                 onSaved: (value) {
                   formData['email'] = value;
                 },
               ),
-              /*AppTextField(
+              /*
+              AppTextField(
                 labelText: 'City',
                 hintText: 'Erbil',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['region_id'] = value;
-                },*/ /*
+                },
               ),
               AppTextField(
                 labelText: 'Neighborhood',
                 hintText: 'Italian Town',
-                */ /*onSaved: (value) {
+                onSaved: (value) {
                   formData['city_id'] = value;
-                },*/ /*
-              ),*/
+                },
+              ),
+              */
               ElevatedButton(
                 child: Text(Translations.of(context).get('Save')),
-                onPressed: () => _submit(context),
+                onPressed: () => _submit(context, appProvider),
               ),
               SizedBox(height: 20),
             ],
@@ -91,7 +101,7 @@ class OTPCompleteProfile extends StatelessWidget {
     );
   }
 
-  Future<void> _submit(BuildContext context) async {
+  Future<void> _submit(BuildContext context, AppProvider appProvider) async {
     if (!_formKeyFoo.currentState.validate()) {
       showToast(msg: Translations.of(context).get('Invalid Form'));
       return;
@@ -99,17 +109,17 @@ class OTPCompleteProfile extends StatelessWidget {
     _formKeyFoo.currentState.save();
     print(formData);
     try {
-      final responseData = await AppProvider().put(
-        endpoint: 'profile',
-        body: formData,
-        withToken: true,
-      );
-      print(responseData);
       // Todo: store user
+      // Response is received as null
+      await appProvider.updateProfile(formData);
       getLocationPermissionStatus().then((isGranted) {
-        Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,
+        );
       });
     } catch (e) {
+      print("error @submit complete profile");
+      print(e.toString());
       throw e;
     }
   }

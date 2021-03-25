@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/style.dart';
 
 import 'app_colors.dart';
 
@@ -73,6 +74,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle subtitleSecondaryBold = const TextStyle(
@@ -107,6 +109,7 @@ class AppTextStyles {
     height: 1,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle subtitle50 = const TextStyle(
@@ -141,6 +144,7 @@ class AppTextStyles {
     height: 1.3,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
+    decoration: TextDecoration.none,
   );
 
   static const TextStyle bodyBold = const TextStyle(
@@ -191,7 +195,6 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
-
   static const TextStyle subtitleXsWhiteBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
@@ -206,6 +209,23 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle textButton = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.primary,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static Style htmlXsBold = Style(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.text,
+    fontSize: FontSize(12),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    textAlign: TextAlign.end,
   );
 
   static TextStyle dynamicValues({

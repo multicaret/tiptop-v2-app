@@ -5,6 +5,7 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'cart_provider.dart';
 import 'local_storage.dart';
@@ -12,57 +13,80 @@ import 'local_storage.dart';
 class HomeProvider with ChangeNotifier {
   HomeDataResponse homeDataResponse;
   HomeData homeData;
+  EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
+  List<Slide> slides;
   int branchId;
   int chainId;
 
   bool categorySelected = false;
   int selectedParentCategoryId;
 
-  LocalStorage storageActions = LocalStorage.getActions();
+  bool homeDataRequestError = false;
+  bool noBranchFound = false;
 
-  Future<void> selectCategory(int categoryId) async {
-    selectedParentCategoryId = categoryId;
-    categorySelected = categoryId != null;
-    await storageActions.save(key: 'selected_category_id', data: selectedParentCategoryId);
-    print('selected category saved in provider $categoryId');
-    notifyListeners();
-  }
+  static double branchLat;
+  static double branchLong;
+
+  LocalStorage storageActions = LocalStorage.getActions();
 
   Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
     final endpoint = 'home';
+
+    if(AppProvider.latitude == null || AppProvider.longitude == null) {
+      await handleLocationPermission();
+    }
+
     final body = {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',
       'channel': 'grocery',
+      //Todo: send dynamically
       'selected_address_id': '1',
     };
 
-    final responseData = await appProvider.get(
-      endpoint: endpoint,
-      body: body,
-      withToken: appProvider.isAuth,
-    );
-    // print(responseData);
-    homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
+    try {
+      final responseData = await appProvider.get(
+        endpoint: endpoint,
+        body: body,
+        withToken: appProvider.isAuth,
+      );
 
-    if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
-      throw HttpException(title: 'Error', message: homeDataResponse.message);
+      // print(responseData["data"]["cart"]);
+      homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
+
+      if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
+        homeDataRequestError = true;
+        notifyListeners();
+        throw HttpException(title: 'Error', message: homeDataResponse.message);
+      }
+
+      homeData = homeDataResponse.homeData;
+      categories = homeData.categories;
+      slides = homeData.slides;
+      estimatedArrivalTime = homeData.estimatedArrivalTime;
+
+      if (homeData.branch == null) {
+        noBranchFound = true;
+      } else {
+        branchId = homeData.branch.id;
+        if (homeData.branch.chain != null) {
+          chainId = homeData.branch.chain.id;
+        }
+        branchLat = homeData.branch.latitude;
+        branchLong = homeData.branch.longitude;
+      }
+
+      if (homeData.cart != null) {
+        cartProvider.setCart(homeData.cart);
+        print(homeData.cart.id);
+      }
+
+      notifyListeners();
+    } catch (e) {
+      homeDataRequestError = true;
+      notifyListeners();
+      throw e;
     }
-
-    homeData = homeDataResponse.homeData;
-    categories = homeData.categories;
-    branchId = homeData.branch == null ? null : homeData.branch.id;
-    chainId = branchId == null
-        ? null
-        : homeData.branch.chain == null
-            ? null
-            : homeData.branch.chain.id;
-
-    if (homeData.cart != null) {
-      cartProvider.setCart(homeData.cart);
-    }
-
-    notifyListeners();
   }
 }

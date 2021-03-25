@@ -13,7 +13,6 @@ class OTPProvider with ChangeNotifier {
   OTPDataResponse otpInitDataResponse;
   OTPValidationDataResponse otpValidationDataResponse;
   OTPValidationData otpValidationData;
-  SMSValidationDataResponse otpSMSValidationDataResponse;
   DateTime validationDate;
 
   Future<void> initOTPValidation(String method) async {
@@ -48,7 +47,8 @@ class OTPProvider with ChangeNotifier {
       body: body,
     );
     otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
-
+    print("@otpValidationDataResponse");
+    print(otpValidationDataResponse);
     if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {
       throw HttpException(title: 'Error', message: otpInitDataResponse.message);
     }
@@ -76,20 +76,36 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> validateSMS(String countryCode, String phoneNumber, String code, String reference) async {
+  Future<void> validateSMS(
+    AppProvider appProvider,
+    String countryCode,
+    String phoneCountryCode,
+    String phoneNumber,
+    String code,
+    String reference,
+  ) async {
     final endpoint = 'otp/sms-validate';
     final responseData = await AppProvider().post(endpoint: endpoint, params: {
       'country_code': countryCode,
+      'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
       'code': code,
       'reference': reference,
     });
 
-    otpSMSValidationDataResponse = SMSValidationDataResponse.fromJson(responseData);
+    otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
 
-    validationDate = otpSMSValidationDataResponse.smsData.validationDate;
+    if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {
+      throw HttpException(title: 'Error', message: otpInitDataResponse.message);
+    }
 
-    print('validationDate: ${validationDate.toString()}');
+    otpValidationData = otpValidationDataResponse.otpValidationData;
+    validationStatus = otpValidationData.validationStatus;
+    isNewUser = otpValidationData.newUser;
+
+    appProvider.updateUserData(otpValidationData.user, otpValidationData.accessToken);
+
+    print('validationStatus: $validationStatus');
     notifyListeners();
   }
 }

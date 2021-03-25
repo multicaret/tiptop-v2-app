@@ -23,7 +23,7 @@ void main() async {
       // Uncomment when you want to clear local storage on app launch
       // LocalStorage().clear();
       AppProvider appProvider = AppProvider();
-      await appProvider.fetchLocale();
+      await appProvider.bootActions();
       runApp(MyApp(
         appProvider: appProvider,
       ));
@@ -68,8 +68,8 @@ class _MyAppState extends State<MyApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          locale: app.appLocal,
-          supportedLocales: app.appLanguages.map((language) => Locale(language['locale'], language['country_code'])).toList(),
+          locale: app.appLocale,
+          supportedLocales: app.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: AppColors.primary,
@@ -107,10 +107,26 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
+            sliderTheme: SliderThemeData(
+              showValueIndicator: ShowValueIndicator.never,
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+              tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
+              activeTickMarkColor: AppColors.primary,
+              inactiveTickMarkColor: AppColors.primary50,
+              activeTrackColor: AppColors.primary,
+              inactiveTrackColor: AppColors.primary50,
+              thumbColor: AppColors.primary,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.primary,
+                textStyle: AppTextStyles.textButton
+              )
+            )
           ),
           home: app.localeSelected
               ? app.isAuth
-                  ? AppWrapper(key: appWrapperKey)
+                  ? AppWrapper()
                   : FutureBuilder(
                       future: _autoLoginFuture,
                       builder: (c, authResultSnapshot) =>

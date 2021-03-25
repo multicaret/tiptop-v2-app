@@ -40,14 +40,14 @@ class StringRawStringFormatted {
   });
 
   factory StringRawStringFormatted.fromJson(Map<String, dynamic> json) => StringRawStringFormatted(
-    raw: json["raw"] == null ? null : json["raw"],
-    formatted: json["formatted"] == null ? null : json["formatted"],
-  );
+        raw: json["raw"] == null ? null : json["raw"],
+        formatted: json["formatted"] == null ? null : json["formatted"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "raw": raw == null ? null : raw,
-    "formatted": formatted == null ? null : formatted,
-  };
+        "raw": raw == null ? null : raw,
+        "formatted": formatted == null ? null : formatted,
+      };
 }
 
 class DoubleRawStringFormatted {
@@ -60,14 +60,14 @@ class DoubleRawStringFormatted {
   });
 
   factory DoubleRawStringFormatted.fromJson(Map<String, dynamic> json) => DoubleRawStringFormatted(
-    raw: json["raw"] == null ? null : json["raw"].toDouble(),
-    formatted: json["formatted"] == null ? null : json["formatted"],
-  );
+        raw: json["raw"] == null ? null : json["raw"].toDouble(),
+        formatted: json["formatted"] == null ? null : json["formatted"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "raw": raw == null ? null : raw,
-    "formatted": formatted == null ? null : formatted,
-  };
+        "raw": raw == null ? null : raw,
+        "formatted": formatted == null ? null : formatted,
+      };
 }
 
 class IntRawStringFormatted {
@@ -80,34 +80,34 @@ class IntRawStringFormatted {
   });
 
   factory IntRawStringFormatted.fromJson(Map<String, dynamic> json) => IntRawStringFormatted(
-    raw: json["raw"] == null ? null : json["raw"],
-    formatted: json["formatted"] == null ? null : json["formatted"],
-  );
+        raw: json["raw"] == null ? null : json["raw"],
+        formatted: json["formatted"] == null ? null : json["formatted"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "raw": raw == null ? null : raw,
-    "formatted": formatted == null ? null : formatted,
-  };
+        "raw": raw == null ? null : raw,
+        "formatted": formatted == null ? null : formatted,
+      };
 }
 
-class Price {
-  int amountRaw;
-  String amountFormatted;
+class DoubleRawIntFormatted {
+  double raw;
+  String formatted;
 
-  Price({
-    this.amountRaw,
-    this.amountFormatted,
+  DoubleRawIntFormatted({
+    this.raw,
+    this.formatted,
   });
 
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-    amountRaw: json["amountRaw"] == null ? null : json["amountRaw"],
-    amountFormatted: json["amountFormatted"] == null ? null : json["amountFormatted"],
-  );
+  factory DoubleRawIntFormatted.fromJson(Map<String, dynamic> json) => DoubleRawIntFormatted(
+        raw: json["raw"] == null ? null : json["raw"].toDouble(),
+        formatted: json["formatted"] == null ? null : json["formatted"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "amountRaw": amountRaw == null ? null : amountRaw,
-    "amountFormatted": amountFormatted == null ? null : amountFormatted,
-  };
+        "raw": raw == null ? null : raw,
+        "formatted": formatted == null ? null : formatted,
+      };
 }
 
 class EdAt {
@@ -122,16 +122,16 @@ class EdAt {
   });
 
   factory EdAt.fromJson(Map<String, dynamic> json) => EdAt(
-    formatted: json["formatted"] == null ? null : json["formatted"],
-    diffForHumans: json["diffForHumans"] == null ? null : json["diffForHumans"],
-    timestamp: json["timestamp"] == null ? null : json["timestamp"],
-  );
+        formatted: json["formatted"] == null ? null : json["formatted"],
+        diffForHumans: json["diffForHumans"] == null ? null : json["diffForHumans"],
+        timestamp: json["timestamp"] == null ? null : json["timestamp"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "formatted": formatted == null ? null : formatted,
-    "diffForHumans": diffForHumans == null ? null : diffForHumans,
-    "timestamp": timestamp == null ? null : timestamp,
-  };
+        "formatted": formatted == null ? null : formatted,
+        "diffForHumans": diffForHumans == null ? null : diffForHumans,
+        "timestamp": timestamp == null ? null : timestamp,
+      };
 }
 
 class Media {
@@ -146,16 +146,16 @@ class Media {
   List<Gallery> gallery;
 
   factory Media.fromJson(Map<String, dynamic> json) => Media(
-    logo: json["logo"],
-    cover: json["cover"],
-    gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
-  );
+        logo: json["logo"],
+        cover: json["cover"],
+        gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "logo": logo,
-    "cover": cover,
-    "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
-  };
+        "logo": logo,
+        "cover": cover,
+        "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
+      };
 }
 
 class City {
@@ -184,32 +184,31 @@ class City {
   int longitude;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
-    id: json["id"],
-    name: Name.fromJson(json["name"]),
-    description: json["description"],
-    code: json["code"],
-    country: Country.fromJson(json["country"]),
-    region: Region.fromJson(json["region"]),
-    timezone: Timezone.fromJson(json["timezone"]),
-    population: json["population"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-  );
+        id: json["id"],
+        name: Name.fromJson(json["name"]),
+        description: json["description"],
+        code: json["code"],
+        country: Country.fromJson(json["country"]),
+        region: Region.fromJson(json["region"]),
+        timezone: Timezone.fromJson(json["timezone"]),
+        population: json["population"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name.toJson(),
-    "description": description,
-    "code": code,
-    "country": country.toJson(),
-    "region": region.toJson(),
-    "timezone": timezone.toJson(),
-    "population": population,
-    "latitude": latitude,
-    "longitude": longitude,
-  };
+        "id": id,
+        "name": name.toJson(),
+        "description": description,
+        "code": code,
+        "country": country.toJson(),
+        "region": region.toJson(),
+        "timezone": timezone.toJson(),
+        "population": population,
+        "latitude": latitude,
+        "longitude": longitude,
+      };
 }
-
 
 class Country {
   Country({
@@ -237,30 +236,30 @@ class Country {
   Timezone timezone;
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
-    id: json["id"],
-    nameEnglish: json["nameEnglish"],
-    name: json["name"],
-    alpha2Code: json["alpha2Code"],
-    alpha3Code: json["alpha3Code"],
-    numericCode: json["numericCode"],
-    phoneCode: json["phoneCode"],
-    flagUrl: json["flagUrl"],
-    currency: Currency.fromJson(json["currency"]),
-    timezone: Timezone.fromJson(json["timezone"]),
-  );
+        id: json["id"],
+        nameEnglish: json["nameEnglish"],
+        name: json["name"],
+        alpha2Code: json["alpha2Code"],
+        alpha3Code: json["alpha3Code"],
+        numericCode: json["numericCode"],
+        phoneCode: json["phoneCode"],
+        flagUrl: json["flagUrl"],
+        currency: Currency.fromJson(json["currency"]),
+        timezone: Timezone.fromJson(json["timezone"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "nameEnglish": nameEnglish,
-    "name": name,
-    "alpha2Code": alpha2Code,
-    "alpha3Code": alpha3Code,
-    "numericCode": numericCode,
-    "phoneCode": phoneCode,
-    "flagUrl": flagUrl,
-    "currency": currency.toJson(),
-    "timezone": timezone.toJson(),
-  };
+        "id": id,
+        "nameEnglish": nameEnglish,
+        "name": name,
+        "alpha2Code": alpha2Code,
+        "alpha3Code": alpha3Code,
+        "numericCode": numericCode,
+        "phoneCode": phoneCode,
+        "flagUrl": flagUrl,
+        "currency": currency.toJson(),
+        "timezone": timezone.toJson(),
+      };
 }
 
 class Currency {
@@ -285,26 +284,26 @@ class Currency {
   bool isSymbolAfter;
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(
-    id: json["id"],
-    name: json["name"],
-    code: json["code"],
-    symbol: json["symbol"],
-    rate: json["rate"].toDouble(),
-    decimalSeparator: json["decimalSeparator"],
-    thousandsSeparator: json["thousandsSeparator"],
-    isSymbolAfter: json["isSymbolAfter"],
-  );
+        id: json["id"],
+        name: json["name"],
+        code: json["code"],
+        symbol: json["symbol"],
+        rate: json["rate"].toDouble(),
+        decimalSeparator: json["decimalSeparator"],
+        thousandsSeparator: json["thousandsSeparator"],
+        isSymbolAfter: json["isSymbolAfter"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "code": code,
-    "symbol": symbol,
-    "rate": rate,
-    "decimalSeparator": decimalSeparator,
-    "thousandsSeparator": thousandsSeparator,
-    "isSymbolAfter": isSymbolAfter,
-  };
+        "id": id,
+        "name": name,
+        "code": code,
+        "symbol": symbol,
+        "rate": rate,
+        "decimalSeparator": decimalSeparator,
+        "thousandsSeparator": thousandsSeparator,
+        "isSymbolAfter": isSymbolAfter,
+      };
 }
 
 class Timezone {
@@ -321,18 +320,18 @@ class Timezone {
   int dstOffset;
 
   factory Timezone.fromJson(Map<String, dynamic> json) => Timezone(
-    id: json["id"],
-    name: json["name"],
-    utcOffset: json["utcOffset"],
-    dstOffset: json["dstOffset"],
-  );
+        id: json["id"],
+        name: json["name"],
+        utcOffset: json["utcOffset"],
+        dstOffset: json["dstOffset"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "utcOffset": utcOffset,
-    "dstOffset": dstOffset,
-  };
+        "id": id,
+        "name": name,
+        "utcOffset": utcOffset,
+        "dstOffset": dstOffset,
+      };
 }
 
 class Name {
@@ -345,14 +344,14 @@ class Name {
   String translated;
 
   factory Name.fromJson(Map<String, dynamic> json) => Name(
-    original: json["original"],
-    translated: json["translated"],
-  );
+        original: json["original"],
+        translated: json["translated"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "original": original,
-    "translated": translated,
-  };
+        "original": original,
+        "translated": translated,
+      };
 }
 
 class Region {
@@ -369,42 +368,42 @@ class Region {
   String code;
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
-    id: json["id"],
-    nameEnglish: json["nameEnglish"],
-    name: json["name"],
-    code: json["code"],
-  );
+        id: json["id"],
+        nameEnglish: json["nameEnglish"],
+        name: json["name"],
+        code: json["code"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "nameEnglish": nameEnglish,
-    "name": name,
-    "code": code,
-  };
+        "id": id,
+        "nameEnglish": nameEnglish,
+        "name": name,
+        "code": code,
+      };
 }
 
 class MobileApp {
   MobileApp({
     this.device,
-    this.versionCode,
-    this.versionNumber,
+    this.version,
+    this.buildNumber,
   });
 
   Device device;
-  String versionCode;
-  String versionNumber;
+  String version;
+  int buildNumber;
 
   factory MobileApp.fromJson(Map<String, dynamic> json) => MobileApp(
-    device: Device.fromJson(json["device"]),
-    versionCode: json["versionCode"],
-    versionNumber: json["versionNumber"],
-  );
+        device: Device.fromJson(json["device"]),
+        version: json["version"],
+        buildNumber: json["buildNumber"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "device": device.toJson(),
-    "versionCode": versionCode,
-    "versionNumber": versionNumber,
-  };
+        "device": device.toJson(),
+        "version": version,
+        "buildNumber": buildNumber,
+      };
 }
 
 class Device {
@@ -425,22 +424,22 @@ class Device {
   String manufacturer;
 
   factory Device.fromJson(Map<String, dynamic> json) => Device(
-    uuid: json["uuid"],
-    model: json["model"],
-    serial: json["serial"],
-    version: json["version"],
-    platform: json["platform"],
-    manufacturer: json["manufacturer"],
-  );
+        uuid: json["uuid"],
+        model: json["model"],
+        serial: json["serial"],
+        version: json["version"],
+        platform: json["platform"],
+        manufacturer: json["manufacturer"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "uuid": uuid,
-    "model": model,
-    "serial": serial,
-    "version": version,
-    "platform": platform,
-    "manufacturer": manufacturer,
-  };
+        "uuid": uuid,
+        "model": model,
+        "serial": serial,
+        "version": version,
+        "platform": platform,
+        "manufacturer": manufacturer,
+      };
 }
 
 class Rating {
@@ -455,16 +454,16 @@ class Rating {
   String countFormatted;
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-    average: json["average"],
-    countRaw: json["countRaw"],
-    countFormatted: json["countFormatted"],
-  );
+        average: json["average"],
+        countRaw: json["countRaw"],
+        countFormatted: json["countFormatted"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "average": average,
-    "countRaw": countRaw,
-    "countFormatted": countFormatted,
-  };
+        "average": average,
+        "countRaw": countRaw,
+        "countFormatted": countFormatted,
+      };
 }
 
 class Settings {
@@ -475,12 +474,12 @@ class Settings {
   Notifications notifications;
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
-    notifications: Notifications.fromJson(json["notifications"]),
-  );
+        notifications: Notifications.fromJson(json["notifications"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "notifications": notifications.toJson(),
-  };
+        "notifications": notifications.toJson(),
+      };
 }
 
 class Notifications {
@@ -499,23 +498,23 @@ class Notifications {
   int pushMobileAll;
 
   factory Notifications.fromJson(Map<String, dynamic> json) => Notifications(
-    db: json["db"],
-    mail: json["mail"],
-    pushWebAll: json["push_web_all"],
-    pushMobileAds: json["push_mobile_ads"],
-    pushMobileAll: json["push_mobile_all"],
-  );
+        db: json["db"],
+        mail: json["mail"],
+        pushWebAll: json["push_web_all"],
+        pushMobileAds: json["push_mobile_ads"],
+        pushMobileAll: json["push_mobile_all"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "db": db,
-    "mail": mail,
-    "push_web_all": pushWebAll,
-    "push_mobile_ads": pushMobileAds,
-    "push_mobile_all": pushMobileAll,
-  };
+        "db": db,
+        "mail": mail,
+        "push_web_all": pushWebAll,
+        "push_mobile_ads": pushMobileAds,
+        "push_mobile_all": pushMobileAll,
+      };
 }
 
-enum CartAction {ADD, REMOVE}
+enum CartAction { ADD, REMOVE }
 
 class Gallery {
   Gallery({
@@ -535,20 +534,36 @@ class Gallery {
   String thumbnail;
 
   factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
-    id: json["id"],
-    name: json["name"],
-    type: json["type"],
-    size: json["size"],
-    file: json["file"],
-    thumbnail: json["thumbnail"],
-  );
+        id: json["id"],
+        name: json["name"],
+        type: json["type"],
+        size: json["size"],
+        file: json["file"],
+        thumbnail: json["thumbnail"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "type": type,
-    "size": size,
-    "file": file,
-    "thumbnail": thumbnail,
-  };
+        "id": id,
+        "name": name,
+        "type": type,
+        "size": size,
+        "file": file,
+        "thumbnail": thumbnail,
+      };
+}
+
+class Language {
+  int id;
+  String title;
+  String logo;
+  String locale;
+  String countryCode;
+
+  Language({
+    this.id,
+    this.title,
+    this.logo,
+    this.locale,
+    this.countryCode,
+  });
 }
