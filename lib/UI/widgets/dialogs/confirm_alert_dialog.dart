@@ -7,22 +7,28 @@ import 'app_alert_dialog.dart';
 
 class ConfirmAlertDialog extends StatelessWidget {
   final String title;
+  final String image;
 
-  ConfirmAlertDialog({
-    @required this.title,
-  });
+  ConfirmAlertDialog({@required this.title, this.image});
 
   @override
   Widget build(BuildContext context) {
     return AppAlertDialog(
       children: [
         SizedBox(height: 20),
+        if (image != null)
+          Padding(
+            padding: EdgeInsets.only(left: 100, right: 100, bottom: 20),
+            child: Image(
+              image: AssetImage(image),
+            ),
+          ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 50),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Text(
             Translations.of(context).get(title),
             textAlign: TextAlign.center,
-            style: AppTextStyles.bodyBold,
+            style: AppTextStyles.bodyBold.copyWith(height: 1.4),
           ),
         ),
         SizedBox(height: 20),

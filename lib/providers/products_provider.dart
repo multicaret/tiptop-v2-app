@@ -37,7 +37,7 @@ class ProductsProvider with ChangeNotifier {
     try {
       final responseData = await AppProvider().get(endpoint: endpoint);
       searchedProductsDataResponse = ProductsResponse.fromJson(responseData);
-      searchedProducts = searchedProductsDataResponse.data;
+      searchedProducts = searchedProductsDataResponse.data == null ? [] : searchedProductsDataResponse.data;
 
       if (searchedProductsDataResponse.status != 200) {
         throw HttpException(title: 'Error', message: searchedProductsDataResponse.message);

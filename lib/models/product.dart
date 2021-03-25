@@ -191,7 +191,7 @@ class ProductsResponse {
 
   factory ProductsResponse.fromJson(Map<String, dynamic> json) => ProductsResponse(
         data: json["data"] == null ? null : List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
-        errors: json["errors"],
+        errors: json["errors"] == null ? null : json["errors"],
         message: json["message"],
         status: json["status"],
       );

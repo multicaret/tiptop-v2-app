@@ -80,5 +80,18 @@
   "Are you sure you want to delete this order from your order history?": "هل انت متأكد من انك تريد حذف هذا الطلب من قائمة طلباتك السابقة؟",
   "Please Rate Your Experience": "الرجاء تقييم تجربتك",
   "Quick Search": "بحث سريع",
-  "Most Searched Terms": "الكلمات الاكثر بحثاً"
+  "Most Searched Terms": "الكلمات الاكثر بحثاً",
+  "Search Results": "نتائج البحث",
+  "Add Address": "اضف عنوان",
+  "Add": "اضف",
+  "Add New Address": "اضف عنوان جديد",
+  "Use This Address": "استخدم هذا العنوان",
+  "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "سوف يتم تسليم طلبك الى الموقع الجغرافي المختار, الرجاء التحقق من موقع الدبوس المختار",
+  "Track Order": "تتبع الطلب",
+  "Live Order" : "الطلب المباشر",
+  "Check your order": "تابع طلبك",
+  "Preparing" : "قيد التحضير",
+  "On the way": "على الطريق",
+  "At the address": "بالقرب من العنوان",
+  "Delivered" : "تم التوصيل"
 }

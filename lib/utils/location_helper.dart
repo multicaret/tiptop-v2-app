@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart' as locationPkg;
@@ -16,14 +21,14 @@ Future<bool> getLocationPermissionStatus() async {
 }
 
 Future<bool> handleLocationPermission() async {
-  PermissionStatus locationPermission = await Permission.location.status;
+  bool isGranted = await getLocationPermissionStatus();
 
-  if (await Permission.location.request().isGranted || await Permission.locationWhenInUse.request().isGranted) {
+  if (isGranted) {
+    print('Location permission granted! Update user location');
     await updateLocationAndStoreIt();
     return true;
-  }
-
-  if (locationPermission.isDenied) {
+  } else {
+    print('Location is denied! ASK and Wait for it to be granted');
     if (await Permission.location.request().isGranted || await Permission.locationWhenInUse.request().isGranted) {
       await updateLocationAndStoreIt();
       return true;
@@ -67,8 +72,7 @@ final googlePlacesEndpoint = 'https://maps.googleapis.com/maps/api/place/findpla
 
 // Geocoding
 Future<List<Candidate>> findPlaces(String input) async {
-  final endpoint =
-      'input=$input&inputtype=textquery&fields=formatted_address,name,geometry/location&key=${AppProvider.GOOGLE_API_KEY}';
+  final endpoint = 'input=$input&inputtype=textquery&fields=formatted_address,name,geometry/location&key=${AppProvider.GOOGLE_API_KEY}';
   Uri url = Uri.http(googleGeocodeEndpoint, endpoint);
   http.Response response = await http.get(url);
 
@@ -118,4 +122,23 @@ void handleGoogleRequestError(GoogleResponseStatus status) {
       }
       break;
   }
+}
+
+Future<Uint8List> getAndCacheMarkerIcon(String imageUrl) async {
+  final int targetWidth = 180;
+  final File markerImageFile = await DefaultCacheManager().getSingleFile(imageUrl);
+  final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
+
+  final Codec markerImageCodec = await instantiateImageCodec(
+    markerImageBytes,
+    targetWidth: targetWidth,
+  );
+
+  final FrameInfo frameInfo = await markerImageCodec.getNextFrame();
+  final ByteData byteData = await frameInfo.image.toByteData(
+    format: ImageByteFormat.png,
+  );
+
+  final Uint8List resizedMarkerImageBytes = byteData.buffer.asUint8List();
+  return resizedMarkerImageBytes;
 }

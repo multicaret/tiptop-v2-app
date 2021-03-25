@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+
+import 'local_storage.dart';
 
 class AddressesProvider with ChangeNotifier {
   CreateAddressResponseData createAddressResponseData;
@@ -16,6 +20,26 @@ class AddressesProvider with ChangeNotifier {
   AddressesResponseData addressesResponseData;
   List<Address> addresses = [];
   List<Kind> kinds = [];
+
+  LocalStorage storageActions = LocalStorage.getActions();
+
+  bool addressIsSelected = false;
+  Address selectedAddress;
+
+  Future<void> fetchSelectedAddress() async {
+    bool checkSelectedAddressKey = storageActions.checkKey(key: 'selected_address');
+    if (!checkSelectedAddressKey) {
+      print('Address not selected yet!');
+      addressIsSelected = false;
+      notifyListeners();
+      return;
+    }
+    String selectedAddressString = await storageActions.getDataOfType(key: 'selected_address', type: String);
+    print(selectedAddressString);
+    selectedAddress = Address.fromJson(json.decode(selectedAddressString));
+    addressIsSelected = true;
+    notifyListeners();
+  }
 
   Future<dynamic> createAddress(AppProvider appProvider, {double lat, double long}) async {
     final endpoint = 'profile/addresses/create';

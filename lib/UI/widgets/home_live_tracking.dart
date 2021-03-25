@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/check_order_page.dart';
+import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -45,7 +45,7 @@ class HomeLiveTracking extends StatelessWidget {
                   child: Text('1', style: AppTextStyles.subtitleBold),
                 ),
               ),
-              title: Text('Live Order', style: AppTextStyles.bodyBold),
+              title: Text(Translations.of(context).get("Live Order"), style: AppTextStyles.bodyBold),
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -95,9 +95,9 @@ class HomeLiveTracking extends StatelessWidget {
                       SizedBox(width: 5),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(minimumSize: Size(120, 45)),
-                        onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(CheckOrderPage.routeName),
-                        child: Text('Track Order'),
-                      )
+                        onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName),
+                        child: Text(Translations.of(context).get("Track Order")),
+                      ),
                     ],
                   ),
                 )
