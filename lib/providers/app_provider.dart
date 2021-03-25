@@ -214,8 +214,6 @@ class AppProvider with ChangeNotifier {
         body: userData,
       );
 
-      print('Response: $responseData');
-
       if (responseData['data'] == null) {
         throw HttpException(
           title: 'Error',
@@ -285,19 +283,15 @@ class AppProvider with ChangeNotifier {
         deviceData = readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
+      deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
     }
     return deviceData;
   }
-
 
   Future<Map<String, dynamic>> loadMobileAppData() async {
     PackageInfo deviceData = await getDeviceData();
     Map<String, dynamic> platformState = await initPlatformState();
 
     return getMobileApp(deviceData, platformState);
-
   }
 }
