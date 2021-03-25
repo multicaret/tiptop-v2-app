@@ -95,7 +95,7 @@ class AddressesData {
 
   factory AddressesData.fromJson(Map<String, dynamic> json) => AddressesData(
         addresses: List<Address>.from(json["addresses"].map((x) => Address.fromJson(x))),
-        kinds: List<Kind>.from(json["addresses"].map((x) => Kind.fromJson(x))),
+        kinds: List<Kind>.from(json["kinds"].map((x) => Kind.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
