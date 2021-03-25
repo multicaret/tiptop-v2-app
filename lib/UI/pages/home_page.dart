@@ -10,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/category_item.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
+import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -44,6 +45,8 @@ class _HomePageState extends State<HomePage> {
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
   List<Slide> slides;
+
+  String currentView = 'market';
 
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
@@ -107,47 +110,57 @@ class _HomePageState extends State<HomePage> {
                                 autoplayDuration: Duration(milliseconds: 4000),
                                 hasMap: true,
                               ),
-                        ChannelsButtons(),
-                        HomeLiveTracking(isRTL: appProvider.isRTL),
-                        hideContent
-                            ? Padding(
-                                padding: EdgeInsets.symmetric(vertical: 50),
-                                child: homeProvider.noBranchFound
-                                    ? Text('No Branch Found')
-                                    : homeProvider.homeDataRequestError
-                                        //Todo: translate this string/reconsider what to do
-                                        ? Text('An error occurred! Please try again later')
-                                        : AppLoader(),
-                              )
-                            : GridView.count(
-                                padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
-                                shrinkWrap: true,
-                                childAspectRatio: 0.78,
-                                physics: NeverScrollableScrollPhysics(),
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 16,
-                                children: categories
-                                    .map((category) => GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              CupertinoPageRoute<void>(
-                                                builder: (BuildContext context) => ProductsPage(
-                                                  selectedParentCategoryId: category.id,
-                                                  parents: categories,
-                                                  refreshHomeData: fetchAndSetHomeData,
-                                                  isLoadingHomeData: isLoadingHomeData,
+                        //Todo: switch whole app when Food infrastructure is set up
+                        ChannelsButtons(
+                          currentView: currentView,
+                          changeView: (value) => setState(() => currentView = value),
+                        ),
+                        if (currentView == 'food') TempFoodView(),
+                        if (currentView == 'market')
+                          Column(
+                            children: [
+                              HomeLiveTracking(isRTL: appProvider.isRTL),
+                              hideContent
+                                  ? Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 50),
+                                      child: homeProvider.noBranchFound
+                                          ? Text('No Branch Found')
+                                          : homeProvider.homeDataRequestError
+                                              //Todo: translate this string/reconsider what to do
+                                              ? Text('An error occurred! Please try again later')
+                                              : AppLoader(),
+                                    )
+                                  : GridView.count(
+                                      padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
+                                      shrinkWrap: true,
+                                      childAspectRatio: 0.78,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 15,
+                                      mainAxisSpacing: 16,
+                                      children: categories
+                                          .map((category) => GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    CupertinoPageRoute<void>(
+                                                      builder: (BuildContext context) => ProductsPage(
+                                                        selectedParentCategoryId: category.id,
+                                                        parents: categories,
+                                                        refreshHomeData: fetchAndSetHomeData,
+                                                        isLoadingHomeData: isLoadingHomeData,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: CategoryItem(
+                                                  title: category.title,
+                                                  imageUrl: category.cover,
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          child: CategoryItem(
-                                            title: category.title,
-                                            imageUrl: category.cover,
-                                          ),
-                                        ))
-                                    .toList(),
-                              )
+                                              ))
+                                          .toList(),
+                                    )
+                            ],
+                          ),
                       ],
                     ),
                   ),
