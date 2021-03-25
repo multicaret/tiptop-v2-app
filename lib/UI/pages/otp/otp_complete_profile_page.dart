@@ -27,6 +27,7 @@ class OTPCompleteProfile extends StatelessWidget {
     AppProvider appProvider = Provider.of<AppProvider>(context);
 
     return AppScaffold(
+      bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
         //Todo: Uncomment this line when OTP is implemented

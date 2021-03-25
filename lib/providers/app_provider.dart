@@ -196,7 +196,7 @@ class AppProvider with ChangeNotifier {
 
   Future<void> updateProfile(Map<String, dynamic> userData) async {
     try {
-      final dynamic responseData = await this.put(
+      final dynamic responseData = await this.post(
         withToken: true,
         endpoint: 'profile',
         body: userData,

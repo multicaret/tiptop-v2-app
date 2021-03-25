@@ -10,6 +10,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class OTPStepThreePage extends StatefulWidget {
@@ -74,6 +75,8 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bgColor: AppColors.white,
+      bgImage: "assets/images/page-bg-pattern-white.png",
       body: Column(
         children: [
           SizedBox(height: 40),
