@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
-import 'package:tiptop_v2/UI/widgets/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
@@ -10,6 +10,7 @@ import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
 class AddressesPage extends StatefulWidget {
   static const routeName = '/my-addresses';
@@ -64,39 +65,53 @@ class _AddressesPageState extends State<AddressesPage> {
                 child: Column(
                   children: [
                     SectionTitle('Add Address'),
-                    ...List.generate(
-                      kinds.length,
-                      (i) => Material(
-                        color: AppColors.white,
-                        child: InkWell(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(color: AppColors.border),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                AddressIcon(
-                                  isRTL: appProvider.isRTL,
-                                  icon: kinds[i].icon,
-                                  isAsset: false,
-                                ),
-                                appProvider.isRTL
-                                    ? Text('${Translations.of(context).get('Add Address')} ${kinds[i].title}')
-                                    : Text('${Translations.of(context).get('Add')} ${kinds[i].title} ${Translations.of(context).get('Address')}')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                    ..._getAddressKindsList(),
                   ],
                 ),
               ),
             ),
+    );
+  }
+
+  List<Widget> _getAddressKindsList() {
+    return List.generate(
+      kinds.length,
+      (i) => Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () {
+            //Todo: navigate to select address map page with the kind id
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: AppColors.border),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      AddressIcon(
+                        isRTL: appProvider.isRTL,
+                        icon: kinds[i].icon,
+                        isAsset: false,
+                      ),
+                      appProvider.isRTL
+                          ? Text('${Translations.of(context).get('Add Address')} ${kinds[i].title}')
+                          : Text('${Translations.of(context).get('Add')} ${kinds[i].title} ${Translations.of(context).get('Address')}')
+                    ],
+                  ),
+                ),
+                AppIcon.iconSm(FontAwesomeIcons.plus)
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

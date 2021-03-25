@@ -119,12 +119,7 @@ class AddressSelectButton extends StatelessWidget {
                             ),
                             onTap: () {
                               if (appProvider.isAuth) {
-                                Navigator.of(context, rootNavigator: true).push(
-                                  CupertinoPageRoute(
-                                    fullscreenDialog: true,
-                                    builder: (c) => AddressesPage(),
-                                  ),
-                                );
+                                Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
                               } else {
                                 showToast(msg: 'You need to log in first!');
                                 Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
