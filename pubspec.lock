@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.3"
-  dismissible_page:
-    dependency: "direct main"
-    description:
-      name: dismissible_page
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.1"
   device_info:
     dependency: "direct main"
     description:
@@ -148,6 +141,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  dismissible_page:
+    dependency: "direct main"
+    description:
+      name: dismissible_page
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   fake_async:
     dependency: transitive
     description:
