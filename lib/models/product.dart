@@ -3,41 +3,41 @@ import 'dart:convert';
 import 'category.dart';
 import 'models.dart';
 
-ProductsDataResponse productDataResponseFromJson(String str) => ProductsDataResponse.fromJson(json.decode(str));
+ProductsWithCategoriesDataResponse productDataResponseFromJson(String str) => ProductsWithCategoriesDataResponse.fromJson(json.decode(str));
 
-class ProductsDataResponse {
-  ProductsDataResponse({
-    this.parentsData,
+class ProductsWithCategoriesDataResponse {
+  ProductsWithCategoriesDataResponse({
+    this.categoryParentsData,
     this.errors,
     this.message,
     this.status,
   });
 
-  ParentsData parentsData;
+  CategoryParentsData categoryParentsData;
   String errors;
   String message;
   int status;
 
-  factory ProductsDataResponse.fromJson(Map<String, dynamic> json) => ProductsDataResponse(
-        parentsData: json["data"] == null ? null : ParentsData.fromJson(json["data"]),
+  factory ProductsWithCategoriesDataResponse.fromJson(Map<String, dynamic> json) => ProductsWithCategoriesDataResponse(
+        categoryParentsData: json["data"] == null ? null : CategoryParentsData.fromJson(json["data"]),
         errors: json["errors"],
         message: json["message"],
         status: json["status"],
       );
 }
 
-class ParentsData {
-  ParentsData({
-    this.selectedParent,
-    this.parents,
+class CategoryParentsData {
+  CategoryParentsData({
+    this.selectedParentCategory,
+    this.parentCategories,
   });
 
-  Category selectedParent;
-  List<Category> parents;
+  Category selectedParentCategory;
+  List<Category> parentCategories;
 
-  factory ParentsData.fromJson(Map<String, dynamic> json) => ParentsData(
-        selectedParent: Category.fromJson(json["selectedParent"]),
-        parents: List<Category>.from(json["parents"].map((x) => Category.fromJson(x))),
+  factory CategoryParentsData.fromJson(Map<String, dynamic> json) => CategoryParentsData(
+        selectedParentCategory: Category.fromJson(json["selectedParent"]),
+        parentCategories: List<Category>.from(json["parents"].map((x) => Category.fromJson(x))),
       );
 }
 
@@ -100,7 +100,7 @@ class Product {
         title: json["title"],
         description: json["description"] == null ? null : StringRawStringFormatted.fromJson(json["description"]),
         excerpt: json["excerpt"] == null ? null : StringRawStringFormatted.fromJson(json["excerpt"]),
-        notes: json["notes"]  == null ? null : StringRawStringFormatted.fromJson(json["notes"]),
+        notes: json["notes"] == null ? null : StringRawStringFormatted.fromJson(json["notes"]),
         customBannerText: json["customBannerText"],
         availableQuantity: json["availableQuantity"],
         unitText: json["unitText"],
@@ -168,5 +168,38 @@ class Unit {
         "id": id,
         "title": title,
         "step": step,
+      };
+}
+
+// Search Related
+ProductsResponse productsResponseFromJson(String str) => ProductsResponse.fromJson(json.decode(str));
+
+String productsResponseToJson(ProductsResponse data) => json.encode(data.toJson());
+
+class ProductsResponse {
+  ProductsResponse({
+    this.data,
+    this.errors,
+    this.message,
+    this.status,
+  });
+
+  List<Product> data;
+  String errors;
+  String message;
+  int status;
+
+  factory ProductsResponse.fromJson(Map<String, dynamic> json) => ProductsResponse(
+        data: json["data"] == null ? null : List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
+        errors: json["errors"],
+        message: json["message"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "errors": errors,
+        "message": message,
+        "status": status,
       };
 }

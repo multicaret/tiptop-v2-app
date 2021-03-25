@@ -94,19 +94,33 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
             controller: widget.productsScrollController,
             index: widget.index,
             key: ValueKey(widget.index),
-            child: GridView.count(
-              padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 3,
-              childAspectRatio: 0.45,
-              children: <Widget>[...products.map((product) => ProductItem(product: product))],
-            ),
+            child: ProductsGridView(products: products),
           ),
         ),
       ],
+    );
+  }
+}
+
+class ProductsGridView extends StatelessWidget {
+  const ProductsGridView({
+    Key key,
+    @required this.products,
+  }) : super(key: key);
+
+  final List<Product> products;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      crossAxisCount: 3,
+      childAspectRatio: 0.45,
+      children: <Widget>[...products.map((product) => ProductItem(product: product))],
     );
   }
 }

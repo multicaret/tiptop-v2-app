@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OTPStepOnePage extends StatelessWidget {
   static const routeName = '/otp-step-one';
@@ -15,6 +16,8 @@ class OTPStepOnePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      bgColor: AppColors.white,
+      bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       body: Form(
         key: _formKey,

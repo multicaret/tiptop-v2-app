@@ -23,7 +23,7 @@ class LanguageSelectPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 17),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/page-bg-pattern.png"),
+            image: AssetImage("assets/images/page-bg-pattern-white.png"),
             fit: BoxFit.cover,
           ),
         ),

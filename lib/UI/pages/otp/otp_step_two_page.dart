@@ -94,7 +94,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      try {
+      // try {
         await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
         isValid = otpProvider.validationStatus;
         isNewUser = otpProvider.isNewUser;
@@ -109,10 +109,12 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
         } else {
           showToast(msg: 'OTP Validation Failed');
         }
-      } catch (error) {
+      /*} catch (error) {
+        print("@error checkOTPValidation");
+        print(error.toString());
         showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
         throw error;
-      }
+      }*/
     }
   }
 
