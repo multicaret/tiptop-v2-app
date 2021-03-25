@@ -108,12 +108,19 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
+            sliderTheme: SliderThemeData(
+              showValueIndicator: ShowValueIndicator.never,
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+              tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
+              activeTickMarkColor: AppColors.primary,
+              inactiveTickMarkColor: AppColors.primary50,
+              activeTrackColor: AppColors.primary,
+              inactiveTrackColor: AppColors.primary50,
+              thumbColor: AppColors.primary,
+            ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: AppColors.primary,
-                textStyle: AppTextStyles.textButton
-              )
-            )
+              style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton),
+            ),
           ),
           home: app.localeSelected
               ? app.isAuth
