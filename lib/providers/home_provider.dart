@@ -5,6 +5,7 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'cart_provider.dart';
 import 'local_storage.dart';
@@ -31,6 +32,11 @@ class HomeProvider with ChangeNotifier {
 
   Future<void> fetchAndSetHomeData(AppProvider appProvider, CartProvider cartProvider) async {
     final endpoint = 'home';
+
+    if(AppProvider.latitude == null || AppProvider.longitude == null) {
+      await handleLocationPermission();
+    }
+
     final body = {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',

@@ -83,5 +83,8 @@
   "Most Searched Terms": "الكلمات الاكثر بحثاً",
   "Search Results": "نتائج البحث",
   "Add Address": "اضف عنوان",
-  "Add": "اضف"
+  "Add": "اضف",
+  "Add New Address": "اضف عنوان جديد",
+  "Use This Address": "استخدم هذا العنوان",
+  "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "سوف يتم تسليم طلبك الى الموقع الجغرافي المختار, الرجاء التحقق من موقع الدبوس المختار"
 }

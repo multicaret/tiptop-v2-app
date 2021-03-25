@@ -109,22 +109,26 @@ class Kind {
     this.id,
     this.title,
     this.icon,
+    this.markerIcon,
   });
 
   int id;
   String title;
   String icon;
+  String markerIcon;
 
   factory Kind.fromJson(Map<String, dynamic> json) => Kind(
         id: json["id"],
         title: json["title"],
         icon: json["icon"],
+        markerIcon: json["markerIcon"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "icon": icon,
+        "markerIcon": markerIcon,
       };
 }
 

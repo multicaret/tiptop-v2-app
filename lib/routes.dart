@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/about_page.dart';
+import 'package:tiptop_v2/UI/pages/add_address_step_one_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
@@ -51,4 +52,5 @@ final routes = <String, WidgetBuilder>{
   CheckoutPage.routeName: (BuildContext context) => CheckoutPage(),
   PreviousOrderPage.routeName: (BuildContext context) => PreviousOrderPage(),
   CheckOrderPage.routeName: (BuildContext context) => CheckOrderPage(),
+  AddAddressStepOnePage.routeName: (BuildContext context) => AddAddressStepOnePage(),
 };
