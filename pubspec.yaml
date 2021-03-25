@@ -55,6 +55,7 @@ dependencies:
   fluttertoast: ^8.0.3
   dismissible_page: ^0.6.1
   instabug_flutter: ^9.1.8
+  flutter_launcher_icons: ^0.9.0
 
 dev_dependencies:
   flutter_test:
@@ -98,3 +99,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "dev_assets/icon.png"

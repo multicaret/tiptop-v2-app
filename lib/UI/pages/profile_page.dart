@@ -81,7 +81,7 @@ class ProfilePage extends StatelessWidget {
     return Consumer<AppProvider>(
       builder: (c, appProvider, _) {
         Language selectedLanguage =
-            appProvider.appLanguages.firstWhere((language) => language.locale == appProvider.appLocal.languageCode, orElse: () => null);
+            appProvider.appLanguages.firstWhere((language) => language.locale == appProvider.appLocale.languageCode, orElse: () => null);
         int selectedLanguageId = selectedLanguage.id;
 
         return AppScaffold(
