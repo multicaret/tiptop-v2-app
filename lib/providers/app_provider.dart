@@ -6,7 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/user.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'local_storage.dart';
 
@@ -15,8 +17,8 @@ class AppProvider with ChangeNotifier {
 
   //  Location
   /*Todo: set these coordinates to be a proper place*/
-  static double latitude = 41.017827;
-  static double longitude = 28.971372;
+  static double latitude;
+  static double longitude;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
@@ -86,6 +88,13 @@ class AppProvider with ChangeNotifier {
     localeSelected = true;
     _appLocale = Locale(languageCode);
     return _appLocale;
+  }
+
+  Future<void> bootActions() async {
+    initInstaBug();
+    await fetchLocale();
+    await handleLocationPermission();
+    await AddressesProvider().fetchSelectedAddress();
   }
 
   Future<void> changeLanguage(String localeString) async {
