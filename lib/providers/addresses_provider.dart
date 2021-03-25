@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -41,12 +42,12 @@ class AddressesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> createAddress(AppProvider appProvider, {double lat, double long}) async {
+  Future<dynamic> createAddress(AppProvider appProvider, LatLng pickedPosition) async {
     final endpoint = 'profile/addresses/create';
 
     Map<String, String> body = {
-      'latitude': '$lat',
-      'longitude': '$long',
+      'latitude': '${pickedPosition.latitude}',
+      'longitude': '${pickedPosition.longitude}',
     };
 
     final responseData = await appProvider.get(endpoint: endpoint, body: body, withToken: true);

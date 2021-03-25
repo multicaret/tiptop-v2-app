@@ -14,6 +14,9 @@ class AddAddressMap extends StatefulWidget {
   final List<Marker> markers;
   final LatLng pickedPosition;
   final Function setPickedPosition;
+  final Function onCameraMoveStarted;
+  final Marker defaultMarker;
+  final Function setDefaultMarker;
 
   AddAddressMap({
     this.defaultZoom = 12,
@@ -22,6 +25,9 @@ class AddAddressMap extends StatefulWidget {
     this.markers,
     this.pickedPosition,
     this.setPickedPosition,
+    this.onCameraMoveStarted,
+    this.defaultMarker,
+    this.setDefaultMarker,
   });
 
   @override
@@ -30,7 +36,6 @@ class AddAddressMap extends StatefulWidget {
 
 class _AddAddressMapState extends State<AddAddressMap> {
   static LatLng _defaultMarkerPosition = LatLng(AppProvider.latitude, AppProvider.longitude);
-  Marker defaultMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,7 @@ class _AddAddressMapState extends State<AddAddressMap> {
       markers: Set.from(widget.markers),
       onMapCreated: _onMapCreated,
       onCameraMove: (_position) => _updatePosition(_position),
+      onCameraMoveStarted: widget.onCameraMoveStarted,
     );
   }
 
@@ -54,8 +60,10 @@ class _AddAddressMapState extends State<AddAddressMap> {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
       }
     }
+    final userLocation = LatLng(AppProvider.latitude, AppProvider.longitude);
+    widget.setPickedPosition(userLocation);
     final CameraPosition _cameraPosition = CameraPosition(
-      target: LatLng(AppProvider.latitude, AppProvider.longitude),
+      target: userLocation,
       zoom: widget.defaultZoom,
     );
     await controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
@@ -64,13 +72,13 @@ class _AddAddressMapState extends State<AddAddressMap> {
     if (widget.customMarkerIcon != null) {
       Uint8List markerIconBytes = await getAndCacheMarkerIcon(widget.customMarkerIcon);
 
-      defaultMarker = Marker(
+      widget.setDefaultMarker(Marker(
         markerId: MarkerId('main-marker'),
         position: _defaultMarkerPosition,
         icon: BitmapDescriptor.fromBytes(markerIconBytes),
-      );
+      ));
 
-      widget.setMarkersArray([defaultMarker]);
+      widget.setMarkersArray([widget.defaultMarker]);
     }
   }
 
@@ -81,9 +89,9 @@ class _AddAddressMapState extends State<AddAddressMap> {
     double pickedLng = newMarkerPosition.longitude;
     widget.setPickedPosition(LatLng(pickedLat, pickedLng));
 
-    if (defaultMarker != null) {
-      defaultMarker = defaultMarker.copyWith(positionParam: widget.pickedPosition);
-      widget.setMarkersArray([defaultMarker]);
+    if (widget.defaultMarker != null) {
+      widget.setDefaultMarker(widget.defaultMarker.copyWith(positionParam: widget.pickedPosition));
+      widget.setMarkersArray([widget.defaultMarker]);
     }
   }
 }

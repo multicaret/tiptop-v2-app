@@ -88,5 +88,9 @@
   "Preparing": "قيد التحضير",
   "On the way": "على الطريق",
   "At the address": "بالقرب من العنوان",
-  "Delivered": "تم التوصيل"
+  "Delivered": "تم التوصيل",
+  "Address Title (Home, Work)": "اسم العنوان (منزل/عمل)",
+  "Directions": "تعليمات",
+  "Are you sure you want to change your pin location? Your entered data will be lost": "هل أنت متأكد من أنك تريد تغيير موقع الدبوس؟ سوف تخسر المعلومات التي أدخلتها",
+  "General explanation on how to find you": "شرح عام عن كيفية الوصول لك"
 }
