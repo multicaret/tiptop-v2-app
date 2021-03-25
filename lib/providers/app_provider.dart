@@ -228,7 +228,7 @@ class AppProvider with ChangeNotifier {
       print('Not logged in! (No local storage key)');
       return;
     }
-    var userDataString = await storageActions.getDataType(key: 'userData', type: String);
+    var userDataString = await storageActions.getDataOfType(key: 'userData', type: String);
     final responseData = json.decode(userDataString) as Map<String, dynamic>;
     authUser = User.fromJson(json.decode(responseData['data']));
     userId = LocalStorage.userId = responseData['userId'];

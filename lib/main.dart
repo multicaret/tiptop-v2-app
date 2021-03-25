@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
@@ -23,8 +24,10 @@ void main() async {
       // Uncomment when you want to clear local storage on app launch
       // LocalStorage().clear();
       AppProvider appProvider = AppProvider();
+      AddressesProvider addressesProvider = AddressesProvider();
       appProvider.initInstaBug();
       await appProvider.fetchLocale();
+      await addressesProvider.fetchSelectedAddress();
       runApp(MyApp(
         appProvider: appProvider,
       ));

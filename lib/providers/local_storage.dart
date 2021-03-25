@@ -62,7 +62,7 @@ class LocalStorage {
     return _pref.get(key);
   }
 
-  dynamic getDataType({String key, Type type}) {
+  dynamic getDataOfType({String key, Type type}) {
     if (type is String) {
       return _pref.getString(key);
     } else if (type is List<String>) {

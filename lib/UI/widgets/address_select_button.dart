@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -28,13 +31,14 @@ class AddressSelectButton extends StatelessWidget {
     String appDir = appProvider.dir;
     Size screenSize = MediaQuery.of(context).size;
 
-    return Consumer<HomeProvider>(
-      builder: (c, homeProvider, _) {
+    return Consumer2<HomeProvider, AddressesProvider>(
+      builder: (c, homeProvider, addressesProvider, _) {
         bool showSelectAddress = isLoadingHomeData ||
             homeProvider.noBranchFound ||
             homeProvider.homeDataRequestError ||
-            !appProvider.isAuth ||
-            homeProvider.estimatedArrivalTime == null;
+            homeProvider.estimatedArrivalTime == null ||
+            !addressesProvider.addressIsSelected ||
+            !appProvider.isAuth;
 
         return Container(
           decoration: BoxDecoration(
@@ -114,9 +118,17 @@ class AddressSelectButton extends StatelessWidget {
                               alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
                             ),
                             onTap: () {
-                              //Todo: run this code and show this button also when user is logged in but no address is selected
-                              showToast(msg: 'You need to log in first!');
-                              Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+                              if (appProvider.isAuth) {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(
+                                    fullscreenDialog: true,
+                                    builder: (c) => AddressesPage(),
+                                  ),
+                                );
+                              } else {
+                                showToast(msg: 'You need to log in first!');
+                                Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+                              }
                             },
                           )
                         : Row(
