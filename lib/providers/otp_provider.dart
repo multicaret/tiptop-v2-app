@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/otp.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -34,9 +36,11 @@ class OTPProvider with ChangeNotifier {
   Future<void> checkOTPValidation(AppProvider appProvider, String reference, String phoneCountryCode, String phoneNumber) async {
     print('reference in check: $reference');
     final endpoint = 'otp/check-validation/$reference';
+    var mobileApp = await appProvider.loadMobileAppData();
     final body = {
       'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
+      'mobile_app': json.encode(mobileApp),
     };
 
     final responseData = await AppProvider().get(

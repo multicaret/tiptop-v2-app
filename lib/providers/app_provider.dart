@@ -1,8 +1,12 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/user.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 
 import 'local_storage.dart';
 
@@ -221,4 +225,36 @@ class AppProvider with ChangeNotifier {
   }
 
   void isAttemptingRequestWithExpiredToken() {}
+
+  Future<PackageInfo> getDeviceData() async {
+    return await PackageInfo.fromPlatform();
+  }
+
+  Future<Map<String, dynamic>> initPlatformState() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    Map<String, dynamic> deviceData = <String, dynamic>{};
+
+    try {
+      if (Platform.isAndroid) {
+        deviceData = readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      } else if (Platform.isIOS) {
+        deviceData = readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+      }
+    } on PlatformException {
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+    return deviceData;
+  }
+
+
+  Future<Map<String, dynamic>> loadMobileAppData() async {
+    PackageInfo deviceData = await getDeviceData();
+    Map<String, dynamic> platformState = await initPlatformState();
+
+    return getMobileApp(deviceData, platformState);
+
+  }
+
 }

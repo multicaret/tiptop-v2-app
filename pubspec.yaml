@@ -53,6 +53,8 @@ dependencies:
   visibility_detector: ^0.1.5
   lottie: ^1.0.1
   fluttertoast: ^7.1.8
+  package_info: ^2.0.0
+  device_info: ^2.0.0
 
 dev_dependencies:
   flutter_test:
