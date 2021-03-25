@@ -71,43 +71,59 @@ class _MyAppState extends State<MyApp> {
           locale: app.appLocale,
           supportedLocales: app.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
           theme: ThemeData(
-              primarySwatch: Colors.blue,
-              primaryColor: AppColors.primary,
-              accentColor: AppColors.secondary,
-              scaffoldBackgroundColor: Colors.transparent,
-              fontFamily: 'NeoSansArabic',
+            primarySwatch: Colors.blue,
+            primaryColor: AppColors.primary,
+            accentColor: AppColors.secondary,
+            scaffoldBackgroundColor: Colors.transparent,
+            fontFamily: 'NeoSansArabic',
+            textTheme: TextTheme(
+              headline1: AppTextStyles.h2,
+              button: AppTextStyles.button,
+              bodyText1: AppTextStyles.body,
+              bodyText2: AppTextStyles.body, //Default style everywhere, e.g. Text widget
+            ),
+            appBarTheme: AppBarTheme(
+              centerTitle: true,
+              color: Colors.transparent,
+              shadowColor: Colors.transparent,
               textTheme: TextTheme(
                 headline1: AppTextStyles.h2,
-                button: AppTextStyles.button,
+                headline6: AppTextStyles.h2,
                 bodyText1: AppTextStyles.body,
-                bodyText2: AppTextStyles.body, //Default style everywhere, e.g. Text widget
               ),
-              appBarTheme: AppBarTheme(
-                centerTitle: true,
-                color: Colors.transparent,
-                shadowColor: Colors.transparent,
-                textTheme: TextTheme(
-                  headline1: AppTextStyles.h2,
-                  headline6: AppTextStyles.h2,
-                  bodyText1: AppTextStyles.body,
-                ),
-                iconTheme: IconThemeData(color: AppColors.primary, size: 20),
-                actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
-              ),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                  primary: AppColors.primary,
-                  onPrimary: AppColors.white,
-                  minimumSize: Size.fromHeight(55),
-                  textStyle: AppTextStyles.button,
-                  elevation: 4,
-                  shadowColor: AppColors.shadowDark,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(8.0),
-                  ),
+              iconTheme: IconThemeData(color: AppColors.primary, size: 20),
+              actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.primary,
+                onPrimary: AppColors.white,
+                minimumSize: Size.fromHeight(55),
+                textStyle: AppTextStyles.button,
+                elevation: 4,
+                shadowColor: AppColors.shadowDark,
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(8.0),
                 ),
               ),
-              textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton))),
+            ),
+            sliderTheme: SliderThemeData(
+              showValueIndicator: ShowValueIndicator.never,
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+              tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
+              activeTickMarkColor: AppColors.primary,
+              inactiveTickMarkColor: AppColors.primary50,
+              activeTrackColor: AppColors.primary,
+              inactiveTrackColor: AppColors.primary50,
+              thumbColor: AppColors.primary,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.primary,
+                textStyle: AppTextStyles.textButton
+              )
+            )
+          ),
           home: app.localeSelected
               ? app.isAuth
                   ? AppWrapper()
