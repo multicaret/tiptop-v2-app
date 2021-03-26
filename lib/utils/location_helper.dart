@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -141,4 +142,12 @@ Future<Uint8List> getAndCacheMarkerIcon(String imageUrl) async {
 
   final Uint8List resizedMarkerImageBytes = byteData.buffer.asUint8List();
   return resizedMarkerImageBytes;
+}
+
+Future<Uint8List> getBytesFromAsset(String path) async {
+  final int targetWidth = 180;
+  ByteData data = await rootBundle.load(path);
+  Codec codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: targetWidth);
+  FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ImageByteFormat.png)).buffer.asUint8List();
 }

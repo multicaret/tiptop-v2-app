@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,12 +11,14 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class TrackOrderPage extends StatefulWidget {
   static const routeName = '/track-order';
+
   @override
   _TrackOrderPageState createState() => _TrackOrderPageState();
 }
@@ -32,8 +36,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   double sliderValue = 1;
   double leftPosition = 30;
 
-  BitmapDescriptor orderIcon;
-  BitmapDescriptor homeIcon;
+  Marker homeMarker;
+  Marker marketMarker;
   List<Marker> allMarkers = [];
 
   @override
@@ -44,9 +48,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       centerLat = (HomeProvider.branchLat + AppProvider.latitude) / 2;
       centerLong = (HomeProvider.branchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
-
-      BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'assets/images/home_pin.png').then((value) => homeIcon = value);
-      BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'assets/images/home_pin.png').then((value) => orderIcon = value);
     }
 
     _isInit = false;
@@ -68,13 +69,14 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       ),
       body: Column(
         children: [
-          AddressSelectButton(),
+          AddressSelectButton(isDisabled: true),
           Expanded(
             child: Stack(
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height,
                   child: GoogleMap(
+                    myLocationButtonEnabled: false,
                     initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
                     mapType: MapType.normal,
                     markers: Set.from(allMarkers),
@@ -238,25 +240,26 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
     );
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    Uint8List homeMarkerIconBytes = await getBytesFromAsset('assets/images/address-home-marker-icon.png');
+    Uint8List marketMarkerIconBytes = await getBytesFromAsset('assets/images/tiptop-marker-icon.png');
+
     setState(() {
+      homeMarker = Marker(
+        markerId: MarkerId('Home'),
+        draggable: false,
+        icon: BitmapDescriptor.fromBytes(homeMarkerIconBytes),
+        position: LatLng(AppProvider.latitude, AppProvider.longitude),
+      );
+      marketMarker = Marker(
+        markerId: MarkerId('Market'),
+        draggable: false,
+        icon: BitmapDescriptor.fromBytes(marketMarkerIconBytes),
+        position: LatLng(HomeProvider.branchLat, HomeProvider.branchLong),
+      );
       // add marker
-      allMarkers.add(
-        Marker(
-          markerId: MarkerId('Home'),
-          draggable: false,
-          icon: orderIcon,
-          position: LatLng(AppProvider.latitude, AppProvider.longitude),
-        ),
-      );
-      allMarkers.add(
-        Marker(
-          markerId: MarkerId('Order'),
-          draggable: false,
-          icon: homeIcon,
-          position: LatLng(HomeProvider.branchLat, HomeProvider.branchLong),
-        ),
-      );
+      allMarkers.add(homeMarker);
+      allMarkers.add(marketMarker);
     });
   }
 }
