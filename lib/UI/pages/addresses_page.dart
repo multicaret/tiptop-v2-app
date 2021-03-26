@@ -12,6 +12,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressesPage extends StatefulWidget {
   static const routeName = '/my-addresses';
@@ -65,6 +66,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    ..._getAddressesItems(),
                     SectionTitle('Add Address'),
                     ..._getAddressKindsList(),
                   ],
@@ -72,6 +74,51 @@ class _AddressesPageState extends State<AddressesPage> {
               ),
             ),
     );
+  }
+
+  List<Widget> _getAddressesItems() {
+    return List.generate(addresses.length, (i) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.border)),
+          color: AppColors.white,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  AddressIcon(
+                    isRTL: appProvider.isRTL,
+                    icon: addresses[i].kind.icon,
+                    isAsset: false,
+                  ),
+                  Text(addresses[i].kind.title),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      addresses[i].address1,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.body50,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                //Todo: implement deleting address
+              },
+              child: AppIcon.icon(FontAwesomeIcons.trashAlt),
+              style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   List<Widget> _getAddressKindsList() {
