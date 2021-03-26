@@ -21,6 +21,7 @@ class AddressSelectButton extends StatelessWidget {
   final String addressKindIcon;
   final String addressKindTitle;
   final String addressText;
+  final bool forceAddressView;
 
   AddressSelectButton({
     this.isLoadingHomeData = false,
@@ -29,6 +30,7 @@ class AddressSelectButton extends StatelessWidget {
     this.addressKindIcon,
     this.addressKindTitle,
     this.addressText,
+    this.forceAddressView = false,
   });
 
   @override
@@ -108,17 +110,19 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
+                  width: forceAddressView && (showSelectAddress || !hasETA) ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
-                    onTap: isDisabled ? null : () {
-                      if (appProvider.isAuth) {
-                        Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
-                      } else {
-                        showToast(msg: 'You need to log in first!');
-                        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
-                      }
-                    },
-                    child: showSelectAddress
+                    onTap: isDisabled
+                        ? null
+                        : () {
+                            if (appProvider.isAuth) {
+                              Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+                            } else {
+                              showToast(msg: 'You need to log in first!');
+                              Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+                            }
+                          },
+                    child: showSelectAddress && !forceAddressView
                         ? Container(
                             child: Text(
                               Translations.of(context).get('Select Address'),
