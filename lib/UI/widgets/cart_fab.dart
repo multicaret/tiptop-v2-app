@@ -9,6 +9,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'dart:io' show Platform;
 
 class CartFAB extends StatelessWidget {
   @override
@@ -22,7 +23,6 @@ class CartFAB extends StatelessWidget {
           right: 0,
           left: 0,
           child: GestureDetector(
-            //Todo: implement no cart view
             onTap: hideCart
                 ? null
                 : () {
@@ -39,7 +39,7 @@ class CartFAB extends StatelessWidget {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 30),
+                    margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 10),
                     height: 75,
                     width: 75,
                     decoration: BoxDecoration(
@@ -53,7 +53,7 @@ class CartFAB extends StatelessWidget {
                   ),
                   if (cartProvider.cartProductsCount > 0 && !hideCart)
                     Positioned(
-                      bottom: 30,
+                      bottom: Platform.isIOS ? 30 : 10,
                       right: 0,
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 200),

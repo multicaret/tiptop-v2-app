@@ -29,8 +29,8 @@ class WalkthroughPage extends StatelessWidget {
           Container(
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
+                TextButton(
+                  onPressed: () {
                     getLocationPermissionStatus().then((isGranted) {
                       Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
                     });
@@ -47,21 +47,21 @@ class WalkthroughPage extends StatelessWidget {
                   child: Text(Translations.of(context).get('Register')),
                 ),
                 SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(Translations.of(context).get('Already have an account?')),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(OTPStepOnePage.routeName);
-                      },
-                      child: Text(
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(OTPStepOnePage.routeName);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(Translations.of(context).get('Already have an account?')),
+                      SizedBox(width: 5),
+                      Text(
                         Translations.of(context).get('Login'),
                         style: AppTextStyles.bodySecondaryDark,
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

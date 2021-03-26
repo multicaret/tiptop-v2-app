@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/products_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/category_item.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
+import 'package:tiptop_v2/UI/widgets/home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
@@ -96,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                 child: RefreshIndicator(
                   onRefresh: fetchAndSetHomeData,
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(bottom: 50.0),
                     physics: AlwaysScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -123,43 +123,31 @@ class _HomePageState extends State<HomePage> {
                               hideContent
                                   //Todo: Add no content screen (with error text for error and dynamic text for no branch)
                                   ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 50),
-                                      child: homeProvider.noBranchFound
-                                          ? Text('No Branch Found')
-                                          : homeProvider.homeDataRequestError
-                                              //Todo: translate this string/reconsider what to do
-                                              ? Text('An error occurred! Please try again later')
-                                              : AppLoader(),
-                                    )
-                                  : GridView.count(
-                                      padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
-                                      shrinkWrap: true,
-                                      childAspectRatio: 0.78,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 15,
-                                      mainAxisSpacing: 16,
-                                      children: categories
-                                          .map((category) => GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    CupertinoPageRoute<void>(
-                                                      builder: (BuildContext context) => ProductsPage(
-                                                        selectedParentCategoryId: category.id,
-                                                        parents: categories,
-                                                        refreshHomeData: fetchAndSetHomeData,
-                                                        isLoadingHomeData: isLoadingHomeData,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: CategoryItem(
-                                                  title: category.title,
-                                                  imageUrl: category.cover,
-                                                ),
-                                              ))
-                                          .toList(),
-                                    )
+                                      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 17.0),
+                                      child: Container(
+                                        padding: EdgeInsets.all(15.0),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            homeProvider.noBranchFound
+                                                ? Text('No Branch Found')
+                                                : homeProvider.homeDataRequestError
+                                                    //Todo: translate this string/reconsider what to do
+                                                    ? Text('An error occurred! Please try again later')
+                                                    : AppLoader(),
+                                            SizedBox(height: 15),
+                                            Image.asset('assets/images/empty_products.png'),
+                                          ],
+                                        ),
+                                      ))
+                                  : HomeCategoriesGrid(
+                                      categories: categories,
+                                      fetchAndSetHomeData: fetchAndSetHomeData,
+                                      isLoadingHomeData: isLoadingHomeData,
+                                    ),
                             ],
                           ),
                       ],

@@ -37,7 +37,7 @@ class AppBarCartTotal extends StatelessWidget {
             child: Container(
               width: 130,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(left: appProvider.isRTL ? 10 : 0, right: appProvider.isRTL ? 0 : 10),
+              margin: EdgeInsets.symmetric(horizontal: 10),
               child: Stack(
                 children: [
                   Positioned(
