@@ -27,7 +27,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   double centerLong;
   LatLng initCameraPosition;
 
-  double defaultZoom = 4.0;
+  double defaultZoom = 12.0;
 
   double sliderValue = 1;
   double leftPosition = 30;
