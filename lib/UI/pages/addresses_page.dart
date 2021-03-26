@@ -93,6 +93,10 @@ class _AddressesPageState extends State<AddressesPage> {
       ),
     );
     if (response != null && response) {
+      if(!cartProvider.noCart) {
+        await cartProvider.clearCart(appProvider, homeProvider);
+        print('cart cleared as well :( ');
+      }
       await addressesProvider.deleteAddress(appProvider, _addressId);
       _fetchAndSetAddresses();
       showToast(msg: 'Successfully deleted address!');
