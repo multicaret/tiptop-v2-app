@@ -1,3 +1,4 @@
+import 'address.dart';
 import 'cart.dart';
 import 'models.dart';
 
@@ -148,6 +149,7 @@ class PreviousOrdersResponseData {
 class Order {
   Order({
     this.id,
+    this.address,
     this.completedAt,
     this.deliveryFee,
     this.grandTotal,
@@ -156,6 +158,7 @@ class Order {
   });
 
   int id;
+  Address address;
   EdAt completedAt;
   DoubleRawIntFormatted deliveryFee;
   DoubleRawIntFormatted grandTotal;
@@ -164,6 +167,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
+        address: Address.fromJson(json["address"]),
         completedAt: EdAt.fromJson(json["completedAt"]),
         deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
@@ -173,10 +177,11 @@ class Order {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "completedAt": completedAt,
-        "deliveryFee": deliveryFee,
-        "grandTotal": grandTotal,
-        "cart": cart,
-        "paymentMethod": paymentMethod,
+        "address": address.toJson(),
+        "completedAt": completedAt.toJson(),
+        "deliveryFee": deliveryFee.toJson(),
+        "grandTotal": grandTotal.toJson(),
+        "cart": cart.toJson(),
+        "paymentMethod": paymentMethod.toJson(),
       };
 }
