@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               HomeLiveTracking(isRTL: appProvider.isRTL),
                               hideContent
+                              //Todo: Add no content screen (with error text for error and dynamic text for no branch)
                                   ? Padding(
                                       padding: EdgeInsets.symmetric(vertical: 50),
                                       child: homeProvider.noBranchFound
