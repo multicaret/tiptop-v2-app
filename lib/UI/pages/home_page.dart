@@ -10,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/map_slide.dart';
+import 'package:tiptop_v2/UI/widgets/no_content_view.dart';
 import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       bodyPadding: EdgeInsets.all(0),
       body: Consumer<HomeProvider>(
         builder: (c, homeProvider, _) {
-          bool hideContent = isLoadingHomeData || homeProvider.homeDataRequestError || homeProvider.noBranchFound;
+          bool hideContent = homeProvider.homeDataRequestError || homeProvider.noBranchFound;
           return Column(
             children: [
               AddressSelectButton(isLoadingHomeData: isLoadingHomeData),
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        hideContent
+                        hideContent || isLoadingHomeData
                             ? Container(
                                 height: HomePage.sliderHeight,
                                 color: AppColors.bg,
@@ -121,33 +122,19 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               HomeLiveTracking(isRTL: appProvider.isRTL),
                               hideContent
-                                  //Todo: Add no content screen (with error text for error and dynamic text for no branch)
-                                  ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 17.0),
-                                      child: Container(
-                                        padding: EdgeInsets.all(15.0),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.circular(8.0),
+                                  ? NoContentView(
+                                      text: homeProvider.noBranchFound
+                                          ? 'No Branch Found'
+                                          : homeProvider.homeDataRequestError
+                                              ? 'An error occurred! Please try again later'
+                                              : '')
+                                  : isLoadingHomeData
+                                      ? AppLoader()
+                                      : HomeCategoriesGrid(
+                                          categories: categories,
+                                          fetchAndSetHomeData: fetchAndSetHomeData,
+                                          isLoadingHomeData: isLoadingHomeData,
                                         ),
-                                        child: Column(
-                                          children: [
-                                            homeProvider.noBranchFound
-                                                ? Text('No Branch Found')
-                                                : homeProvider.homeDataRequestError
-                                                    //Todo: translate this string/reconsider what to do
-                                                    ? Text('An error occurred! Please try again later')
-                                                    : AppLoader(),
-                                            SizedBox(height: 15),
-                                            Image.asset('assets/images/empty_products.png'),
-                                          ],
-                                        ),
-                                      ))
-                                  : HomeCategoriesGrid(
-                                      categories: categories,
-                                      fetchAndSetHomeData: fetchAndSetHomeData,
-                                      isLoadingHomeData: isLoadingHomeData,
-                                    ),
                             ],
                           ),
                       ],
