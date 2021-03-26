@@ -12,6 +12,7 @@ import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -35,6 +36,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
+  AddressesProvider addressesProvider;
+
   CheckoutData checkoutData;
   List<Map<String, String>> totals = [];
   Order submittedOrder;
@@ -73,6 +76,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
+      addressesProvider = Provider.of<AddressesProvider>(context);
       _createOrderAndGetCheckoutData();
     }
     _isInit = false;
@@ -155,6 +159,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         appProvider,
         homeProvider,
         cartProvider,
+        addressesProvider,
         paymentMethodId: selectedPaymentMethodId,
         notes: notes,
       );

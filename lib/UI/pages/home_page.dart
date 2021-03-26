@@ -13,6 +13,7 @@ import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -41,21 +42,22 @@ class _HomePageState extends State<HomePage> {
   AppProvider appProvider;
   HomeProvider homeProvider;
   CartProvider cartProvider;
+  AddressesProvider addressesProvider;
 
   EstimatedArrivalTime estimatedArrivalTime;
-  List<Category> categories;
-  List<Slide> slides;
+  List<Category> categories = [];
+  List<Slide> slides = [];
 
   String currentView = 'market';
 
   Future<void> fetchAndSetHomeData() async {
-    setState(() => isLoadingHomeData = true);
     try {
-      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider);
+      setState(() => isLoadingHomeData = true);
+      await addressesProvider.fetchSelectedAddress();
+      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
       slides = homeProvider.homeData.slides;
-
       setState(() => isLoadingHomeData = false);
     } catch (e) {
       //Todo: translate this string/reconsider what to do
@@ -71,6 +73,7 @@ class _HomePageState extends State<HomePage> {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
+      addressesProvider = Provider.of<AddressesProvider>(context);
       fetchAndSetHomeData();
     }
     _isInit = false;

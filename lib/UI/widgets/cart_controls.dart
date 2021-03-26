@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -33,7 +35,7 @@ class CartControls extends StatefulWidget {
 class _CartControlsState extends State<CartControls> {
   AppProvider appProvider;
   HomeProvider homeProvider;
-  CartProvider cartProvider;
+  AddressesProvider addressesProvider;
   bool _isInit = true;
 
   @override
@@ -41,6 +43,7 @@ class _CartControlsState extends State<CartControls> {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      addressesProvider = Provider.of<AddressesProvider>(context);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -50,6 +53,9 @@ class _CartControlsState extends State<CartControls> {
     if (!appProvider.isAuth) {
       showToast(msg: 'You Need to Log In First!');
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+    } else if (!addressesProvider.addressIsSelected) {
+      showToast(msg: 'You Need to Select Address First!');
+      Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
       await cartProvider.addRemoveProduct(
@@ -68,82 +74,84 @@ class _CartControlsState extends State<CartControls> {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (17 * 2)) / 3;
 
-    return Consumer<CartProvider>(builder: (c, cartProvider, _) {
-      int quantity = cartProvider.getProductQuantity(widget.product.id);
-      bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
-          ? false
-          : cartProvider.requestedMoreThanAvailableQuantity[widget.product.id];
-      return Stack(
-        children: [
-          //Quantity
-          Positioned(
-            left: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
-            height: widget.cartButtonHeight,
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              width: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
+    return Consumer<CartProvider>(
+      builder: (c, cartProvider, _) {
+        int quantity = cartProvider.getProductQuantity(widget.product.id);
+        bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
+            ? false
+            : cartProvider.requestedMoreThanAvailableQuantity[widget.product.id];
+        return Stack(
+          children: [
+            //Quantity
+            Positioned(
+              left: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
               height: widget.cartButtonHeight,
-              decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(quantity == 0 ? 10 : 0), boxShadow: [
-                BoxShadow(blurRadius: 6, color: AppColors.shadow),
-              ]),
-              child: Center(
-                child: Text(
-                  quantity == 0 ? '' : '$quantity',
-                  style: quantity.toString().length >= 2 ? AppTextStyles.subtitleXsBold : AppTextStyles.subtitleBold,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-            ),
-          ),
-          //Remove Button
-          buttonAnimatedContainer(
-            context: context,
-            action: CartAction.REMOVE,
-            isRTL: appProvider.isRTL,
-            screenThirdWidth: screenThirdWidth,
-            quantity: quantity,
-            cartProvider: cartProvider,
-          ),
-          //Add Button
-          buttonAnimatedContainer(
-            context: context,
-            action: CartAction.ADD,
-            isRTL: appProvider.isRTL,
-            screenThirdWidth: screenThirdWidth,
-            quantity: quantity,
-            disableAddition: disableAddition,
-            cartProvider: cartProvider,
-          ),
-          if (widget.isModalControls)
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 300),
-              right: 0,
-              left: 0,
-              top: quantity == 0 ? 0 : widget.cartButtonHeight,
-              bottom: quantity == 0 ? 0 : -widget.cartButtonHeight,
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
-                opacity: quantity == 0 ? 1 : 0,
-                child: ElevatedButton(
-                  onPressed: () => editCartAction(CartAction.ADD, cartProvider),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppIcon.iconWhite(LineAwesomeIcons.shopping_cart),
-                      SizedBox(width: 5),
-                      Text(
-                        'Add to Cart',
-                        style: AppTextStyles.button,
-                      ),
-                    ],
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                width: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
+                height: widget.cartButtonHeight,
+                decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(quantity == 0 ? 10 : 0), boxShadow: [
+                  BoxShadow(blurRadius: 6, color: AppColors.shadow),
+                ]),
+                child: Center(
+                  child: Text(
+                    quantity == 0 ? '' : '$quantity',
+                    style: quantity.toString().length >= 2 ? AppTextStyles.subtitleXsBold : AppTextStyles.subtitleBold,
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
                   ),
                 ),
               ),
             ),
-        ],
-      );
-    });
+            //Remove Button
+            buttonAnimatedContainer(
+              context: context,
+              action: CartAction.REMOVE,
+              isRTL: appProvider.isRTL,
+              screenThirdWidth: screenThirdWidth,
+              quantity: quantity,
+              cartProvider: cartProvider,
+            ),
+            //Add Button
+            buttonAnimatedContainer(
+              context: context,
+              action: CartAction.ADD,
+              isRTL: appProvider.isRTL,
+              screenThirdWidth: screenThirdWidth,
+              quantity: quantity,
+              disableAddition: disableAddition,
+              cartProvider: cartProvider,
+            ),
+            if (widget.isModalControls)
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 300),
+                right: 0,
+                left: 0,
+                top: quantity == 0 ? 0 : widget.cartButtonHeight,
+                bottom: quantity == 0 ? 0 : -widget.cartButtonHeight,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: quantity == 0 ? 1 : 0,
+                  child: ElevatedButton(
+                    onPressed: () => editCartAction(CartAction.ADD, cartProvider),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppIcon.iconWhite(LineAwesomeIcons.shopping_cart),
+                        SizedBox(width: 5),
+                        Text(
+                          'Add to Cart',
+                          style: AppTextStyles.button,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
   }
 
   double getLeftOffset(CartAction action, bool isRTL, double cartButtonHeight, int quantity) {

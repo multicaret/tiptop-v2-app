@@ -85,6 +85,9 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
             AddressSelectButton(
               isDisabled: true,
               hasETA: false,
+              addressKindIcon: order.address.kind.icon,
+              addressKindTitle: order.address.kind.title,
+              addressText: order.address.address1,
             ),
             Expanded(
               child: SingleChildScrollView(

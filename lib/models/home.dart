@@ -16,7 +16,7 @@ class HomeDataResponse {
   });
 
   HomeData homeData;
-  String errors;
+  dynamic errors;
   String message;
   int status;
 

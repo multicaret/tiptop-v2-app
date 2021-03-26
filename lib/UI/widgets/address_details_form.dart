@@ -6,7 +6,9 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class AddressDetailsForm extends StatelessWidget {
+import 'input/address_icon_dropdown.dart';
+
+class AddressDetailsForm extends StatefulWidget {
   final Map<String, dynamic> addressDetailsFormData;
   final Kind selectedKind;
   final GlobalKey<FormState> formKey;
@@ -14,6 +16,7 @@ class AddressDetailsForm extends StatelessWidget {
   final CreateAddressData createAddressData;
   final Function setRegionId;
   final Function setCityId;
+  final Function setKindId;
 
   AddressDetailsForm({
     @required this.addressDetailsFormData,
@@ -23,25 +26,48 @@ class AddressDetailsForm extends StatelessWidget {
     @required this.createAddressData,
     @required this.setRegionId,
     @required this.setCityId,
+    @required this.setKindId,
   });
 
   @override
-  Widget build(BuildContext context) {
-    List<Map<String, dynamic>> regionsDropDownItems = createAddressData == null
-        ? []
-        : createAddressData.regions
-            .map((region) => {
-                  'id': region.id,
-                  'name': region.name.translated
-                })
-            .toList();
+  _AddressDetailsFormState createState() => _AddressDetailsFormState();
+}
 
-    List<Map<String, dynamic>> citiesDropDownItems = createAddressData == null
+class _AddressDetailsFormState extends State<AddressDetailsForm> {
+  TextEditingController addressAliasFieldController = new TextEditingController();
+
+  @override
+  void initState() {
+    addressAliasFieldController.text = widget.selectedKind.title;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    addressAliasFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Map<String, dynamic>> regionsDropDownItems =
+        widget.createAddressData == null ? [] : widget.createAddressData.regions.map((region) => {'id': region.id, 'name': region.name.translated}).toList();
+
+    List<Map<String, dynamic>> citiesDropDownItems = widget.createAddressData == null
         ? []
-        : createAddressData.cities
+        : widget.createAddressData.cities
             .map((city) => {
                   'id': city.id,
                   'name': city.name.translated,
+                })
+            .toList();
+
+    List<Map<String, dynamic>> iconsItems = widget.createAddressData == null
+        ? []
+        : widget.createAddressData.kinds
+            .map((kind) => {
+                  'id': kind.id,
+                  'icon_url': kind.icon,
                 })
             .toList();
 
@@ -61,44 +87,59 @@ class AddressDetailsForm extends StatelessWidget {
           topRight: Radius.circular(40),
         ),
         child: Form(
-          key: formKey,
+          key: widget.formKey,
           child: SingleChildScrollView(
             padding: EdgeInsets.only(left: 17, right: 17, top: 40, bottom: 40),
             child: Column(
               children: [
-                AppTextField(
-                  labelText: 'Address Title (Home, Work)',
-                  initialValue: selectedKind == null ? '' : selectedKind.title,
-                  required: true,
-                  onSaved: (value) {
-                    addressDetailsFormData['alias'] = value;
-                  },
+                Row(
+                  children: [
+                    AddressIconDropDown(
+                      currentIcon: widget.addressDetailsFormData['kind'],
+                      iconItems: iconsItems,
+                      onChanged: (id) {
+                        widget.setKindId(id);
+                        addressAliasFieldController.text = widget.createAddressData.kinds.firstWhere((kind) => kind.id == id).title;
+                      },
+                    ),
+                    Expanded(
+                      child: AppTextField(
+                        controller: addressAliasFieldController,
+                        labelText: 'Address Title (Home, Work)',
+                        hintText: widget.selectedKind == null ? '' : widget.selectedKind.title,
+                        required: true,
+                        onSaved: (value) {
+                          widget.addressDetailsFormData['alias'] = value;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 AppDropDownButton(
                   labelText: 'City',
-                  defaultValue: addressDetailsFormData['region_id'],
+                  defaultValue: widget.addressDetailsFormData['region_id'],
                   items: regionsDropDownItems,
-                  onChanged: (id) => setRegionId(id),
+                  onChanged: (id) => widget.setRegionId(id),
                 ),
                 AppDropDownButton(
                   labelText: 'Neighborhood',
-                  defaultValue: addressDetailsFormData['city_id'],
+                  defaultValue: widget.addressDetailsFormData['city_id'],
                   items: citiesDropDownItems,
-                  onChanged: (id) => setCityId(id),
+                  onChanged: (id) => widget.setCityId(id),
                 ),
                 AppTextField(
                   labelText: 'Address',
                   required: true,
                   maxLines: 3,
                   onSaved: (value) {
-                    addressDetailsFormData['address1'] = value;
+                    widget.addressDetailsFormData['address1'] = value;
                   },
                 ),
                 AppTextField(
                   labelText: 'Directions',
                   hintText: 'General explanation on how to find you',
                   onSaved: (value) {
-                    addressDetailsFormData['notes'] = value;
+                    widget.addressDetailsFormData['notes'] = value;
                   },
                 ),
                 ElevatedButton(
@@ -106,7 +147,7 @@ class AddressDetailsForm extends StatelessWidget {
                     primary: AppColors.secondaryDark,
                     onPrimary: AppColors.primary,
                   ),
-                  onPressed: submitForm,
+                  onPressed: widget.submitForm,
                   child: Text(Translations.of(context).get('Save')),
                 ),
               ],

@@ -213,7 +213,6 @@ class City {
 class Country {
   Country({
     this.id,
-    this.nameEnglish,
     this.name,
     this.alpha2Code,
     this.alpha3Code,
@@ -225,8 +224,7 @@ class Country {
   });
 
   int id;
-  String nameEnglish;
-  String name;
+  Name name;
   String alpha2Code;
   String alpha3Code;
   int numericCode;
@@ -237,8 +235,7 @@ class Country {
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
         id: json["id"],
-        nameEnglish: json["nameEnglish"],
-        name: json["name"],
+        name: Name.fromJson(json["name"]),
         alpha2Code: json["alpha2Code"],
         alpha3Code: json["alpha3Code"],
         numericCode: json["numericCode"],
@@ -250,8 +247,7 @@ class Country {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "nameEnglish": nameEnglish,
-        "name": name,
+        "name": name.toJson(),
         "alpha2Code": alpha2Code,
         "alpha3Code": alpha3Code,
         "numericCode": numericCode,

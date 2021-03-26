@@ -8,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/previous_order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
@@ -24,11 +25,12 @@ class _PreviousOrdersPageState extends State<PreviousOrdersPage> {
 
   OrdersProvider ordersProvider;
   AppProvider appProvider;
+  HomeProvider homeProvider;
   List<Order> previousOrders = [];
 
   Future<void> _fetchAndSetPreviousOrders() async {
     setState(() => _isLoadingPreviousOrders = true);
-    final response = await ordersProvider.fetchAndSetPreviousOrders(appProvider);
+    final response = await ordersProvider.fetchAndSetPreviousOrders(appProvider, homeProvider);
     if (response == 401) {
       showToast(msg: 'You need to log in first!');
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
@@ -42,6 +44,7 @@ class _PreviousOrdersPageState extends State<PreviousOrdersPage> {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       _fetchAndSetPreviousOrders();
     }
     _isInit = false;

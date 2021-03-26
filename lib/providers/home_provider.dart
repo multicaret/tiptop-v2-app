@@ -8,6 +8,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
+import 'addresses_provider.dart';
 import 'cart_provider.dart';
 import 'local_storage.dart';
 
@@ -32,7 +33,12 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  Future<void> fetchAndSetHomeData(BuildContext context, AppProvider appProvider, CartProvider cartProvider) async {
+  Future<void> fetchAndSetHomeData(
+    BuildContext context,
+    AppProvider appProvider,
+    CartProvider cartProvider,
+    AddressesProvider addressesProvider,
+  ) async {
     final endpoint = 'home';
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
@@ -46,10 +52,10 @@ class HomeProvider with ChangeNotifier {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',
       'channel': 'grocery',
-      //Todo: send dynamically
-      'selected_address_id': '1',
+      'selected_address_id': addressesProvider.selectedAddress == null ? '' : '${addressesProvider.selectedAddress.id}',
     };
 
+    homeDataRequestError = false;
     try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
@@ -57,7 +63,6 @@ class HomeProvider with ChangeNotifier {
         withToken: appProvider.isAuth,
       );
 
-      // print(responseData["data"]["cart"]);
       homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
 
       if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {

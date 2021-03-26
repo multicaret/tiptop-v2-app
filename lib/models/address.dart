@@ -32,17 +32,20 @@ class CreateAddressData {
   CreateAddressData({
     this.regions,
     this.cities,
+    this.kinds,
     this.selectedRegion,
     this.selectedCity,
   });
 
   List<Region> regions;
   List<City> cities;
+  List<Kind> kinds;
   Region selectedRegion;
   City selectedCity;
 
   factory CreateAddressData.fromJson(Map<String, dynamic> json) => CreateAddressData(
         regions: List<Region>.from(json["regions"].map((x) => Region.fromJson(x))),
+        kinds: List<Kind>.from(json["kinds"].map((x) => Kind.fromJson(x))),
         cities: List<City>.from(json["cities"].map((x) => City.fromJson(x))),
         selectedRegion: Region.fromJson(json["selectedRegion"]),
         selectedCity: City.fromJson(json["selectedCity"]),
@@ -51,6 +54,7 @@ class CreateAddressData {
   Map<String, dynamic> toJson() => {
         "regions": List<dynamic>.from(regions.map((x) => x.toJson())),
         "cities": List<dynamic>.from(cities.map((x) => x.toJson())),
+        "kinds": List<dynamic>.from(kinds.map((x) => x.toJson())),
         "selectedRegion": selectedRegion.toJson(),
         "selectedCity": selectedCity.toJson(),
       };

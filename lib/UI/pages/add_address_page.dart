@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/add_address_map.dart';
 import 'package:tiptop_v2/UI/widgets/address_details_form.dart';
@@ -13,6 +16,7 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AddAddressPage extends StatefulWidget {
@@ -26,7 +30,11 @@ class AddAddressPage extends StatefulWidget {
 class _AddAddressPageState extends State<AddAddressPage> {
   final GlobalKey<FormState> addressDetailsFormKey = GlobalKey();
   bool _isInit = true;
+  bool _isLoadingStoreAddressRequest = false;
+  bool _isLoadingCreateAddressRequest = false;
+
   Kind selectedKind;
+  String currentMarkerIcon;
 
   AddressesProvider addressesProvider;
   AppProvider appProvider;
@@ -36,11 +44,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   bool addressLocationConfirmed = false;
   double useAddressButtonHeight = 115.0;
-  bool _isLoadingCreateAddressRequest = false;
 
   City selectedCity;
   Region selectedRegion;
   CreateAddressData createAddressData;
+
+  Marker defaultMarker;
 
   Future<bool> _createAddress() async {
     setState(() => _isLoadingCreateAddressRequest = true);
@@ -71,7 +80,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       setState(() => _isLoadingCreateAddressRequest = false);
       return true;
     } catch (e) {
-      throw e;
+      // throw e;
       showToast(msg: 'An error occurred!');
       setState(() => _isLoadingCreateAddressRequest = false);
       return false;
@@ -79,7 +88,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Map<String, dynamic> addressDetailsFormData = {
-    'kind': '',
+    'kind': null,
     'alias': '',
     'region_id': null,
     'city_id': null,
@@ -96,6 +105,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       appProvider = Provider.of<AppProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       selectedKind = data['kind'];
+      currentMarkerIcon = selectedKind.markerIcon;
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -111,6 +121,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      hasOverlayLoader: _isLoadingStoreAddressRequest,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Add New Address')),
       ),
@@ -124,6 +135,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
             child: AddAddressMap(
               setMarkersArray: (_markers) => setState(() => markers = _markers),
               setPickedPosition: (_pickedPosition) => setState(() => pickedPosition = _pickedPosition),
+              setDefaultMarker: (_defaultMarker) => setState(() => defaultMarker = _defaultMarker),
+              defaultMarker: defaultMarker,
               onCameraMoveStarted: _switchToLocationSelect,
               customMarkerIcon: selectedKind.markerIcon,
               markers: markers,
@@ -169,6 +182,20 @@ class _AddAddressPageState extends State<AddAddressPage> {
               createAddressData: createAddressData,
               setRegionId: (id) => setState(() => addressDetailsFormData['region_id'] = id),
               setCityId: (id) => setState(() => addressDetailsFormData['city_id'] = id),
+              setKindId: (id) {
+                setState(() {
+                  addressDetailsFormData['kind'] = id;
+                  addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == id).title;
+                  currentMarkerIcon = createAddressData.kinds.firstWhere((kind) => kind.id == id).markerIcon;
+                });
+                getAndCacheMarkerIcon(currentMarkerIcon).then((Uint8List markerIconBytes) {
+                  setState(() {
+                    defaultMarker = defaultMarker.copyWith(iconParam: BitmapDescriptor.fromBytes(markerIconBytes));
+                    markers = [defaultMarker];
+                  });
+                });
+                // print(addressDetailsFormData);
+              },
             ),
           )
         ],
@@ -200,5 +227,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
     }
     addressDetailsFormKey.currentState.save();
     print(addressDetailsFormData);
+    setState(() => _isLoadingStoreAddressRequest = true);
+    await addressesProvider.storeAddress(appProvider, addressDetailsFormData);
+    setState(() => _isLoadingStoreAddressRequest = false);
+    showToast(msg: 'Address stored successfully!');
+    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
   }
 }
