@@ -13,8 +13,6 @@ class CategoryItem extends StatelessWidget {
     @required this.title,
   });
 
-  static double categoryItemHeight = 220;
-
   @override
   Widget build(BuildContext context) {
     return Column(

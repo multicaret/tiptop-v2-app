@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/products_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/category_item.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
+import 'package:tiptop_v2/UI/widgets/home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
 import 'package:tiptop_v2/models/category.dart';
@@ -147,35 +146,11 @@ class _HomePageState extends State<HomePage> {
                                           ],
                                         ),
                                       ))
-                                  : GridView.count(
-                                      padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
-                                      shrinkWrap: true,
-                                      childAspectRatio: 0.78,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 15,
-                                      mainAxisSpacing: 16,
-                                      children: categories
-                                          .map((category) => GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    CupertinoPageRoute<void>(
-                                                      builder: (BuildContext context) => ProductsPage(
-                                                        selectedParentCategoryId: category.id,
-                                                        parents: categories,
-                                                        refreshHomeData: fetchAndSetHomeData,
-                                                        isLoadingHomeData: isLoadingHomeData,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: CategoryItem(
-                                                  title: category.title,
-                                                  imageUrl: category.cover,
-                                                ),
-                                              ))
-                                          .toList(),
-                                    )
+                                  : HomeCategoriesGrid(
+                                      categories: categories,
+                                      fetchAndSetHomeData: fetchAndSetHomeData,
+                                      isLoadingHomeData: isLoadingHomeData,
+                                    ),
                             ],
                           ),
                       ],
