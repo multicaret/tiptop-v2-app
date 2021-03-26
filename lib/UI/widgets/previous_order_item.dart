@@ -75,7 +75,8 @@ class PreviousOrderItem extends StatelessWidget {
                         children: [
                           AddressIcon(
                             isRTL: isRTL,
-                            icon: 'assets/images/address-home-icon.png',
+                            icon: order.address.kind.icon,
+                            isAsset: false,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +86,7 @@ class PreviousOrderItem extends StatelessWidget {
                                 style: AppTextStyles.body50,
                               ),
                               SizedBox(height: 5),
-                              Text('Home')
+                              Text(order.address.kind.title)
                             ],
                           )
                         ],
