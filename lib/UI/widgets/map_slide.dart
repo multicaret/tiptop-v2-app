@@ -1,21 +1,28 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/home_page.dart';
+import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class MapSlide extends StatefulWidget {
+  final Address selectedAddress;
+
+  MapSlide({this.selectedAddress});
+
   @override
   _MapSlideState createState() => _MapSlideState();
 }
 
-class _MapSlideState extends State<MapSlide> {
+class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin {
   bool _isInit = true;
   HomeProvider homeProvider;
   AppProvider appProvider;
@@ -36,27 +43,17 @@ class _MapSlideState extends State<MapSlide> {
       centerLong = (HomeProvider.branchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
     }
-
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  Marker branchMarker = Marker(
-    markerId: MarkerId('main-marker'),
-    position: LatLng(HomeProvider.branchLat, HomeProvider.branchLong),
-    // Added to test a LatLng closer to the AppProivder LatLng.
-    // position: LatLng(41.01651992458213, 28.97052218328264),
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-  );
-
-  Marker userLocationMarker = Marker(
-    markerId: MarkerId('main-marker'),
-    position: LatLng(AppProvider.latitude, AppProvider.longitude),
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-  );
+  List<Marker> allMarkers = [];
+  Marker branchMarker;
+  Marker userMarker;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       height: HomePage.sliderHeight,
       child: Stack(
@@ -64,7 +61,7 @@ class _MapSlideState extends State<MapSlide> {
           GoogleMap(
             initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
             mapType: MapType.normal,
-            markers: {userLocationMarker, branchMarker},
+            markers: Set.from(allMarkers),
             compassEnabled: false,
             zoomControlsEnabled: false,
             zoomGesturesEnabled: false,
@@ -126,15 +123,43 @@ class _MapSlideState extends State<MapSlide> {
     );
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  bool addressHasLatLng(Address _address) {
+    return _address != null && _address.latitude != null && _address.latitude != 0 && _address.latitude != null && _address.longitude != 0;
+  }
+
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    print('Carousel map recreated!!');
     _mapController = controller;
     _controller.complete(controller);
 
-    var userLatLng = LatLng(AppProvider.latitude, AppProvider.longitude);
-    var branchLatLng = LatLng(HomeProvider.branchLat, HomeProvider.branchLong);
+    LatLng branchLatLng = LatLng(HomeProvider.branchLat, HomeProvider.branchLong);
+    Uint8List branchMarkerIconBytes = await getBytesFromAsset(
+      'assets/images/tiptop-marker-icon.png',
+      targetWidth: 150,
+    );
 
-    // Added to test
-    // var branchLatLng = LatLng(41.01651992458213, 28.97052218328264);
+    LatLng userLatLng = addressHasLatLng(widget.selectedAddress)
+        ? LatLng(widget.selectedAddress.latitude, widget.selectedAddress.longitude)
+        : LatLng(AppProvider.latitude, AppProvider.longitude);
+
+    Uint8List userMarkerIconBytes = widget.selectedAddress != null && widget.selectedAddress.kind.markerIcon != null
+        ? await getAndCacheMarkerIcon(widget.selectedAddress.kind.markerIcon)
+        : await getBytesFromAsset('assets/images/address-home-marker-icon.png', targetWidth: 150);
+
+    setState(() {
+      userMarker = Marker(
+        markerId: MarkerId('user-marker'),
+        position: userLatLng,
+        icon: BitmapDescriptor.fromBytes(userMarkerIconBytes),
+      );
+      branchMarker = Marker(
+        markerId: MarkerId('main-marker'),
+        position: branchLatLng,
+        icon: BitmapDescriptor.fromBytes(branchMarkerIconBytes),
+      );
+      allMarkers.add(userMarker);
+      allMarkers.add(branchMarker);
+    });
 
     LatLngBounds bound;
     if (userLatLng.latitude > branchLatLng.latitude && userLatLng.longitude > branchLatLng.longitude) {
@@ -162,4 +187,7 @@ class _MapSlideState extends State<MapSlide> {
     LatLngBounds secondLatLng = await controller.getVisibleRegion();
     if (firstLatLng.southwest.latitude == -90 || secondLatLng.southwest.latitude == -90) animate(cameraUpdate, controller);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

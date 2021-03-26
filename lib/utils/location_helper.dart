@@ -125,8 +125,7 @@ void handleGoogleRequestError(GoogleResponseStatus status) {
   }
 }
 
-Future<Uint8List> getAndCacheMarkerIcon(String imageUrl) async {
-  final int targetWidth = 180;
+Future<Uint8List> getAndCacheMarkerIcon(String imageUrl, {int targetWidth = 180}) async {
   final File markerImageFile = await DefaultCacheManager().getSingleFile(imageUrl);
   final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
 
@@ -144,8 +143,7 @@ Future<Uint8List> getAndCacheMarkerIcon(String imageUrl) async {
   return resizedMarkerImageBytes;
 }
 
-Future<Uint8List> getBytesFromAsset(String path) async {
-  final int targetWidth = 180;
+Future<Uint8List> getBytesFromAsset(String path, {int targetWidth = 180}) async {
   ByteData data = await rootBundle.load(path);
   Codec codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: targetWidth);
   FrameInfo fi = await codec.getNextFrame();

@@ -31,6 +31,7 @@ class AddressesProvider with ChangeNotifier {
     }
     print('Address is selected!');
     String selectedAddressString = await storageActions.getDataOfType(key: 'selected_address', type: String);
+    print(selectedAddressString);
     selectedAddress = Address.fromJson(json.decode(selectedAddressString));
     notifyListeners();
   }

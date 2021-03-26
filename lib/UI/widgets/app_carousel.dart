@@ -15,7 +15,7 @@ class AppCarousel extends StatelessWidget {
   final bool imageOverlay;
   final bool hasDots;
   final Duration autoplayDuration;
-  final bool hasMap;
+  final Widget mapWidget;
 
   AppCarousel({
     this.height = 212,
@@ -28,7 +28,7 @@ class AppCarousel extends StatelessWidget {
     this.imageOverlay = false,
     this.hasDots = false,
     this.autoplayDuration,
-    this.hasMap = false,
+    this.mapWidget,
   });
 
   @override
@@ -54,7 +54,7 @@ class AppCarousel extends StatelessWidget {
         autoplay: autoplayDuration != null,
         autoplayDuration: autoplayDuration,
         dotBgColor: hasDots ? dotBgColor : Colors.transparent,
-        images: hasMap ? [MapSlide(), ..._getImagesList()] : _getImagesList(),
+        images: mapWidget != null ? [mapWidget, ..._getImagesList()] : _getImagesList(),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/category_item.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
+import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/temp_food_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -83,11 +84,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBarActions: appProvider.isAuth
-          ? [
-              AppBarCartTotal(isLoadingHomeData: isLoadingHomeData),
-            ]
-          : null,
+      appBarActions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: isLoadingHomeData)] : null,
       bodyPadding: EdgeInsets.all(0),
       body: Consumer<HomeProvider>(
         builder: (c, homeProvider, _) {
@@ -110,8 +107,8 @@ class _HomePageState extends State<HomePage> {
                               )
                             : AppCarousel(
                                 images: slides.map((slide) => slide.image).toList(),
-                                autoplayDuration: Duration(milliseconds: 4000),
-                                hasMap: true,
+                                autoplayDuration: Duration(milliseconds: 7000),
+                                mapWidget: MapSlide(selectedAddress: addressesProvider.selectedAddress),
                               ),
                         //Todo: switch whole app when Food infrastructure is set up
                         ChannelsButtons(
@@ -124,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               HomeLiveTracking(isRTL: appProvider.isRTL),
                               hideContent
-                              //Todo: Add no content screen (with error text for error and dynamic text for no branch)
+                                  //Todo: Add no content screen (with error text for error and dynamic text for no branch)
                                   ? Padding(
                                       padding: EdgeInsets.symmetric(vertical: 50),
                                       child: homeProvider.noBranchFound
