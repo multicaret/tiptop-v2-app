@@ -38,6 +38,7 @@ class AddressSelectButton extends StatelessWidget {
             homeProvider.homeDataRequestError ||
             homeProvider.estimatedArrivalTime == null ||
             !addressesProvider.addressIsSelected ||
+            addressesProvider.selectedAddress == null ||
             !appProvider.isAuth;
 
         return Container(
@@ -108,67 +109,68 @@ class AddressSelectButton extends StatelessWidget {
                     color: AppColors.white,
                     height: 70,
                     width: showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
-                    child: showSelectAddress
-                        ? InkWell(
-                            child: Container(
+                    child: InkWell(
+                      onTap: () {
+                        if (appProvider.isAuth) {
+                          Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+                        } else {
+                          showToast(msg: 'You need to log in first!');
+                          Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+                        }
+                      },
+                      child: showSelectAddress
+                          ? Container(
                               child: Text(
                                 Translations.of(context).get('Select Address'),
                                 style: AppTextStyles.bodyBold,
                               ),
                               alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
-                            ),
-                            onTap: () {
-                              if (appProvider.isAuth) {
-                                Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
-                              } else {
-                                showToast(msg: 'You need to log in first!');
-                                Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
-                              }
-                            },
-                          )
-                        : Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              AddressIcon(
-                                isRTL: appProvider.isRTL,
-                                icon: 'assets/images/address-home-icon.png',
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      Translations.of(context).get('Address'),
-                                      style: AppTextStyles.subtitleBold,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Home',
-                                          style: AppTextStyles.subtitle,
-                                        ),
-                                        SizedBox(width: 5),
-                                        Expanded(
-                                          child: Text(
-                                            'Sultan Selim Mah. Tuna Cad. Yasam Evleri Residence',
-                                            style: AppTextStyles.subtitle50,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                AddressIcon(
+                                  isRTL: appProvider.isRTL,
+                                  icon: addressesProvider.selectedAddress.kind.icon,
+                                  isAsset: false,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        Translations.of(context).get('Address'),
+                                        style: AppTextStyles.subtitleBold,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            addressesProvider.selectedAddress.kind.title,
+                                            style: AppTextStyles.subtitle,
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                                          SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              addressesProvider.selectedAddress.address1,
+                                              style: AppTextStyles.subtitle50,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              if (!isDisabled)
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
-                                ),
-                            ],
-                          ),
+                                if (!isDisabled)
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                    child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
+                                  ),
+                              ],
+                            ),
+                    ),
                   ),
                 ),
               ),
