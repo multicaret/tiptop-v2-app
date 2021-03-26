@@ -99,6 +99,7 @@ class _HomePageState extends State<HomePage> {
                 child: RefreshIndicator(
                   onRefresh: fetchAndSetHomeData,
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(bottom: 50.0),
                     physics: AlwaysScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -124,16 +125,28 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               HomeLiveTracking(isRTL: appProvider.isRTL),
                               hideContent
-                              //Todo: Add no content screen (with error text for error and dynamic text for no branch)
+                                  //Todo: Add no content screen (with error text for error and dynamic text for no branch)
                                   ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 50),
-                                      child: homeProvider.noBranchFound
-                                          ? Text('No Branch Found')
-                                          : homeProvider.homeDataRequestError
-                                              //Todo: translate this string/reconsider what to do
-                                              ? Text('An error occurred! Please try again later')
-                                              : AppLoader(),
-                                    )
+                                      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 17.0),
+                                      child: Container(
+                                        padding: EdgeInsets.all(15.0),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            homeProvider.noBranchFound
+                                                ? Text('No Branch Found')
+                                                : homeProvider.homeDataRequestError
+                                                    //Todo: translate this string/reconsider what to do
+                                                    ? Text('An error occurred! Please try again later')
+                                                    : AppLoader(),
+                                            SizedBox(height: 15),
+                                            Image.asset('assets/images/empty_products.png'),
+                                          ],
+                                        ),
+                                      ))
                                   : GridView.count(
                                       padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
                                       shrinkWrap: true,
