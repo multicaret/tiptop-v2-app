@@ -54,14 +54,16 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
   }
 
   _getPositions(_) {
-    final RenderBox renderBoxRed = key.currentContext.findRenderObject();
-    final positionRed = renderBoxRed.localToGlobal(Offset.zero);
-    setState(() {
-      if (widget.index == 0) {
-        firstCategoryPosition = positionRed.dy;
-      }
-      categoryPosition = positionRed.dy;
-    });
+    if (key.currentContext != null) {
+      final RenderBox renderBoxRed = key.currentContext.findRenderObject();
+      final positionRed = renderBoxRed.localToGlobal(Offset.zero);
+      setState(() {
+        if (widget.index == 0) {
+          firstCategoryPosition = positionRed.dy;
+        }
+        categoryPosition = positionRed.dy;
+      });
+    }
   }
 
   @override
