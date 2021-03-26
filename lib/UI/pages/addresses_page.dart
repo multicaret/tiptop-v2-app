@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
@@ -24,6 +25,7 @@ class AddressesPage extends StatefulWidget {
 class _AddressesPageState extends State<AddressesPage> {
   bool _isInit = true;
   bool _isLoadingAddress = false;
+  bool _isLoadingChangingAddress = false;
   AddressesProvider addressesProvider;
   AppProvider appProvider;
   List<Address> addresses = [];
@@ -56,6 +58,7 @@ class _AddressesPageState extends State<AddressesPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       hasCurve: false,
+      hasOverlayLoader: _isLoadingChangingAddress,
       body: _isLoadingAddress
           ? Center(
               child: AppLoader(),
@@ -76,46 +79,58 @@ class _AddressesPageState extends State<AddressesPage> {
     );
   }
 
+  Future<void> _changeSelectedAddress(Address _selectedAddress) async {
+    setState(() => _isLoadingChangingAddress = true);
+    await addressesProvider.changeSelectedAddress(_selectedAddress);
+    setState(() => _isLoadingChangingAddress = false);
+    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+  }
+
   List<Widget> _getAddressesItems() {
     return List.generate(addresses.length, (i) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
-          color: AppColors.white,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  AddressIcon(
-                    isRTL: appProvider.isRTL,
-                    icon: addresses[i].kind.icon,
-                    isAsset: false,
-                  ),
-                  Text(addresses[i].kind.title),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      addresses[i].address1,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.body50,
-                    ),
-                  ),
-                ],
-              ),
+      return Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () => _changeSelectedAddress(addresses[i]),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
-            TextButton(
-              onPressed: () {
-                //Todo: implement deleting address
-              },
-              child: AppIcon.icon(FontAwesomeIcons.trashAlt),
-              style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
-            )
-          ],
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      AddressIcon(
+                        isRTL: appProvider.isRTL,
+                        icon: addresses[i].kind.icon,
+                        isAsset: false,
+                      ),
+                      Text(addresses[i].kind.title),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          addresses[i].address1,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.body50,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    //Todo: implement deleting address
+                  },
+                  child: AppIcon.icon(FontAwesomeIcons.trashAlt),
+                  style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
+                )
+              ],
+            ),
+          ),
         ),
       );
     });

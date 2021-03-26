@@ -26,13 +26,25 @@ class AddressesProvider with ChangeNotifier {
     if (!checkSelectedAddressKey) {
       print('Address not selected yet!');
       selectedAddress = null;
-      notifyListeners();
+      // notifyListeners();
       return;
     }
     print('Address is selected!');
     String selectedAddressString = await storageActions.getDataOfType(key: 'selected_address', type: String);
     selectedAddress = Address.fromJson(json.decode(selectedAddressString));
     notifyListeners();
+  }
+
+  Future<void> changeSelectedAddress(Address _selectedAddress) async {
+    try {
+      String selectedAddressString = json.encode(_selectedAddress.toJson());
+      selectedAddress = _selectedAddress;
+      await storageActions.save(key: 'selected_address', data: selectedAddressString);
+      notifyListeners();
+    } catch (e) {
+      print('error saving address!');
+      throw e;
+    }
   }
 
   Future<dynamic> createAddress(AppProvider appProvider, LatLng pickedPosition) async {
