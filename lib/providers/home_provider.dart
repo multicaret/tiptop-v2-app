@@ -55,6 +55,7 @@ class HomeProvider with ChangeNotifier {
       'selected_address_id': addressesProvider.selectedAddress == null ? '' : '${addressesProvider.selectedAddress.id}',
     };
 
+    homeDataRequestError = false;
     try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
@@ -62,7 +63,6 @@ class HomeProvider with ChangeNotifier {
         withToken: appProvider.isAuth,
       );
 
-      // print(responseData["data"]["cart"]);
       homeDataResponse = homeDataResponseFromJson(json.encode(responseData));
 
       if (homeDataResponse.homeData == null || homeDataResponse.status != 200) {
