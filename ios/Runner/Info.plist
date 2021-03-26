@@ -51,5 +51,10 @@
 	<string>For debugging purposes to record your feedback</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>For debugging purposes to upload your reports</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+            <string>itms-beta</string>
+            <string>itms</string>
+    </array>
 </dict>
 </plist>

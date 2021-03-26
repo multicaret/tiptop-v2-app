@@ -383,7 +383,7 @@ class MobileApp {
 
   Device device;
   String version;
-  int buildNumber;
+  dynamic buildNumber;
 
   factory MobileApp.fromJson(Map<String, dynamic> json) => MobileApp(
         device: Device.fromJson(json["device"]),
