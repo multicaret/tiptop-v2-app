@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -39,7 +40,7 @@ class _TempFoodViewState extends State<TempFoodView> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 17.0, bottom: 5.0),
-            child: Text('Categories', style: AppTextStyles.body50),
+            child: Text(Translations.of(context).get("Categories"), style: AppTextStyles.body50),
           ),
           RestaurantCategories(categoriesItems: _categoriesItems),
           FilterSortButtons(),
@@ -48,7 +49,7 @@ class _TempFoodViewState extends State<TempFoodView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('All Restaurants', style: AppTextStyles.body50),
+                Text(Translations.of(context).get("All Restaurants"), style: AppTextStyles.body50),
                 ListDisplayButton(
                   showGridView: _showGridView,
                   showListView: _showListView,
@@ -180,17 +181,7 @@ class RestaurantListView extends StatelessWidget {
                         ),
                         height: 29,
                         width: 116,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(FontAwesomeIcons.solidStar, color: AppColors.secondaryDark, size: 16),
-                            Text('4.5', style: AppTextStyles.bodySecondaryDark),
-                            Text(
-                              '(+350)',
-                              style: AppTextStyles.dynamicValues(color: AppColors.white.withOpacity(0.50), fontSize: 14.0),
-                            )
-                          ],
-                        ),
+                        child: RatingRow(isListView: true),
                       ),
                     ),
                   ],
@@ -233,7 +224,187 @@ class RestaurantListView extends StatelessWidget {
 class RestaurantGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: MediaQuery.of(context).size.height + 100,
+      padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 5.0),
+      color: AppColors.white,
+      child: ListView.builder(
+        itemCount: 5,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (context, i) {
+          return Container(
+            height: 287,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      height: 173,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        image: DecorationImage(
+                          fit: BoxFit.fitHeight,
+                          image: AssetImage(
+                            'assets/images/slide-2.png',
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Container(
+                        width: 125,
+                        height: 25,
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                          color: AppColors.secondaryDark,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.tag,
+                              size: 16,
+                            ),
+                            SizedBox(width: 5.0),
+                            Expanded(
+                              child: Text(
+                                '50% discount',
+                                style: AppTextStyles.subtitle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.0),
+                            color: AppColors.white,
+                          ),
+                          child: RatingRow(isListView: false),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(FontAwesomeIcons.heart, color: AppColors.secondaryDark),
+                        onPressed: () {},
+                      ),
+                    )
+                  ],
+                ),
+                Text('Burger - kara mah'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              TipTopDeliveryIcon(),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                                child: Text(
+                                  Translations.of(context).get("TipTop delivery"),
+                                  style: AppTextStyles.subtitle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          EstimatedTimePriceRow(estimatedTime: '15-20', minFee: '25 IQD'),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              RestaurantDeliveryIcon(),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                                child: Text(
+                                  Translations.of(context).get("Restaurant delivery"),
+                                  style: AppTextStyles.subtitle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          EstimatedTimePriceRow(estimatedTime: '25-30', minFee: '50 IQD'),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 30,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.0),
+                            color: AppColors.primary,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '%50',
+                              style: AppTextStyles.subtitleXxsSecondary,
+                            ),
+                          ),
+                        ),
+                        CustomPaint(
+                          size: Size(28.0, 5.0),
+                          painter: TrianglePainter(isDown: true, color: AppColors.primary),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class RatingRow extends StatelessWidget {
+  final bool isListView;
+
+  RatingRow({this.isListView});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Icon(FontAwesomeIcons.solidStar, color: AppColors.secondaryDark, size: 16),
+        SizedBox(width: isListView ? 0 : 4),
+        Text('4.5', style: AppTextStyles.bodySecondaryDark),
+        SizedBox(width: isListView ? 0 : 4),
+        Text(
+          '(350+)',
+          style: AppTextStyles.dynamicValues(
+            color: isListView ? AppColors.white.withOpacity(0.50) : AppColors.primary50,
+            fontSize: 14.0,
+          ),
+        )
+      ],
+    );
   }
 }
 
@@ -297,7 +468,7 @@ class FilterSortButtons extends StatelessWidget {
                 children: [
                   Icon(FontAwesomeIcons.filter),
                   SizedBox(width: 10),
-                  Text('Filters'),
+                  Text(Translations.of(context).get("Filter")),
                 ],
               ),
             ),
@@ -311,7 +482,7 @@ class FilterSortButtons extends StatelessWidget {
                 children: [
                   Icon(FontAwesomeIcons.sort),
                   SizedBox(width: 10),
-                  Text('Sorting'),
+                  Text(Translations.of(context).get("Sort")),
                 ],
               ),
             ),
@@ -374,7 +545,7 @@ class EstimatedTimePriceRow extends StatelessWidget {
       children: [
         Icon(FontAwesomeIcons.hourglassHalf, color: AppColors.primary50, size: 17),
         Text(estimatedTime, style: AppTextStyles.dynamicValues(color: AppColors.primary50)),
-        SizedBox(width: 15),
+        SizedBox(width: 10),
         Row(
           children: [
             Icon(
@@ -391,5 +562,38 @@ class EstimatedTimePriceRow extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class TrianglePainter extends CustomPainter {
+  bool isDown;
+  Color color;
+
+  TrianglePainter({this.isDown = true, this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint _paint = new Paint();
+    _paint.strokeWidth = 2.0;
+    _paint.color = color;
+    _paint.style = PaintingStyle.fill;
+
+    Path path = new Path();
+    if (isDown) {
+      path.moveTo(0.0, -1.0);
+      path.lineTo(size.width, -1.0);
+      path.lineTo(size.width / 2.0, size.height);
+    } else {
+      path.moveTo(size.width / 2.0, 0.0);
+      path.lineTo(0.0, size.height + 1);
+      path.lineTo(size.width, size.height + 1);
+    }
+
+    canvas.drawPath(path, _paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
