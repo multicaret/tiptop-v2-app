@@ -357,27 +357,23 @@ class Name {
 class Region {
   Region({
     this.id,
-    this.nameEnglish,
     this.name,
     this.code,
   });
 
   int id;
-  String nameEnglish;
-  String name;
+  Name name;
   String code;
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
         id: json["id"],
-        nameEnglish: json["nameEnglish"],
-        name: json["name"],
+        name: Name.fromJson(json["name"]),
         code: json["code"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "nameEnglish": nameEnglish,
-        "name": name,
+        "name": name.toJson(),
         "code": code,
       };
 }

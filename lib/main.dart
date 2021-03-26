@@ -94,6 +94,7 @@ class _MyAppState extends State<MyApp> {
               iconTheme: IconThemeData(color: AppColors.primary, size: 20),
               actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
             ),
+
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ElevatedButton.styleFrom(
                 primary: AppColors.primary,
@@ -107,6 +108,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
+
             sliderTheme: SliderThemeData(
               showValueIndicator: ShowValueIndicator.never,
               thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
@@ -122,7 +124,7 @@ class _MyAppState extends State<MyApp> {
                 primary: AppColors.primary,
                 textStyle: AppTextStyles.textButton
               )
-            )
+            ),
           ),
           home: app.localeSelected
               ? app.isAuth
