@@ -53,7 +53,7 @@ class CartFAB extends StatelessWidget {
                   ),
                   if (cartProvider.cartProductsCount > 0 && !hideCart)
                     Positioned(
-                      bottom: 30,
+                      bottom: Platform.isIOS ? 30 : 10,
                       right: 0,
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 200),
