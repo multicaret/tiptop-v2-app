@@ -6,6 +6,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/providers/search_provider.dart';
 
 final providers = <SingleChildWidget>[
   ChangeNotifierProvider.value(
@@ -25,5 +26,8 @@ final providers = <SingleChildWidget>[
   ),
   ChangeNotifierProvider.value(
     value: AddressesProvider(),
+  ),
+  ChangeNotifierProvider.value(
+    value: SearchProvider(),
   ),
 ];

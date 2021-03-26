@@ -8,7 +8,10 @@ import 'package:tiptop_v2/UI/widgets/products_grid_view.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
+import 'package:tiptop_v2/models/search.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
@@ -21,13 +24,18 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool _isInit = true;
+  bool _isLoading = false;
+
   String searchQuery = '';
   TextEditingController searchFieldController = new TextEditingController();
   FocusNode searchFieldFocusNote = new FocusNode();
 
   ProductsProvider productsProvider;
+  HomeProvider homeProvider;
+  SearchProvider searchProvider;
   List<Product> _searchedProducts = [];
-  bool _isLoading = false;
+  List<Term> _terms = [];
 
   @override
   void dispose() {
@@ -36,27 +44,30 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  Future<void> _fetchSearchedProducts(String _searchQuery) async {
-    setState(() {
-      _isLoading = true;
-    });
-    await productsProvider.fetchSearchedProducts(_searchQuery);
-    _searchedProducts = productsProvider.searchedProducts;
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
   }
 
-  List<String> _terms = [
-    'apple',
-    'water',
-    'banana',
-  ];
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      productsProvider = Provider.of<ProductsProvider>(context, listen: false);
+      homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      searchProvider = Provider.of<SearchProvider>(context);
+
+      fetchAndSetSearchTerms();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  Future<void> fetchAndSetSearchTerms() async {
+    setState(() => _isLoading = true);
+    await searchProvider.fetchAndSetSearchTerms(homeProvider: homeProvider);
+    _terms = searchProvider.terms;
+    setState(() => _isLoading = false);
+  }
 
   void _clearSearchResults() {
     searchFieldController.clear();
@@ -69,13 +80,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    productsProvider = Provider.of<ProductsProvider>(context);
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Search')),
         actions: [
-          if (_searchedProducts.length > 0)
+          if (_searchedProducts.isNotEmpty)
             IconButton(
               onPressed: _clearSearchResults,
               icon: AppIcon.icon(FontAwesomeIcons.eraser),
@@ -87,17 +97,17 @@ class _SearchPageState extends State<SearchPage> {
           : Column(
               children: [
                 AppSearchField(
-                  submitAction: (String searchQuery) => _mainSearch(searchQuery),
+                  submitAction: (String searchQuery) => _submitSearch(searchQuery),
                   controller: searchFieldController,
                   focusNode: searchFieldFocusNote,
                 ),
-                _searchedProducts.length >= 1
+                _searchedProducts.isNotEmpty
                     ? SectionTitle(
                         'Search Results',
                         suffix: ' (${_searchedProducts.length})',
                       )
                     : SectionTitle('Most Searched Terms'),
-                _searchedProducts.length >= 1
+                _searchedProducts.isNotEmpty
                     ? Expanded(
                         child: Container(
                           color: AppColors.white,
@@ -124,8 +134,9 @@ class _SearchPageState extends State<SearchPage> {
         color: AppColors.white,
         child: InkWell(
           onTap: () {
-            searchFieldController.text = _terms[i];
+            searchFieldController.text = _terms[i].term;
             searchFieldFocusNote.requestFocus();
+            _submitSearch(_terms[i].term);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -136,7 +147,7 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 AppIcon.iconSecondary(FontAwesomeIcons.infoCircle),
                 SizedBox(width: 10),
-                Text(_terms[i]),
+                Text(_terms[i].term),
               ],
             ),
           ),
@@ -145,23 +156,25 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void _mainSearch(String _searchQuery) {
+  Future<void> _submitSearch(String _searchQuery) async {
+    print("_searchQuery");
     print(_searchQuery);
     if (searchQuery != _searchQuery) {
       setState(() {
         searchQuery = _searchQuery;
+        _isLoading = true;
       });
-      _fetchSearchedProducts(searchQuery).then((_) {
-        if (_searchedProducts.length == 0) {
-          showToast(msg: Translations.of(context).get('No results match your search'));
-        } else {
-          var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
-          showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
-        }
-      }).catchError((error) {
-        print('@error Error');
-        print(error);
-        showToast(msg: error.message);
+      await productsProvider.fetchSearchedProducts(_searchQuery, homeProvider: homeProvider);
+      _searchedProducts = productsProvider.searchedProducts;
+      if (_searchedProducts.isEmpty) {
+        showToast(msg: Translations.of(context).get('No results match your search'));
+      } else {
+        var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
+        showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
+      }
+
+      setState(() {
+        _isLoading = false;
       });
     }
   }
