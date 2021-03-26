@@ -45,19 +45,19 @@ class _HomePageState extends State<HomePage> {
   AddressesProvider addressesProvider;
 
   EstimatedArrivalTime estimatedArrivalTime;
-  List<Category> categories;
-  List<Slide> slides;
+  List<Category> categories = [];
+  List<Slide> slides = [];
 
   String currentView = 'market';
 
   Future<void> fetchAndSetHomeData() async {
-    setState(() => isLoadingHomeData = true);
     try {
-      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider);
+      setState(() => isLoadingHomeData = true);
+      await addressesProvider.fetchSelectedAddress();
+      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
       estimatedArrivalTime = homeProvider.homeData.estimatedArrivalTime;
       categories = homeProvider.homeData.categories;
       slides = homeProvider.homeData.slides;
-
       setState(() => isLoadingHomeData = false);
     } catch (e) {
       //Todo: translate this string/reconsider what to do
@@ -74,7 +74,6 @@ class _HomePageState extends State<HomePage> {
       homeProvider = Provider.of<HomeProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
-      addressesProvider.fetchSelectedAddress();
       fetchAndSetHomeData();
     }
     _isInit = false;
