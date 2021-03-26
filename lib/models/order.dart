@@ -126,7 +126,7 @@ class PreviousOrdersResponseData {
   });
 
   List<Order> previousOrders;
-  String errors;
+  dynamic errors;
   String message;
   int status;
 

@@ -91,10 +91,15 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider) async {
+  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider, HomeProvider homeProvider) async {
     final endpoint = 'orders';
+    final Map<String, String> body = {
+      'chain_id': '${homeProvider.chainId}',
+    };
+
     final responseData = await appProvider.get(
       endpoint: endpoint,
+      body: body,
       withToken: true,
     );
     // print(responseData);
