@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'app_provider.dart';
@@ -45,7 +46,8 @@ class OrdersProvider with ChangeNotifier {
   Future<void> submitOrder(
     AppProvider appProvider,
     HomeProvider homeProvider,
-    CartProvider cartProvider, {
+    CartProvider cartProvider,
+    AddressesProvider addressesProvider, {
     @required int paymentMethodId,
     @required String notes,
   }) async {
@@ -56,12 +58,17 @@ class OrdersProvider with ChangeNotifier {
 
     cartProvider.clearRequestedMoreThanAvailableQuantity();
 
+    if(addressesProvider.selectedAddress == null) {
+      print('No address selected!');
+      return false;
+    }
+
     Map<String, dynamic> body = {
       'branch_id': homeProvider.branchId,
       'chain_id': homeProvider.chainId,
       'cart_id': cartProvider.cart.id,
       'payment_method_id': paymentMethodId,
-      'address_id': 1,
+      'address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
     };
 
