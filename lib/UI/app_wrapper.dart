@@ -54,6 +54,9 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 
   void onTabItemTapped(int index) {
+    if (index == 2) {
+      return;
+    }
     setState(() {
       _selectedTabIndex = index;
       _cupertinoTabController.index = index;
@@ -64,6 +67,7 @@ class _AppWrapperState extends State<AppWrapper> {
   List<BottomNavigationBarItem> _getCupertinoTabBarItems() {
     return List.generate(_cupertinoTabsList.length, (i) {
       return BottomNavigationBarItem(
+        backgroundColor: AppColors.primary,
         icon: Icon(
           _cupertinoTabsList[i]['icon'],
         ),
@@ -112,6 +116,7 @@ class _AppWrapperState extends State<AppWrapper> {
         child: Stack(
           children: [
             CupertinoTabScaffold(
+              backgroundColor: AppColors.white,
               controller: _cupertinoTabController,
               tabBar: CupertinoTabBar(
                 onTap: onTabItemTapped,
