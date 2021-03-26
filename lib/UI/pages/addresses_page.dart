@@ -6,11 +6,15 @@ import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/widgets/address_icon.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -26,8 +30,12 @@ class _AddressesPageState extends State<AddressesPage> {
   bool _isInit = true;
   bool _isLoadingAddress = false;
   bool _isLoadingChangingAddress = false;
+
   AddressesProvider addressesProvider;
   AppProvider appProvider;
+  CartProvider cartProvider;
+  HomeProvider homeProvider;
+
   List<Address> addresses = [];
   List<Kind> kinds = [];
 
@@ -43,11 +51,50 @@ class _AddressesPageState extends State<AddressesPage> {
     setState(() => _isLoadingAddress = false);
   }
 
+  Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {
+    if (!cartProvider.noCart) {
+      //User wants to change address while he has filled cart
+      showDialog(
+        context: context,
+        builder: (context) => ConfirmAlertDialog(
+          title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
+        ),
+      ).then((response) {
+        if (response != null && response) {
+          //User accepted changing address while he has filled cart, change address and clear cart
+          cartProvider.clearCart(appProvider, homeProvider).then((_) {
+            addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
+              _changeSelectedAddress(_selectedAddress).then((_) {
+                showToast(msg: 'Cleared cart and changed address to (${_selectedAddress.kind.title}) successfully!');
+              });
+            });
+          });
+        } else {
+          //User cancelled
+          return;
+        }
+      });
+    } else {
+      _changeSelectedAddress(_selectedAddress).then((_) {
+        showToast(msg: 'Changed address to (${_selectedAddress.kind.title}) successfully!');
+      });
+    }
+  }
+
+  Future<void> _changeSelectedAddress(Address _selectedAddress) async {
+    setState(() => _isLoadingChangingAddress = true);
+    await addressesProvider.changeSelectedAddress(_selectedAddress);
+    setState(() => _isLoadingChangingAddress = false);
+    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       _fetchAndSetAddresses();
     }
     _isInit = false;
@@ -79,19 +126,12 @@ class _AddressesPageState extends State<AddressesPage> {
     );
   }
 
-  Future<void> _changeSelectedAddress(Address _selectedAddress) async {
-    setState(() => _isLoadingChangingAddress = true);
-    await addressesProvider.changeSelectedAddress(_selectedAddress);
-    setState(() => _isLoadingChangingAddress = false);
-    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-  }
-
   List<Widget> _getAddressesItems() {
     return List.generate(addresses.length, (i) {
       return Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: () => _changeSelectedAddress(addresses[i]),
+          onTap: () => _changeSelectedAddressWithConfirmation(addresses[i]),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             width: double.infinity,
