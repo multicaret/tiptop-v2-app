@@ -148,12 +148,15 @@ Map<String, dynamic> readIosDeviceInfo(IosDeviceInfo data) {
 
 Map<String, dynamic> getMobileApp(PackageInfo deviceData, Map<String, dynamic> platformState) {
   return <String, dynamic>{
-    'versionCode': deviceData.version,
-    'versionNumber': deviceData.buildNumber,
+    'version': deviceData.version,
+    'buildNumber': deviceData.buildNumber,
     'device': {
       'manufacturer': Platform.isAndroid ? platformState['manufacturer'] : platformState['systemName'],
+      // Todo: @Suheyl, I've no idea how to get the device name on Android.
+      // hoping that 'device' is the write key.
+      'name': Platform.isAndroid ? platformState['device'] : platformState['name'],
       'model': platformState['model'],
-      'platform': Platform.isAndroid ? 'android' : 'IOS',
+      'platform': Platform.isAndroid ? 'android' : 'iOS',
       'serial': Platform.isAndroid ? platformState['id'] : platformState['systemVersion'],
       'uuid': Platform.isAndroid ? platformState['androidId'] : platformState['utsname.nodename'],
       'version': Platform.isAndroid ? platformState['version.release'] : platformState['utsname.version'],

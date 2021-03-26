@@ -42,7 +42,7 @@ class OTPCompleteProfile extends StatelessWidget {
             children: [
               SizedBox(height: 40),
               Text(
-                isProfileComplete ? Translations.of(context).get("Final Step") : appProvider.authUser.name,
+                isProfileComplete ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
                 style: AppTextStyles.bodyBold,
                 textAlign: TextAlign.center,
               ),
@@ -109,8 +109,6 @@ class OTPCompleteProfile extends StatelessWidget {
     _formKeyFoo.currentState.save();
     print(formData);
     try {
-      // Todo: store user
-      // Response is received as null
       await appProvider.updateProfile(formData);
       getLocationPermissionStatus().then((isGranted) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(

@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
+import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
@@ -14,6 +15,7 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'UI/app_wrapper.dart';
 import 'UI/splash_screen.dart';
+import 'force_update_view.dart';
 import 'i18n/translations.dart';
 
 void main() async {
@@ -117,25 +119,29 @@ class _MyAppState extends State<MyApp> {
               inactiveTrackColor: AppColors.primary50,
               thumbColor: AppColors.primary,
             ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: AppColors.primary,
-                textStyle: AppTextStyles.textButton
-              )
-            )
+            textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),
-          home: app.localeSelected
-              ? app.isAuth
-                  ? AppWrapper()
-                  : FutureBuilder(
-                      future: _autoLoginFuture,
-                      builder: (c, authResultSnapshot) =>
-                          authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
-                    )
-              : LanguageSelectPage(),
+          home: getHomeWidget(app),
           routes: routes,
         ),
       ),
     );
+  }
+
+  Widget getHomeWidget(AppProvider app) {
+    if (app.isForceUpdateEnabled) {
+      return ForceUpdateWidget(
+        appProvider: app,
+      );
+    }
+    return app.localeSelected
+        ? app.isAuth
+            ? AppWrapper()
+            : FutureBuilder(
+                future: _autoLoginFuture,
+                builder: (c, authResultSnapshot) =>
+                    authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
+              )
+        : LanguageSelectPage();
   }
 }

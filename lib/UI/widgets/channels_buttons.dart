@@ -3,6 +3,11 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class ChannelsButtons extends StatelessWidget {
+  final Function changeView;
+  final String currentView;
+
+  ChannelsButtons({this.changeView, this.currentView});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,11 +17,13 @@ class ChannelsButtons extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: AppColors.white,
-                onPrimary: AppColors.primary,
+                primary: currentView == 'food' ? AppColors.primary : AppColors.white,
+                onPrimary: currentView == 'food' ? AppColors.white :AppColors.primary,
                 minimumSize: Size.fromHeight(45),
               ),
-              onPressed: () {},
+              onPressed: () {
+                changeView('food');
+              },
               child: Row(
                 children: [
                   Expanded(
@@ -34,9 +41,13 @@ class ChannelsButtons extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: currentView == 'market' ? AppColors.primary : AppColors.white,
+                onPrimary: currentView == 'market' ? AppColors.white :AppColors.primary,
                 minimumSize: Size.fromHeight(45),
               ),
-              onPressed: () {},
+              onPressed: () {
+                changeView('market');
+              },
               child: Row(
                 children: [
                   Expanded(

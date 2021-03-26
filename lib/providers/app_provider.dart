@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:tiptop_v2/models/boot.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/user.dart';
@@ -18,6 +19,25 @@ import 'local_storage.dart';
 class AppProvider with ChangeNotifier {
   static const String GOOGLE_API_KEY = 'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
+  // Boot config related
+  BootData bootConfigs;
+
+  bool _isForceUpdateEnabled = false;
+
+  bool get isForceUpdateEnabled => _isForceUpdateEnabled;
+
+  set isForceUpdateEnabled(bool isForceUpdateEnabled) {
+    _isForceUpdateEnabled = isForceUpdateEnabled;
+  }
+
+  bool _isSoftUpdateEnabled = false;
+
+  bool get isSoftUpdateEnabled => _isSoftUpdateEnabled;
+
+  set isSoftUpdateEnabled(bool isSoftUpdateEnabled) {
+    _isSoftUpdateEnabled = isSoftUpdateEnabled;
+  }
+
   //  Location
   /*Todo: set these coordinates to be a proper place*/
   static double latitude;
@@ -25,7 +45,21 @@ class AppProvider with ChangeNotifier {
 
   LocalStorage storageActions = LocalStorage.getActions();
 
-  // Locale
+  // Locale Related.
+  bool localeSelected = false;
+  static const String DEFAULT_LOCALE = 'en';
+  Locale _appLocale = Locale(DEFAULT_LOCALE);
+
+  Locale get appLocale => _appLocale ?? Locale(DEFAULT_LOCALE);
+
+  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+
+  bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
+
+  set appLocale(value) {
+    _appLocale = value;
+  }
+
   List<Language> appLanguages = [
     Language(
       id: 1,
@@ -49,21 +83,6 @@ class AppProvider with ChangeNotifier {
       logo: 'assets/images/ku-flag.png',
     ),
   ];
-
-  // Locale Related.
-  bool localeSelected = false;
-  static const String DEFAULT_LOCALE = 'en';
-  Locale _appLocale = Locale(DEFAULT_LOCALE);
-
-  Locale get appLocale => _appLocale ?? Locale(DEFAULT_LOCALE);
-
-  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
-
-  bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
-
-  set appLocale(value) {
-    _appLocale = value;
-  }
 
   // Auth Related.
   static const DOMAIN = 'https://titan.trytiptop.app/';
@@ -95,6 +114,7 @@ class AppProvider with ChangeNotifier {
 
   Future<void> bootActions() async {
     initInstaBug();
+    await fetchBootConfigurations();
     await fetchLocale();
     await handleLocationPermission();
     await AddressesProvider().fetchSelectedAddress();
@@ -214,8 +234,6 @@ class AppProvider with ChangeNotifier {
         body: userData,
       );
 
-      print('Response: $responseData');
-
       if (responseData['data'] == null) {
         throw HttpException(
           title: 'Error',
@@ -285,19 +303,47 @@ class AppProvider with ChangeNotifier {
         deviceData = readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
+      deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
     }
     return deviceData;
   }
-
 
   Future<Map<String, dynamic>> loadMobileAppData() async {
     PackageInfo deviceData = await getDeviceData();
     Map<String, dynamic> platformState = await initPlatformState();
 
     return getMobileApp(deviceData, platformState);
+  }
 
+  Future<void> fetchBootConfigurations() async {
+    final mobileAppData = await loadMobileAppData();
+    final Map<String, String> body = {
+      'build_number': mobileAppData['buildNumber'],
+      'platform': mobileAppData['device']['platform'],
+    };
+    final responseData = await get(endpoint: 'boot', body: body);
+    BootResponse bootResponse = BootResponse.fromJson(responseData);
+    bootConfigs = bootResponse.data;
+    print("bootConfigs");
+    if (bootConfigs != null) {
+      print("bootConfigs.updateMethod");
+      print(bootConfigs.updateMethod);
+      if (bootConfigs.updateMethod == 2) {
+        print("HARD");
+        isForceUpdateEnabled = true;
+      } else if (bootConfigs.updateMethod == 1) {
+        print("SOFT");
+        isSoftUpdateEnabled = true;
+      }
+    }
+
+    /*bool isStorageCleared = storageActions.checkKey(key: 'storage_cleared');
+    if (!isStorageCleared) {
+      print('APP YIELD! your locale storage has been cleared!');
+      LocalStorage().clear();
+      // notifyListeners();
+    }*/
+
+    // notifyListeners();
   }
 }
