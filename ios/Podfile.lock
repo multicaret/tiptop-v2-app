@@ -20,6 +20,8 @@ PODS:
   - instabug_flutter (0.0.1):
     - Flutter
     - Instabug (= 9.1.7)
+  - launch_review (0.0.1):
+    - Flutter
   - location (0.0.1):
     - Flutter
   - package_info (0.0.1):
@@ -49,6 +51,7 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - instabug_flutter (from `.symlinks/plugins/instabug_flutter/ios`)
+  - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -78,6 +81,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   instabug_flutter:
     :path: ".symlinks/plugins/instabug_flutter/ios"
+  launch_review:
+    :path: ".symlinks/plugins/launch_review/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   package_info:
@@ -108,6 +113,7 @@ SPEC CHECKSUMS:
   GoogleMaps: 4b5346bddfe6911bb89155d43c903020170523ac
   Instabug: a952d72372697192dbb15800117b89f59c185054
   instabug_flutter: 65794e9f82acebde599e56cc6a2e74a17b69410e
+  launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
