@@ -69,9 +69,6 @@ class _AddressesPageState extends State<AddressesPage> {
               });
             });
           });
-        } else {
-          //User cancelled
-          return;
         }
       });
     } else {
@@ -86,6 +83,20 @@ class _AddressesPageState extends State<AddressesPage> {
     await addressesProvider.changeSelectedAddress(_selectedAddress);
     setState(() => _isLoadingChangingAddress = false);
     Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+  }
+
+  Future<void> _deleteAddress(int _addressId) async {
+    final response = await showDialog(
+      context: context,
+      builder: (context) => ConfirmAlertDialog(
+        title: 'Are you sure you want to delete this address?',
+      ),
+    );
+    if (response != null && response) {
+      await addressesProvider.deleteAddress(appProvider, _addressId);
+      _fetchAndSetAddresses();
+      showToast(msg: 'Successfully deleted address!');
+    }
   }
 
   @override
@@ -162,9 +173,7 @@ class _AddressesPageState extends State<AddressesPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    //Todo: implement deleting address
-                  },
+                  onPressed: () => _deleteAddress(addresses[i].id),
                   child: AppIcon.icon(FontAwesomeIcons.trashAlt),
                   style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
                 )

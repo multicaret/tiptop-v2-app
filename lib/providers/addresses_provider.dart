@@ -117,4 +117,20 @@ class AddressesProvider with ChangeNotifier {
       throw e;
     }
   }
+
+  Future<dynamic> deleteAddress(AppProvider appProvider, int addressId) async {
+    final endpoint = 'profile/addresses/$addressId/delete';
+    final responseData = await appProvider.post(endpoint: endpoint);
+    if(responseData == 401) {
+      return 401;
+    }
+    if(responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    if(selectedAddress != null && selectedAddress.id == addressId) {
+      print('😱😱😱😱 Ya Lahweeee you are deleting selected address');
+      storageActions.deleteData(key: 'selected_address');
+      selectedAddress = null;
+    }
+  }
 }
