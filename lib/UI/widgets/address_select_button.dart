@@ -110,7 +110,7 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: forceAddressView && (showSelectAddress || !hasETA) ? screenSize.width : screenSize.width * 0.75,
+                  width: forceAddressView || showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null
