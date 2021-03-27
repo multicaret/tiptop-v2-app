@@ -88,4 +88,14 @@ class ProductsProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
+    final endpoint = 'profile/favorites';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if(responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
+    notifyListeners();
+  }
 }
