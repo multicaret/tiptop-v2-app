@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/cart_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/list_product_item.dart';
 import 'package:tiptop_v2/UI/widgets/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
