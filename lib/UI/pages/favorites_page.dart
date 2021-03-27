@@ -52,7 +52,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ? AppLoader()
           : ListView.builder(
               itemCount: favoriteProducts.length,
-              itemBuilder: (c, i) => ListProductItem(product: favoriteProducts[i], hasControls: false,),
+              itemBuilder: (c, i) => ListProductItem(product: favoriteProducts[i]),
             ),
     );
   }
