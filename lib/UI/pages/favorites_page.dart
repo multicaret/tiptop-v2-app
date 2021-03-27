@@ -50,9 +50,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
       ),
       body: _isLoadingFavoriteProducts
           ? AppLoader()
-          : ListView.builder(
-              itemCount: favoriteProducts.length,
-              itemBuilder: (c, i) => ListProductItem(product: favoriteProducts[i]),
+          : RefreshIndicator(
+              onRefresh: _fetchAndSetFavoriteProducts,
+              child: ListView.builder(
+                itemCount: favoriteProducts.length,
+                itemBuilder: (c, i) => ListProductItem(product: favoriteProducts[i]),
+              ),
             ),
     );
   }
