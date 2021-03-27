@@ -67,6 +67,7 @@ class Product {
     this.height,
     this.depth,
     this.weight,
+    this.isFavorited,
     this.unit,
   });
 
@@ -92,6 +93,7 @@ class Product {
   int height;
   int depth;
   double weight;
+  bool isFavorited;
   Unit unit;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -117,6 +119,7 @@ class Product {
         height: json["height"],
         depth: json["depth"],
         weight: json["weight"].toDouble(),
+        isFavorited: json["isFavorited"],
         unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
       );
 
@@ -143,6 +146,7 @@ class Product {
         "height": height,
         "depth": depth,
         "weight": weight,
+        "isFavorited": isFavorited,
         "unit": unit.toJson(),
       };
 }
