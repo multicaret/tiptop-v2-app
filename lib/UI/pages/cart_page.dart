@@ -13,36 +13,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
-class CartPage extends StatefulWidget {
+class CartPage extends StatelessWidget {
   static const routeName = '/cart';
-
-  @override
-  _CartPageState createState() => _CartPageState();
-}
-
-class _CartPageState extends State<CartPage> {
-  ScrollController _controller;
-  bool popFlag = false;
-
-  @override
-  void initState() {
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    super.initState();
-  }
-
-  _scrollListener() {
-    if (_controller.offset <= _controller.position.minScrollExtent - 100 && popFlag == false) {
-      popFlag = true;
-      Navigator.of(context).pop();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +54,6 @@ class _CartPageState extends State<CartPage> {
                 padding: EdgeInsets.only(bottom: 105),
                 child: ListView(
                   physics: AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
                   children: cartProvider.cartProducts
                       .map((cartProduct) => CartProductItem(
                             product: cartProduct.product,

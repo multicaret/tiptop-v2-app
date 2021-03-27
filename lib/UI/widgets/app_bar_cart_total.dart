@@ -27,12 +27,7 @@ class AppBarCartTotal extends StatelessWidget {
           opacity: isLoadingHomeData || noCart ? 0 : 1,
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  fullscreenDialog: true,
-                  builder: (c) => CartPage(),
-                ),
-              );
+              Navigator.of(context, rootNavigator: true).pushNamed(CartPage.routeName);
             },
             child: Container(
               width: 130,

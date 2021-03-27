@@ -37,16 +37,7 @@ class CartProductItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  fullscreenDialog: true,
-                  builder: (c) => ProductPage(
-                    product: product,
-                  ),
-                ),
-              );
-            },
+            onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: product),
             child: Container(
               width: 80,
               height: 80,
@@ -61,16 +52,7 @@ class CartProductItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    fullscreenDialog: true,
-                    builder: (c) => ProductPage(
-                      product: product,
-                    ),
-                  ),
-                );
-              },
+              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: product),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

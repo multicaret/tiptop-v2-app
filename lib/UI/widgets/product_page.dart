@@ -20,20 +20,13 @@ import 'app_scaffold.dart';
 import 'formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
-  final Product product;
-
-  ProductPage({
-    @required this.product,
-  });
+  static const routeName = '/product';
 
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
-  ScrollController _controller;
-  bool popFlag = false;
-
   bool _isInit = true;
   bool _isLoadingProduct = false;
   bool _isLoadingInteractRequest = false;
@@ -44,23 +37,9 @@ class _ProductPageState extends State<ProductPage> {
   List<String> productGallery = [];
   bool hasDiscountedPrice = false;
 
-  @override
-  void initState() {
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-    super.initState();
-  }
-
-  _scrollListener() {
-    if (_controller.offset <= _controller.position.minScrollExtent - 100 && popFlag == false) {
-      popFlag = true;
-      Navigator.of(context).pop();
-    }
-  }
-
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
-    await productsProvider.fetchAndSetProduct(appProvider, widget.product.id);
+    await productsProvider.fetchAndSetProduct(appProvider, product.id);
     product = productsProvider.product;
     productIsFavorited = product.isFavorited;
     print('productIsFavorited: $productIsFavorited');
@@ -70,7 +49,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      product = widget.product;
+      product = ModalRoute.of(context).settings.arguments as Product;
       productIsFavorited = product.isFavorited;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
@@ -78,12 +57,6 @@ class _ProductPageState extends State<ProductPage> {
     }
     _isInit = false;
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   Future<void> interactWithProduct() async {
@@ -136,7 +109,6 @@ class _ProductPageState extends State<ProductPage> {
           Positioned.fill(
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
-              controller: _controller,
               children: [
                 AppCarousel(
                   height: 400,

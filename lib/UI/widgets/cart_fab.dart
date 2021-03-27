@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -9,7 +11,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-import 'dart:io' show Platform;
 
 class CartFAB extends StatelessWidget {
   @override
@@ -23,16 +24,7 @@ class CartFAB extends StatelessWidget {
           right: 0,
           left: 0,
           child: GestureDetector(
-            onTap: hideCart
-                ? null
-                : () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                        fullscreenDialog: true,
-                        builder: (c) => CartPage(),
-                      ),
-                    );
-                  },
+            onTap: hideCart ? null : () => Navigator.of(context, rootNavigator: true).pushNamed(CartPage.routeName),
             child: Container(
               alignment: Alignment.center,
               child: Stack(

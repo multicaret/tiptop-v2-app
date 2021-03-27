@@ -43,17 +43,6 @@ class _ProductItemState extends State<ProductItem> {
     super.didChangeDependencies();
   }
 
-  void openProductModal() {
-    Navigator.of(context, rootNavigator: true).push(
-      CupertinoPageRoute(
-        fullscreenDialog: true,
-        builder: (c) => ProductPage(
-          product: widget.product,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
@@ -71,7 +60,7 @@ class _ProductItemState extends State<ProductItem> {
                 int productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
 
                 return GestureDetector(
-                  onTap: openProductModal,
+                  onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: widget.product),
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 200),
                     height: getColItemHeight(3, context),
@@ -116,7 +105,7 @@ class _ProductItemState extends State<ProductItem> {
         SizedBox(height: 10),
         Expanded(
           child: GestureDetector(
-            onTap: openProductModal,
+            onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: widget.product),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
