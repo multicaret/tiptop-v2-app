@@ -88,10 +88,6 @@ class _ProductPageState extends State<ProductPage> {
       bgColor: AppColors.white,
       appBar: AppBar(
         title: Text(product.title),
-        leading: IconButton(
-          icon: Icon(Platform.isAndroid ? Icons.clear : CupertinoIcons.clear_thick),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         actions: [
           if (appProvider.isAuth)
             AnimatedOpacity(
