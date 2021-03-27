@@ -55,7 +55,7 @@ class CartPage extends StatelessWidget {
                 child: ListView(
                   physics: AlwaysScrollableScrollPhysics(),
                   children: cartProvider.cartProducts
-                      .map((cartProduct) => CartProductItem(
+                      .map((cartProduct) => ListGridProductItem(
                             product: cartProduct.product,
                             quantity: cartProduct.quantity,
                           ))

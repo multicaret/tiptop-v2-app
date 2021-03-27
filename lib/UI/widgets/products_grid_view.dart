@@ -22,7 +22,7 @@ class ProductsGridView extends StatelessWidget {
       mainAxisSpacing: 10,
       crossAxisCount: 3,
       childAspectRatio: 0.45,
-      children: <Widget>[...products.map((product) => ProductItem(product: product))],
+      children: <Widget>[...products.map((product) => GridProductItem(product: product))],
     );
   }
 }

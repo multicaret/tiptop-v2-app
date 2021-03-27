@@ -14,16 +14,16 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'formatted_price.dart';
 
-class ProductItem extends StatefulWidget {
+class GridProductItem extends StatefulWidget {
   final Product product;
 
-  const ProductItem({@required this.product});
+  const GridProductItem({@required this.product});
 
   @override
-  _ProductItemState createState() => _ProductItemState();
+  _GridProductItemState createState() => _GridProductItemState();
 }
 
-class _ProductItemState extends State<ProductItem> {
+class _GridProductItemState extends State<GridProductItem> {
   AppProvider appProvider;
   HomeProvider homeProvider;
   CartProvider cartProvider;

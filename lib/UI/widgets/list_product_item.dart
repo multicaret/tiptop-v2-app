@@ -9,12 +9,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'formatted_price.dart';
 
-class CartProductItem extends StatelessWidget {
+class ListGridProductItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
 
-  CartProductItem({
+  ListGridProductItem({
     @required this.quantity,
     @required this.product,
     this.hasControls = true,

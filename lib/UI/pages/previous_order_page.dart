@@ -103,7 +103,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                     SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
                     ...List.generate(
                       order.cart.products.length,
-                      (i) => CartProductItem(
+                      (i) => ListGridProductItem(
                         quantity: order.cart.products[i].quantity,
                         product: order.cart.products[i].product,
                         hasControls: false,
