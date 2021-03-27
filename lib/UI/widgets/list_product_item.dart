@@ -24,6 +24,13 @@ class ListGridProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
 
+    void openProductPage() {
+      Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
+        "product": product,
+        "has_controls": hasControls,
+      });
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17, vertical: 15),
       decoration: BoxDecoration(
@@ -37,7 +44,7 @@ class ListGridProductItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: product),
+            onTap: openProductPage,
             child: Container(
               width: 80,
               height: 80,
@@ -52,7 +59,7 @@ class ListGridProductItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: product),
+              onTap: openProductPage,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

@@ -43,6 +43,13 @@ class _GridProductItemState extends State<GridProductItem> {
     super.didChangeDependencies();
   }
 
+  void openProductPage() {
+    Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
+      "product": widget.product,
+      "has_controls": true,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
@@ -60,7 +67,7 @@ class _GridProductItemState extends State<GridProductItem> {
                 int productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
 
                 return GestureDetector(
-                  onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: widget.product),
+                  onTap: openProductPage,
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 200),
                     height: getColItemHeight(3, context),
@@ -105,7 +112,7 @@ class _GridProductItemState extends State<GridProductItem> {
         SizedBox(height: 10),
         Expanded(
           child: GestureDetector(
-            onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: widget.product),
+            onTap: openProductPage,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

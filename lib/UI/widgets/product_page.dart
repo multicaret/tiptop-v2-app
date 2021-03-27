@@ -34,6 +34,7 @@ class _ProductPageState extends State<ProductPage> {
   Product product;
   List<String> productGallery = [];
   bool hasDiscountedPrice = false;
+  bool hasControls = true;
 
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
@@ -47,7 +48,9 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      product = ModalRoute.of(context).settings.arguments as Product;
+      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      product = data["product"];
+      hasControls = data["has_controls"];
       productIsFavorited = product.isFavorited;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
@@ -143,6 +146,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ),
                 ),
+                if(hasControls)
                 Positioned(
                   bottom: 0,
                   left: 0,
