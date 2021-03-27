@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -60,18 +58,18 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<void> interactWithProduct() async {
-    bool _oldFavoriteState = productIsFavorited;
+    bool _productIsFavorited = productIsFavorited;
     setState(() {
       productIsFavorited = !productIsFavorited;
       _isLoadingInteractRequest = true;
     });
     try {
-      await productsProvider.interactWithProduct(appProvider, product.id, _oldFavoriteState ? 'unfavorite' : 'favorite');
+      await productsProvider.interactWithProduct(appProvider, product.id, _productIsFavorited ? 'unfavorite' : 'favorite');
       setState(() => _isLoadingInteractRequest = false);
-      showToast(msg: 'Successfully added product to favorites!');
+      showToast(msg: _productIsFavorited ? 'Successfully removed product from favorites!' : 'Successfully added product to favorites!');
     } catch (e) {
       setState(() {
-        productIsFavorited = _oldFavoriteState;
+        productIsFavorited = _productIsFavorited;
         _isLoadingInteractRequest = false;
       });
       showToast(msg: "An error occurred and we couldn't add this product to your favorites!");
@@ -94,72 +92,75 @@ class _ProductPageState extends State<ProductPage> {
               duration: Duration(milliseconds: 300),
               opacity: _isLoadingProduct ? 0 : 1,
               child: IconButton(
-                onPressed: interactWithProduct,
+                onPressed: _isLoadingInteractRequest ? null : interactWithProduct,
                 icon: AppIcon.icon(productIsFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart),
               ),
             ),
         ],
       ),
       body: Stack(
-        children: [
-          Positioned.fill(
-            child: ListView(
-              physics: AlwaysScrollableScrollPhysics(),
               children: [
-                AppCarousel(
-                  height: 400,
-                  hasDots: productGallery.length > 1,
-                  images: productGallery,
-                ),
-                SizedBox(height: 20),
-                Text(
-                  product.title,
-                  style: AppTextStyles.h2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                if (hasDiscountedPrice)
-                  FormattedPrice(
-                    price: product.discountedPrice.formatted,
-                    isLarge: true,
-                  ),
-                FormattedPrice(
-                  price: product.price.formatted,
-                  isDiscounted: hasDiscountedPrice,
-                  isLarge: true,
-                ),
-                if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
-                SizedBox(height: 20),
-                if (product.description != null) SectionTitle('Details'),
-                if (product.description != null)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 9),
-                    child: Html(
-                      data: """${product.description.formatted}""",
+                Positioned.fill(
+                  child: RefreshIndicator(
+                    onRefresh: _fetchAndSetProduct,
+                    child: ListView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      children: [
+                        AppCarousel(
+                          height: 400,
+                          hasDots: productGallery.length > 1,
+                          images: productGallery,
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          product.title,
+                          style: AppTextStyles.h2,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 20),
+                        if (hasDiscountedPrice)
+                          FormattedPrice(
+                            price: product.discountedPrice.formatted,
+                            isLarge: true,
+                          ),
+                        FormattedPrice(
+                          price: product.price.formatted,
+                          isDiscounted: hasDiscountedPrice,
+                          isLarge: true,
+                        ),
+                        if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
+                        SizedBox(height: 20),
+                        if (product.description != null) SectionTitle('Details'),
+                        if (product.description != null)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 9),
+                            child: Html(
+                              data: """${product.description.formatted}""",
+                            ),
+                          ),
+                        SizedBox(height: 105),
+                      ],
                     ),
                   ),
-                SizedBox(height: 105),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 105,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
+                    height: 45,
+                    color: AppColors.bg,
+                    child: CartControls(
+                      isModalControls: true,
+                      product: product,
+                      cartButtonHeight: 45,
+                    ),
+                  ),
+                )
               ],
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 105,
-            child: Container(
-              padding: EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
-              height: 45,
-              color: AppColors.bg,
-              child: CartControls(
-                isModalControls: true,
-                product: product,
-                cartButtonHeight: 45,
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }
