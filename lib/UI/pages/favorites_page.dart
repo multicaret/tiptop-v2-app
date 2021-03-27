@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/list_product_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -30,7 +32,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   @override
   void didChangeDependencies() {
-    if(_isInit) {
+    if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       _fetchAndSetFavoriteProducts();
@@ -42,12 +44,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('My Favorites')),
       ),
-      body: Center(
-        child: Text('Favorites Page'),
-      ),
+      body: _isLoadingFavoriteProducts
+          ? AppLoader()
+          : ListView.builder(
+              itemCount: favoriteProducts.length,
+              itemBuilder: (c, i) => ListProductItem(product: favoriteProducts[i], hasControls: false,),
+            ),
     );
   }
 }

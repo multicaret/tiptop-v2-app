@@ -9,13 +9,13 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'formatted_price.dart';
 
-class ListGridProductItem extends StatelessWidget {
+class ListProductItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
 
-  ListGridProductItem({
-    @required this.quantity,
+  ListProductItem({
+    this.quantity,
     @required this.product,
     this.hasControls = true,
   });
@@ -39,7 +39,10 @@ class ListGridProductItem extends StatelessWidget {
           bottom: BorderSide(width: 1.5, color: AppColors.border),
         ),
       ),
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -81,20 +84,21 @@ class ListGridProductItem extends StatelessWidget {
               ),
             ),
           ),
-          hasControls
-              ? Container(
-                  width: 99,
-                  height: 33,
-                  child: CartControls(product: product, cartButtonHeight: 33),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.bg,
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: Text('$quantity'),
-                )
+          if(hasControls)
+            Container(
+              width: 99,
+              height: 33,
+              child: CartControls(product: product, cartButtonHeight: 33),
+            ),
+          if(quantity != null && !hasControls)
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.bg,
+              ),
+              padding: EdgeInsets.all(10),
+              child: Text('$quantity'),
+            )
         ],
       ),
     );
