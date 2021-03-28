@@ -77,6 +77,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: AppColors.secondary,
             scaffoldBackgroundColor: Colors.transparent,
             fontFamily: 'NeoSansArabic',
+            canvasColor: Colors.transparent,
             textTheme: TextTheme(
               headline1: AppTextStyles.h2,
               button: AppTextStyles.button,
