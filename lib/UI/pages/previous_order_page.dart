@@ -3,8 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/list_product_item.dart';
 import 'package:tiptop_v2/UI/widgets/dialogs/confirm_alert_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/input/app_rating_bar.dart';
+import 'package:tiptop_v2/UI/widgets/list_product_item.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -14,6 +15,8 @@ import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
+
+import 'order_rating_page.dart';
 
 class PreviousOrderPage extends StatefulWidget {
   static const routeName = '/previous-order';
@@ -50,6 +53,25 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
     super.didChangeDependencies();
   }
 
+  Future<void> _deleteOrder(AppProvider appProvider, OrdersProvider ordersProvider) async {
+    final response = await showDialog(
+      context: context,
+      builder: (context) => ConfirmAlertDialog(
+        title: 'Are you sure you want to delete this order from your order history?',
+      ),
+    );
+    if (response != null && response) {
+      try {
+        await ordersProvider.deletePreviousOrder(appProvider, order.id);
+        showToast(msg: 'Successfully Deleted Order From History!');
+        Navigator.of(context).pop(true);
+      } catch (e) {
+        throw e;
+        showToast(msg: 'Error deleting order!');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, OrdersProvider>(
@@ -59,23 +81,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
           title: Text(Translations.of(context).get('Order Details')),
           actions: [
             IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => ConfirmAlertDialog(
-                    title: 'Are you sure you want to delete this order from your order history?',
-                  ),
-                ).then((response) {
-                  if (response != null && response) {
-                    ordersProvider.deletePreviousOrder(appProvider, order.id).then((_) {
-                      showToast(msg: 'Successfully Deleted Order From History!');
-                      Navigator.of(context).pop(true);
-                    }).catchError((e) {
-                      showToast(msg: 'Error deleting order!');
-                    });
-                  }
-                });
-              },
+              onPressed: () => _deleteOrder(appProvider, ordersProvider),
               icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
             )
           ],
@@ -94,11 +100,28 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SectionTitle('Please Rate Your Experience'),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                    SectionTitle(order.orderRating.branchHasBeenRated ? 'Thanks for your rating' : 'Please Rate Your Experience'),
+                    Material(
                       color: AppColors.white,
-                      //Todo: add rating stars
+                      child: InkWell(
+                        onTap: order.orderRating.branchHasBeenRated
+                            ? null
+                            : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppRatingBar(
+                                disabled: true,
+                                initialRating: 1.5,
+                              ),
+                              if (!order.orderRating.branchHasBeenRated)
+                                AppIcon.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
                     ...List.generate(
