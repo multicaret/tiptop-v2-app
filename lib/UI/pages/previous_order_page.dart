@@ -27,33 +27,19 @@ class PreviousOrderPage extends StatefulWidget {
 
 class _PreviousOrderPageState extends State<PreviousOrderPage> {
   bool _isInit = true;
-  Order order;
+  int orderId;
   List<Map<String, String>> totals = [];
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      order = ModalRoute.of(context).settings.arguments as Order;
-      totals = [
-        {
-          "title": "Total",
-          "value": order.cart.total.formatted,
-        },
-        {
-          "title": "Delivery Fee",
-          "value": order.deliveryFee.formatted,
-        },
-        {
-          "title": "Grand Total",
-          "value": order.grandTotal.formatted,
-        },
-      ];
+      orderId = ModalRoute.of(context).settings.arguments as int;
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  Future<void> _deleteOrder(AppProvider appProvider, OrdersProvider ordersProvider) async {
+  Future<void> _deleteOrder(AppProvider appProvider, OrdersProvider ordersProvider, int orderId) async {
     final response = await showDialog(
       context: context,
       builder: (context) => ConfirmAlertDialog(
@@ -62,7 +48,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
     );
     if (response != null && response) {
       try {
-        await ordersProvider.deletePreviousOrder(appProvider, order.id);
+        await ordersProvider.deletePreviousOrder(appProvider, orderId);
         showToast(msg: 'Successfully Deleted Order From History!');
         Navigator.of(context).pop(true);
       } catch (e) {
@@ -75,76 +61,94 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, OrdersProvider>(
-      builder: (c, appProvider, ordersProvider, _) => AppScaffold(
-        hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
-        appBar: AppBar(
-          title: Text(Translations.of(context).get('Order Details')),
-          actions: [
-            IconButton(
-              onPressed: () => _deleteOrder(appProvider, ordersProvider),
-              icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
-            )
-          ],
-        ),
-        body: Column(
-          children: [
-            AddressSelectButton(
-              isDisabled: true,
-              hasETA: false,
-              forceAddressView: true,
-              addressKindIcon: order.address.kind.icon,
-              addressKindTitle: order.address.kind.title,
-              addressText: order.address.address1,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SectionTitle(order.orderRating.branchHasBeenRated ? 'Thanks for your rating' : 'Please Rate Your Experience'),
-                    Material(
-                      color: AppColors.white,
-                      child: InkWell(
-                        onTap: order.orderRating.branchHasBeenRated
-                            ? null
-                            : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AppRatingBar(
-                                disabled: true,
-                                initialRating: order.orderRating.branchRatingValue ?? 0,
-                              ),
-                              if (!order.orderRating.branchHasBeenRated)
-                                AppIcon.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
-                            ],
+      builder: (c, appProvider, ordersProvider, _) {
+        Order order = ordersProvider.previousOrders.firstWhere((order) => order.id == orderId);
+        totals = [
+          {
+            "title": "Total",
+            "value": order.cart.total.formatted,
+          },
+          {
+            "title": "Delivery Fee",
+            "value": order.deliveryFee.formatted,
+          },
+          {
+            "title": "Grand Total",
+            "value": order.grandTotal.formatted,
+          },
+        ];
+
+        return AppScaffold(
+          hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
+          appBar: AppBar(
+            title: Text(Translations.of(context).get('Order Details')),
+            actions: [
+              IconButton(
+                onPressed: () => _deleteOrder(appProvider, ordersProvider, order.id),
+                icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
+              )
+            ],
+          ),
+          body: Column(
+            children: [
+              AddressSelectButton(
+                isDisabled: true,
+                hasETA: false,
+                forceAddressView: true,
+                addressKindIcon: order.address.kind.icon,
+                addressKindTitle: order.address.kind.title,
+                addressText: order.address.address1,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SectionTitle(order.orderRating.branchHasBeenRated ? 'Thanks for your rating' : 'Please Rate Your Experience'),
+                      Material(
+                        color: AppColors.white,
+                        child: InkWell(
+                          onTap: order.orderRating.branchHasBeenRated
+                              ? null
+                              : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppRatingBar(
+                                  disabled: true,
+                                  initialRating: order.orderRating.branchRatingValue ?? 0,
+                                ),
+                                if (!order.orderRating.branchHasBeenRated)
+                                  AppIcon.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
-                    ...List.generate(
-                      order.cart.products.length,
-                      (i) => ListProductItem(
-                        quantity: order.cart.products[i].quantity,
-                        product: order.cart.products[i].product,
-                        hasControls: false,
+                      SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
+                      ...List.generate(
+                        order.cart.products.length,
+                            (i) => ListProductItem(
+                          quantity: order.cart.products[i].quantity,
+                          product: order.cart.products[i].product,
+                          hasControls: false,
+                        ),
                       ),
-                    ),
-                    SectionTitle('Payment Summary'),
-                    PaymentSummary(
-                      totals: totals,
-                      isRTL: appProvider.isRTL,
-                    ),
-                    SizedBox(height: 30),
-                  ],
+                      SectionTitle('Payment Summary'),
+                      PaymentSummary(
+                        totals: totals,
+                        isRTL: appProvider.isRTL,
+                      ),
+                      SizedBox(height: 30),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -31,7 +31,7 @@ class OrdersProvider with ChangeNotifier {
       withToken: true,
     );
 
-    if (responseData == null) {
+    if (responseData == 401) {
       return;
     }
 
@@ -145,6 +145,20 @@ class OrdersProvider with ChangeNotifier {
     }
     final availableIssuesArray = responseData["data"]["availableIssues"];
     orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
+    notifyListeners();
+  }
+
+  Future<void> storeOrderRating(AppProvider appProvider, HomeProvider homeProvider, int orderId, Map<String, dynamic> ratingData) async {
+    final endpoint = 'orders/$orderId/rate';
+    final responseData = await appProvider.post(endpoint: endpoint, body: ratingData, withToken: true);
+    if(responseData == 401) {
+      print('Unauthenticated');
+      return 401;
+    }
+    if(responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    await fetchAndSetPreviousOrders(appProvider, homeProvider);
     notifyListeners();
   }
 }

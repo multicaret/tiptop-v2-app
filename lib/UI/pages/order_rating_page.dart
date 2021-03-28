@@ -10,7 +10,9 @@ import 'package:tiptop_v2/UI/widgets/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OrderRatingPage extends StatefulWidget {
@@ -28,12 +30,13 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
   bool _isLoadingStoreRatingRequest = false;
   Order order;
   AppProvider appProvider;
+  HomeProvider homeProvider;
   OrdersProvider ordersProvider;
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
   double ratingStarsGutter = 30;
   double _ratingValue;
-  String ratingComments = '';
+  String _ratingComments = '';
   int _selectedIssueId;
 
   Future<void> _createOrderRating() async {
@@ -50,6 +53,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
       order = data["order"];
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       _createOrderRating();
     }
     _isInit = false;
@@ -64,13 +68,39 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
     "Very Good",
   ];
 
-  Future<void> _submitRating() async {}
+  Future<void> _submitRating() async {
+    _ratingFormKey.currentState.save();
+    if (_ratingValue == null) {
+      showToast(msg: 'Please enter a rating value!');
+    } else if (_ratingValue <= 2 && _selectedIssueId == null) {
+      showToast(msg: 'Please select a reason!');
+    } else {
+      setState(() => _isLoadingStoreRatingRequest = true);
+      Map<String, dynamic> ratingData = {
+        'branch_rating_value': _ratingValue,
+        'grocery_issue_id': _selectedIssueId,
+        'comment': _ratingComments,
+      };
+      print('ratingData');
+      print(ratingData);
+      try {
+        await ordersProvider.storeOrderRating(appProvider, homeProvider, order.id, ratingData);
+        setState(() => _isLoadingStoreRatingRequest = false);
+        showToast(msg: 'Rating submitted successfully');
+        Navigator.of(context).pop();
+      } catch (e) {
+        showToast(msg: 'Error submitting rating!');
+        setState(() => _isLoadingStoreRatingRequest = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
     return AppScaffold(
+        hasOverlayLoader: _isLoadingStoreRatingRequest,
         body: _isLoadingCreateRatingRequest
             ? AppLoader()
             : Column(
@@ -117,18 +147,18 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                               ],
                             ),
                           ),
-                          if(_ratingValue != null && _ratingValue <= 2)
-                          RadioSelectItems(
-                            items: orderRatingAvailableIssues,
-                            selectedId: _selectedIssueId,
-                            hasLogo: false,
-                            action: (int id) {
-                              setState(() {
-                                _selectedIssueId = id;
-                              });
-                            },
-                            isRTL: appProvider.isRTL,
-                          ),
+                          if (_ratingValue != null && _ratingValue <= 2)
+                            RadioSelectItems(
+                              items: orderRatingAvailableIssues,
+                              selectedId: _selectedIssueId,
+                              hasLogo: false,
+                              action: (int id) {
+                                setState(() {
+                                  _selectedIssueId = id;
+                                });
+                              },
+                              isRTL: appProvider.isRTL,
+                            ),
                           Form(
                             key: _ratingFormKey,
                             child: Container(
@@ -138,7 +168,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                                 labelText: 'Your comment',
                                 maxLines: 3,
                                 onSaved: (value) {
-                                  ratingComments = value;
+                                  _ratingComments = value;
                                 },
                               ),
                             ),

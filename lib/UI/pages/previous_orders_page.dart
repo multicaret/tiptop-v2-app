@@ -72,11 +72,7 @@ class _PreviousOrdersPageState extends State<PreviousOrdersPage> {
                       order: previousOrders[i],
                       isRTL: appProvider.isRTL,
                       action: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed(PreviousOrderPage.routeName, arguments: previousOrders[i]).then((value) {
-                          if (value != null && value) {
-                            _fetchAndSetPreviousOrders();
-                          }
-                        });
+                        Navigator.of(context, rootNavigator: true).pushNamed(PreviousOrderPage.routeName, arguments: previousOrders[i].id);
                       },
                       dismissAction: () {
                         int orderIdToRemove = previousOrders[i].id;

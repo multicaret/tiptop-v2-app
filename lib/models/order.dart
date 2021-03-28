@@ -211,18 +211,18 @@ class OrderRating {
   bool hasGoodFoodQualityRating;
   bool hasGoodPackagingQualityRating;
   bool hasGoodOrderAccuracyRating;
-  int ratingIssue;
+  OrderRatingAvailableIssue ratingIssue;
 
   factory OrderRating.fromJson(Map<String, dynamic> json) => OrderRating(
         branchHasBeenRated: json["branchHasBeenRated"],
-        branchRatingValue: json["branchRatingValue"],
+        branchRatingValue: json["branchRatingValue"].toDouble(),
         driverHasBeenRated: json["driverHasBeenRated"],
-        driverRatingValue: json["driverRatingValue"],
+        driverRatingValue: json["driverRatingValue"].toDouble(),
         ratingComment: json["ratingComment"],
         hasGoodFoodQualityRating: json["hasGoodFoodQualityRating"],
         hasGoodPackagingQualityRating: json["hasGoodPackagingQualityRating"],
         hasGoodOrderAccuracyRating: json["hasGoodOrderAccuracyRating"],
-        ratingIssue: json["ratingIssue"],
+        ratingIssue: OrderRatingAvailableIssue.fromJson(json["ratingIssue"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -234,7 +234,7 @@ class OrderRating {
         "hasGoodFoodQualityRating": hasGoodFoodQualityRating,
         "hasGoodPackagingQualityRating": hasGoodPackagingQualityRating,
         "hasGoodOrderAccuracyRating": hasGoodOrderAccuracyRating,
-        "ratingIssue": ratingIssue,
+        "ratingIssue": ratingIssue.toJson(),
       };
 }
 
