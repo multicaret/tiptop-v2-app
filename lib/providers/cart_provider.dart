@@ -168,7 +168,7 @@ class CartProvider with ChangeNotifier {
       throw HttpException(title: 'Error', message: responseData["message"]);
     }
 
-    isLoadingClearCartRequest = true;
+    isLoadingClearCartRequest = false;
     notifyListeners();
   }
 }
