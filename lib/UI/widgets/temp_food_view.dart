@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/UI/widgets/triangle_painter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -562,38 +563,5 @@ class EstimatedTimePriceRow extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class TrianglePainter extends CustomPainter {
-  bool isDown;
-  Color color;
-
-  TrianglePainter({this.isDown = true, this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint _paint = new Paint();
-    _paint.strokeWidth = 2.0;
-    _paint.color = color;
-    _paint.style = PaintingStyle.fill;
-
-    Path path = new Path();
-    if (isDown) {
-      path.moveTo(0.0, -1.0);
-      path.lineTo(size.width, -1.0);
-      path.lineTo(size.width / 2.0, size.height);
-    } else {
-      path.moveTo(size.width / 2.0, 0.0);
-      path.lineTo(0.0, size.height + 1);
-      path.lineTo(size.width, size.height + 1);
-    }
-
-    canvas.drawPath(path, _paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }
