@@ -114,7 +114,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                             children: [
                               AppRatingBar(
                                 disabled: true,
-                                initialRating: 1.5,
+                                initialRating: order.orderRating.branchRatingValue ?? 0,
                               ),
                               if (!order.orderRating.branchHasBeenRated)
                                 AppIcon.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
