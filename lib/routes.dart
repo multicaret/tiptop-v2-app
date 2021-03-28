@@ -21,7 +21,7 @@ import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
-import 'package:tiptop_v2/UI/pages/support_page.dart';
+import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
@@ -55,4 +55,5 @@ final routes = <String, WidgetBuilder>{
   AddAddressPage.routeName: (BuildContext context) => AddAddressPage(),
   TrackOrderPage.routeName: (BuildContext context) => TrackOrderPage(),
   ProductPage.routeName: (BuildContext context) => ProductPage(),
+  SupportPage.routeName: (BuildContext context) => SupportPage(),
 };
