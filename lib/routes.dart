@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/UI/pages/checkout_page.dart';
 import 'package:tiptop_v2/UI/pages/favorites_page.dart';
@@ -38,7 +39,7 @@ final routes = <String, WidgetBuilder>{
   FavoritesPage.routeName: (BuildContext context) => FavoritesPage(),
   PaymentMethodsPage.routeName: (BuildContext context) => PaymentMethodsPage(),
   PreviousOrdersPage.routeName: (BuildContext context) => PreviousOrdersPage(),
-  SupportPage.routeName: (BuildContext context) => SupportPage(),
+  LiveChatPage.routeName: (BuildContext context) => LiveChatPage(),
   LanguageSelectPage.routeName: (BuildContext context) => LanguageSelectPage(),
   WalkthroughPage.routeName: (BuildContext context) => WalkthroughPage(),
   OTPStepOnePage.routeName: (BuildContext context) => OTPStepOnePage(),
