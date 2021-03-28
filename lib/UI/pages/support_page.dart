@@ -31,7 +31,7 @@ class _SupportPageState extends State<SupportPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'We are at your service 24/7, please contact us via',
+                Translations.of(context).get('We are at your service 24/7, please contact us via'),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 40),
@@ -56,7 +56,7 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            'Direct Call',
+                            Translations.of(context).get('Direct Call'),
                             style: AppTextStyles.body,
                           ),
                         ],
@@ -82,7 +82,7 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            'Live Chat',
+                            Translations.of(context).get('Live Chat'),
                             style: AppTextStyles.bodyWhite,
                           ),
                         ],
