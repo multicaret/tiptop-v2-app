@@ -8,7 +8,7 @@ import 'package:tiptop_v2/UI/pages/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/home_page.dart';
 import 'package:tiptop_v2/UI/pages/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
-import 'package:tiptop_v2/UI/pages/support_page.dart';
+import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
 import 'package:tiptop_v2/UI/widgets/cart_fab.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -93,7 +93,7 @@ class _AppWrapperState extends State<AppWrapper> {
     },
     {
       'title': 'Support',
-      'page': SupportPage(),
+      'page': LiveChatPage(),
       'icon': LineAwesomeIcons.headset,
     },
     {
