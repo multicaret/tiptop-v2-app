@@ -35,7 +35,7 @@ class _TrackOrderMapState extends State<TrackOrderMap> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     Uint8List homeMarkerIconBytes = await getBytesFromAsset('assets/images/address-home-marker-icon.png');
-    Uint8List marketMarkerIconBytes = await getBytesFromAsset('assets/images/tiptop-marker-icon.png');
+    Uint8List marketMarkerIconBytes = await getBytesFromAsset('assets/images/delivery-marker-icon.png');
 
     setState(() {
       homeMarker = Marker(
