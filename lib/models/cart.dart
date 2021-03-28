@@ -12,7 +12,7 @@ class AddRemoveProductDataResponse {
 
   CartData cartData;
   String errors;
-  String message;
+  dynamic message;
   int status;
 
   factory AddRemoveProductDataResponse.fromJson(Map<String, dynamic> json) => AddRemoveProductDataResponse(
