@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/order_item.dart';
+import 'package:tiptop_v2/UI/widgets/section_title.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OrderRatingPage extends StatefulWidget {
   static const routeName = '/order-rating';
@@ -11,28 +19,85 @@ class OrderRatingPage extends StatefulWidget {
 
 class _OrderRatingPageState extends State<OrderRatingPage> {
   bool _isInit = true;
+  bool _isLoadingCreateRatingRequest = false;
+  bool _isLoadingStoreRatingRequest = false;
   Order order;
+  AppProvider appProvider;
+  OrdersProvider ordersProvider;
+  List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
+
+  Future<void> _createOrderRating() async {
+    setState(() => _isLoadingCreateRatingRequest = true);
+    await ordersProvider.createOrderRating(appProvider, order.id);
+    orderRatingAvailableIssues = ordersProvider.orderRatingAvailableIssues;
+    setState(() => _isLoadingCreateRatingRequest = false);
+  }
 
   @override
   void didChangeDependencies() {
-    if(_isInit) {
+    if (_isInit) {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       order = data["order"];
+      appProvider = Provider.of<AppProvider>(context);
+      ordersProvider = Provider.of<OrdersProvider>(context);
+      _createOrderRating();
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
+  Future<void> _submitRating() async {}
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(),
-          ],
-        ),
-      )
-    );
+        body: _isLoadingCreateRatingRequest
+            ? AppLoader()
+            : Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          OrderItem(
+                            isRTL: appProvider.isRTL,
+                            order: order,
+                            isDisabled: true,
+                          ),
+                          SectionTitle('Please Rate Your Experience'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+                    decoration: BoxDecoration(
+                      color: AppColors.bg,
+                      boxShadow: [BoxShadow(color: AppColors.shadowDark, blurRadius: 6)],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Text(Translations.of(context).get('Skip')),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: AppColors.secondaryDark,
+                              onPrimary: AppColors.primary,
+                            ),
+                            child: Text(Translations.of(context).get('Send')),
+                            onPressed: _submitRating,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ));
   }
 }

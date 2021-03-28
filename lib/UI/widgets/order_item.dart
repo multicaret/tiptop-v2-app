@@ -13,10 +13,12 @@ import 'address_icon.dart';
 class OrderItem extends StatelessWidget {
   final bool isRTL;
   final Order order;
+  final bool isDisabled;
 
   const OrderItem({
     @required this.isRTL,
     @required this.order,
+    this.isDisabled = false,
   });
 
   @override
@@ -27,6 +29,7 @@ class OrderItem extends StatelessWidget {
         border: Border(
           bottom: BorderSide(color: AppColors.border),
         ),
+        color: isDisabled ? AppColors.white : Colors.transparent,
       ),
       width: double.infinity,
       child: Row(
@@ -98,7 +101,9 @@ class OrderItem extends StatelessWidget {
               ],
             ),
           ),
+          if(!isDisabled)
           SizedBox(width: 10),
+          if(!isDisabled)
           AppIcon.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
         ],
       ),

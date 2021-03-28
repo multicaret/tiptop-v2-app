@@ -237,3 +237,23 @@ class OrderRating {
         "ratingIssue": ratingIssue,
       };
 }
+
+class OrderRatingAvailableIssue {
+  OrderRatingAvailableIssue({
+    this.id,
+    this.title,
+  });
+
+  int id;
+  String title;
+
+  factory OrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => OrderRatingAvailableIssue(
+        id: json["id"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+      };
+}
