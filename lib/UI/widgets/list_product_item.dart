@@ -36,7 +36,7 @@ class ListProductItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
-          bottom: BorderSide(width: 1.5, color: AppColors.border),
+          bottom: BorderSide(width: 1, color: AppColors.border),
         ),
       ),
       width: MediaQuery

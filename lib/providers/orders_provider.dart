@@ -17,6 +17,8 @@ class OrdersProvider with ChangeNotifier {
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest  = false;
 
+  List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
+
   Future<void> createOrderAndGetCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
@@ -125,9 +127,24 @@ class OrdersProvider with ChangeNotifier {
     final responseData = await appProvider.post(endpoint: endpoint, withToken: true);
 
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] == null ? 'Unknown' : responseData["message"]);
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
     isLoadingDeleteOrderRequest = false;
+    notifyListeners();
+  }
+
+  Future<void> createOrderRating(AppProvider appProvider, int orderId) async {
+    final endpoint = 'orders/$orderId/rate';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if(responseData == 401) {
+      print('Unauthenticated');
+      return 401;
+    }
+    if(responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    final availableIssuesArray = responseData["data"]["availableIssues"];
+    orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
     notifyListeners();
   }
 }
