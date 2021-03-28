@@ -27,6 +27,11 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
 
   double sliderValue = 1;
   double leftPosition = 30;
+  int sliderDivisions = 3;
+  double screenGutter = 17.0;
+  double sliderIndicatorWidth = 55.0;
+  double sliderIndicatorHeight = 65.0;
+  double sliderSideGutter = 20;
 
   @override
   void didChangeDependencies() {
@@ -48,6 +53,9 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    double infoContainerWidth = screenSize.width - (screenGutter * 2);
+
     return AppScaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).get("Track your order")),
@@ -59,22 +67,23 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             child: Stack(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: screenSize.height,
                   child: TrackOrderMap(),
                 ),
                 AnimatedPositioned(
                   duration: Duration(milliseconds: 300),
                   bottom: 225,
-                  left: appProvider.isRTL ? null : getPosition(leftPosition, sliderValue),
-                  right: appProvider.isRTL ? getPosition(leftPosition, sliderValue) : null,
+                  left: appProvider.isRTL ? null : getOffset(screenSize.width),
+                  right: appProvider.isRTL ? getOffset(screenSize.width) : null,
                   child: Column(
                     children: [
                       Container(
-                        height: 55,
-                        width: 55,
+                        width: sliderIndicatorWidth,
+                        height: sliderIndicatorWidth,
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
                           color: AppColors.white,
                         ),
                         child: Image.asset(
@@ -92,122 +101,125 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 ),
                 Positioned(
                   bottom: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 17.0),
-                    child: Container(
-                      height: 218,
-                      padding: const EdgeInsets.symmetric(horizontal: 17.0),
-                      width: MediaQuery.of(context).size.width * 0.9,
+                  child: Container(
+                    height: 218,
+                    margin: EdgeInsets.symmetric(horizontal: screenGutter),
+                    padding: EdgeInsets.symmetric(horizontal: screenGutter),
+                    width: infoContainerWidth,
+                    decoration: BoxDecoration(
                       color: AppColors.white,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Slider(
-                                value: sliderValue,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    sliderValue = newValue;
-                                  });
-                                },
-                                divisions: 3,
-                                min: 1,
-                                max: 4,
-                              ),
-                              Container(
-                                height: 25,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.only(left: 10.0),
-                                  physics: NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _stepsText.length,
-                                  itemBuilder: (context, i) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Text(
-                                        Translations.of(context).get(_stepsText[i]),
-                                        style: AppTextStyles.subtitleXs,
-                                      ),
-                                    );
-                                  },
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                      boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Slider(
+                              value: sliderValue,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  sliderValue = newValue;
+                                });
+                              },
+                              divisions: sliderDivisions,
+                              min: 1,
+                              max: 4,
+                            ),
+                            Row(
+                              children: List.generate(
+                                _stepsText.length,
+                                (i) => Expanded(
+                                  child: Text(
+                                    Translations.of(context).get(_stepsText[i]),
+                                    style: AppTextStyles.subtitleXs,
+                                    textAlign: i == 0
+                                        ? TextAlign.start
+                                        : i == _stepsText.length - 1
+                                            ? TextAlign.end
+                                            : TextAlign.center,
+                                  ),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 14),
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    child: AppIcon.iconMdPrimary(FontAwesomeIcons.solidUser),
+                                    height: 55.0,
+                                    width: 55.0,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(color: AppColors.shadow, blurRadius: 4),
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text('Lara')
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.primary,
+                                      ),
+                                      child: Icon(
+                                        FontAwesomeIcons.solidComments,
+                                        color: AppColors.white,
+                                        size: 14,
+                                      ),
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                  SizedBox(width: 10),
+                                  InkWell(
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.primary,
+                                      ),
+                                      child: Icon(
+                                        FontAwesomeIcons.solidFileAlt,
+                                        color: AppColors.white,
+                                        size: 14,
+                                      ),
+                                    ),
+                                    onTap: () {},
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 14),
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      child: AppIcon.iconMdPrimary(FontAwesomeIcons.solidUser),
-                                      height: 55.0,
-                                      width: 55.0,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(color: AppColors.shadow, blurRadius: 4),
-                                        ],
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(4.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text('Lara')
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.primary,
-                                        ),
-                                        child: Icon(
-                                          FontAwesomeIcons.solidComments,
-                                          color: AppColors.white,
-                                          size: 14,
-                                        ),
-                                      ),
-                                      onTap: () {},
-                                    ),
-                                    SizedBox(width: 10),
-                                    InkWell(
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.primary,
-                                        ),
-                                        child: Icon(
-                                          FontAwesomeIcons.solidFileAlt,
-                                          color: AppColors.white,
-                                          size: 14,
-                                        ),
-                                      ),
-                                      onTap: () {},
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 )
@@ -218,19 +230,11 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       ),
     );
   }
-}
 
-double getPosition(double position, double sliderValue) {
-  if (sliderValue == 1) {
-    position = 30;
-  } else if (sliderValue == 2) {
-    position = 110;
-  } else if (sliderValue == 3) {
-    position = 190;
-  } else if (sliderValue == 4) {
-    position = 275;
+  double getOffset(double screenWidth) {
+    double sliderDivisionWidth = (screenWidth - (screenGutter * 4) - (sliderSideGutter * 2)) / sliderDivisions;
+    return ((sliderValue - 1) * sliderDivisionWidth) + (screenGutter * 2) - (sliderIndicatorWidth / 2) + sliderSideGutter;
   }
-  return position;
 }
 
 class TrianglePainter extends CustomPainter {
