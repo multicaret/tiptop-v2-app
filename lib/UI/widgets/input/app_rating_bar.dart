@@ -13,6 +13,7 @@ class AppRatingBar extends StatelessWidget {
   final bool hasLabel;
   final bool disabled;
   final double starSize;
+  final double starsGutter;
 
   AppRatingBar({
     this.initialRating = 0,
@@ -20,6 +21,7 @@ class AppRatingBar extends StatelessWidget {
     this.hasLabel = false,
     this.disabled = false,
     this.starSize = 20,
+    this.starsGutter = 10,
   });
 
   @override
@@ -36,14 +38,20 @@ class AppRatingBar extends StatelessWidget {
           itemCount: 5,
           itemSize: starSize,
           ratingWidget: RatingWidget(
-            full: Icon(FontAwesomeIcons.solidStar, color: AppColors.secondaryDark),
+            full: Image.asset(
+              'assets/images/star-filled.png',
+              width: starSize,
+            ),
             half: Image.asset(
               'assets/images/star-half.png',
-              fit: BoxFit.cover,
+              width: starSize,
             ),
-            empty: Icon(FontAwesomeIcons.star, color: AppColors.border),
+            empty: Image.asset(
+              'assets/images/star-empty.png',
+              width: starSize,
+            ),
           ),
-          itemPadding: appProvider.dir == 'ltr' ? EdgeInsets.only(right: 5.0) : EdgeInsets.only(left: 5.0),
+          itemPadding: EdgeInsets.symmetric(horizontal: starsGutter / 2),
           onRatingUpdate: onRatingUpdate,
         ),
         if (hasLabel) SizedBox(width: 5),
