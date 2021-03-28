@@ -8,6 +8,7 @@ class RadioSelectItems extends StatelessWidget {
   final Function action;
   final bool isRTL;
   final bool isAssetLogo;
+  final bool hasLogo;
 
   RadioSelectItems({
     @required this.items,
@@ -15,6 +16,7 @@ class RadioSelectItems extends StatelessWidget {
     @required this.action,
     @required this.isRTL,
     this.isAssetLogo = false,
+    this.hasLogo = true,
   });
 
   @override
@@ -52,6 +54,7 @@ class RadioSelectItems extends StatelessWidget {
                       Text(items[i].title),
                     ],
                   ),
+                  if(hasLogo)
                   isAssetLogo
                       ? Container(
                           decoration: BoxDecoration(
