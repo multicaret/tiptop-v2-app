@@ -90,9 +90,13 @@ class _CartControlsState extends State<CartControls> {
                 duration: Duration(milliseconds: 200),
                 width: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
                 height: widget.cartButtonHeight,
-                decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(quantity == 0 ? 10 : 0), boxShadow: [
-                  BoxShadow(blurRadius: 6, color: AppColors.shadow),
-                ]),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(quantity == 0 ? 10 : 0),
+                  boxShadow: [
+                    BoxShadow(blurRadius: 6, color: AppColors.shadow),
+                  ],
+                ),
                 child: Center(
                   child: Text(
                     quantity == 0 ? '' : '$quantity',
