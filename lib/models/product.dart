@@ -90,8 +90,8 @@ class Product {
   List<dynamic> barcodes;
   Media media;
   double width;
-  int height;
-  int depth;
+  double height;
+  double depth;
   double weight;
   bool isFavorited;
   Unit unit;
@@ -115,10 +115,10 @@ class Product {
         discountedPrice: json["discountedPrice"] == null ? null : DoubleRawIntFormatted.fromJson(json["discountedPrice"]),
         barcodes: json["barcodes"] == null ? null : List<dynamic>.from(json["barcodes"].map((x) => x)),
         media: Media.fromJson(json["media"]),
-        width: json["width"].toDouble(),
-        height: json["height"],
-        depth: json["depth"],
-        weight: json["weight"].toDouble(),
+        width: json["width"] == null ? null : json["width"].toDouble(),
+        height: json["height"] == null ? null : json["height"].toDouble(),
+        depth: json["depth"] == null ? null : json["depth"].toDouble(),
+        weight: json["weight"] == null ? null : json["weight"].toDouble(),
         isFavorited: json["isFavorited"],
         unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
       );
