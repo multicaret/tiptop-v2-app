@@ -110,7 +110,8 @@ class _ProductPageState extends State<ProductPage> {
                       physics: AlwaysScrollableScrollPhysics(),
                       children: [
                         AppCarousel(
-                          height: 400,
+                          height: MediaQuery.of(context).size.width * 0.8,
+                          dotBgColor: AppColors.border.withOpacity(0.3),
                           hasDots: productGallery.length > 1,
                           images: productGallery,
                         ),
