@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
 class RadioSelectItems extends StatelessWidget {
   final List<dynamic> items;
@@ -8,7 +9,7 @@ class RadioSelectItems extends StatelessWidget {
   final Function action;
   final bool isRTL;
   final bool isAssetLogo;
-  final bool hasLogo;
+  final bool hasBorder;
 
   RadioSelectItems({
     @required this.items,
@@ -16,7 +17,7 @@ class RadioSelectItems extends StatelessWidget {
     @required this.action,
     @required this.isRTL,
     this.isAssetLogo = false,
-    this.hasLogo = true,
+    this.hasBorder = true,
   });
 
   @override
@@ -30,13 +31,13 @@ class RadioSelectItems extends StatelessWidget {
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.only(
-                top: 10,
-                bottom: 10,
+                top: hasBorder ? 10 : 5,
+                bottom: hasBorder ? 10 : 5,
                 left: isRTL ? 17 : 7,
                 right: isRTL ? 7 : 17,
               ),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: AppColors.border)),
+                border: hasBorder ? Border(bottom: BorderSide(color: AppColors.border)) : null,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,29 +51,34 @@ class RadioSelectItems extends StatelessWidget {
                         activeColor: AppColors.secondaryDark,
                         onChanged: (itemId) => action(itemId),
                       ),
+                      if (items[i]["icon"] != null)
+                        Padding(
+                          padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
+                          child: AppIcon.icon50(items[i]["icon"]),
+                        ),
                       SizedBox(width: 10),
                       Text(items[i]["title"]),
                     ],
                   ),
-                  if(hasLogo)
-                  isAssetLogo
-                      ? Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
-                          ),
-                          child: Image(
-                            alignment: Alignment.centerRight,
-                            image: AssetImage(items[i]["logo"]),
+                  if (items[i]["logo"] != null)
+                    isAssetLogo
+                        ? Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                            ),
+                            child: Image(
+                              alignment: Alignment.centerRight,
+                              image: AssetImage(items[i]["logo"]),
+                              width: 30,
+                              height: 30,
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: items[i]["logo"],
                             width: 30,
-                            height: 30,
+                            fit: BoxFit.cover,
                           ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: items[i]["logo"],
-                          width: 30,
-                          fit: BoxFit.cover,
-                        ),
                 ],
               ),
             ),

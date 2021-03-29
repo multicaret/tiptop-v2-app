@@ -151,7 +151,6 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                             RadioSelectItems(
                               items: orderRatingAvailableIssues.map((issue) => {'id': issue.id, 'title': issue.title}).toList(),
                               selectedId: _selectedIssueId,
-                              hasLogo: false,
                               action: (int id) {
                                 setState(() {
                                   _selectedIssueId = id;
