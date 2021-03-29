@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/article_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
@@ -62,46 +64,74 @@ class _BlogPageState extends State<BlogPage> {
 
 class ArticleTile extends StatelessWidget {
   final Article article;
+  final AppProvider appProvider;
 
-  ArticleTile({this.article});
+  ArticleTile({
+    this.article,
+    this.appProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
     return InkWell(
       onTap: () => Navigator.of(context).pushNamed(ArticlePage.routeName, arguments: {'article': article}),
       child: Card(
         clipBehavior: Clip.antiAlias,
-        child: Column(
+        child: Row(
           children: [
-            ListTile(
-              // leading: Icon(Icons.arrow_drop_down_circle),
-              title: Text(
-                article.title,
-                style: AppTextStyles.body,
-              ),
-              subtitle: Row(
+            Expanded(
+              child: Column(
                 children: [
-                  Icon(
-                    FontAwesomeIcons.calendarAlt,
-                    size: 14.0,
-                    color: AppColors.text50,
+                  ListTile(
+                    // leading: Icon(Icons.arrow_drop_down_circle),
+                    title: Text(
+                      article.title,
+                      style: AppTextStyles.body,
+                    ),
+                    subtitle: Row(
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.calendarAlt,
+                          size: 14.0,
+                          color: AppColors.text50,
+                        ),
+                        SizedBox(width: 5.0),
+                        Text(
+                          article.updatedAt.formatted,
+                          style: AppTextStyles.subtitle50,
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(width: 5.0),
-                  Text(
-                    article.updatedAt.formatted,
-                    style: AppTextStyles.subtitle50,
+                  Padding(
+                    padding: const EdgeInsets.all(17.0),
+                    child: Text(
+                      article.exc.raw,
+                      style: AppTextStyles.subtitle,
+                    ),
                   ),
+                  // if (/*article.cover*/ false) Image.asset('assets/card-sample-image.jpg'),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(17.0),
-              child: Text(
-                article.exc.raw,
-                style: AppTextStyles.subtitle,
+            Expanded(
+              child: Padding(
+                padding: appProvider.isRTL ? EdgeInsets.only(left: 17.0) : EdgeInsets.only(right: 17.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [BoxShadow(blurRadius: 4, color: AppColors.shadow)],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      imageUrl: article.cover,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            if (/*article.cover*/ false) Image.asset('assets/card-sample-image.jpg'),
+            )
           ],
         ),
       ),
