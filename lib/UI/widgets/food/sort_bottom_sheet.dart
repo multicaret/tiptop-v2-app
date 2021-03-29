@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -12,19 +15,19 @@ class SortBottomSheet extends StatefulWidget {
 class _SortBottomSheetState extends State<SortBottomSheet> {
   List<Map<String, dynamic>> sortItems = [
     {
+      'id': 0,
       'title': 'Smart Sorting',
       'icon': FontAwesomeIcons.listUl,
-      'value': 0,
     },
     {
+      'id': 1,
       'title': 'Restaurant Rating',
       'icon': FontAwesomeIcons.star,
-      'value': 1,
     },
     {
+      'id': 2,
       'title': 'Delivery Time',
       'icon': FontAwesomeIcons.stopwatch,
-      'value': 2,
     },
   ];
 
@@ -32,9 +35,9 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.45,
-      padding: EdgeInsets.only(left: 17, right: 17, top: 10),
+      height: MediaQuery.of(context).size.height * 0.4,
       decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: new BorderRadius.only(
@@ -43,50 +46,53 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Center(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              width: 56,
-              height: 3,
-              decoration: BoxDecoration(
-                color: AppColors.primary50,
-                borderRadius: BorderRadius.circular(2.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  width: 56,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
               ),
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+                padding: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                ),
+                child: Text(Translations.of(context).get('Sort')),
+              ),
+              RadioSelectItems(
+                items: sortItems,
+                selectedId: _initRadioValue,
+                action: (value) {
+                  setState(() {
+                    _initRadioValue = value;
+                  });
+                },
+                hasBorder: false,
+                isRTL: appProvider.isRTL,
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 17, right: 17, bottom: 40, top: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
+              child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-          ),
-          Text(Translations.of(context).get('Sort')),
-          Divider(thickness: 1),
-          Container(
-            height: 180,
-            child: ListView.builder(
-                itemCount: sortItems.length,
-                itemBuilder: (context, i) {
-                  return RadioListTile(
-                    contentPadding: EdgeInsets.zero,
-                    activeColor: AppColors.primary,
-                    value: sortItems[i]['value'],
-                    groupValue: _initRadioValue,
-                    title: Row(
-                      children: [
-                        Icon(sortItems[i]['icon'], color: AppColors.primary50, size: 20),
-                        SizedBox(width: 10),
-                        Text(Translations.of(context).get(sortItems[i]['title'])),
-                      ],
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        _initRadioValue = value;
-                      });
-                    },
-                  );
-                }),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
-            child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
-            onPressed: () {},
           )
         ],
       ),
