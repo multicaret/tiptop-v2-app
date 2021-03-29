@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-
-import '../products_grid_view.dart';
 
 class ChildCategoryProducts extends StatefulWidget {
   final Category child;

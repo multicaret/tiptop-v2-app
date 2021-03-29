@@ -5,7 +5,7 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 
-import 'dialogs/confirm_alert_dialog.dart';
+import 'UI/dialogs/confirm_alert_dialog.dart';
 
 class PreviousOrderItem extends StatelessWidget {
   final Order order;

@@ -7,7 +7,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'UI/widgets/app_scaffold.dart';
+import 'UI/widgets/UI/app_scaffold.dart';
 
 class ForceUpdateWidget extends StatelessWidget {
   final AppProvider appProvider;

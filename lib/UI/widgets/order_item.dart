@@ -8,7 +8,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'address_icon.dart';
+import 'address/address_icon.dart';
 
 class OrderItem extends StatelessWidget {
   final bool isRTL;

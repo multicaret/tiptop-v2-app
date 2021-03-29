@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/cart_controls.dart';
-import 'package:tiptop_v2/UI/widgets/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
@@ -13,9 +13,9 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'app_carousel.dart';
-import 'app_scaffold.dart';
-import 'formatted_price.dart';
+import '../../UI/app_carousel.dart';
+import '../../UI/app_scaffold.dart';
+import '../../UI/formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = '/product';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/add_address_page.dart';
-import 'package:tiptop_v2/UI/widgets/input/app_drop_down_button.dart';
-import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
+import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-import 'input/address_icon_dropdown.dart';
+import '../UI/input/address_icon_dropdown.dart';
 
 class AddressDetailsForm extends StatefulWidget {
   final Map<String, dynamic> addressDetailsFormData;

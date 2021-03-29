@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/payment_methods_page.dart';
-import 'package:tiptop_v2/UI/pages/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
-import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/profile_auth_header.dart';
 import 'package:tiptop_v2/UI/widgets/profile_setting_item.dart';
-import 'package:tiptop_v2/UI/widgets/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
+import '../faq_page.dart';
 import 'about_page.dart';
 import 'addresses_page.dart';
 import 'blog_page.dart';
-import 'faq_page.dart';
 import 'favorites_page.dart';
 
 class ProfilePage extends StatelessWidget {

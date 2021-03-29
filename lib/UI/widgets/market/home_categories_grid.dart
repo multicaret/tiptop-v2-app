@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/market/products_page.dart';
+import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
-
-import 'category_item.dart';
 
 class HomeCategoriesGrid extends StatelessWidget {
   final List<Category> categories;

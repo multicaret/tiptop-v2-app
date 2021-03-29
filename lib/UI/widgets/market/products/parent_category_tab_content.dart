@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:tiptop_v2/UI/widgets/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/models/category.dart';
 
 import 'child_categories_tabs.dart';

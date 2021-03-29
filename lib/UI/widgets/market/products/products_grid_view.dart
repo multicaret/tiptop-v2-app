@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/grid_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/grid_product_item.dart';
 import 'package:tiptop_v2/models/product.dart';
 
 class ProductsGridView extends StatelessWidget {

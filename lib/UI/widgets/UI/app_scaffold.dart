@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppScaffold extends StatelessWidget {

@@ -6,10 +6,10 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/market/home_page.dart';
-import 'package:tiptop_v2/UI/pages/profile_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
-import 'package:tiptop_v2/UI/widgets/cart_fab.dart';
+import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 

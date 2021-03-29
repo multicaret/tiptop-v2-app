@@ -5,20 +5,20 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icon.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class CustomExpansionTile extends StatefulWidget {
+class AppExpansionTile extends StatefulWidget {
   final String title;
   final String content;
 
-  CustomExpansionTile({
+  AppExpansionTile({
     @required this.title,
     @required this.content,
   });
 
   @override
-  _CustomExpansionTileState createState() => _CustomExpansionTileState();
+  _AppExpansionTileState createState() => _AppExpansionTileState();
 }
 
-class _CustomExpansionTileState extends State<CustomExpansionTile> with SingleTickerProviderStateMixin {
+class _AppExpansionTileState extends State<AppExpansionTile> with SingleTickerProviderStateMixin {
   AnimationController _rotationController;
 
   @override
