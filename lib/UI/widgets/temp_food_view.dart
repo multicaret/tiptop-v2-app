@@ -464,6 +464,7 @@ class FilterSortButtons extends StatelessWidget {
         children: [
           Expanded(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
               onPressed: () {},
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -478,9 +479,12 @@ class FilterSortButtons extends StatelessWidget {
           SizedBox(width: 16),
           Expanded(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
+                  useRootNavigator: true,
+                  backgroundColor: Colors.transparent,
                   builder: (context) => SortBottomSheet(),
                 );
               },
@@ -512,6 +516,7 @@ class ListDisplayButton extends StatelessWidget {
     this.showGridView,
     this.showListView,
   });
+
   @override
   Widget build(BuildContext context) {
     return Row(

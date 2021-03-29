@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/products_page.dart';
+import 'package:tiptop_v2/UI/pages/market/products_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 

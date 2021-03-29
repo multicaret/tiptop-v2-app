@@ -6,7 +6,7 @@ import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/article_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
-import 'package:tiptop_v2/UI/pages/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/order_rating_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
