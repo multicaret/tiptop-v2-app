@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/cart_page.dart';
-import 'package:tiptop_v2/UI/pages/home_page.dart';
-import 'package:tiptop_v2/UI/pages/profile_page.dart';
+import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/market/home_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
+import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
-import 'package:tiptop_v2/UI/widgets/cart_fab.dart';
+import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -54,6 +55,9 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 
   void onTabItemTapped(int index) {
+    if (index == 2) {
+      return;
+    }
     setState(() {
       _selectedTabIndex = index;
       _cupertinoTabController.index = index;
@@ -64,6 +68,7 @@ class _AppWrapperState extends State<AppWrapper> {
   List<BottomNavigationBarItem> _getCupertinoTabBarItems() {
     return List.generate(_cupertinoTabsList.length, (i) {
       return BottomNavigationBarItem(
+        backgroundColor: AppColors.primary,
         icon: Icon(
           _cupertinoTabsList[i]['icon'],
         ),
@@ -112,6 +117,7 @@ class _AppWrapperState extends State<AppWrapper> {
         child: Stack(
           children: [
             CupertinoTabScaffold(
+              backgroundColor: AppColors.white,
               controller: _cupertinoTabController,
               tabBar: CupertinoTabBar(
                 onTap: onTabItemTapped,

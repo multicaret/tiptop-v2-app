@@ -56,6 +56,7 @@ class HomeProvider with ChangeNotifier {
     };
 
     homeDataRequestError = false;
+    noBranchFound = false;
     try {
       final responseData = await appProvider.get(
         endpoint: endpoint,

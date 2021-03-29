@@ -132,18 +132,18 @@ class PreviousOrdersResponseData {
   int status;
 
   factory PreviousOrdersResponseData.fromJson(Map<String, dynamic> json) => PreviousOrdersResponseData(
-    previousOrders: json["data"] == null ? null : List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
-    errors: json["errors"],
-    message: json["message"],
-    status: json["status"],
-  );
+        previousOrders: json["data"] == null ? null : List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
+        errors: json["errors"],
+        message: json["message"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": previousOrders == null ? null : List<dynamic>.from(previousOrders.map((x) => x.toJson())),
-    "errors": errors,
-    "message": message,
-    "status": status,
-  };
+        "data": previousOrders == null ? null : List<dynamic>.from(previousOrders.map((x) => x.toJson())),
+        "errors": errors,
+        "message": message,
+        "status": status,
+      };
 }
 
 class Order {
@@ -153,6 +153,7 @@ class Order {
     this.completedAt,
     this.deliveryFee,
     this.grandTotal,
+    this.orderRating,
     this.cart,
     this.paymentMethod,
   });
@@ -162,6 +163,7 @@ class Order {
   EdAt completedAt;
   DoubleRawIntFormatted deliveryFee;
   DoubleRawIntFormatted grandTotal;
+  OrderRating orderRating;
   Cart cart;
   PaymentMethod paymentMethod;
 
@@ -171,6 +173,7 @@ class Order {
         completedAt: EdAt.fromJson(json["completedAt"]),
         deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+        orderRating: OrderRating.fromJson(json["rating"]),
         cart: Cart.fromJson(json["cart"]),
         paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
       );
@@ -181,7 +184,76 @@ class Order {
         "completedAt": completedAt.toJson(),
         "deliveryFee": deliveryFee.toJson(),
         "grandTotal": grandTotal.toJson(),
+        "rating": orderRating.toJson(),
         "cart": cart.toJson(),
         "paymentMethod": paymentMethod.toJson(),
+      };
+}
+
+class OrderRating {
+  OrderRating({
+    this.branchHasBeenRated,
+    this.branchRatingValue,
+    this.driverHasBeenRated,
+    this.driverRatingValue,
+    this.ratingComment,
+    this.hasGoodFoodQualityRating,
+    this.hasGoodPackagingQualityRating,
+    this.hasGoodOrderAccuracyRating,
+    this.ratingIssue,
+  });
+
+  bool branchHasBeenRated;
+  double branchRatingValue;
+  bool driverHasBeenRated;
+  double driverRatingValue;
+  String ratingComment;
+  bool hasGoodFoodQualityRating;
+  bool hasGoodPackagingQualityRating;
+  bool hasGoodOrderAccuracyRating;
+  OrderRatingAvailableIssue ratingIssue;
+
+  factory OrderRating.fromJson(Map<String, dynamic> json) => OrderRating(
+        branchHasBeenRated: json["branchHasBeenRated"],
+        branchRatingValue: json["branchRatingValue"].toDouble(),
+        driverHasBeenRated: json["driverHasBeenRated"],
+        driverRatingValue: json["driverRatingValue"].toDouble(),
+        ratingComment: json["ratingComment"],
+        hasGoodFoodQualityRating: json["hasGoodFoodQualityRating"],
+        hasGoodPackagingQualityRating: json["hasGoodPackagingQualityRating"],
+        hasGoodOrderAccuracyRating: json["hasGoodOrderAccuracyRating"],
+        ratingIssue: OrderRatingAvailableIssue.fromJson(json["ratingIssue"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "branchHasBeenRated": branchHasBeenRated,
+        "branchRatingValue": branchRatingValue,
+        "driverHasBeenRated": driverHasBeenRated,
+        "driverRatingValue": driverRatingValue,
+        "ratingComment": ratingComment,
+        "hasGoodFoodQualityRating": hasGoodFoodQualityRating,
+        "hasGoodPackagingQualityRating": hasGoodPackagingQualityRating,
+        "hasGoodOrderAccuracyRating": hasGoodOrderAccuracyRating,
+        "ratingIssue": ratingIssue.toJson(),
+      };
+}
+
+class OrderRatingAvailableIssue {
+  OrderRatingAvailableIssue({
+    this.id,
+    this.title,
+  });
+
+  int id;
+  String title;
+
+  factory OrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => OrderRatingAvailableIssue(
+        id: json["id"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
       };
 }

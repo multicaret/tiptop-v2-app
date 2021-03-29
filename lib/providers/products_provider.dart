@@ -15,6 +15,8 @@ class ProductsProvider with ChangeNotifier {
   List<Category> parents = [];
   List<Category> selectedParentChildCategories = [];
   List<Product> searchedProducts = [];
+  List<Product> favoriteProducts = [];
+  Product product;
 
   Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {
     final endpoint = 'categories/$selectedParentCategoryId/products';
@@ -50,5 +52,50 @@ class ProductsProvider with ChangeNotifier {
       print('@e Error');
       print(e);
     }
+  }
+
+  Future<dynamic> fetchAndSetProduct(AppProvider appProvider, int productId) async {
+    final endpoint = 'products/$productId';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
+    //Todo: Add (|| responseData["status"] != 200)
+    if (responseData["data"] == null) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'No Data!');
+    }
+    product = Product.fromJson(responseData["data"]);
+    notifyListeners();
+  }
+
+  Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, String action) async {
+    final endpoint = 'products/$productId/interact';
+    final body = {
+      "action": action,
+    };
+    print(body);
+    print('productId $productId');
+    print('action: $action');
+    final responseData = await appProvider.post(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+    print(responseData);
+    if (responseData == 401) {
+      print('Unauthenticated!');
+      return 401;
+    }
+    if (responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
+    final endpoint = 'profile/favorites';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if(responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
+    notifyListeners();
   }
 }

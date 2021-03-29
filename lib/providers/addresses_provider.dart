@@ -31,6 +31,7 @@ class AddressesProvider with ChangeNotifier {
     }
     print('Address is selected!');
     String selectedAddressString = await storageActions.getDataOfType(key: 'selected_address', type: String);
+    // print(selectedAddressString);
     selectedAddress = Address.fromJson(json.decode(selectedAddressString));
     notifyListeners();
   }
@@ -75,11 +76,12 @@ class AddressesProvider with ChangeNotifier {
   Future<dynamic> fetchAndSetAddresses(AppProvider appProvider) async {
     final endpoint = 'profile/addresses';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
-    addressesResponseData = AddressesResponseData.fromJson(responseData);
-
     if (responseData == 401) {
       return 401;
     }
+
+    addressesResponseData = AddressesResponseData.fromJson(responseData);
+
 
     if (addressesResponseData.addressesData == null || addressesResponseData.status != 200) {
       throw HttpException(title: 'Error', message: addressesResponseData.message);

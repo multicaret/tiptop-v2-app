@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
-import 'package:tiptop_v2/UI/widgets/address_select_button.dart';
-import 'package:tiptop_v2/UI/widgets/app_loader.dart';
-import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/dialogs/order_confirmed_dialog.dart';
-import 'package:tiptop_v2/UI/widgets/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/UI/dialogs/order_confirmed_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
-import 'package:tiptop_v2/UI/widgets/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -122,7 +122,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   SectionTitle('Payment Methods'),
                                   RadioSelectItems(
-                                    items: checkoutData.paymentMethods,
+                                    items: checkoutData.paymentMethods.map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo}).toList(),
                                     selectedId: selectedPaymentMethodId,
                                     action: (value) => setState(() => selectedPaymentMethodId = value),
                                     isRTL: appProvider.isRTL,

@@ -24,13 +24,15 @@ class OrderButton extends StatelessWidget {
         right: 0,
         left: 0,
         child: GestureDetector(
-          onTap: () {
-            if (submitAction != null) {
-              submitAction();
-            } else {
-              Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
-            }
-          },
+          onTap: cartProvider.noCart
+              ? null
+              : () {
+                  if (submitAction != null) {
+                    submitAction();
+                  } else {
+                    Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
+                  }
+                },
           child: Container(
             color: AppColors.primary,
             padding: EdgeInsets.only(top: 20, bottom: 40, left: 17, right: 17),
