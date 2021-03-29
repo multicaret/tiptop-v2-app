@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -30,16 +31,15 @@ class _ArticlePageState extends State<ArticlePage> {
         child: Column(
           children: [
             Container(
-              height: 200,
-              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.0),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/slide-2.png'),
-                ),
+                boxShadow: [BoxShadow(blurRadius: 5, color: AppColors.shadow)],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: CachedNetworkImage(imageUrl: article.cover),
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             Row(
               children: [
                 Icon(
@@ -50,7 +50,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 SizedBox(width: 5.0),
                 Text(
                   article.updatedAt.formatted,
-                  style: AppTextStyles.body50,
+                  style: AppTextStyles.subtitle50,
                 ),
               ],
             ),
