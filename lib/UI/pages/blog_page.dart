@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/UI/pages/article_page.dart';
 import 'package:tiptop_v2/UI/widgets/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/app_scaffold.dart';
 import 'package:tiptop_v2/models/blog.dart';
@@ -66,40 +67,43 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          ListTile(
-            // leading: Icon(Icons.arrow_drop_down_circle),
-            title: Text(
-              article.title,
-              style: AppTextStyles.body,
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(ArticlePage.routeName, arguments: {'article': article}),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            ListTile(
+              // leading: Icon(Icons.arrow_drop_down_circle),
+              title: Text(
+                article.title,
+                style: AppTextStyles.body,
+              ),
+              subtitle: Row(
+                children: [
+                  Icon(
+                    FontAwesomeIcons.calendarAlt,
+                    size: 14.0,
+                    color: AppColors.text50,
+                  ),
+                  SizedBox(width: 5.0),
+                  Text(
+                    article.updatedAt.formatted,
+                    style: AppTextStyles.subtitle50,
+                  ),
+                ],
+              ),
             ),
-            subtitle: Row(
-              children: [
-                Icon(
-                  FontAwesomeIcons.calendarAlt,
-                  size: 14.0,
-                  color: AppColors.text50,
-                ),
-                SizedBox(width: 5.0),
-                Text(
-                  article.updatedAt.formatted,
-                  style: AppTextStyles.subtitle50,
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(17.0),
+              child: Text(
+                article.exc.raw,
+                style: AppTextStyles.subtitle,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(17.0),
-            child: Text(
-              article.exc.raw,
-              style: AppTextStyles.subtitle,
-            ),
-          ),
-          if (/*article.cover*/ false) Image.asset('assets/card-sample-image.jpg'),
-        ],
+            if (/*article.cover*/ false) Image.asset('assets/card-sample-image.jpg'),
+          ],
+        ),
       ),
     );
   }

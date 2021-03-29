@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/about_page.dart';
 import 'package:tiptop_v2/UI/pages/add_address_page.dart';
 import 'package:tiptop_v2/UI/pages/addresses_page.dart';
+import 'package:tiptop_v2/UI/pages/article_page.dart';
 import 'package:tiptop_v2/UI/pages/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
@@ -59,4 +60,5 @@ final routes = <String, WidgetBuilder>{
   ProductPage.routeName: (BuildContext context) => ProductPage(),
   OrderRatingPage.routeName: (BuildContext context) => OrderRatingPage(),
   SupportPage.routeName: (BuildContext context) => SupportPage(),
+  ArticlePage.routeName: (BuildContext context) => ArticlePage()
 };
