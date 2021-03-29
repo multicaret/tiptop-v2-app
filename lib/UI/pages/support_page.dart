@@ -97,7 +97,7 @@ class _SupportPageState extends State<SupportPage> {
                             minimumSize: Size.fromHeight(150),
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushNamed(LiveChatPage.routeName);
+                            // Navigator.of(context, rootNavigator: true).pushNamed(LiveChatPage.routeName);
                           },
                           child: Column(
                             children: [
