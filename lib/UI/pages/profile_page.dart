@@ -41,11 +41,6 @@ class ProfilePage extends StatelessWidget {
       'icon': FontAwesomeIcons.shoppingBag,
       'route': PreviousOrdersPage.routeName,
     },
-    {
-      'title': "Payment Methods",
-      'icon': FontAwesomeIcons.ccMastercard,
-      'route': PaymentMethodsPage.routeName,
-    },
   ];
 
   final List<Map<String, dynamic>> profileItems = [
