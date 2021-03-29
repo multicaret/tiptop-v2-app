@@ -15,7 +15,7 @@ class OrdersProvider with ChangeNotifier {
 
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
-  bool isLoadingDeleteOrderRequest  = false;
+  bool isLoadingDeleteOrderRequest = false;
 
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
@@ -60,7 +60,7 @@ class OrdersProvider with ChangeNotifier {
 
     cartProvider.clearRequestedMoreThanAvailableQuantity();
 
-    if(addressesProvider.selectedAddress == null) {
+    if (addressesProvider.selectedAddress == null) {
       print('No address selected!');
       return false;
     }
@@ -136,11 +136,11 @@ class OrdersProvider with ChangeNotifier {
   Future<void> createOrderRating(AppProvider appProvider, int orderId) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
-    if(responseData == 401) {
+    if (responseData == 401) {
       print('Unauthenticated');
       return 401;
     }
-    if(responseData["data"] == null || responseData["status"] != 200) {
+    if (responseData["data"] == null || responseData["status"] != 200) {
       throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
     final availableIssuesArray = responseData["data"]["availableIssues"];
@@ -151,11 +151,11 @@ class OrdersProvider with ChangeNotifier {
   Future<void> storeOrderRating(AppProvider appProvider, HomeProvider homeProvider, int orderId, Map<String, dynamic> ratingData) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.post(endpoint: endpoint, body: ratingData, withToken: true);
-    if(responseData == 401) {
+    if (responseData == 401) {
       print('Unauthenticated');
       return 401;
     }
-    if(responseData["status"] != 200) {
+    if (responseData["status"] != 200) {
       throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
     await fetchAndSetPreviousOrders(appProvider, homeProvider);
