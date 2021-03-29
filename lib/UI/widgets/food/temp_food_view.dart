@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/UI/triangle_painter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -36,6 +39,8 @@ class _TempFoodViewState extends State<TempFoodView> {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,7 +49,7 @@ class _TempFoodViewState extends State<TempFoodView> {
             padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 17.0, bottom: 5.0),
             child: Text(Translations.of(context).get("Categories"), style: AppTextStyles.body50),
           ),
-          RestaurantCategories(categoriesItems: _categoriesItems),
+          CategoriesSlider(categoriesItems: _categoriesItems, isRTL: appProvider.isRTL),
           FilterSortButtons(),
           Padding(
             padding: const EdgeInsets.only(left: 17.0, right: 17.0, bottom: 5.0),
@@ -73,64 +78,6 @@ class _TempFoodViewState extends State<TempFoodView> {
           ),
           _showListView ? RestaurantListView() : RestaurantGridView(),
         ],
-      ),
-    );
-  }
-}
-
-class RestaurantCategories extends StatelessWidget {
-  const RestaurantCategories({
-    Key key,
-    @required List<Map<String, dynamic>> categoriesItems,
-  })  : _categoriesItems = categoriesItems,
-        super(key: key);
-
-  final List<Map<String, dynamic>> _categoriesItems;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-      color: AppColors.white,
-      height: 110,
-      child: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(width: 10);
-        },
-        itemCount: _categoriesItems.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, i) {
-          return Stack(
-            children: [
-              Container(
-                width: 116,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage(
-                      _categoriesItems[i]['image'],
-                    ),
-                  ),
-                  color: AppColors.primary50,
-                ),
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5.0),
-                    child: Text(
-                      _categoriesItems[i]['title'],
-                      style: AppTextStyles.bodyWhite,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
       ),
     );
   }
