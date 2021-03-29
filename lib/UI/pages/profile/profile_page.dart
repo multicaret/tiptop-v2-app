@@ -7,9 +7,9 @@ import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/profile_auth_header.dart';
 import 'package:tiptop_v2/UI/widgets/profile_setting_item.dart';
-import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -96,7 +96,7 @@ class ProfilePage extends StatelessWidget {
                 if (appProvider.isAuth) ..._getProfileSettingItems(context, authProfileItems),
                 SectionTitle('Languages'),
                 RadioSelectItems(
-                  items: appProvider.appLanguages,
+                  items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
                   selectedId: selectedLanguageId,
                   action: (languageId) {
                     Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);

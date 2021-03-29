@@ -149,7 +149,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                           ),
                           if (_ratingValue != null && _ratingValue <= 2)
                             RadioSelectItems(
-                              items: orderRatingAvailableIssues,
+                              items: orderRatingAvailableIssues.map((issue) => {'id': issue.id, 'title': issue.title}).toList(),
                               selectedId: _selectedIssueId,
                               hasLogo: false,
                               action: (int id) {

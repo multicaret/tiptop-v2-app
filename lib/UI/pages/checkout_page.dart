@@ -122,7 +122,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   SectionTitle('Payment Methods'),
                                   RadioSelectItems(
-                                    items: checkoutData.paymentMethods,
+                                    items: checkoutData.paymentMethods.map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo}).toList(),
                                     selectedId: selectedPaymentMethodId,
                                     action: (value) => setState(() => selectedPaymentMethodId = value),
                                     isRTL: appProvider.isRTL,

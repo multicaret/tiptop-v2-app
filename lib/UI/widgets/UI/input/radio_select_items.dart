@@ -26,7 +26,7 @@ class RadioSelectItems extends StatelessWidget {
         return Material(
           color: AppColors.white,
           child: InkWell(
-            onTap: () => action(items[i].id),
+            onTap: () => action(items[i]['id']),
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.only(
@@ -44,14 +44,14 @@ class RadioSelectItems extends StatelessWidget {
                   Row(
                     children: [
                       Radio(
-                        value: items[i].id,
+                        value: items[i]["id"],
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         groupValue: selectedId,
                         activeColor: AppColors.secondaryDark,
                         onChanged: (itemId) => action(itemId),
                       ),
                       SizedBox(width: 10),
-                      Text(items[i].title),
+                      Text(items[i]["title"]),
                     ],
                   ),
                   if(hasLogo)
@@ -63,13 +63,13 @@ class RadioSelectItems extends StatelessWidget {
                           ),
                           child: Image(
                             alignment: Alignment.centerRight,
-                            image: AssetImage(items[i].logo),
+                            image: AssetImage(items[i]["logo"]),
                             width: 30,
                             height: 30,
                           ),
                         )
                       : CachedNetworkImage(
-                          imageUrl: items[i].logo,
+                          imageUrl: items[i]["logo"],
                           width: 30,
                           fit: BoxFit.cover,
                         ),
