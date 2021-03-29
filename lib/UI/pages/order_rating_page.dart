@@ -187,19 +187,19 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            child: Text(Translations.of(context).get('Skip')),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: AppColors.secondaryDark,
                               onPrimary: AppColors.primary,
                             ),
                             child: Text(Translations.of(context).get('Send')),
                             onPressed: _submitRating,
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Text(Translations.of(context).get('Skip')),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
                         ),
                       ],
