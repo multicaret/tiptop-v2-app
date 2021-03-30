@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/triangle_painter.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
-import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
-import 'package:tiptop_v2/UI/widgets/UI/triangle_painter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
 
 class TempFoodView extends StatefulWidget {
   @override
@@ -16,8 +17,7 @@ class TempFoodView extends StatefulWidget {
 }
 
 class _TempFoodViewState extends State<TempFoodView> {
-  bool _showListView = true;
-  bool _showGridView = false;
+  ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
   final List<Map<String, dynamic>> _categoriesItems = [
     {
@@ -35,6 +35,17 @@ class _TempFoodViewState extends State<TempFoodView> {
     {
       'title': "Deserts",
       'image': 'assets/images/slide-2.png',
+    },
+  ];
+
+  final List<Map<String, dynamic>> _listTypes = [
+    {
+      'type': ListType.HORIZONTALLY_STACKED,
+      'icon': 'assets/images/list-view-icon.png',
+    },
+    {
+      'type': ListType.VERTICALLY_STACKED,
+      'icon': 'assets/images/grid-view-icon.png',
     },
   ];
 
@@ -58,26 +69,27 @@ class _TempFoodViewState extends State<TempFoodView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Translations.of(context).get("All Restaurants"), style: AppTextStyles.body50),
-                ListDisplayButton(
-                  showGridView: _showGridView,
-                  showListView: _showListView,
-                  onGridViewPressed: () {
-                    setState(() {
-                      _showGridView = !_showGridView;
-                      _showListView = false;
-                    });
-                  },
-                  onListViewPressed: () {
-                    setState(() {
-                      _showListView = !_showListView;
-                      _showGridView = false;
-                    });
-                  },
+                Row(
+                  children: List.generate(
+                    _listTypes.length,
+                    (i) => InkWell(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: i == 0 ? appProvider.isRTL ? 0 : 25 : 0, left: i == 0 ? appProvider.isRTL ? 25 : 0 : 0),
+                        child: Image.asset(
+                          _listTypes[i]['icon'],
+                          color: activeListType == _listTypes[i]['type'] ? AppColors.primary : AppColors.primary50,
+                          width: 18,
+                          height: 16,
+                        ),
+                      ),
+                      onTap: () => setState(() => activeListType = _listTypes[i]['type']),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          _showListView ? RestaurantListView() : RestaurantGridView(),
+          activeListType == ListType.HORIZONTALLY_STACKED ? RestaurantListView() : RestaurantGridView(),
         ],
       ),
     );
@@ -398,43 +410,41 @@ class TipTopDeliveryIcon extends StatelessWidget {
   }
 }
 
-class ListDisplayButton extends StatelessWidget {
-  final Function onListViewPressed;
-  final Function onGridViewPressed;
-  final bool showListView;
-  final bool showGridView;
+class ListTypePicker extends StatelessWidget {
+  final Function action;
+  final ListType activeListType;
 
-  ListDisplayButton({
-    this.onGridViewPressed,
-    this.onListViewPressed,
-    this.showGridView,
-    this.showListView,
+  ListTypePicker({
+    this.action,
+    this.activeListType,
   });
+
+  final List<Map<String, dynamic>> _listTypes = [
+    {
+      'type': ListType.HORIZONTALLY_STACKED,
+      'icon': 'assets/images/list-view-icon.png',
+    },
+    {
+      'type': ListType.VERTICALLY_STACKED,
+      'icon': 'assets/images/grid-view-icon.png',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        InkWell(
+      children: List.generate(
+        _listTypes.length,
+        (i) => InkWell(
           child: Image.asset(
-            'assets/images/list-view-icon.png',
-            color: showListView ? AppColors.primary : AppColors.primary50,
+            _listTypes[i]['icon'],
+            color: activeListType == _listTypes[i]['type'] ? AppColors.primary : AppColors.primary50,
             width: 18,
             height: 16,
           ),
-          onTap: onListViewPressed,
+          onTap: () => action(_listTypes[i]['type']),
         ),
-        SizedBox(width: 25),
-        InkWell(
-          child: Image.asset(
-            'assets/images/grid-view-icon.png',
-            color: showGridView ? AppColors.primary : AppColors.primary50,
-            width: 18,
-            height: 16,
-          ),
-          onTap: onGridViewPressed,
-        ),
-      ],
+      ),
     );
   }
 }
