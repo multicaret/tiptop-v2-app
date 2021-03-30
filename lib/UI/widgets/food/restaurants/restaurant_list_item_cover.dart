@@ -14,7 +14,7 @@ class RestaurantListItemCover extends StatelessWidget {
   const RestaurantListItemCover({
     @required this.restaurant,
     this.favoriteAction,
-    this.isFavorited = false,
+    this.isFavorited,
   });
 
   @override
