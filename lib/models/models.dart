@@ -559,3 +559,19 @@ class Language {
     this.countryCode,
   });
 }
+
+enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
+
+class Restaurant {
+  Restaurant({
+    this.id,
+    this.title,
+    this.cover,
+    this.discountValue
+  });
+
+  int id;
+  String title;
+  String cover;
+  String discountValue;
+}

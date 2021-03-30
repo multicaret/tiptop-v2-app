@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   List<Category> categories = [];
   List<Slide> slides = [];
 
-  String currentView = 'market';
+  String currentView = 'food';
 
   Future<void> fetchAndSetHomeData() async {
     try {
