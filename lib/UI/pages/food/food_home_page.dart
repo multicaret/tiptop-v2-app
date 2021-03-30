@@ -11,12 +11,12 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class TempFoodView extends StatefulWidget {
+class FoodHomePage extends StatefulWidget {
   @override
-  _TempFoodViewState createState() => _TempFoodViewState();
+  _FoodHomePageState createState() => _FoodHomePageState();
 }
 
-class _TempFoodViewState extends State<TempFoodView> {
+class _FoodHomePageState extends State<FoodHomePage> {
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
   final List<Map<String, dynamic>> _categoriesItems = [

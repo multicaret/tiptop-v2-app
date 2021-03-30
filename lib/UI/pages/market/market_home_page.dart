@@ -11,7 +11,7 @@ import 'package:tiptop_v2/UI/widgets/market/home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/UI/no_content_view.dart';
-import 'package:tiptop_v2/UI/widgets/food/temp_food_view.dart';
+import 'package:tiptop_v2/UI/pages/food/food_home_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           currentView: currentView,
                           changeView: (value) => setState(() => currentView = value),
                         ),
-                        if (currentView == 'food') TempFoodView(),
+                        if (currentView == 'food') FoodHomePage(),
                         if (currentView == 'market')
                           Column(
                             children: [
