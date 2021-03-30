@@ -13,6 +13,7 @@ class AppColors {
   static const Color text50 = const Color(0x88293351);
   static const Color success = const Color(0xff56a66b);
   static const Color white = const Color(0xffffffff);
+  static const Color white50 = const Color(0x88ffffff);
   static const Color whatsApp = const Color(0xff1BD741);
   static const Color telegram = const Color(0xff61A8DE);
   static const Color shadow = const Color(0x1C000000);
