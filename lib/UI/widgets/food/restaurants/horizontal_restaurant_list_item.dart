@@ -19,7 +19,6 @@ class HorizontalRestaurantListItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.primary50)),
-        color: AppColors.white,
       ),
       child: Row(
         children: [

@@ -10,20 +10,26 @@ class RestaurantListItemCover extends StatelessWidget {
   final Restaurant restaurant;
   final Function favoriteAction;
   final bool isFavorited;
+  final bool hasRating;
+  final double height;
+  final bool hasBorderRadius;
 
   const RestaurantListItemCover({
     @required this.restaurant,
     this.favoriteAction,
     this.isFavorited,
+    this.hasRating = true,
+    this.height = 180,
+    this.hasBorderRadius = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
-      height: 180,
+      height: height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(hasBorderRadius ? 8 : 0),
         image: DecorationImage(
           fit: BoxFit.cover,
           image: AssetImage(restaurant.cover),
@@ -53,6 +59,7 @@ class RestaurantListItemCover extends StatelessWidget {
               )
             ],
           ),
+          if(hasRating)
           Row(
             children: [
               Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
@@ -102,9 +103,15 @@ class _FoodHomePageState extends State<FoodHomePage> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemCount: dummyRestaurants.length,
-          itemBuilder: (c, i) => activeListType == ListType.HORIZONTALLY_STACKED
-              ? HorizontalRestaurantListItem(restaurant: dummyRestaurants[i])
-              : VerticalRestaurantListItem(restaurant: dummyRestaurants[i]),
+          itemBuilder: (c, i) => Material(
+            color: AppColors.white,
+            child: InkWell(
+              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: dummyRestaurants[i]),
+              child: activeListType == ListType.HORIZONTALLY_STACKED
+                  ? HorizontalRestaurantListItem(restaurant: dummyRestaurants[i])
+                  : VerticalRestaurantListItem(restaurant: dummyRestaurants[i]),
+            ),
+          ),
         ),
       ],
     );

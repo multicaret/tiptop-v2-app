@@ -26,7 +26,6 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 20.0),
       decoration: BoxDecoration(
-        color: AppColors.white,
         border: Border(
           bottom: BorderSide(color: AppColors.border),
         ),
