@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -162,4 +163,12 @@ Map<String, dynamic> getMobileApp(PackageInfo deviceData, Map<String, dynamic> p
       'version': Platform.isAndroid ? platformState['version.release'] : platformState['utsname.version'],
     },
   };
+}
+
+Alert appAlert({BuildContext context, String title, String description}) {
+  return Alert(
+    context: context,
+    title: title,
+    desc: description,
+  );
 }

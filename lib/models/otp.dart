@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:tiptop_v2/models/user.dart';
 
+import 'models.dart';
+
 OTPDataResponse otpFromJson(String str) => OTPDataResponse.fromJson(json.decode(str));
 
 String otpToJson(OTPDataResponse data) => json.encode(data.toJson());
@@ -67,13 +69,13 @@ class OTPValidationDataResponse {
   });
 
   OTPValidationData otpValidationData;
-  String errors;
+  dynamic errors;
   String message;
   int status;
 
   factory OTPValidationDataResponse.fromJson(Map<String, dynamic> json) => OTPValidationDataResponse(
         otpValidationData: json["data"] == null ? null : OTPValidationData.fromJson(json["data"]),
-        errors: json["errors"],
+        errors: handleErrors(json["errors"]),
         message: json["message"],
         status: json["status"],
       );

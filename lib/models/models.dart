@@ -563,15 +563,22 @@ class Language {
 enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
 
 class Restaurant {
-  Restaurant({
-    this.id,
-    this.title,
-    this.cover,
-    this.discountValue
-  });
+  Restaurant({this.id, this.title, this.cover, this.discountValue});
 
   int id;
   String title;
   String cover;
   String discountValue;
+}
+
+dynamic handleErrors(errors) {
+  if (errors == null) return errors;
+  if (errors is String) return errors;
+  Map<String, dynamic> formattedErrors = {};
+  if (errors is Map) {
+    errors.forEach((index, error) {
+      formattedErrors[index] = List<String>.from(errors[index].map((x) => x));
+    });
+  }
+  return formattedErrors;
 }
