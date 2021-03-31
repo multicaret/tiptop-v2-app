@@ -34,7 +34,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
   double currentCategoryHeight;
   double previousCategoriesHeights = 0;
 
-  void childCategoriesScrollListener() {
+  void scrollSpyListener() {
     double scrollPosition = widget.scrollController.position.pixels;
     if (scrollPosition <= headerHeight) {
       widget.scrollSpyAction(0);
@@ -49,7 +49,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
 
   @override
   void initState() {
-    widget.scrollController.addListener(childCategoriesScrollListener);
+    // widget.scrollController.addListener(scrollSpyListener);
     currentCategoryHeight = widget.categoriesHeights[widget.index]['height'];
     if (widget.index > 0) {
       for (int i = widget.index - 1; i >= 0; i--) {
@@ -61,7 +61,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
 
   @override
   void dispose() {
-    widget.scrollController.removeListener(childCategoriesScrollListener);
+    // widget.scrollController.removeListener(scrollSpyListener);
     super.dispose();
   }
 

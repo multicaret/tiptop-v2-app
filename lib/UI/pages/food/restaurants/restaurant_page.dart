@@ -75,7 +75,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   void scrollToCategory(int index) {
-    selectedCategoryIdNotifier.value = dummyCategories[index].id;
     categoriesScrollController.scrollToIndex(
       index,
       preferPosition: AutoScrollPosition.begin,
@@ -83,7 +82,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   void scrollToProducts(int index) {
-    selectedCategoryIdNotifier.value = dummyCategories[index].id;
     productsScrollController.scrollToIndex(
       index,
       preferPosition: AutoScrollPosition.begin,
@@ -132,7 +130,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 itemScrollController: categoriesScrollController,
                                 selectedChildCategoryId: _selectedChildCategoryId,
                                 //Fired when a child category is clicked
-                                action: (i) => scrollToProducts(i),
+                                action: (i) {
+                                  selectedCategoryIdNotifier.value = dummyCategories[i].id;
+                                  // productsScrollController.removeListener(scrollSpyListener);
+                                  scrollToCategory(i);
+                                  scrollToProducts(i);
+                                },
                               ),
                             ),
                           ),
@@ -171,7 +174,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     index: i,
                     count: dummyCategories.length,
                     scrollController: productsScrollController,
-                    scrollSpyAction: (i) => scrollToCategory(i),
+                    scrollSpyAction: (i) {
+                      selectedCategoryIdNotifier.value = dummyCategories[i].id;
+                      // scrollToCategory(i);
+                    },
                     categoriesHeights: categoriesHeights,
                     singleTabContent: Column(
                       children: List.generate(
