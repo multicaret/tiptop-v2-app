@@ -4,25 +4,25 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class ChildCategoriesTabs extends StatelessWidget {
+class ScrollableHorizontalTabs extends StatelessWidget {
   final List<Category> children;
   final AutoScrollController itemScrollController;
   final Function action;
   final int selectedChildCategoryId;
 
-  ChildCategoriesTabs({
+  ScrollableHorizontalTabs({
     @required this.children,
     @required this.itemScrollController,
     @required this.action,
     @required this.selectedChildCategoryId,
   });
 
-  static double childCategoriesTabsHeight = 50.0;
+  static double tabsHeight = 50.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: childCategoriesTabsHeight,
+      height: tabsHeight,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 1.5, color: AppColors.border)),
         color: AppColors.white,

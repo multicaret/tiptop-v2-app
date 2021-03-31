@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-import 'child_categories_tabs.dart';
-import 'child_category_products.dart';
+import '../../UI/scrollable_horizontal_tabs.dart';
 
 class ParentCategoryTabContent extends StatefulWidget {
   final List<Category> children;
@@ -94,7 +95,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       children: [
         ValueListenableBuilder(
           valueListenable: selectedChildCategoryIdNotifier,
-          builder: (c, _selectedChildCategoryId, _) => ChildCategoriesTabs(
+          builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
             children: widget.children,
             itemScrollController: childCategoriesScrollController,
             selectedChildCategoryId: _selectedChildCategoryId,
@@ -108,19 +109,20 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             child: _isRefreshingData
                 ? Center(child: AppLoader())
                 : ListView(
+                    controller: productsScrollController,
                     children: List.generate(
                       widget.children.length,
-                      (i) => ChildCategoryProducts(
+                      (i) => ScrollableVerticalContent(
                         index: i,
                         count: widget.children.length,
                         child: widget.children[i],
-                        productsScrollController: productsScrollController,
+                        scrollController: productsScrollController,
                         //Fired when a child category is scrolled into view
                         scrollSpyAction: (index) => scrollToCategory(index),
                         categoriesHeights: childCategoriesHeights,
+                        singleTabContent: ProductsGridView(products: widget.children[i].products),
                       ),
                     ),
-                    controller: productsScrollController,
                   ),
           ),
         )
