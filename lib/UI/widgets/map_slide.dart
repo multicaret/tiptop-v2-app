@@ -54,71 +54,74 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      height: HomePage.sliderHeight,
-      child: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
-            mapType: MapType.normal,
-            markers: Set.from(allMarkers),
-            compassEnabled: false,
-            zoomControlsEnabled: false,
-            zoomGesturesEnabled: false,
-            myLocationButtonEnabled: false,
-            indoorViewEnabled: false,
-            onMapCreated: _onMapCreated,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
-                height: 40,
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  boxShadow: [BoxShadow(blurRadius: 10, color: AppColors.shadow)],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
-                          Expanded(
-                            child: Html(
-                              data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
-                              style: {"body": AppTextStyles.htmlXsBold},
+    return IgnorePointer(
+      ignoring: true,
+      child: Container(
+        height: HomePage.sliderHeight,
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
+              mapType: MapType.normal,
+              markers: Set.from(allMarkers),
+              compassEnabled: false,
+              zoomControlsEnabled: false,
+              zoomGesturesEnabled: false,
+              myLocationButtonEnabled: false,
+              indoorViewEnabled: false,
+              onMapCreated: _onMapCreated,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
+                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [BoxShadow(blurRadius: 10, color: AppColors.shadow)],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
+                            Expanded(
+                              child: Html(
+                                data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
+                                style: {"body": AppTextStyles.htmlXsBold},
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    VerticalDivider(thickness: 1.5),
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
-                          Expanded(
-                            child: Html(
-                              data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
-                              style: {"body": AppTextStyles.htmlXsBold},
+                      VerticalDivider(thickness: 1.5),
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
+                            Expanded(
+                              child: Html(
+                                data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
+                                style: {"body": AppTextStyles.htmlXsBold},
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
