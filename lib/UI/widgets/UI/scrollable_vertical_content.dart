@@ -86,7 +86,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
             ),
           ),
         Container(
-          color: AppColors.white,
+          // color: AppColors.white,
           height: widget.categoriesHeights[widget.index]['height'],
           child: AutoScrollTag(
             controller: widget.scrollController,

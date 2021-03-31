@@ -5,8 +5,10 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_horizontal_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
+import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../../../../dummy_data.dart';
@@ -31,7 +33,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
   static double searchBarHeight = 70;
   double headerExpandedHeight = 460.0;
   double headerCollapsedHeight = categoriesBarHeight + searchBarHeight;
-  double productItemHeight = 120;
 
   void scrollListener() {
     if (productsScrollController.hasClients) {
@@ -62,7 +63,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         dummyCategories.length,
         (i) => {
               'id': dummyCategories[i].id,
-              'height': productItemHeight * dummyCategories[i].products.length,
+              'height': foodProductListItemHeight * dummyCategories[i].products.length,
             });
     super.initState();
   }
@@ -184,15 +185,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     singleTabContent: Column(
                       children: List.generate(
                         dummyCategories[i].products.length,
-                        (j) => Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                            border: Border(bottom: BorderSide(color: AppColors.secondaryDark, width: 3)),
-                          ),
-                          child: Center(
-                            child: Text(dummyCategories[i].products[j].title),
-                          ),
-                        ),
+                        (j) => FoodProductListItem(product: dummyCategories[i].products[j]),
                       ),
                     ),
                   );
