@@ -309,7 +309,7 @@ class AppProvider with ChangeNotifier {
     return deviceData;
   }
 
-  Future<Map<String, dynamic>> loadMobileAppData() async {
+  Future<Map<String, dynamic>> loadMobileAppDetails() async {
     PackageInfo deviceData = await getDeviceData();
     Map<String, dynamic> platformState = await initPlatformState();
 
@@ -317,10 +317,10 @@ class AppProvider with ChangeNotifier {
   }
 
   Future<void> fetchBootConfigurations() async {
-    final mobileAppData = await loadMobileAppData();
+    final mobileAppDetails = await loadMobileAppDetails();
     final Map<String, String> body = {
-      'build_number': mobileAppData['buildNumber'],
-      'platform': mobileAppData['device']['platform'],
+      'build_number': mobileAppDetails['buildNumber'],
+      'platform': mobileAppDetails['device']['platform'],
     };
     final responseData = await get(endpoint: 'boot', body: body);
     BootResponse bootResponse = BootResponse.fromJson(responseData);
