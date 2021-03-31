@@ -45,6 +45,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
   @override
   void dispose() {
     tabController.dispose();
+    print('Disposed products page!');
     super.dispose();
   }
 
