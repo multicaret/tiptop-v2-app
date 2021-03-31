@@ -9,6 +9,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,11 +33,13 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   String phoneNumber;
   String phoneCountryCode;
   String countryCode = 'TR';
+  bool _isLoading = false;
   bool isValid;
   bool isNewUser;
   bool _isInit = true;
 
   Future<void> _initOTPValidation(String method) async {
+    _isLoading = true;
     await otpProvider.initOTPValidation(method);
     setState(() {
       deepLink = otpProvider.deepLink;
@@ -94,27 +97,30 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      // try {
-      await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
-      isValid = otpProvider.validationStatus;
-      isNewUser = otpProvider.isNewUser;
-      if (isValid == true) {
-        if (isNewUser) {
-          print('New user, navigating to complete profile page');
-          Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+      try {
+        await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
+        isValid = otpProvider.validationStatus;
+        _isLoading = false;
+        isNewUser = otpProvider.isNewUser;
+        if (isValid == true) {
+          if (isNewUser) {
+            print('New user, navigating to complete profile page');
+            Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+          } else {
+            print('Registered user, navigating to home page');
+            Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+          }
         } else {
-          print('Registered user, navigating to home page');
-          Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+          showToast(msg: 'OTP Validation Failed');
         }
-      } else {
-        showToast(msg: 'OTP Validation Failed');
-      }
-      /*} catch (error) {
+      } on HttpException catch (error) {
+        appAlert(context: context, title: error.title, description: error.getErrorsAsString()).show();
+      } catch (error) {
         print("@error checkOTPValidation");
         print(error.toString());
-        showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
-        throw error;
-      }*/
+        // showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
+        // throw error;
+      }
     }
   }
 
@@ -150,6 +156,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
     return AppScaffold(
       bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
       bgImage: 'assets/images/otp-bg-pattern.png',
+      hasOverlayLoader: _isLoading,
       body: SingleChildScrollView(
         child: Column(
           children: [

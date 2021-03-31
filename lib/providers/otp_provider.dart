@@ -47,10 +47,8 @@ class OTPProvider with ChangeNotifier {
       body: body,
     );
     otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
-    print("@otpValidationDataResponse");
-    print(otpValidationDataResponse);
     if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {
-      throw HttpException(title: 'Error', message: otpInitDataResponse.message);
+      throw HttpException(title: 'Error', message: otpInitDataResponse.message, errors: otpValidationDataResponse.errors);
     }
     otpValidationData = otpValidationDataResponse.otpValidationData;
     validationStatus = otpValidationData.validationStatus;
