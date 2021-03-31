@@ -33,6 +33,14 @@ class _AppCarouselState extends State<AppCarousel> {
   int _currentSlide = 0;
 
   @override
+  void initState() {
+    if (_controller.ready) {
+      _controller.startAutoPlay();
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     print('Disposed carousel!');
     _controller.stopAutoPlay();
