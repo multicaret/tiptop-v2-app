@@ -12,6 +12,7 @@ class ScrollableVerticalContent extends StatefulWidget {
   final Function scrollSpyAction;
   final List<Map<String, dynamic>> categoriesHeights;
   final Widget singleTabContent;
+  final bool firstItemHasTitle;
 
   ScrollableVerticalContent({
     @required this.child,
@@ -21,6 +22,7 @@ class ScrollableVerticalContent extends StatefulWidget {
     @required this.scrollSpyAction,
     @required this.categoriesHeights,
     @required this.singleTabContent,
+    this.firstItemHasTitle = false,
   });
 
   @override
@@ -74,7 +76,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (widget.index != 0)
+        if (widget.index != 0 || widget.firstItemHasTitle)
           Container(
             padding: EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
             color: AppColors.bg,

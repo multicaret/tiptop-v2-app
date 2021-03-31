@@ -179,6 +179,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       selectedCategoryIdNotifier.value = dummyCategories[i].id;
                       // scrollToCategory(i);
                     },
+                    firstItemHasTitle: true,
                     categoriesHeights: categoriesHeights,
                     singleTabContent: Column(
                       children: List.generate(
