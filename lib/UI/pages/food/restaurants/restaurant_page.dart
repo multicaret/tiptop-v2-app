@@ -126,6 +126,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                             child: ValueListenableBuilder(
                               valueListenable: selectedCategoryIdNotifier,
                               builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
+                                isInverted: true,
                                 children: dummyCategories,
                                 itemScrollController: categoriesScrollController,
                                 selectedChildCategoryId: _selectedChildCategoryId,
