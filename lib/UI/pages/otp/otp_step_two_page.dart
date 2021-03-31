@@ -47,7 +47,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
 
   Future<void> _sendOTPSms(String countryCode, String phoneNumber) async {
     try {
-      await otpProvider.sendOTPSms(countryCode, phoneNumber);
+      await otpProvider.sendOTPSms(countryCode: countryCode, phoneCountryCode: phoneCountryCode, phoneNumber: phoneNumber);
       setState(() {
         reference = otpProvider.reference;
       });
@@ -95,20 +95,20 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       // try {
-        await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
-        isValid = otpProvider.validationStatus;
-        isNewUser = otpProvider.isNewUser;
-        if (isValid == true) {
-          if (isNewUser) {
-            print('New user, navigating to complete profile page');
-            Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
-          } else {
-            print('Registered user, navigating to home page');
-            Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
-          }
+      await otpProvider.checkOTPValidation(appProvider, reference, phoneCountryCode, phoneNumber);
+      isValid = otpProvider.validationStatus;
+      isNewUser = otpProvider.isNewUser;
+      if (isValid == true) {
+        if (isNewUser) {
+          print('New user, navigating to complete profile page');
+          Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
         } else {
-          showToast(msg: 'OTP Validation Failed');
+          print('Registered user, navigating to home page');
+          Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
         }
+      } else {
+        showToast(msg: 'OTP Validation Failed');
+      }
       /*} catch (error) {
         print("@error checkOTPValidation");
         print(error.toString());

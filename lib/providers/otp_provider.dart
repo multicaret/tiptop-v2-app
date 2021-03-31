@@ -62,10 +62,11 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendOTPSms(String countryCode, String phoneNumber) async {
+  Future<void> sendOTPSms({String countryCode, String phoneCountryCode, String phoneNumber}) async {
     final endpoint = 'otp/sms-send';
     final responseData = await AppProvider().post(endpoint: endpoint, params: {
-      'country_code': countryCode,
+      'country_code': countryCode, // i.e: TR, IQ
+      'phone_country_code': phoneCountryCode, // i.e: 90, 964
       'phone_number': phoneNumber,
     });
     otpInitDataResponse = OTPDataResponse.fromJson(responseData);
