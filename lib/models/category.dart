@@ -5,6 +5,7 @@ class Category {
   Category({
     this.id,
     this.icon,
+    this.englishTitle,
     this.title,
     this.description,
     this.hasChildren,
@@ -16,6 +17,7 @@ class Category {
 
   int id;
   dynamic icon;
+  String englishTitle;
   String title;
   StringRawStringFormatted description;
   bool hasChildren;
@@ -27,6 +29,7 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         icon: json["icon"],
+        englishTitle: json["englishTitle"],
         title: json["title"],
         description: StringRawStringFormatted.fromJson(json["description"]),
         hasChildren: json["hasChildren"],
@@ -39,6 +42,7 @@ class Category {
   Map<String, dynamic> toJson() => {
         "id": id,
         "icon": icon,
+        "englishTitle": englishTitle,
         "title": title,
         "description": description.toJson(),
         "hasChildren": hasChildren == null ? null : hasChildren,
