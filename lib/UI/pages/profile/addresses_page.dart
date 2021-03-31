@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -43,7 +44,7 @@ class _AddressesPageState extends State<AddressesPage> {
     setState(() => _isLoadingAddress = true);
     final response = await addressesProvider.fetchAndSetAddresses(appProvider);
     if (response == 401) {
-      print('not authenticated!');
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       return;
     }
     addresses = addressesProvider.addresses;
