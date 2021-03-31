@@ -57,7 +57,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   }
 
   void scrollToCategory(int index) {
-    selectedChildCategoryIdNotifier.value = widget.children[index].id;
     childCategoriesScrollController.scrollToIndex(
       index,
       preferPosition: AutoScrollPosition.begin,
@@ -65,7 +64,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   }
 
   void scrollToProducts(int index) {
-    selectedChildCategoryIdNotifier.value = widget.children[index].id;
     productsScrollController.scrollToIndex(
       index,
       preferPosition: AutoScrollPosition.begin,
@@ -100,7 +98,11 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             itemScrollController: childCategoriesScrollController,
             selectedChildCategoryId: _selectedChildCategoryId,
             //Fired when a child category is clicked
-            action: (i) => scrollToProducts(i),
+            action: (index) {
+              selectedChildCategoryIdNotifier.value = widget.children[index].id;
+              scrollToCategory(index);
+              scrollToProducts(index);
+            },
           ),
         ),
         Expanded(
@@ -118,9 +120,13 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
                         child: widget.children[i],
                         scrollController: productsScrollController,
                         //Fired when a child category is scrolled into view
-                        scrollSpyAction: (index) => scrollToCategory(index),
+                        scrollSpyAction: (index) {
+                          selectedChildCategoryIdNotifier.value = widget.children[index].id;
+                          scrollToCategory(index);
+                        },
                         categoriesHeights: childCategoriesHeights,
                         singleTabContent: ProductsGridView(products: widget.children[i].products),
+                        pageTopOffset: 0,
                       ),
                     ),
                   ),

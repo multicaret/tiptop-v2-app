@@ -13,6 +13,7 @@ class ScrollableVerticalContent extends StatefulWidget {
   final List<Map<String, dynamic>> categoriesHeights;
   final Widget singleTabContent;
   final bool firstItemHasTitle;
+  final double pageTopOffset;
 
   ScrollableVerticalContent({
     @required this.child,
@@ -23,6 +24,7 @@ class ScrollableVerticalContent extends StatefulWidget {
     @required this.categoriesHeights,
     @required this.singleTabContent,
     this.firstItemHasTitle = false,
+    @required this.pageTopOffset,
   });
 
   @override
@@ -32,16 +34,15 @@ class ScrollableVerticalContent extends StatefulWidget {
 class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
   GlobalKey key = GlobalKey();
   double categoryPosition = 0;
-  double headerHeight = 200;
   double currentCategoryHeight;
   double previousCategoriesHeights = 0;
 
   void scrollSpyListener() {
     double scrollPosition = widget.scrollController.position.pixels;
-    if (scrollPosition <= headerHeight) {
+    if (scrollPosition <= 0) {
       widget.scrollSpyAction(0);
     } else {
-      if (scrollPosition >= previousCategoriesHeights && scrollPosition < currentCategoryHeight + previousCategoriesHeights) {
+      if (scrollPosition >= previousCategoriesHeights + widget.pageTopOffset && scrollPosition < previousCategoriesHeights + widget.pageTopOffset + 10) {
         widget.scrollSpyAction(widget.index);
       } else if (scrollPosition == widget.scrollController.position.maxScrollExtent) {
         widget.scrollSpyAction(widget.count - 1);
@@ -51,7 +52,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
 
   @override
   void initState() {
-    // widget.scrollController.addListener(scrollSpyListener);
+    widget.scrollController.addListener(scrollSpyListener);
     currentCategoryHeight = widget.categoriesHeights[widget.index]['height'];
     if (widget.index > 0) {
       for (int i = widget.index - 1; i >= 0; i--) {
@@ -63,7 +64,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
 
   @override
   void dispose() {
-    // widget.scrollController.removeListener(scrollSpyListener);
+    widget.scrollController.removeListener(scrollSpyListener);
     super.dispose();
   }
 
@@ -86,7 +87,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
             ),
           ),
         Container(
-          // color: AppColors.white,
+          color: AppColors.white,
           height: widget.categoriesHeights[widget.index]['height'],
           child: AutoScrollTag(
             controller: widget.scrollController,

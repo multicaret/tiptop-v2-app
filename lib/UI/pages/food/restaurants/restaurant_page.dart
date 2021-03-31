@@ -29,16 +29,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   final _collapsedNotifier = ValueNotifier<bool>(false);
 
-  static double categoriesBarHeight = 50;
-  static double searchBarHeight = 70;
-  double headerExpandedHeight = 460.0;
-  double headerCollapsedHeight = categoriesBarHeight + searchBarHeight;
-
   void scrollListener() {
     if (productsScrollController.hasClients) {
-      if (productsScrollController.offset >= (headerExpandedHeight - headerCollapsedHeight - 10)) {
+      if (productsScrollController.offset >= (restaurantPageExpandedHeaderHeight - restaurantPageCollapsedHeaderHeight)) {
         _collapsedNotifier.value = true;
-      } else if (productsScrollController.offset < (headerExpandedHeight - headerCollapsedHeight - 10)) {
+      } else if (productsScrollController.offset < (restaurantPageExpandedHeaderHeight - restaurantPageCollapsedHeaderHeight)) {
         _collapsedNotifier.value = false;
       }
     }
@@ -104,8 +99,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
             onStretchTrigger: () async {
               print('Pulled down!');
             },
-            expandedHeight: headerExpandedHeight,
-            collapsedHeight: headerCollapsedHeight,
+            expandedHeight: restaurantPageExpandedHeaderHeight,
+            collapsedHeight: restaurantPageCollapsedHeaderHeight,
             backgroundColor: AppColors.bg,
             pinned: true,
             bottom: PreferredSize(
@@ -121,24 +116,19 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         opacity: _isCollapsed ? 1 : 0,
                         child: IgnorePointer(
                           ignoring: !_isCollapsed,
-                          child: Container(
-                            height: categoriesBarHeight,
-                            color: AppColors.primary,
-                            child: ValueListenableBuilder(
-                              valueListenable: selectedCategoryIdNotifier,
-                              builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
-                                isInverted: true,
-                                children: dummyCategories,
-                                itemScrollController: categoriesScrollController,
-                                selectedChildCategoryId: _selectedChildCategoryId,
-                                //Fired when a child category is clicked
-                                action: (i) {
-                                  selectedCategoryIdNotifier.value = dummyCategories[i].id;
-                                  // productsScrollController.removeListener(scrollSpyListener);
-                                  scrollToCategory(i);
-                                  scrollToProducts(i);
-                                },
-                              ),
+                          child: ValueListenableBuilder(
+                            valueListenable: selectedCategoryIdNotifier,
+                            builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
+                              isInverted: true,
+                              children: dummyCategories,
+                              itemScrollController: categoriesScrollController,
+                              selectedChildCategoryId: _selectedChildCategoryId,
+                              //Fired when a child category is clicked
+                              action: (i) {
+                                selectedCategoryIdNotifier.value = dummyCategories[i].id;
+                                scrollToCategory(i);
+                                scrollToProducts(i);
+                              },
                             ),
                           ),
                         ),
@@ -178,7 +168,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     scrollController: productsScrollController,
                     scrollSpyAction: (i) {
                       selectedCategoryIdNotifier.value = dummyCategories[i].id;
-                      // scrollToCategory(i);
+                      scrollToCategory(i);
                     },
                     firstItemHasTitle: true,
                     categoriesHeights: categoriesHeights,
@@ -188,6 +178,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         (j) => FoodProductListItem(product: dummyCategories[i].products[j]),
                       ),
                     ),
+                    pageTopOffset: restaurantPageExpandedHeaderHeight,
                   );
                 },
               ),

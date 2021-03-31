@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -19,12 +20,10 @@ class ScrollableHorizontalTabs extends StatelessWidget {
     this.isInverted = false,
   });
 
-  static double tabsHeight = 50.0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: tabsHeight,
+      height: scrollableHorizontalTabBarHeight,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 1.5, color: AppColors.border)),
         color: isInverted ? AppColors.primary : AppColors.white,

@@ -208,6 +208,22 @@ List<Category> dummyCategories = [
     title: 'Test Category 7',
     products: [
       Product(
+        id: 1,
+        title: 'Category 7 - Test Product 5',
+      ),
+      Product(
+        id: 2,
+        title: 'Category 7 - Test Product 6',
+      ),
+      Product(
+        id: 3,
+        title: 'Category 7 - Test Product 5',
+      ),
+      Product(
+        id: 4,
+        title: 'Category 7 - Test Product 6',
+      ),
+      Product(
         id: 5,
         title: 'Category 7 - Test Product 5',
       ),
