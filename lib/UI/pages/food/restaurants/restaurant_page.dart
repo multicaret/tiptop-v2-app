@@ -1,22 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
-import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_list_item_cover.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class RestaurantPage extends StatelessWidget {
+class RestaurantPage extends StatefulWidget {
   static const routeName = '/restaurant';
 
   @override
+  _RestaurantPageState createState() => _RestaurantPageState();
+}
+
+class _RestaurantPageState extends State<RestaurantPage> {
+  ScrollController _scrollController;
+  final _collapsedNotifier = ValueNotifier<bool>(false);
+
+  static double categoriesBarHeight = 50;
+  static double searchBarHeight = 70;
+  double headerExpandedHeight = 460.0;
+  double headerCollapsedHeight = categoriesBarHeight + searchBarHeight;
+
+  void scrollListener() {
+    if (_scrollController.hasClients) {
+      if (_scrollController.offset >= (headerExpandedHeight - headerCollapsedHeight - 10)) {
+        _collapsedNotifier.value = true;
+      } else if (_scrollController.offset < (headerExpandedHeight - headerCollapsedHeight - 10)) {
+        _collapsedNotifier.value = false;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(scrollListener);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Restaurant restaurant = ModalRoute.of(context).settings.arguments as Restaurant;
+     Restaurant restaurant = ModalRoute.of(context).settings.arguments as Restaurant;
     return AppScaffold(
       hasCurve: false,
       body: CustomScrollView(
+        controller: _scrollController,
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: [
           SliverAppBar(
@@ -25,19 +60,41 @@ class RestaurantPage extends StatelessWidget {
             onStretchTrigger: () async {
               print('Pulled down!');
             },
-            expandedHeight: 460.0,
-            collapsedHeight: 70,
+            expandedHeight: headerExpandedHeight,
+            collapsedHeight: headerCollapsedHeight,
             backgroundColor: AppColors.bg,
             pinned: true,
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(0),
               child: Transform.translate(
-                offset: const Offset(0, 0),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                  color: AppColors.bg,
-                  child: RestaurantSearchField(),
+                offset: Offset(0, -1),
+                child: ValueListenableBuilder(
+                  valueListenable: _collapsedNotifier,
+                  builder: (_, _isCollapsed, __) => Column(
+                    children: [
+                      AnimatedOpacity(
+                        duration: Duration(milliseconds: 200),
+                        opacity: _isCollapsed ? 1 : 0,
+                        child: IgnorePointer(
+                          ignoring: !_isCollapsed,
+                          child: Container(
+                            height: categoriesBarHeight,
+                            color: AppColors.primary,
+                            child: ElevatedButton(onPressed: () => print('foo'), child: Text('click me')),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        decoration: BoxDecoration(
+                          border: _isCollapsed ? Border(bottom: BorderSide(color: AppColors.border)) : null,
+                          color: AppColors.bg,
+                        ),
+                        child: RestaurantSearchField(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -47,115 +104,7 @@ class RestaurantPage extends StatelessWidget {
               ],
               centerTitle: true,
               titlePadding: EdgeInsets.all(0),
-              background: Column(
-                children: [
-                  Stack(
-                    children: [
-                      RestaurantListItemCover(
-                        restaurant: restaurant,
-                        isFavorited: false,
-                        hasRating: false,
-                        hasBorderRadius: false,
-                        height: 240,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 17,
-                        left: 17,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: AppColors.border),
-                            ),
-                          ),
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                constraints: BoxConstraints(minHeight: 100),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                  ),
-                                ),
-                                padding: EdgeInsets.only(left: 130, top: 20, bottom: 20, right: 15),
-                                margin: EdgeInsets.only(top: 20),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      restaurant.title,
-                                      maxLines: 2,
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            'Closing 12:18',
-                                            maxLines: 1,
-                                            style: AppTextStyles.subtitle50,
-                                          ),
-                                        ),
-                                        RatingInfo(
-                                          ratingValue: 4.5,
-                                          ratingsCount: 350,
-                                          hasWhiteBg: true,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 20,
-                                left: 15,
-                                height: 100,
-                                width: 100,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
-                                  ),
-                                  padding: EdgeInsets.all(10),
-                                  child: Image.asset('assets/images/restaurant-logo.png'),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 17, right: 17, bottom: 75),
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                        boxShadow: [
-                          BoxShadow(color: AppColors.shadow, blurRadius: 4, offset: Offset(0, 3)),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          DeliveryInfo(),
-                          SizedBox(height: 10),
-                          DeliveryInfo(isRestaurant: true),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              background: RestaurantHeaderInfo(restaurant: restaurant),
             ),
           ),
           SliverList(
