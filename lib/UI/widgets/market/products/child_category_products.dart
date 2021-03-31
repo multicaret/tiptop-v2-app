@@ -12,6 +12,7 @@ class ChildCategoryProducts extends StatefulWidget {
   final int count;
   final AutoScrollController productsScrollController;
   final Function scrollSpyAction;
+  final List<Map<String, dynamic>> categoriesHeights;
 
   ChildCategoryProducts({
     @required this.child,
@@ -19,6 +20,7 @@ class ChildCategoryProducts extends StatefulWidget {
     @required this.count,
     @required this.productsScrollController,
     @required this.scrollSpyAction,
+    @required this.categoriesHeights,
   });
 
   @override
@@ -28,57 +30,48 @@ class ChildCategoryProducts extends StatefulWidget {
 class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
   GlobalKey key = GlobalKey();
   double categoryPosition = 0;
-  double firstCategoryPosition = 200;
+  double headerHeight = 200;
+  double currentCategoryHeight;
+  double previousCategoriesHeights = 0;
 
-  void categoryReachedTopScrollListener() {
+  void childCategoriesScrollListener() {
     double scrollPosition = widget.productsScrollController.position.pixels;
-    double scrollPositionWithTopBars = widget.productsScrollController.position.pixels + firstCategoryPosition;
-    // print('${widget.child.title} category position: $categoryPosition');
-    // print('scroll position with top bars: $scrollPositionWithTopBars');
-
-    if (scrollPosition == 0) {
+    if (scrollPosition <= headerHeight) {
       widget.scrollSpyAction(0);
-    } else if (scrollPosition == widget.productsScrollController.position.maxScrollExtent) {
-      widget.scrollSpyAction(widget.count - 1);
-    } else if (scrollPositionWithTopBars >= categoryPosition && scrollPositionWithTopBars < categoryPosition + 30) {
-      widget.scrollSpyAction(widget.index);
+    } else {
+      if (scrollPosition >= previousCategoriesHeights && scrollPosition < currentCategoryHeight + previousCategoriesHeights) {
+        widget.scrollSpyAction(widget.index);
+      } else if (scrollPosition == widget.productsScrollController.position.maxScrollExtent) {
+        widget.scrollSpyAction(widget.count - 1);
+      }
     }
   }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_getPositions);
-    widget.productsScrollController.addListener(categoryReachedTopScrollListener);
-    super.initState();
-  }
-
-  _getPositions(_) {
-    if (key.currentContext != null) {
-      final RenderBox renderBoxRed = key.currentContext.findRenderObject();
-      final positionRed = renderBoxRed.localToGlobal(Offset.zero);
-      setState(() {
-        if (widget.index == 0) {
-          firstCategoryPosition = positionRed.dy;
-        }
-        categoryPosition = positionRed.dy;
-      });
+    widget.productsScrollController.addListener(childCategoriesScrollListener);
+    currentCategoryHeight = widget.categoriesHeights[widget.index]['height'];
+    if (widget.index > 0) {
+      for (int i = widget.index - 1; i >= 0; i--) {
+        previousCategoriesHeights += widget.categoriesHeights[i]['height'];
+      }
     }
+    super.initState();
   }
 
   @override
   void dispose() {
-    widget.productsScrollController.removeListener(categoryReachedTopScrollListener);
+    widget.productsScrollController.removeListener(childCategoriesScrollListener);
     super.dispose();
   }
+  int count = 1;
 
   @override
   Widget build(BuildContext context) {
     List<Product> products = widget.child.products;
-    //Todo: Uncomment this print to see the horror 🤬
-    // print('Rebuilt ${widget.child.title} widget!!! 🤬');
+    print('Built ${widget.child.title} widget ${count++} times!!!');
 
     return Column(
-      key: key,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         if (widget.index != 0)
@@ -92,6 +85,7 @@ class _ChildCategoryProductsState extends State<ChildCategoryProducts> {
           ),
         Container(
           color: AppColors.white,
+          height: widget.categoriesHeights[widget.index]['height'],
           child: AutoScrollTag(
             controller: widget.productsScrollController,
             index: widget.index,
