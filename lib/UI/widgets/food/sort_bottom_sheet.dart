@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/apply_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/bottom_sheet_indicator.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class SortBottomSheet extends StatefulWidget {
   @override
@@ -74,16 +74,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
               ),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 17, right: 17, bottom: 40, top: 20),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
-              child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          )
+          ApplyButton()
         ],
       ),
     );
