@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -43,10 +44,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<void> _autoLoginFuture;
+  static final facebookAppEvents = FacebookAppEvents();
 
   @override
   void initState() {
     _autoLoginFuture = widget.appProvider.autoLogin();
+    facebookAppEvents.setAdvertiserTracking(enabled: true);
     super.initState();
   }
 
