@@ -20,25 +20,6 @@ class FoodHomePage extends StatefulWidget {
 class _FoodHomePageState extends State<FoodHomePage> {
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
-  final List<Map<String, dynamic>> _categoriesItems = [
-    {
-      'title': "Burger",
-      'image': 'assets/images/slide-2.png',
-    },
-    {
-      'title': "Kebap",
-      'image': 'assets/images/slide-2.png',
-    },
-    {
-      'title': "Ice Cream",
-      'image': 'assets/images/slide-2.png',
-    },
-    {
-      'title': "Deserts",
-      'image': 'assets/images/slide-2.png',
-    },
-  ];
-
   final List<Map<String, dynamic>> _listTypes = [
     {
       'type': ListType.HORIZONTALLY_STACKED,
@@ -61,7 +42,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
           padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 17.0, bottom: 5.0),
           child: Text(Translations.of(context).get("Categories"), style: AppTextStyles.body50),
         ),
-        CategoriesSlider(categoriesItems: _categoriesItems, isRTL: appProvider.isRTL),
+        CategoriesSlider(categories: dummyCategories, isRTL: appProvider.isRTL),
         FilterSortButtons(),
         Padding(
           padding: const EdgeInsets.only(left: 17.0, right: 17.0, bottom: 5.0),
