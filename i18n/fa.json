@@ -118,5 +118,11 @@
   "Smart Sorting": "التصنيف الذكي (الإفتراضي)",
   "Restaurant Rating": "تقييم المطعم",
   "Delivery Time": "وقت التسليم",
-  "discount": "خصم"
+  "discount": "خصم",
+  "Filters": "التصفيات",
+  "Delivery Type": "طريقة التوصيل",
+  "Min Basket": "الحد الأدنى للسلة",
+  "All": "الجميع",
+  "Rating": "التقييم",
+  "Clear": "مسح"
 }

@@ -123,5 +123,12 @@
   "Smart Sorting": "Smart Sorting (default)",
   "Restaurant Rating": "Restaurant Rating",
   "Delivery Time": "Delivery Time",
-  "discount": "discount"
+  "discount": "discount",
+  "Filters": "Filters",
+  "Delivery Type": "Delivery Type",
+  "Min Basket": "Min. Basket",
+  "All": "All",
+  "Rating": "Rating",
+  "Clear": "Clear"
+
 }
