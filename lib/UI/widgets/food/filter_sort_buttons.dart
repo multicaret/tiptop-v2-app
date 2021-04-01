@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/UI/widgets/food/filter_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 
@@ -19,7 +19,15 @@ class FilterSortButtons extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  useRootNavigator: true,
+                  builder: (context) => FilterBottomSheet(),
+                );
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

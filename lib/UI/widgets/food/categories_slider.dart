@@ -6,8 +6,13 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 class CategoriesSlider extends StatelessWidget {
   final List<Category> categories;
   final bool isRTL;
+  final bool isCategorySelectable;
 
-  CategoriesSlider({@required this.categories, @required this.isRTL});
+  CategoriesSlider({
+    @required this.categories,
+    @required this.isRTL,
+    this.isCategorySelectable = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,7 @@ class CategoriesSlider extends StatelessWidget {
           index: i,
           count: categories.length,
           isRTL: isRTL,
+          isSelectable: isCategorySelectable,
         ),
       ),
     );
