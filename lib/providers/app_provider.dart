@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
 import 'package:device_info/device_info.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/boot.dart';
 import 'package:tiptop_v2/models/models.dart';
-import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/user.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 
 import 'local_storage.dart';
 
@@ -112,12 +114,17 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
+  static final facebookAppEvents = FacebookAppEvents();
+
   Future<void> bootActions() async {
     initInstaBug();
     await fetchBootConfigurations();
     await fetchLocale();
     await handleLocationPermission();
     await AddressesProvider().fetchSelectedAddress();
+
+    await facebookAppEvents.setAdvertiserTracking(enabled: true);
+    await sendAppOpenEvent();
   }
 
   Future<void> changeLanguage(String localeString) async {
@@ -316,8 +323,10 @@ class AppProvider with ChangeNotifier {
     return getMobileApp(deviceData, platformState);
   }
 
+  Map<String, dynamic> mobileAppDetails;
+
   Future<void> fetchBootConfigurations() async {
-    final mobileAppDetails = await loadMobileAppDetails();
+    mobileAppDetails = await loadMobileAppDetails();
     final Map<String, String> body = {
       'build_number': mobileAppDetails['buildNumber'],
       'platform': mobileAppDetails['device']['platform'],
@@ -346,5 +355,19 @@ class AppProvider with ChangeNotifier {
     }*/
 
     // notifyListeners();
+  }
+
+  Future<void> sendAppOpenEvent() async {
+    print('Sending app open event!');
+    Map<String, dynamic> params = {
+      'platform': mobileAppDetails['device']['platform'],
+      'user_language': _appLocale.languageCode,
+    };
+    print('params');
+    print(params);
+    await facebookAppEvents.logEvent(
+      name: 'visit',
+      parameters: params,
+    );
   }
 }

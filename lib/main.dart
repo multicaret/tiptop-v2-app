@@ -44,12 +44,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<void> _autoLoginFuture;
-  static final facebookAppEvents = FacebookAppEvents();
 
   @override
   void initState() {
     _autoLoginFuture = widget.appProvider.autoLogin();
-    facebookAppEvents.setAdvertiserTracking(enabled: true);
     super.initState();
   }
 
