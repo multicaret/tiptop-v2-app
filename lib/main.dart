@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             sliderTheme: SliderThemeData(
-              showValueIndicator: ShowValueIndicator.never,
+              showValueIndicator: ShowValueIndicator.onlyForContinuous,
               thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
               tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
               activeTickMarkColor: AppColors.primary,
@@ -117,6 +117,7 @@ class _MyAppState extends State<MyApp> {
               activeTrackColor: AppColors.primary,
               inactiveTrackColor: AppColors.primary50,
               thumbColor: AppColors.primary,
+              valueIndicatorColor: AppColors.secondaryDark,
             ),
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),
