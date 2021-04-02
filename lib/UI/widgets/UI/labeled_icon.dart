@@ -23,9 +23,11 @@ class LabeledIcon extends StatelessWidget {
       children: [
         AppIcon.iconXs50(icon),
         SizedBox(width: 5),
-        Text(
-          text,
-          style: AppTextStyles.subtitle50,
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.subtitle50,
+          ),
         ),
       ],
     );

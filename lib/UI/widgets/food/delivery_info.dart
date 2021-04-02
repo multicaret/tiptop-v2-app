@@ -30,21 +30,18 @@ class DeliveryInfo extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              flex: 1,
               child: LabeledIcon(
                 icon: FontAwesomeIcons.hourglassHalf,
                 text: '15-20',
               ),
             ),
             Expanded(
-              flex: 1,
               child: LabeledIcon(
                 icon: FontAwesomeIcons.shoppingBasket,
                 text: '25 IQD',
               ),
             ),
             Expanded(
-              flex: 2,
               child: LabeledIcon(
                 icon: FontAwesomeIcons.shoppingBasket,
                 text: 'Min. 1000 IQD',
