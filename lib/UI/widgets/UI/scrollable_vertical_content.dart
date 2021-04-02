@@ -39,13 +39,16 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
 
   void scrollSpyListener() {
     double scrollPosition = widget.scrollController.position.pixels;
-    if (scrollPosition <= 0) {
-      widget.scrollSpyAction(0);
-    } else {
-      if (scrollPosition >= previousCategoriesHeights + widget.pageTopOffset && scrollPosition < previousCategoriesHeights + widget.pageTopOffset + 10) {
-        widget.scrollSpyAction(widget.index);
-      } else if (scrollPosition == widget.scrollController.position.maxScrollExtent) {
-        widget.scrollSpyAction(widget.count - 1);
+    if (widget.scrollController.hasClients) {
+      if (scrollPosition <= 0) {
+        widget.scrollSpyAction(0);
+      } else {
+        if (scrollPosition >= previousCategoriesHeights + widget.pageTopOffset &&
+            scrollPosition < previousCategoriesHeights + widget.pageTopOffset + 10) {
+          widget.scrollSpyAction(widget.index);
+        } else if (scrollPosition == widget.scrollController.position.maxScrollExtent) {
+          widget.scrollSpyAction(widget.count - 1);
+        }
       }
     }
   }

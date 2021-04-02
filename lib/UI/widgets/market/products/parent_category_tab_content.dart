@@ -71,6 +71,14 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   }
 
   @override
+  void dispose() {
+    print('disposing products page controllers');
+    childCategoriesScrollController.dispose();
+    productsScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     if (_isInit) {
       productGridItemHeight = (getColItemHeight(3, context) * 2);
