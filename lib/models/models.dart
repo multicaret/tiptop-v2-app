@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
 class EnumValues<T> {
   Map<String, T> map;
   Map<T, String> reverseMap;
@@ -581,4 +584,20 @@ dynamic handleErrors(errors) {
     });
   }
   return formattedErrors;
+}
+
+class DialogAction {
+  final String text;
+  final Color buttonColor;
+  final Color buttonTextColor;
+  final dynamic popValue;
+  final Function onTap;
+
+  DialogAction({
+    @required this.text,
+    this.buttonColor = AppColors.primary,
+    this.buttonTextColor = AppColors.white,
+    this.popValue,
+    this.onTap
+  });
 }
