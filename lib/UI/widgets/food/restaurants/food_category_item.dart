@@ -11,40 +11,33 @@ class FoodCategoryItem extends StatefulWidget {
   final int count;
   final bool isRTL;
   final bool isSelectable;
+  final Function onTap;
+  final bool isSelected;
 
-  const FoodCategoryItem({
-    @required this.category,
-    @required this.index,
-    @required this.count,
-    @required this.isRTL,
-    this.isSelectable = false,
-  });
+  const FoodCategoryItem(
+      {@required this.category,
+      @required this.index,
+      @required this.count,
+      @required this.isRTL,
+      this.isSelectable = false,
+      this.onTap,
+      this.isSelected});
 
   @override
   _FoodCategoryItemState createState() => _FoodCategoryItemState();
 }
 
-class _FoodCategoryItemState extends State<FoodCategoryItem> with AutomaticKeepAliveClientMixin<FoodCategoryItem> {
+class _FoodCategoryItemState extends State<FoodCategoryItem> {
   bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Padding(
       padding: widget.isRTL
           ? EdgeInsets.only(right: widget.index == 0 ? 17 : 0, left: widget.index == widget.count - 1 ? 17 : 0)
           : EdgeInsets.only(left: widget.index == 0 ? 17 : 0, right: widget.index == widget.count - 1 ? 17 : 0),
       child: InkWell(
-        onTap: widget.isSelectable
-            ? () {
-                setState(() {
-                  isSelected = !isSelected;
-                  print(isSelected.toString());
-                });
-              }
-            : () {
-                print(isSelected.toString());
-              },
+        onTap: widget.isSelectable ? widget.onTap : null,
         child: Stack(
           children: [
             Container(
@@ -66,7 +59,7 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> with AutomaticKeepA
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
-                  border: isSelected ? Border.all(color: AppColors.secondaryDark, width: 2) : null,
+                  border: widget.isSelected ? Border.all(color: AppColors.secondaryDark, width: 2) : null,
                   borderRadius: BorderRadius.circular(8),
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -81,13 +74,10 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> with AutomaticKeepA
                 ),
               ),
             ),
-            isSelected ? Positioned.fill(child: AppIcon.iconWhite(FontAwesomeIcons.check)) : Container()
+            widget.isSelected ? Positioned.fill(child: AppIcon.iconWhite(FontAwesomeIcons.check)) : Container()
           ],
         ),
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

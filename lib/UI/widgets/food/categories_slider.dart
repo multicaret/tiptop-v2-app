@@ -3,7 +3,7 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/food_category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class CategoriesSlider extends StatelessWidget {
+class CategoriesSlider extends StatefulWidget {
   final List<Category> categories;
   final bool isRTL;
   final bool isCategorySelectable;
@@ -15,6 +15,14 @@ class CategoriesSlider extends StatelessWidget {
   });
 
   @override
+  _CategoriesSliderState createState() => _CategoriesSliderState();
+}
+
+class _CategoriesSliderState extends State<CategoriesSlider> {
+  int selectedIndex;
+  bool isSelected;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
@@ -24,14 +32,20 @@ class CategoriesSlider extends StatelessWidget {
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 10);
         },
-        itemCount: categories.length,
+        itemCount: widget.categories.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, i) => FoodCategoryItem(
-          category: categories[i],
+          category: widget.categories[i],
           index: i,
-          count: categories.length,
-          isRTL: isRTL,
-          isSelectable: isCategorySelectable,
+          count: widget.categories.length,
+          isRTL: widget.isRTL,
+          isSelectable: widget.isCategorySelectable,
+          onTap: () {
+            setState(() {
+              selectedIndex = i;
+            });
+          },
+          isSelected: selectedIndex == i,
         ),
       ),
     );
