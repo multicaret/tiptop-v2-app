@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/apply_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/bottom_sheet_indicator.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
@@ -152,7 +151,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ],
             ),
           ),
-          ApplyButton(),
+          Padding(
+            padding: EdgeInsets.only(left: 17, right: 17, bottom: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
+              child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
         ],
       ),
     );
