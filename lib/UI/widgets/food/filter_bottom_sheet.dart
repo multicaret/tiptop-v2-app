@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/apply_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/bottom_sheet_indicator.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
@@ -37,7 +36,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 0.82,
       decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: new BorderRadius.only(
@@ -46,6 +45,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           BottomSheetIndicator(),
           Container(
@@ -78,15 +78,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           Padding(
-            //When increasing the horizontal padding, pixels overflow.
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 17),
-                  child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
-                ),
+                Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
                 SizedBox(height: 15),
                 DeliveryInfoWithRadio(
                   itemValue: filterItems[0]["id"],
@@ -152,7 +148,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ],
             ),
           ),
-          ApplyButton(),
+          Padding(
+            padding: EdgeInsets.only(left: 17, right: 17, bottom: 40),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
+              child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -204,7 +209,6 @@ class DeliveryInfoWithRadio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -220,7 +224,7 @@ class DeliveryInfoWithRadio extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 10,
+          flex: 13,
           child: DeliveryInfo(isRestaurant: isRestaurant),
         ),
       ],
