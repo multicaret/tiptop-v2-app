@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -8,8 +9,17 @@ import 'app_alert_dialog.dart';
 class ConfirmAlertDialog extends StatelessWidget {
   final String title;
   final String image;
+  final bool hasTextField;
+  final String textFieldHint;
+  final TextEditingController controller;
 
-  ConfirmAlertDialog({@required this.title, this.image});
+  ConfirmAlertDialog({
+    this.title,
+    this.image,
+    this.hasTextField = false,
+    this.textFieldHint,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +33,21 @@ class ConfirmAlertDialog extends StatelessWidget {
               image: AssetImage(image),
             ),
           ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            Translations.of(context).get(title),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.bodyBold.copyWith(height: 1.4),
-          ),
-        ),
-        SizedBox(height: 20),
+        hasTextField
+            ? AppTextField(
+                controller: controller,
+                hintText: Translations.of(context).get(textFieldHint),
+                hasInnerLabel: true,
+              )
+            : Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  Translations.of(context).get(title),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodyBold.copyWith(height: 1.4),
+                ),
+              ),
+        SizedBox(height: hasTextField ? 0 : 20),
         Row(
           children: [
             Expanded(
@@ -40,7 +56,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                   primary: AppColors.secondaryDark,
                   minimumSize: Size.fromHeight(45),
                 ),
-                child: Text(Translations.of(context).get('Yes')),
+                child: Text(Translations.of(context).get(hasTextField ? 'Done' : 'Yes')),
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
@@ -55,7 +71,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(45),
                 ),
-                child: Text(Translations.of(context).get('No')),
+                child: Text(Translations.of(context).get(hasTextField ? 'Cancel' : 'No')),
               ),
             )
           ],

@@ -129,5 +129,10 @@
   "Min Basket": "الحد الأدنى للسلة",
   "All": "الجميع",
   "Rating": "التقييم",
-  "Clear": "مسح"
+  "Clear": "مسح",
+  "Promotions": "العروض",
+  "Cancel": "إلغاء",
+  "Are you sure you want to delete the coupon?": "هل أنت متأكد أنك تريد حذف القسيمة؟",
+  "Add Coupon": "إضافة قسيمة",
+  "Enter Promo Code": "إدخال رمز العرض"
 }
