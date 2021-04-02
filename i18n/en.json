@@ -129,6 +129,10 @@
   "Min Basket": "Min. Basket",
   "All": "All",
   "Rating": "Rating",
-  "Clear": "Clear"
-
+  "Clear": "Clear",
+  "Promotions": "Promotions",
+  "Cancel": "Cancel",
+  "Are you sure you want to delete the coupon?": "Are you sure you want to delete the coupon?",
+  "Add Coupon": "Add Coupon",
+  "Enter Promo Code": "Enter Promo Code"
 }
