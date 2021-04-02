@@ -47,20 +47,17 @@ class CartPage extends StatelessWidget {
             )
           ],
         ),
-        body: Stack(
+        body: Column(
           children: [
-            Positioned.fill(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 105),
-                child: ListView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  children: cartProvider.cartProducts
-                      .map((cartProduct) => ListProductItem(
-                            product: cartProduct.product,
-                            quantity: cartProduct.quantity,
-                          ))
-                      .toList(),
-                ),
+            Expanded(
+              child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
+                children: cartProvider.cartProducts
+                    .map((cartProduct) => ListProductItem(
+                          product: cartProduct.product,
+                          quantity: cartProduct.quantity,
+                        ))
+                    .toList(),
               ),
             ),
             OrderButton(

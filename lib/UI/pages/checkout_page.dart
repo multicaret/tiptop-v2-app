@@ -99,141 +99,130 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ),
       body: _isLoading
           ? AppLoader()
-          : Stack(
+          : Form(
+            key: _formKey,
+            child: Column(
               children: [
-                Positioned.fill(
-                  child: Container(
-                    color: AppColors.bg,
-                    padding: EdgeInsets.only(bottom: 105),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          AddressSelectButton(isDisabled: true),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(17),
-                                    color: AppColors.white,
-                                    child: AppTextField(
-                                      labelText: 'Notes',
-                                      maxLines: 3,
-                                      hintText: Translations.of(context).get('You can write your order notes here'),
-                                      fit: true,
-                                      onSaved: (value) {
-                                        notes = value;
-                                      },
-                                    ),
-                                  ),
-                                  SectionTitle('Payment Methods'),
-                                  RadioSelectItems(
-                                    items: checkoutData.paymentMethods
-                                        .map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo})
-                                        .toList(),
-                                    selectedId: selectedPaymentMethodId,
-                                    action: (value) => setState(() => selectedPaymentMethodId = value),
-                                    isRTL: appProvider.isRTL,
-                                  ),
-                                  SectionTitle('Promotions'),
-                                  Material(
-                                    color: AppColors.white,
-                                    child: InkWell(
-                                      child: Container(
-                                        width: double.infinity,
-                                        padding: EdgeInsets.only(
-                                          top: 17,
-                                          bottom: 17,
-                                          right: appProvider.isRTL ? 17 : 12,
-                                          left: appProvider.isRTL ? 12 : 17,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border(bottom: BorderSide(color: AppColors.border)),
-                                        ),
-                                        child: !isCouponSubmitted
-                                            ? InkWell(
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      width: 36,
-                                                      height: 30,
-                                                      child: AppIcon.iconXsSecondary(FontAwesomeIcons.plus),
-                                                      decoration: BoxDecoration(
-                                                        color: AppColors.white,
-                                                        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
-                                                        borderRadius: BorderRadius.circular(4),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Text(Translations.of(context).get('Add Coupon')),
-                                                  ],
-                                                ),
-                                              )
-                                            : Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text(couponValue),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) => ConfirmAlertDialog(
-                                                          title: 'Are you sure you want to delete the coupon?',
-                                                        ),
-                                                      ).then((response) => {
-                                                            if (response != null && response)
-                                                              setState(() {
-                                                                isCouponSubmitted = false;
-                                                              }),
-                                                          });
-                                                    },
-                                                    child: Container(
-                                                      width: 36,
-                                                      height: 30,
-                                                      child: AppIcon.iconXsSecondary(FontAwesomeIcons.trash),
-                                                      decoration: BoxDecoration(
-                                                        color: AppColors.white,
-                                                        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
-                                                        borderRadius: BorderRadius.circular(4),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                      ),
-                                      onTap: !isCouponSubmitted
-                                          ? () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => ConfirmAlertDialog(
-                                                  hasTextField: true,
-                                                  textFieldHint: 'Enter Promo Code',
-                                                  controller: controller,
-                                                ),
-                                              ).then((response) => {
-                                                    if (response != null && response)
-                                                      setState(() {
-                                                        couponValue = controller.text.toString();
-                                                        isCouponSubmitted = true;
-                                                        controller.clear();
-                                                      }),
-                                                  });
-                                            }
-                                          : null,
-                                    ),
-                                  ),
-                                  SectionTitle('Payment Summary'),
-                                  PaymentSummary(
-                                    totals: totals,
-                                    isRTL: appProvider.isRTL,
-                                  ),
-                                ],
-                              ),
-                            ),
+                AddressSelectButton(isDisabled: true),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(17),
+                          color: AppColors.white,
+                          child: AppTextField(
+                            labelText: 'Notes',
+                            maxLines: 3,
+                            hintText: Translations.of(context).get('You can write your order notes here'),
+                            fit: true,
+                            onSaved: (value) {
+                              notes = value;
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                        SectionTitle('Payment Methods'),
+                        RadioSelectItems(
+                          items: checkoutData.paymentMethods
+                              .map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo})
+                              .toList(),
+                          selectedId: selectedPaymentMethodId,
+                          action: (value) => setState(() => selectedPaymentMethodId = value),
+                          isRTL: appProvider.isRTL,
+                        ),
+                        SectionTitle('Promotions'),
+                        Material(
+                          color: AppColors.white,
+                          child: InkWell(
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.only(
+                                top: 17,
+                                bottom: 17,
+                                right: appProvider.isRTL ? 17 : 12,
+                                left: appProvider.isRTL ? 12 : 17,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(color: AppColors.border)),
+                              ),
+                              child: !isCouponSubmitted
+                                  ? InkWell(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 36,
+                                            height: 30,
+                                            child: AppIcon.iconXsSecondary(FontAwesomeIcons.plus),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.white,
+                                              boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text(Translations.of(context).get('Add Coupon')),
+                                        ],
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(couponValue),
+                                        InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => ConfirmAlertDialog(
+                                                title: 'Are you sure you want to delete the coupon?',
+                                              ),
+                                            ).then((response) => {
+                                                  if (response != null && response)
+                                                    setState(() {
+                                                      isCouponSubmitted = false;
+                                                    }),
+                                                });
+                                          },
+                                          child: Container(
+                                            width: 36,
+                                            height: 30,
+                                            child: AppIcon.iconXsSecondary(FontAwesomeIcons.trash),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.white,
+                                              boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                            ),
+                            onTap: !isCouponSubmitted
+                                ? () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => ConfirmAlertDialog(
+                                        hasTextField: true,
+                                        textFieldHint: 'Enter Promo Code',
+                                        controller: controller,
+                                      ),
+                                    ).then((response) => {
+                                          if (response != null && response)
+                                            setState(() {
+                                              couponValue = controller.text.toString();
+                                              isCouponSubmitted = true;
+                                              controller.clear();
+                                            }),
+                                        });
+                                  }
+                                : null,
+                          ),
+                        ),
+                        SectionTitle('Payment Summary'),
+                        PaymentSummary(
+                          totals: totals,
+                          isRTL: appProvider.isRTL,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -244,6 +233,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ],
             ),
+          ),
     );
   }
 
