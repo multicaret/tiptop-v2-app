@@ -133,7 +133,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           FilterContainer(
             title: Translations.of(context).get("Rating"),
-            child: AppRatingBar(starSize: 30),
+            child: AppRatingBar(starSize: 30, onRatingUpdate: (value) => print(value)),
             border: Border(bottom: BorderSide(color: AppColors.border)),
           ),
           Container(
