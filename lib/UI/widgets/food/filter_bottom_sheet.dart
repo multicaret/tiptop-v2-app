@@ -36,7 +36,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.82,
+      height: MediaQuery.of(context).size.height * 0.87,
       decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: new BorderRadius.only(
