@@ -152,7 +152,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 17, right: 17, bottom: 20),
+            padding: EdgeInsets.only(left: 17, right: 17, bottom: 40),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
               child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
