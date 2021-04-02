@@ -36,7 +36,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 0.82,
       decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: new BorderRadius.only(
@@ -45,6 +45,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           BottomSheetIndicator(),
           Container(
@@ -77,15 +78,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           Padding(
-            //When increasing the horizontal padding, pixels overflow.
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 17),
-                  child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
-                ),
+                Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
                 SizedBox(height: 15),
                 DeliveryInfoWithRadio(
                   itemValue: filterItems[0]["id"],
@@ -212,7 +209,6 @@ class DeliveryInfoWithRadio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -228,7 +224,7 @@ class DeliveryInfoWithRadio extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 10,
+          flex: 13,
           child: DeliveryInfo(isRestaurant: isRestaurant),
         ),
       ],
