@@ -66,7 +66,8 @@ class _AppCarouselState extends State<AppCarousel> {
                       colorBlendMode: BlendMode.darken,
                     );
             },*/
-            items: widget.mapWidget != null ? [widget.mapWidget, ..._getImagesList()] : _getImagesList(),
+            items: _getImagesList(),
+            // items: widget.mapWidget != null ? [widget.mapWidget, ..._getImagesList()] : _getImagesList(),
             options: CarouselOptions(
               viewportFraction: 1,
               autoPlay: widget.autoplayDuration != null && widget.autoPlayInterval != null,

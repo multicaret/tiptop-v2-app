@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                                 images: slides.map((slide) => slide.image).toList(),
                                 autoplayDuration: Duration(milliseconds: 300),
                                 autoPlayInterval: Duration(seconds: 7),
-                                mapWidget: MapSlide(selectedAddress: addressesProvider.selectedAddress),
+                                // mapWidget: MapSlide(selectedAddress: addressesProvider.selectedAddress),
                               ),
                         //Todo: switch whole app when Food infrastructure is set up
                         ChannelsButtons(
