@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/boot.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -115,6 +116,12 @@ class AppProvider with ChangeNotifier {
   }
 
   static final facebookAppEvents = FacebookAppEvents();
+  Mixpanel mixpanel;
+
+  Future<void> initMixpanel() async {
+    mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
+    mixpanel.setServerURL("https://api-eu.mixpanel.com");
+  }
 
   Future<void> bootActions() async {
     initInstaBug();
@@ -122,9 +129,9 @@ class AppProvider with ChangeNotifier {
     await fetchLocale();
     await handleLocationPermission();
     await AddressesProvider().fetchSelectedAddress();
-
-    // await facebookAppEvents.setAdvertiserTracking(enabled: true);
-    // await sendAppOpenEvent();
+    await initMixpanel();
+    await facebookAppEvents.setAdvertiserTracking(enabled: true);
+    await sendAppOpenEvent();
   }
 
   Future<void> changeLanguage(String localeString) async {

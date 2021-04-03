@@ -64,6 +64,7 @@ dependencies:
   rflutter_alert: ^2.0.2
   carousel_slider: ^3.0.0
   facebook_app_events: ^0.11.2
+  mixpanel_flutter: ^1.1.0
 
 
 dev_dependencies:
