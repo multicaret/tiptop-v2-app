@@ -48,6 +48,8 @@ class AppProvider with ChangeNotifier {
 
   LocalStorage storageActions = LocalStorage.getActions();
 
+  bool isFirstOpen = true;
+
   // Locale Related.
   bool localeSelected = false;
   static const String DEFAULT_LOCALE = 'en';
@@ -102,6 +104,17 @@ class AppProvider with ChangeNotifier {
     return myHeader;
   }
 
+  Future<void> checkIfIsFirstOpen() async {
+    var isFirstOpenKeyExists = storageActions.checkKey(key: 'is_first_open');
+    isFirstOpen = !isFirstOpenKeyExists;
+    print('First time opening the app: $isFirstOpen');
+    if (isFirstOpen) {
+      await sendAppFirstVisitEvent();
+      await storageActions.save(key: 'is_first_open', data: false);
+      isFirstOpen = false;
+    }
+  }
+
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
     if (languageCode == null) {
@@ -123,15 +136,21 @@ class AppProvider with ChangeNotifier {
     mixpanel.setServerURL("https://api-eu.mixpanel.com");
   }
 
+  bool isLocationPermissionGranted = false;
+
   Future<void> bootActions() async {
     initInstaBug();
     await fetchBootConfigurations();
     await fetchLocale();
-    await handleLocationPermission();
-    await AddressesProvider().fetchSelectedAddress();
+
+    //Init Analytics
     await initMixpanel();
     await facebookAppEvents.setAdvertiserTracking(enabled: true);
-    await sendAppOpenEvent();
+
+    await checkIfIsFirstOpen();
+    isLocationPermissionGranted = await getLocationPermissionStatus();
+
+    await AddressesProvider().fetchSelectedAddress();
   }
 
   Future<void> changeLanguage(String localeString) async {
@@ -364,7 +383,7 @@ class AppProvider with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<void> sendAppOpenEvent() async {
+  Future<void> sendAppFirstVisitEvent() async {
     print('Sending app open event!');
     Map<String, dynamic> params = {
       'platform': mobileAppDetails['device']['platform'],
@@ -373,8 +392,9 @@ class AppProvider with ChangeNotifier {
     print('params');
     print(params);
     await facebookAppEvents.logEvent(
-      name: 'visit',
+      name: 'first_visit',
       parameters: params,
     );
+    mixpanel.track('first_visit', properties: params);
   }
 }

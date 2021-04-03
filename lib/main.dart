@@ -13,6 +13,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'UI/app_wrapper.dart';
+import 'UI/pages/location_permission_page.dart';
 import 'UI/splash_screen.dart';
 import 'force_update_view.dart';
 import 'i18n/translations.dart';
@@ -47,8 +48,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _autoLoginFuture = widget.appProvider.autoLogin();
-    print('widget.appProvider.mixpanel');
-    print(widget.appProvider.mixpanel);
     super.initState();
   }
 
@@ -138,7 +137,9 @@ class _MyAppState extends State<MyApp> {
     }
     return app.localeSelected
         ? app.isAuth
-            ? AppWrapper()
+            ? !app.isLocationPermissionGranted
+                ? LocationPermissionPage()
+                : AppWrapper()
             : FutureBuilder(
                 future: _autoLoginFuture,
                 builder: (c, authResultSnapshot) =>
