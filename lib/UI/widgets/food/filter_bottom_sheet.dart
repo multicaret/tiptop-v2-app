@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
 import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -150,8 +151,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           Padding(
             padding: EdgeInsets.only(left: 17, right: 17, bottom: 40),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: AppColors.secondaryDark),
+            child: AppButtons.secondary(
               child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
               onPressed: () {
                 Navigator.of(context).pop();

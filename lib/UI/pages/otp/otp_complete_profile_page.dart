@@ -7,6 +7,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../app_wrapper.dart';
@@ -89,7 +90,7 @@ class OTPCompleteProfile extends StatelessWidget {
                 },
               ),
               */
-              ElevatedButton(
+              AppButtons.primary(
                 child: Text(Translations.of(context).get('Save')),
                 onPressed: () => _submit(context, appProvider),
               ),

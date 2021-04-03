@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +33,7 @@ class ForceUpdateWidget extends StatelessWidget {
           SizedBox(height: 10),
           getDialogContent(),
           SizedBox(height: 30),
-          ElevatedButton(
+          AppButtons.primary(
             onPressed: () {
               if (appProvider.bootConfigs.data['clear_local_storage'] != null && appProvider.bootConfigs.data['clear_local_storage'] == 1) {
                 print("appProvider.bootConfigs.data['clear_local_storage']");

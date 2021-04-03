@@ -17,6 +17,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AddAddressPage extends StatefulWidget {
@@ -153,11 +154,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,
               ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: AppColors.secondaryDark,
-                  onPrimary: AppColors.primary,
-                ),
+              child: AppButtons.secondary(
                 onPressed: _submitAddressLocation,
                 child: _isLoadingCreateAddressRequest
                     ? SpinKitThreeBounce(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class ChannelsButtons extends StatelessWidget {
@@ -15,12 +16,10 @@ class ChannelsButtons extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: currentView == 'food' ? AppColors.primary : AppColors.white,
-                onPrimary: currentView == 'food' ? AppColors.white :AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
+            child: AppButtons.dynamic(
+              bgColor: currentView == 'food' ? AppColors.primary : AppColors.white,
+              textColor: currentView == 'food' ? AppColors.white : AppColors.primary,
+              height: 45,
               onPressed: () {
                 changeView('food');
               },
@@ -39,12 +38,10 @@ class ChannelsButtons extends StatelessWidget {
           ),
           SizedBox(width: 16),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: currentView == 'market' ? AppColors.primary : AppColors.white,
-                onPrimary: currentView == 'market' ? AppColors.white :AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
+            child: AppButtons.dynamic(
+              bgColor: currentView == 'market' ? AppColors.primary : AppColors.white,
+              textColor: currentView == 'market' ? AppColors.white : AppColors.primary,
+              height: 45,
               onPressed: () {
                 changeView('market');
               },
@@ -63,12 +60,10 @@ class ChannelsButtons extends StatelessWidget {
           ),
           SizedBox(width: 16),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.white,
-                onPrimary: AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
+            child: AppButtons.dynamic(
+              bgColor: currentView == 'carrefour' ? AppColors.primary : AppColors.white,
+              textColor: currentView == 'carrefour' ? AppColors.white : AppColors.primary,
+              height: 45,
               onPressed: () {},
               child: Image(
                 image: AssetImage('assets/images/carrefour-logo.png'),

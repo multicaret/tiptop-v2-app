@@ -11,6 +11,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -136,7 +137,7 @@ class _CartControlsState extends State<CartControls> {
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
                   opacity: quantity == 0 ? 1 : 0,
-                  child: ElevatedButton(
+                  child: AppButtons.primary(
                     onPressed: () => editCartAction(CartAction.ADD, cartProvider),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

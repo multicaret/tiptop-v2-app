@@ -10,6 +10,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -214,11 +215,9 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
     return List.generate(verificationMethods.length, (i) {
       return Container(
         padding: EdgeInsets.only(bottom: i == verificationMethods.length - 1 ? 0 : 20),
-        child: ElevatedButton(
+        child: AppButtons.dynamic(
             onPressed: verificationMethods[i]['action'],
-            style: ElevatedButton.styleFrom(
-              primary: verificationMethods[i]['color'],
-            ),
+            bgColor: verificationMethods[i]['color'],
             child: Row(
               children: [
                 Expanded(

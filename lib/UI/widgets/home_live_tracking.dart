@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -64,6 +65,7 @@ class HomeLiveTracking extends StatelessWidget {
                         icon: 'assets/images/address-home-icon.png',
                       ),
                       Expanded(
+                        flex: 3,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -93,11 +95,13 @@ class HomeLiveTracking extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(minimumSize: Size(120, 45)),
-                        onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName),
-                        child: Text(Translations.of(context).get("Track Order")),
-                      ),
+                      Expanded(
+                        flex: 2,
+                        child: AppButtons.primarySm(
+                          onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName),
+                          child: Text(Translations.of(context).get("Track Order")),
+                        ),
+                      )
                     ],
                   ),
                 )

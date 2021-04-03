@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OTPStepOnePage extends StatelessWidget {
@@ -54,7 +55,7 @@ class OTPStepOnePage extends StatelessWidget {
                     required: true,
                     textDirection: TextDirection.ltr,
                     labelText: 'Phone Number',
-                    initialValue: '5395534325',
+                    initialValue: '5070326662',
                     hintText: '5xx-xxx-xx-xx',
                     onSaved: (value) {
                       phoneNumber = value;
@@ -63,7 +64,7 @@ class OTPStepOnePage extends StatelessWidget {
                 ),
               ],
             ),
-            ElevatedButton(
+            AppButtons.primary(
               onPressed: () => _submit(context),
               child: Text(Translations.of(context).get('Continue')),
             ),

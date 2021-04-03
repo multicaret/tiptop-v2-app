@@ -5,14 +5,15 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
-import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class OrderRatingPage extends StatefulWidget {
@@ -185,18 +186,14 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: AppColors.secondaryDark,
-                              onPrimary: AppColors.primary,
-                            ),
+                          child: AppButtons.secondary(
                             child: Text(Translations.of(context).get('Send')),
                             onPressed: _submitRating,
                           ),
                         ),
                         SizedBox(width: 16),
                         Expanded(
-                          child: ElevatedButton(
+                          child: AppButtons.primary(
                             child: Text(Translations.of(context).get('Skip')),
                             onPressed: () => Navigator.of(context).pop(),
                           ),

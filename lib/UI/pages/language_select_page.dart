@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -51,7 +52,7 @@ List<Widget> _languageItems(
   return List.generate(_appLanguages.length, (i) {
     return Container(
       padding: EdgeInsets.only(bottom: i == _appLanguages.length - 1 ? 0 : 15),
-      child: ElevatedButton(
+      child: AppButtons.secondary(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i].locale);
           //Todo: remove this when profile screen has language selection
@@ -78,12 +79,6 @@ List<Widget> _languageItems(
               ),
             ),
           ],
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: AppColors.secondary,
-          onPrimary: AppColors.text,
-          textStyle: AppTextStyles.body,
-          side: BorderSide(color: AppColors.secondaryDark),
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,11 +65,7 @@ class _SupportPageState extends State<SupportPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColors.secondaryDark,
-                            minimumSize: Size.fromHeight(150),
-                          ),
+                        child: AppButtons.secondaryXl(
                           onPressed: () {
                             launch('tel://$phoneNumber');
                           },
@@ -91,11 +88,7 @@ class _SupportPageState extends State<SupportPage> {
                       ),
                       SizedBox(width: 16),
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColors.primary,
-                            minimumSize: Size.fromHeight(150),
-                          ),
+                        child: AppButtons.primaryXl(
                           onPressed: () {
                             // Navigator.of(context, rootNavigator: true).pushNamed(LiveChatPage.routeName);
                           },

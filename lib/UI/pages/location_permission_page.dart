@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/location_permission_dialog.dart'
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
 class LocationPermissionPage extends StatelessWidget {
   static const routeName = '/location-permission';
@@ -30,7 +31,7 @@ class LocationPermissionPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 120),
-              ElevatedButton(
+              AppButtons.primary(
                 onPressed: () {
                   handleLocationPermission().then((isGranted) {
                     print('Location granted: $isGranted');

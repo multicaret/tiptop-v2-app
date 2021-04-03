@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
 class FilterSortButtons extends StatelessWidget {
   final Function onSortButtonPressed;
@@ -17,8 +18,7 @@ class FilterSortButtons extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
+            child: AppButtons.primarySm(
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -40,8 +40,7 @@ class FilterSortButtons extends StatelessWidget {
           ),
           SizedBox(width: 16),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
+            child: AppButtons.primarySm(
               onPressed: () {
                 showModalBottomSheet(
                   context: context,

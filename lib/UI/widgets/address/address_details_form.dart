@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../UI/input/address_icon_dropdown.dart';
@@ -142,11 +143,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
                     widget.addressDetailsFormData['notes'] = value;
                   },
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColors.secondaryDark,
-                    onPrimary: AppColors.primary,
-                  ),
+                AppButtons.secondary(
                   onPressed: widget.submitForm,
                   child: Text(Translations.of(context).get('Save')),
                 ),

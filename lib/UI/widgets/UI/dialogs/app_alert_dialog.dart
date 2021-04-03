@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppAlertDialog extends StatelessWidget {
@@ -38,12 +39,10 @@ class AppAlertDialog extends StatelessWidget {
                       padding: i < actions.length - 1
                           ? EdgeInsets.only(right: appProvider.isRTL ? 0 : 16, left: appProvider.isRTL ? 16 : 0)
                           : EdgeInsets.all(0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: actions[i].buttonColor,
-                          onPrimary: actions[i].buttonTextColor,
-                          minimumSize: Size.fromHeight(45),
-                        ),
+                      child: AppButtons.dynamic(
+                        bgColor: actions[i].buttonColor,
+                        textColor: actions[i].buttonTextColor,
+                        height: 45,
                         child: Text(Translations.of(context).get(actions[i].text)),
                         onPressed: actions[i].onTap ??
                             () {
