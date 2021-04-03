@@ -11,7 +11,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressSelectButton extends StatelessWidget {
@@ -170,7 +170,7 @@ class AddressSelectButton extends StatelessWidget {
                               if (!isDisabled)
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
+                                  child: AppIcons.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
                                 ),
                             ],
                           ),

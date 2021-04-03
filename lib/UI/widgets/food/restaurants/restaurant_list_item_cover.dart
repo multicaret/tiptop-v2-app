@@ -4,7 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/discount_tag.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RestaurantListItemCover extends StatelessWidget {
   final Restaurant restaurant;
@@ -54,7 +54,7 @@ class RestaurantListItemCover extends StatelessWidget {
                       BoxShadow(blurRadius: 6, color: AppColors.shadowDark),
                     ],
                   ),
-                  child: AppIcon.iconMdSecondary(isFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart),
+                  child: AppIcons.iconMdSecondary(isFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart),
                 ),
               )
             ],

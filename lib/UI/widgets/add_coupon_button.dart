@@ -5,7 +5,7 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/text_field_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 import 'UI/dialogs/confirm_alert_dialog.dart';
 
@@ -37,7 +37,7 @@ class _AddCouponButtonState extends State<AddCouponButton> {
                     Container(
                       width: 36,
                       height: 30,
-                      child: AppIcon.iconXsSecondary(FontAwesomeIcons.plus),
+                      child: AppIcons.iconXsSecondary(FontAwesomeIcons.plus),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
@@ -69,7 +69,7 @@ class _AddCouponButtonState extends State<AddCouponButton> {
                       child: Container(
                         width: 36,
                         height: 30,
-                        child: AppIcon.iconXsSecondary(FontAwesomeIcons.trash),
+                        child: AppIcons.iconXsSecondary(FontAwesomeIcons.trash),
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],

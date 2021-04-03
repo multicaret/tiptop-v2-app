@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FoodCategoryItem extends StatefulWidget {
@@ -74,7 +74,7 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                 ),
               ),
             ),
-            widget.isSelected ? Positioned.fill(child: AppIcon.iconWhite(FontAwesomeIcons.check)) : Container()
+            widget.isSelected ? Positioned.fill(child: AppIcons.iconWhite(FontAwesomeIcons.check)) : Container()
           ],
         ),
       ),

@@ -10,7 +10,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../UI/app_carousel.dart';
@@ -103,7 +103,7 @@ class _ProductPageState extends State<ProductPage> {
               opacity: _isLoadingProduct ? 0 : 1,
               child: IconButton(
                 onPressed: _isLoadingInteractRequest ? null : interactWithProduct,
-                icon: AppIcon.icon(productIsFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart),
+                icon: AppIcons.icon(productIsFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart),
               ),
             ),
         ],

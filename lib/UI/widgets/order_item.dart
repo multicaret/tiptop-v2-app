@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'address/address_icon.dart';
@@ -80,7 +80,7 @@ class OrderItem extends StatelessWidget {
                             bottomRight: Radius.circular(isRTL ? 8 : 0),
                           ),
                         ),
-                        child: AppIcon.icon(LineAwesomeIcons.shopping_cart),
+                        child: AppIcons.icon(LineAwesomeIcons.shopping_cart),
                       ),
                       Expanded(
                         child: Html(
@@ -104,7 +104,7 @@ class OrderItem extends StatelessWidget {
           if(!isDisabled)
           SizedBox(width: 10),
           if(!isDisabled)
-          AppIcon.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+          AppIcons.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
         ],
       ),
     );

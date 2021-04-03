@@ -17,7 +17,7 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressesPage extends StatefulWidget {
@@ -179,7 +179,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 ),
                 TextButton(
                   onPressed: () => _deleteAddress(addresses[i].id),
-                  child: AppIcon.icon(FontAwesomeIcons.trashAlt),
+                  child: AppIcons.icon(FontAwesomeIcons.trashAlt),
                   style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
                 )
               ],
@@ -228,7 +228,7 @@ class _AddressesPageState extends State<AddressesPage> {
                     ],
                   ),
                 ),
-                AppIcon.iconSm(FontAwesomeIcons.plus)
+                AppIcons.iconSm(FontAwesomeIcons.plus)
               ],
             ),
           ),

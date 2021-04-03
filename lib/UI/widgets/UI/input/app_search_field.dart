@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class AppSearchField extends StatefulWidget {
   final Function submitAction;
@@ -38,10 +38,10 @@ class _AppSearchFieldState extends State<AppSearchField> {
         hintText: Translations.of(context).get('Quick Search'),
         fillColor: AppColors.white,
         filled: true,
-        prefixIcon: AppIcon.iconSecondary(FontAwesomeIcons.search),
+        prefixIcon: AppIcons.iconSecondary(FontAwesomeIcons.search),
         suffix: _showDeleteIcon
             ? GestureDetector(
-                child: AppIcon.iconSm50(FontAwesomeIcons.solidTimesCircle),
+                child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
                 onTap: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) => widget.controller.clear());
                   widget.focusNode.unfocus();

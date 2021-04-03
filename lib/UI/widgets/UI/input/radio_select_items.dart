@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RadioSelectItems extends StatelessWidget {
   final List<dynamic> items;
@@ -54,7 +54,7 @@ class RadioSelectItems extends StatelessWidget {
                       if (items[i]["icon"] != null)
                         Padding(
                           padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
-                          child: AppIcon.icon50(items[i]["icon"]),
+                          child: AppIcons.icon50(items[i]["icon"]),
                         ),
                       SizedBox(width: 10),
                       Text(items[i]["title"]),

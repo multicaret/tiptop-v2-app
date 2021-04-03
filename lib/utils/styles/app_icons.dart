@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'app_colors.dart';
 
-class AppIcon {
+class AppIcons {
   static icon(IconData iconName) {
     return Icon(iconName, color: AppColors.text, size: 20);
   }

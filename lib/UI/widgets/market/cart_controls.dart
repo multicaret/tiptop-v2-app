@@ -12,7 +12,7 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class CartControls extends StatefulWidget {
@@ -141,7 +141,7 @@ class _CartControlsState extends State<CartControls> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AppIcon.iconWhite(LineAwesomeIcons.shopping_cart),
+                        AppIcons.iconWhite(LineAwesomeIcons.shopping_cart),
                         SizedBox(width: 5),
                         Text(
                           'Add to Cart',
@@ -237,8 +237,8 @@ class _CartControlsState extends State<CartControls> {
             ],
           ),
           child: disableAddition
-              ? AppIcon.iconXsWhite50(FontAwesomeIcons.plus)
-              : AppIcon.iconXsWhite(
+              ? AppIcons.iconXsWhite50(FontAwesomeIcons.plus)
+              : AppIcons.iconXsWhite(
                   action == CartAction.ADD
                       ? FontAwesomeIcons.plus
                       : quantity == 1

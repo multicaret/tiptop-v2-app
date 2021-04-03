@@ -14,7 +14,7 @@ import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class SearchPage extends StatefulWidget {
   static const routeName = '/search';
@@ -88,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
           if (_searchedProducts.isNotEmpty)
             IconButton(
               onPressed: _clearSearchResults,
-              icon: AppIcon.icon(FontAwesomeIcons.eraser),
+              icon: AppIcons.icon(FontAwesomeIcons.eraser),
             )
         ],
       ),
@@ -145,7 +145,7 @@ class _SearchPageState extends State<SearchPage> {
             padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             child: Row(
               children: [
-                AppIcon.iconSecondary(FontAwesomeIcons.infoCircle),
+                AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),
                 SizedBox(width: 10),
                 Text(_terms[i].term),
               ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AppDropDownButton extends StatelessWidget {
@@ -46,7 +46,7 @@ class AppDropDownButton extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 value: defaultValue,
-                icon: AppIcon.icon(FontAwesomeIcons.angleDown),
+                icon: AppIcons.icon(FontAwesomeIcons.angleDown),
                 style: AppTextStyles.body,
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,

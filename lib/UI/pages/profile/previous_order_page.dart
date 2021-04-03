@@ -14,7 +14,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 import '../order_rating_page.dart';
 
@@ -85,7 +85,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
             actions: [
               IconButton(
                 onPressed: () => _deleteOrder(appProvider, ordersProvider, order.id),
-                icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
+                icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
               )
             ],
           ),
@@ -120,7 +120,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                                   initialRating: order.orderRating.branchRatingValue ?? 0,
                                 ),
                                 if (!order.orderRating.branchHasBeenRated)
-                                  AppIcon.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                                  AppIcons.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
                               ],
                             ),
                           ),

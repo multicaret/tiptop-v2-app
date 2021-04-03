@@ -11,7 +11,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class CartPage extends StatelessWidget {
   static const routeName = '/cart';
@@ -43,7 +43,7 @@ class CartPage extends StatelessWidget {
                   }
                 });
               },
-              icon: AppIcon.iconPrimary(FontAwesomeIcons.trashAlt),
+              icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
             )
           ],
         ),

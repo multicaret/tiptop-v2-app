@@ -9,7 +9,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class CartFAB extends StatelessWidget {
@@ -41,7 +41,7 @@ class CartFAB extends StatelessWidget {
                         BoxShadow(blurRadius: 10, color: AppColors.shadowDark),
                       ],
                     ),
-                    child: AppIcon.iconLgSecondary(LineAwesomeIcons.shopping_cart),
+                    child: AppIcons.iconLgSecondary(LineAwesomeIcons.shopping_cart),
                   ),
                   if (cartProvider.cartProductsCount > 0 && !hideCart)
                     Positioned(

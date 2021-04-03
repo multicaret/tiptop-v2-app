@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class AddressIconDropDown extends StatelessWidget {
   final List<Map<String, dynamic>> iconItems;
@@ -32,7 +32,7 @@ class AddressIconDropDown extends StatelessWidget {
         child: DropdownButtonHideUnderline(
           child: DropdownButton<int>(
             value: currentIcon,
-            icon: AppIcon.icon(FontAwesomeIcons.angleDown),
+            icon: AppIcons.icon(FontAwesomeIcons.angleDown),
             isExpanded: true,
             itemHeight: 72,
             onChanged: onChanged,

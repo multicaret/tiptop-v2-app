@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class RestaurantSearchField extends StatelessWidget {
@@ -17,7 +17,7 @@ class RestaurantSearchField extends StatelessWidget {
           hintText: 'What are you looking for?',
           hintStyle: AppTextStyles.body50,
           filled: true,
-          prefixIcon: AppIcon.icon(FontAwesomeIcons.search),
+          prefixIcon: AppIcons.icon(FontAwesomeIcons.search),
           fillColor: AppColors.white,
           contentPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 0),
           border: OutlineInputBorder(

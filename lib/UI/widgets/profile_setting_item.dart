@@ -5,7 +5,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class ProfileSettingItem extends StatelessWidget {
   final IconData icon;
@@ -52,7 +52,7 @@ class ProfileSettingItem extends StatelessWidget {
                     Text(Translations.of(context).get(title)),
                   ],
                 ),
-                if (hasTrailing) trailing ?? AppIcon.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                if (hasTrailing) trailing ?? AppIcons.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
               ],
             ),
           ),

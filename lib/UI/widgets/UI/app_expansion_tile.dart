@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AppExpansionTile extends StatefulWidget {
@@ -61,7 +61,7 @@ class _AppExpansionTileState extends State<AppExpansionTile> with SingleTickerPr
           ),
           trailing: RotationTransition(
             turns: Tween(begin: 0.0, end: 0.5).animate(_rotationController),
-            child: AppIcon.iconPrimary(FontAwesomeIcons.angleDown),
+            child: AppIcons.iconPrimary(FontAwesomeIcons.angleDown),
           ),
           onExpansionChanged: (value) {
             value ? _rotationController.forward() : _rotationController.reverse();

@@ -5,7 +5,7 @@ import 'package:tiptop_v2/UI/widgets/UI/triangle_painter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class TrackOrderInfoContainer extends StatefulWidget {
@@ -126,7 +126,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                       Row(
                         children: [
                           Container(
-                            child: AppIcon.iconMdPrimary(FontAwesomeIcons.solidUser),
+                            child: AppIcons.iconMdPrimary(FontAwesomeIcons.solidUser),
                             height: 55.0,
                             width: 55.0,
                             decoration: BoxDecoration(
