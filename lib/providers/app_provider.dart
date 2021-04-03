@@ -309,7 +309,6 @@ class AppProvider with ChangeNotifier {
     token = null;
     userId = null;
     await storageActions.deleteData(key: 'userData');
-    await storageActions.deleteData(key: 'selected_address');
     print('Deleted user data and logged out');
     notifyListeners();
   }
