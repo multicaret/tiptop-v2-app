@@ -123,8 +123,8 @@ class AppProvider with ChangeNotifier {
     await handleLocationPermission();
     await AddressesProvider().fetchSelectedAddress();
 
-    await facebookAppEvents.setAdvertiserTracking(enabled: true);
-    await sendAppOpenEvent();
+    // await facebookAppEvents.setAdvertiserTracking(enabled: true);
+    // await sendAppOpenEvent();
   }
 
   Future<void> changeLanguage(String localeString) async {
