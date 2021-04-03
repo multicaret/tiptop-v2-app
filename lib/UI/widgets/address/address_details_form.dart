@@ -52,14 +52,14 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> regionsDropDownItems =
-        widget.createAddressData == null ? [] : widget.createAddressData.regions.map((region) => {'id': region.id, 'name': region.name.translated}).toList();
+        widget.createAddressData == null ? [] : widget.createAddressData.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
 
     List<Map<String, dynamic>> citiesDropDownItems = widget.createAddressData == null
         ? []
         : widget.createAddressData.cities
             .map((city) => {
                   'id': city.id,
-                  'name': city.name.translated,
+                  'name': city.name,
                 })
             .toList();
 

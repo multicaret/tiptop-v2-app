@@ -165,6 +165,7 @@ class City {
   City({
     this.id,
     this.name,
+    this.nameEnglish,
     this.description,
     this.code,
     this.country,
@@ -176,7 +177,8 @@ class City {
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   dynamic description;
   dynamic code;
   Country country;
@@ -188,7 +190,8 @@ class City {
 
   factory City.fromJson(Map<String, dynamic> json) => City(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         description: json["description"],
         code: json["code"],
         country: Country.fromJson(json["country"]),
@@ -201,7 +204,8 @@ class City {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "description": description,
         "code": code,
         "country": country.toJson(),
@@ -217,47 +221,39 @@ class Country {
   Country({
     this.id,
     this.name,
+    this.nameEnglish,
+    this.phoneCode,
     this.alpha2Code,
     this.alpha3Code,
-    this.numericCode,
-    this.phoneCode,
     this.flagUrl,
-    this.currency,
-    this.timezone,
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   String alpha2Code;
   String alpha3Code;
-  int numericCode;
   String phoneCode;
   String flagUrl;
-  Currency currency;
-  Timezone timezone;
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         alpha2Code: json["alpha2Code"],
         alpha3Code: json["alpha3Code"],
-        numericCode: json["numericCode"],
         phoneCode: json["phoneCode"],
         flagUrl: json["flagUrl"],
-        currency: Currency.fromJson(json["currency"]),
-        timezone: Timezone.fromJson(json["timezone"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "alpha2Code": alpha2Code,
         "alpha3Code": alpha3Code,
-        "numericCode": numericCode,
         "phoneCode": phoneCode,
         "flagUrl": flagUrl,
-        "currency": currency.toJson(),
-        "timezone": timezone.toJson(),
       };
 }
 
@@ -333,46 +329,30 @@ class Timezone {
       };
 }
 
-class Name {
-  Name({
-    this.original,
-    this.translated,
-  });
-
-  String original;
-  String translated;
-
-  factory Name.fromJson(Map<String, dynamic> json) => Name(
-        original: json["original"],
-        translated: json["translated"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "original": original,
-        "translated": translated,
-      };
-}
-
 class Region {
   Region({
     this.id,
     this.name,
+    this.nameEnglish,
     this.code,
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   String code;
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         code: json["code"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "code": code,
       };
 }
@@ -593,11 +573,5 @@ class DialogAction {
   final dynamic popValue;
   final Function onTap;
 
-  DialogAction({
-    @required this.text,
-    this.buttonColor = AppColors.primary,
-    this.buttonTextColor = AppColors.white,
-    this.popValue,
-    this.onTap
-  });
+  DialogAction({@required this.text, this.buttonColor = AppColors.primary, this.buttonTextColor = AppColors.white, this.popValue, this.onTap});
 }
