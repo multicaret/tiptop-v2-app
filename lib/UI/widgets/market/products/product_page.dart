@@ -25,6 +25,13 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
   bool _isInit = true;
   bool _isLoadingProduct = false;
   bool _isLoadingInteractRequest = false;
