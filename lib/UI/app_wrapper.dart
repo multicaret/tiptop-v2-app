@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -88,7 +88,7 @@ class _AppWrapperState extends State<AppWrapper> {
     },
     {
       'title': 'Cart',
-      'page': CartPage(),
+      'page': AppScaffold(body: Container()),
       'icon': LineAwesomeIcons.shopping_cart,
     },
     {
