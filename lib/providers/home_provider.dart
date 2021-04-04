@@ -42,9 +42,12 @@ class HomeProvider with ChangeNotifier {
     final endpoint = 'home';
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
+      print('Lat/Long not found!');
       bool isGranted = await getLocationPermissionStatus();
       if (!isGranted) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
+      } else {
+        await updateLocationAndStoreIt();
       }
     }
 
