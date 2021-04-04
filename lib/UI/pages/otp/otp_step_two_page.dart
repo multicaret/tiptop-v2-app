@@ -116,6 +116,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
         }
       } on HttpException catch (error) {
         appAlert(context: context, title: error.title, description: error.getErrorsAsString()).show();
+        _isLoading = false;
       } catch (error) {
         print("@error checkOTPValidation");
         print(error.toString());

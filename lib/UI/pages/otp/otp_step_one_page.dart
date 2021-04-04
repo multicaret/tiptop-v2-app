@@ -79,6 +79,7 @@ class _OTPStepOnePageState extends State<OTPStepOnePage> {
                           textDirection: TextDirection.ltr,
                           labelText: 'Phone Number',
                           initialValue: '5070326662',
+                          keyboardType: TextInputType.phone,
                           hintText: '5xx-xxx-xx-xx',
                           onSaved: (value) {
                             phoneNumber = value;
