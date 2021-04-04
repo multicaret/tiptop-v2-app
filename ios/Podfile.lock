@@ -25,10 +25,6 @@ PODS:
   - GoogleMaps/Base (3.9.0)
   - GoogleMaps/Maps (3.9.0):
     - GoogleMaps/Base
-  - Instabug (9.1.7)
-  - instabug_flutter (0.0.1):
-    - Flutter
-    - Instabug (= 9.1.7)
   - launch_review (0.0.1):
     - Flutter
   - location (0.0.1):
@@ -66,7 +62,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
-  - instabug_flutter (from `.symlinks/plugins/instabug_flutter/ios`)
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
@@ -85,7 +80,6 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FMDB
     - GoogleMaps
-    - Instabug
     - Mixpanel-swift
     - Toast
 
@@ -100,8 +94,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
-  instabug_flutter:
-    :path: ".symlinks/plugins/instabug_flutter/ios"
   launch_review:
     :path: ".symlinks/plugins/launch_review/ios"
   location:
@@ -136,8 +128,6 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_maps_flutter: c7f9c73576de1fbe152a227bfd6e6c4ae8088619
   GoogleMaps: 4b5346bddfe6911bb89155d43c903020170523ac
-  Instabug: a952d72372697192dbb15800117b89f59c185054
-  instabug_flutter: 65794e9f82acebde599e56cc6a2e74a17b69410e
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Mixpanel-swift: 947354668bf7dcaff5aaf9c64232fb5bea6ff0c7
