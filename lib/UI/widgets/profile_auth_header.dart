@@ -59,8 +59,9 @@ class ProfileAuthHeader extends StatelessWidget {
                                   style: AppTextStyles.bodyBoldSecondaryDark,
                                 ),
                                 Text(
-                                  '${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
+                                  '+${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
                                   style: AppTextStyles.subtitle,
+                                  textDirection: TextDirection.ltr,
                                 ),
                               ],
                             )
