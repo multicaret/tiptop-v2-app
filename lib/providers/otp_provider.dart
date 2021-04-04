@@ -23,7 +23,8 @@ class OTPProvider with ChangeNotifier {
     if (responseData["data"] == null || responseData["status"] != 200) {
       throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
-    countries = List<Country>.from(responseData["data"].map((x) => Country.fromJson(x)));
+    List<Country> _countries = List<Country>.from(responseData["data"].map((x) => Country.fromJson(x)));
+    countries = _countries.where((country) => country.phoneCode != null).toList();
   }
 
   Future<void> initOTPValidation(String method) async {
