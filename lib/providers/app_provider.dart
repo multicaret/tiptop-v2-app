@@ -109,7 +109,7 @@ class AppProvider with ChangeNotifier {
     isFirstOpen = !isFirstOpenKeyExists;
     print('First time opening the app: $isFirstOpen');
     if (isFirstOpen) {
-      await sendAppFirstVisitEvent();
+      // await sendAppFirstVisitEvent();
       await storageActions.save(key: 'is_first_open', data: false);
       isFirstOpen = false;
     }
@@ -128,13 +128,13 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
-  static final facebookAppEvents = FacebookAppEvents();
+/*  static final facebookAppEvents = FacebookAppEvents();
   Mixpanel mixpanel;
 
   Future<void> initMixpanel() async {
     mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
     mixpanel.setServerURL("https://api-eu.mixpanel.com");
-  }
+  }*/
 
   bool isLocationPermissionGranted = false;
 
@@ -144,8 +144,8 @@ class AppProvider with ChangeNotifier {
     await fetchLocale();
 
     //Init Analytics
-    await initMixpanel();
-    await facebookAppEvents.setAdvertiserTracking(enabled: true);
+    // await initMixpanel();
+    // await facebookAppEvents.setAdvertiserTracking(enabled: true);
 
     await checkIfIsFirstOpen();
     isLocationPermissionGranted = await getLocationPermissionStatus();
@@ -382,7 +382,7 @@ class AppProvider with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<void> sendAppFirstVisitEvent() async {
+/*  Future<void> sendAppFirstVisitEvent() async {
     print('Sending app open event!');
     Map<String, dynamic> params = {
       'platform': mobileAppDetails['device']['platform'],
@@ -395,5 +395,5 @@ class AppProvider with ChangeNotifier {
       parameters: params,
     );
     mixpanel.track('first_visit', properties: params);
-  }
+  }*/
 }
