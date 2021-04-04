@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/otp.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
@@ -14,6 +15,16 @@ class OTPProvider with ChangeNotifier {
   OTPValidationDataResponse otpValidationDataResponse;
   OTPValidationData otpValidationData;
   DateTime validationDate;
+  List<Country> countries;
+
+  Future<void> fetchAndSetCountries() async {
+    final endpoint = 'countries';
+    final responseData = await AppProvider().get(endpoint: endpoint);
+    if (responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+    countries = List<Country>.from(responseData["data"].map((x) => Country.fromJson(x)));
+  }
 
   Future<void> initOTPValidation(String method) async {
     final endpoint = 'otp/init-validation?method=$method';

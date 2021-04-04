@@ -168,7 +168,7 @@ class _OTPStepTwoPageState extends State<OTPStepTwoPage> with WidgetsBindingObse
             ),
             SizedBox(height: 20),
             Text(
-              '$phoneCountryCode $phoneNumber',
+              '+$phoneCountryCode $phoneNumber',
               style: AppTextStyles.h1,
               textDirection: TextDirection.ltr,
             ),

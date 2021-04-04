@@ -85,7 +85,7 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
           Text(Translations.of(context).get('We sent a message to your number')),
           SizedBox(height: 7),
           Text(
-            '$phoneCountryCode $phoneNumber',
+            '+$phoneCountryCode $phoneNumber',
             style: AppTextStyles.bodyBold,
             textDirection: TextDirection.ltr,
           ),
