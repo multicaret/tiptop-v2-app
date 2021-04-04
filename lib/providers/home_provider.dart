@@ -42,8 +42,8 @@ class HomeProvider with ChangeNotifier {
     final endpoint = 'home';
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
-      bool isEnabled = await handleLocationPermission();
-      if (!isEnabled) {
+      bool isGranted = await getLocationPermissionStatus();
+      if (!isGranted) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(LocationPermissionPage.routeName);
       }
     }
