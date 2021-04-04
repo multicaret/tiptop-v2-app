@@ -9,7 +9,6 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/market/home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
-import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/UI/no_content_view.dart';
 import 'package:tiptop_v2/UI/pages/food/food_home_page.dart';
 import 'package:tiptop_v2/models/category.dart';
@@ -49,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   List<Category> categories = [];
   List<Slide> slides = [];
 
-  String currentView = 'food';
+  String currentView = 'market';
 
   Future<void> fetchAndSetHomeData() async {
     try {
