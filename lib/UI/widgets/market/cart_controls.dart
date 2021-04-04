@@ -27,8 +27,6 @@ class CartControls extends StatefulWidget {
     this.isModalControls = false,
   });
 
-  static double productUnitTitleHeight = 12;
-
   @override
   _CartControlsState createState() => _CartControlsState();
 }

@@ -8,6 +8,7 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -60,7 +61,7 @@ class _GridProductItemState extends State<GridProductItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? CartControls.productUnitTitleHeight : 0),
+          height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? marketProductUnitTitleHeight : 0),
           child: Stack(
             children: [
               Consumer<CartProvider>(builder: (c, cartProvider, _) {
@@ -82,7 +83,7 @@ class _GridProductItemState extends State<GridProductItem> {
                 );
               }),
               Positioned(
-                bottom: widget.product.unit == null || widget.product.unit.title == null ? 0 : CartControls.productUnitTitleHeight,
+                bottom: widget.product.unit == null || widget.product.unit.title == null ? 0 : marketProductUnitTitleHeight,
                 left: cartControlsMargin,
                 right: cartControlsMargin,
                 height: cartButtonHeight,
@@ -94,7 +95,7 @@ class _GridProductItemState extends State<GridProductItem> {
               if (hasUnitTitle)
                 Positioned(
                   bottom: 0,
-                  height: CartControls.productUnitTitleHeight,
+                  height: marketProductUnitTitleHeight,
                   right: 0,
                   left: 0,
                   child: Container(

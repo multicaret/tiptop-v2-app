@@ -72,6 +72,7 @@ class AppTextStyles {
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
     fontSize: 14,
+    height: 1,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     decoration: TextDecoration.none,

@@ -12,3 +12,6 @@ const double restaurantPageExpandedHeaderHeight = 460;
 
 //Height of restaurant page header when collapsed
 const double restaurantPageCollapsedHeaderHeight = sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight;
+
+//Height of unit title below cart controls in market products
+const double marketProductUnitTitleHeight = 12;
