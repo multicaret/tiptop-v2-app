@@ -53,7 +53,7 @@ class AppDropDownButton extends StatelessWidget {
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,
                 isExpanded: true,
-                hint: Text(Translations.of(context).get(hintText)),
+                hint: hintText != null && hintText.isNotEmpty ? Text(Translations.of(context).get(hintText)) : null,
                 items: <Map<String, dynamic>>[...items].map<DropdownMenuItem<int>>(
                   (Map<String, dynamic> value) {
                     return DropdownMenuItem<int>(
