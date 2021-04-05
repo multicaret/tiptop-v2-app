@@ -35,7 +35,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     return AppBottomSheet(
-      screenHeightFraction: 0.42,
+      screenHeightFraction: 0.45,
       applyAction: () {},
       title: 'Sort',
       children: [
