@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:device_info/device_info.dart';
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/boot.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -182,7 +180,7 @@ class AppProvider with ChangeNotifier {
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
-          logout();
+          logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
         }
@@ -228,7 +226,7 @@ class AppProvider with ChangeNotifier {
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
-          logout();
+          logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
         }
@@ -305,10 +303,13 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> logout() async {
+  Future<void> logout({bool clearSelectedAddress = false}) async {
     token = null;
     userId = null;
     await storageActions.deleteData(key: 'userData');
+    if (clearSelectedAddress) {
+      await storageActions.deleteData(key: 'selected_address');
+    }
     print('Deleted user data and logged out');
     notifyListeners();
   }
