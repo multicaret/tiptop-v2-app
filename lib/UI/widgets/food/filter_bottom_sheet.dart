@@ -18,7 +18,12 @@ class FilterBottomSheet extends StatefulWidget {
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
   AppProvider appProvider;
 
-  final List<Map<String, dynamic>> deliveryTypes = [
+  double minSliderValue = 10;
+  double maxSliderValue = 100;
+
+  Map<String, dynamic> filterData;
+
+  List<Map<String, dynamic>> deliveryTypes = [
     {
       'id': 0,
       'title': 'Restaurant delivery',
@@ -29,14 +34,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     },
   ];
 
-  double minSliderValue = 10;
-  double maxSliderValue = 100;
-  double sliderValue = 10;
-  int selectedDeliveryTypeId = 0;
-
   @override
   void initState() {
     appProvider = Provider.of<AppProvider>(context, listen: false);
+    filterData = {
+      'delivery_type_id': null,
+      'min_basket_value': minSliderValue,
+      'rating_value': 0.0,
+      'category_id': null,
+    };
     super.initState();
   }
 
@@ -45,10 +51,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     return AppBottomSheet(
       screenHeightFraction: 0.8,
       title: 'Filters',
-      clearAction: () {},
-      applyAction: () {
-        Navigator.of(context).pop();
-      },
+      clearAction: _clearFilters,
+      applyAction: _submit,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 17, right: 17, bottom: 5),
@@ -75,13 +79,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     child: Slider(
                       min: minSliderValue,
                       max: maxSliderValue,
-                      value: sliderValue,
-                      label: '${sliderValue.round()} IQD',
-                      onChanged: (newValue) {
-                        setState(() {
-                          sliderValue = newValue;
-                        });
-                      },
+                      value: filterData['min_basket_value'].round().toDouble(),
+                      label: '${filterData['min_basket_value'].round().toDouble()} IQD',
+                      onChanged: (newValue) => setState(() => filterData['min_basket_value'] = newValue.round().toDouble()),
                     ),
                   ),
                   Text(Translations.of(context).get("All")),
@@ -102,7 +102,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             children: [
               Text(Translations.of(context).get("Rating"), style: AppTextStyles.body50),
               SizedBox(height: 5),
-              AppRatingBar(starSize: 30, onRatingUpdate: (value) => print(value)),
+              AppRatingBar(
+                initialRating: filterData['rating_value'],
+                starSize: 30,
+                onRatingUpdate: (value) => setState(() => filterData['rating_value'] = value),
+              ),
             ],
           ),
         ),
@@ -113,7 +117,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         CategoriesSlider(
           categories: dummyCategories,
           isRTL: appProvider.isRTL,
-          isCategorySelectable: true,
+          selectedCategoryId: filterData['selected_category_id'],
+          setSelectedCategoryId: (_selectedCategoryId) => setState(() => filterData['selected_category_id'] = _selectedCategoryId),
         ),
       ],
     );
@@ -124,7 +129,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       return Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: () => setState(() => selectedDeliveryTypeId = deliveryTypes[i]['id']),
+          onTap: () => setState(() => filterData['delivery_type_id'] = deliveryTypes[i]['id']),
           child: Container(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: appProvider.isRTL ? 17 : 12, right: appProvider.isRTL ? 12 : 17),
             child: Row(
@@ -134,8 +139,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   activeColor: AppColors.primary,
                   value: deliveryTypes[i]["id"],
-                  groupValue: selectedDeliveryTypeId,
-                  onChanged: (newValue) => setState(() => selectedDeliveryTypeId = newValue),
+                  groupValue: filterData['delivery_type_id'],
+                  onChanged: (newValue) => setState(() => filterData['delivery_type_id'] = newValue),
                 ),
                 Expanded(
                   child: DeliveryInfo(isRestaurant: i == 0),
@@ -145,6 +150,22 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
         ),
       );
+    });
+  }
+
+  void _submit() {
+    print(filterData);
+    Navigator.of(context).pop(filterData);
+  }
+
+  void _clearFilters() {
+    setState(() {
+      filterData = {
+        'delivery_type_id': null,
+        'min_basket_value': minSliderValue,
+        'rating_value': 0.0,
+        'category_id': null,
+      };
     });
   }
 }

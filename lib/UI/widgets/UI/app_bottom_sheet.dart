@@ -70,9 +70,7 @@ class AppBottomSheet extends StatelessWidget {
               padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
               child: AppButtons.secondary(
                 child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: applyAction,
               ),
             ),
         ],

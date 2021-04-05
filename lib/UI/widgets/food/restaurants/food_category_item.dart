@@ -14,14 +14,15 @@ class FoodCategoryItem extends StatefulWidget {
   final Function onTap;
   final bool isSelected;
 
-  const FoodCategoryItem(
-      {@required this.category,
-      @required this.index,
-      @required this.count,
-      @required this.isRTL,
-      this.isSelectable = false,
-      this.onTap,
-      this.isSelected});
+  const FoodCategoryItem({
+    @required this.category,
+    @required this.index,
+    @required this.count,
+    @required this.isRTL,
+    this.isSelectable = false,
+    this.onTap,
+    this.isSelected,
+  });
 
   @override
   _FoodCategoryItemState createState() => _FoodCategoryItemState();
@@ -59,7 +60,6 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
-                  border: widget.isSelected ? Border.all(color: AppColors.secondaryDark, width: 2) : null,
                   borderRadius: BorderRadius.circular(8),
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -74,7 +74,18 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                 ),
               ),
             ),
-            widget.isSelected ? Positioned.fill(child: AppIcons.iconWhite(FontAwesomeIcons.check)) : Container()
+            widget.isSelected
+                ? Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.secondaryDark, width: 2),
+                        color: AppColors.primary.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: AppIcons.iconWhite(FontAwesomeIcons.check),
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),
