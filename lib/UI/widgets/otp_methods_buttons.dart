@@ -18,7 +18,7 @@ class OTPMethodsButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> _verificationMethods = [
       {
-        'id': 'whatsApp',
+        'id': 'whatsapp',
         'name': 'WhatsApp',
         'color': AppColors.whatsApp,
         'icon': FontAwesomeIcons.whatsapp,

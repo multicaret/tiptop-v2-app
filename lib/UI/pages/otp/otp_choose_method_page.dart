@@ -56,12 +56,14 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   Future<void> _initOTPValidation(String method) async {
     setState(() => _isLoadingInitOTPValidation = true);
     await otpProvider.initOTPValidation(method);
-    setState(() {
-      deepLink = otpProvider.deepLink;
-      reference = otpProvider.reference;
-      _isLoadingInitOTPValidation = false;
-    });
-    launch(deepLink, forceSafariVC: false, forceWebView: false);
+    deepLink = otpProvider.deepLink;
+    reference = otpProvider.reference;
+    setState(() => _isLoadingInitOTPValidation = false);
+    if (deepLink != null) {
+      launch(deepLink, forceSafariVC: false, forceWebView: false);
+    } else {
+      print('No deeplink was returned!');
+    }
   }
 
   @override
