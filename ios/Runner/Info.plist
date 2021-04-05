@@ -69,5 +69,9 @@
     <string>1289011161459969</string>
     <key>FacebookDisplayName</key>
     <string>TipTop</string>
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <true/>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <true/>
 </dict>
 </plist>
