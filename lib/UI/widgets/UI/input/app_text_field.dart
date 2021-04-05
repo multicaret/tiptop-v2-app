@@ -99,9 +99,14 @@ class _AppTextFieldState extends State<AppTextField> {
           if (!widget.hasInnerLabel)
             Padding(
               padding: EdgeInsets.only(bottom: 6),
-              child: Text(
-                Translations.of(context).get(widget.labelText),
-                style: labelStyle,
+              child: RichText(
+                text: TextSpan(
+                  text: Translations.of(context).get(widget.labelText),
+                  style: labelStyle,
+                  children: <TextSpan>[
+                    if (widget.required) TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
+                  ],
+                ),
               ),
             ),
           TextFormField(
