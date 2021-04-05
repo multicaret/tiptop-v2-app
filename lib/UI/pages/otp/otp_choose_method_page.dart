@@ -95,12 +95,15 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
           }
         } else {
+          setState(() => _isLoadingCheckOTPValidation = false);
           showToast(msg: 'OTP Validation Failed');
+          return;
         }
       } on HttpException catch (error) {
         appAlert(context: context, title: error.title, description: error.getErrorsAsString()).show();
         setState(() => _isLoadingCheckOTPValidation = false);
       } catch (error) {
+        setState(() => _isLoadingCheckOTPValidation = false);
         print("@error checkOTPValidation");
         print(error.toString());
       }

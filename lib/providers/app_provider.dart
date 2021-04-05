@@ -264,14 +264,12 @@ class AppProvider with ChangeNotifier {
         endpoint: 'profile',
         body: userData,
       );
-
       if (responseData['data'] == null) {
         throw HttpException(
           title: 'Error',
           message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
         );
       }
-
       User updatedUser = User.fromJson(responseData['data']['user']);
       updateUserData(updatedUser, token);
 

@@ -15,7 +15,9 @@ class OTPProvider with ChangeNotifier {
   OTPValidationDataResponse otpValidationDataResponse;
   OTPValidationData otpValidationData;
   DateTime validationDate;
-  List<Country> countries;
+  List<Country> countries = [];
+  List<Region> regions = [];
+  List<City> cities = [];
 
   Future<void> fetchAndSetCountries() async {
     final endpoint = 'countries';
@@ -107,6 +109,20 @@ class OTPProvider with ChangeNotifier {
     appProvider.updateUserData(otpValidationData.user, otpValidationData.accessToken);
 
     print('validationStatus: $validationStatus');
+    notifyListeners();
+  }
+
+  Future<dynamic> createEditProfileRequest(AppProvider appProvider) async {
+    final endpoint = 'profile/edit';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if (responseData == 401) {
+      return 401;
+    }
+    if (responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? "Unknown");
+    }
+    regions = List<Region>.from(responseData["data"]["regions"].map((x) => Region.fromJson(x)));
+    cities = List<City>.from(responseData["data"]["cities"].map((x) => City.fromJson(x)));
     notifyListeners();
   }
 }

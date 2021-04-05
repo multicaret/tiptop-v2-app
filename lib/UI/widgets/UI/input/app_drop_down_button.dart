@@ -10,12 +10,14 @@ class AppDropDownButton extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final Function onChanged;
   final String labelText;
+  final String hintText;
 
   AppDropDownButton({
     @required this.defaultValue,
     @required this.items,
     @required this.onChanged,
     this.labelText,
+    this.hintText = '',
   });
 
   @override
@@ -51,6 +53,7 @@ class AppDropDownButton extends StatelessWidget {
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,
                 isExpanded: true,
+                hint: Text(Translations.of(context).get(hintText)),
                 items: <Map<String, dynamic>>[...items].map<DropdownMenuItem<int>>(
                   (Map<String, dynamic> value) {
                     return DropdownMenuItem<int>(
