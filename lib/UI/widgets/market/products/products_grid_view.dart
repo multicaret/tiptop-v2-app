@@ -16,7 +16,7 @@ class ProductsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double productGridItemWidth = getColItemHeight(3, context);
-    double productGridItemHeight = productGridItemWidth + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 5);
+    double productGridItemHeight = productGridItemWidth + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
     double productGridItemAspectRatio = productGridItemWidth / productGridItemHeight;
 
     return GridView.count(
