@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,48 +15,27 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class OTPStepThreePage extends StatefulWidget {
+class OTPSMSCodePage extends StatefulWidget {
   static const routeName = '/otp-step-three';
 
   @override
-  _OTPStepThreePageState createState() => _OTPStepThreePageState();
+  _OTPSMSCodePageState createState() => _OTPSMSCodePageState();
 }
 
-class _OTPStepThreePageState extends State<OTPStepThreePage> {
+class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
   OTPProvider otpProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
   bool _isInit = true;
   String reference;
-  String phoneCountryCode;
-  String phoneNumber;
-  String countryCode;
   DateTime validationDate;
 
   bool isValid;
   bool isNewUser;
 
-  Future<void> _validateSMSCode(String code) async {
-    try {
-      await otpProvider.validateSMS(appProvider, countryCode, phoneCountryCode, phoneNumber, code, reference);
-      isValid = otpProvider.validationStatus;
-      isNewUser = otpProvider.isNewUser;
-      if (isValid == true) {
-        if (isNewUser) {
-          print('New user, navigating to complete profile page');
-          Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
-        } else {
-          print('Registered user, navigating to home page');
-          Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
-        }
-      } else {
-        showToast(msg: 'OTP Validation Failed');
-      }
-    } catch (error) {
-      showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
-      throw error;
-    }
-  }
+  Map<String, dynamic> smsOTPData;
+  String phoneCountryCode;
+  String phoneNumber;
 
   @override
   void didChangeDependencies() {
@@ -64,9 +45,8 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
       homeProvider = Provider.of<HomeProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       reference = data['reference'];
-      phoneNumber = data['phone_number'];
-      countryCode = data['country_code'];
       phoneCountryCode = data['phone_country_code'];
+      phoneNumber = data['phone_number'];
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -95,11 +75,7 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
             padding: EdgeInsets.symmetric(horizontal: 70),
             child: AppPinCodeTextField(
               length: 6,
-              onComplete: (pin) {
-                _validateSMSCode(pin);
-                print(pin);
-                FocusScope.of(context).unfocus();
-              },
+              onComplete: (code) => _submitCode(code),
             ),
           ),
           SizedBox(height: 20),
@@ -139,5 +115,36 @@ class _OTPStepThreePageState extends State<OTPStepThreePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _submitCode(String code) async {
+    final mobileAppDetails = await appProvider.loadMobileAppDetails();
+    smsOTPData = {
+      'phone_country_code': phoneCountryCode, // i.e: 90, 964
+      'phone_number': phoneNumber,
+      'code': code,
+      'reference': reference,
+      'mobile_app_details': json.encode(mobileAppDetails),
+    };
+
+    // try {
+    await otpProvider.checkOTPSMSValidation(appProvider, smsOTPData);
+    isValid = otpProvider.validationStatus;
+    isNewUser = otpProvider.isNewUser;
+    if (isValid == true) {
+      if (isNewUser) {
+        print('New user, navigating to complete profile page');
+        Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+      } else {
+        print('Registered user, navigating to home page');
+        Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+      }
+    } else {
+      showToast(msg: 'OTP Validation Failed');
+    }
+/*    } catch (error) {
+      showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
+      throw error;
+    }*/
   }
 }

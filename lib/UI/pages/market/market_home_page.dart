@@ -115,6 +115,7 @@ class _HomePageState extends State<HomePage> {
                         ChannelsButtons(
                           currentView: currentView,
                           changeView: (value) => setState(() => currentView = value),
+                          isRTL: appProvider.isRTL,
                         ),
                         if (currentView == 'food') FoodHomePage(),
                         if (currentView == 'market')

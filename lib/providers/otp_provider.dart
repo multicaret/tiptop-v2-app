@@ -44,13 +44,11 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkOTPValidation(AppProvider appProvider, String reference, String phoneCountryCode, String phoneNumber) async {
+  Future<void> checkOTPValidation(AppProvider appProvider, String reference) async {
     print('reference in check: $reference');
     final endpoint = 'otp/check-validation/$reference';
     final mobileAppDetails = await appProvider.loadMobileAppDetails();
     final Map<String, String> body = {
-      'phone_country_code': phoneCountryCode,
-      'phone_number': phoneNumber,
       'mobile_app_details': json.encode(mobileAppDetails),
     };
 
@@ -58,6 +56,8 @@ class OTPProvider with ChangeNotifier {
       endpoint: endpoint,
       body: body,
     );
+    print('responseData');
+    print(responseData);
     otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
     if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {
       throw HttpException(title: 'Error', message: otpInitDataResponse.message, errors: otpValidationDataResponse.errors);
@@ -72,13 +72,15 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendOTPSms({String countryCode, String phoneCountryCode, String phoneNumber}) async {
+  Future<void> initSMSOTPAndSendCode(String phoneCountryCode, String phoneNumber) async {
     final endpoint = 'otp/sms-send';
-    final responseData = await AppProvider().post(endpoint: endpoint, params: {
-      'country_code': countryCode, // i.e: TR, IQ
-      'phone_country_code': phoneCountryCode, // i.e: 90, 964
+    final responseData = await AppProvider().post(endpoint: endpoint, body: {
+      'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
     });
+    print('initSMSOTPAndSendCode responseData');
+    print(responseData);
+
     otpInitDataResponse = OTPDataResponse.fromJson(responseData);
 
     reference = otpInitDataResponse.otpData.reference;
@@ -87,26 +89,11 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> validateSMS(
-    AppProvider appProvider,
-    String countryCode,
-    String phoneCountryCode,
-    String phoneNumber,
-    String code,
-    String reference,
-  ) async {
+  Future<void> checkOTPSMSValidation(AppProvider appProvider, Map<String, dynamic> smsOTPData) async {
     final endpoint = 'otp/sms-validate';
-    final mobileAppDetails = await appProvider.loadMobileAppDetails();
-    final Map<String, String> body = {
-      'country_code': countryCode, // i.e: TR, IQ
-      'phone_country_code': phoneCountryCode, // i.e: 90, 964
-      'phone_number': phoneNumber,
-      'code': code,
-      'reference': reference,
-      'mobile_app_details': json.encode(mobileAppDetails),
-    };
-    final responseData = await AppProvider().post(endpoint: endpoint, params: body);
-
+    final responseData = await AppProvider().post(endpoint: endpoint, body: smsOTPData);
+    print('checkOTPSMSValidation responseData');
+    print(responseData);
     otpValidationDataResponse = OTPValidationDataResponse.fromJson(responseData);
 
     if (otpValidationDataResponse.otpValidationData == null || otpValidationDataResponse.status != 200) {

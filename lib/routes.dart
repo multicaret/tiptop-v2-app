@@ -9,9 +9,8 @@ import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
 import 'package:tiptop_v2/UI/pages/order_rating_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
-import 'package:tiptop_v2/UI/pages/otp/otp_step_one_page.dart';
-import 'package:tiptop_v2/UI/pages/otp/otp_step_three_page.dart';
-import 'package:tiptop_v2/UI/pages/otp/otp_step_two_page.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_choose_method_page.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_sms_code_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/about_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
@@ -45,9 +44,8 @@ final routes = <String, WidgetBuilder>{
   LiveChatPage.routeName: (BuildContext context) => LiveChatPage(),
   LanguageSelectPage.routeName: (BuildContext context) => LanguageSelectPage(),
   WalkthroughPage.routeName: (BuildContext context) => WalkthroughPage(),
-  OTPStepOnePage.routeName: (BuildContext context) => OTPStepOnePage(),
-  OTPStepTwoPage.routeName: (BuildContext context) => OTPStepTwoPage(),
-  OTPStepThreePage.routeName: (BuildContext context) => OTPStepThreePage(),
+  OTPChooseMethodPage.routeName: (BuildContext context) => OTPChooseMethodPage(),
+  OTPSMSCodePage.routeName: (BuildContext context) => OTPSMSCodePage(),
   OTPCompleteProfile.routeName: (BuildContext context) => OTPCompleteProfile(),
   LocationPermissionPage.routeName: (BuildContext context) => LocationPermissionPage(),
   AppWrapper.routeName: (BuildContext context) => AppWrapper(),
