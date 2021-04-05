@@ -42,7 +42,11 @@ class _FoodHomePageState extends State<FoodHomePage> {
           padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 17.0, bottom: 5.0),
           child: Text(Translations.of(context).get("Categories"), style: AppTextStyles.body50),
         ),
-        CategoriesSlider(categories: dummyCategories, isRTL: appProvider.isRTL),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          color: AppColors.white,
+          child: CategoriesSlider(categories: dummyCategories, isRTL: appProvider.isRTL),
+        ),
         FilterSortButtons(),
         Padding(
           padding: const EdgeInsets.only(left: 17.0, right: 17.0, bottom: 5.0),

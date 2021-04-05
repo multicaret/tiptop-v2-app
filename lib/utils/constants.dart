@@ -15,3 +15,6 @@ const double restaurantPageCollapsedHeaderHeight = sliverAppBarSearchBarHeight +
 
 //Height of unit title below cart controls in market products
 const double marketProductUnitTitleHeight = 12;
+
+//Height of restaurant categories
+const double restaurantCategoriesHeight = 70;

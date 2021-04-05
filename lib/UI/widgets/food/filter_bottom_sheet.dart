@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
-import 'package:tiptop_v2/UI/widgets/bottom_sheet_indicator.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
 import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -17,7 +16,9 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  final List<Map<String, dynamic>> filterItems = [
+  AppProvider appProvider;
+
+  final List<Map<String, dynamic>> deliveryTypes = [
     {
       'id': 0,
       'title': 'Restaurant delivery',
@@ -31,203 +32,119 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   double minSliderValue = 10;
   double maxSliderValue = 100;
   double sliderValue = 10;
-  int initRadioValue = 0;
+  int selectedDeliveryTypeId = 0;
 
   @override
-  Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.87,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        borderRadius: new BorderRadius.only(
-          topLeft: const Radius.circular(8.0),
-          topRight: const Radius.circular(8.0),
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BottomSheetIndicator(),
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(top: 10, left: 17, right: 17),
-            padding: EdgeInsets.only(bottom: 5),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColors.border)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Translations.of(context).get('Filters'),
-                  style: AppTextStyles.dynamicValues(fontWeight: FontWeight.w600, color: AppColors.secondaryDark, fontSize: 20),
-                ),
-                Material(
-                  color: AppColors.white,
-                  child: InkWell(
-                    child: SizedBox(
-                      width: 50,
-                      child: Center(child: Text(Translations.of(context).get('Clear'))),
-                    ),
-                    onTap: () {
-                      // Clear filters
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
-                SizedBox(height: 15),
-                DeliveryInfoWithRadio(
-                  itemValue: filterItems[0]["id"],
-                  initRadioValue: initRadioValue,
-                  isRestaurant: false,
-                  onChanged: (newValue) {
-                    setState(() {
-                      initRadioValue = newValue;
-                    });
-                  },
-                ),
-                SizedBox(height: 20),
-                DeliveryInfoWithRadio(
-                  itemValue: filterItems[1]["id"],
-                  initRadioValue: initRadioValue,
-                  isRestaurant: true,
-                  onChanged: (newValue) {
-                    setState(() {
-                      initRadioValue = newValue;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          FilterContainer(
-            title: Translations.of(context).get('Min Basket'),
-            border: Border.all(color: AppColors.border),
-            child: Row(
-              children: [
-                Text(minSliderValue.round().toString()),
-                Expanded(
-                  child: Slider(
-                    min: minSliderValue,
-                    max: maxSliderValue,
-                    value: sliderValue,
-                    label: sliderValue.round().toString(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        sliderValue = newValue;
-                      });
-                    },
-                  ),
-                ),
-                Text(Translations.of(context).get("All")),
-              ],
-            ),
-          ),
-          FilterContainer(
-            title: Translations.of(context).get("Rating"),
-            child: AppRatingBar(starSize: 30, onRatingUpdate: (value) => print(value)),
-            border: Border(bottom: BorderSide(color: AppColors.border)),
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 17, right: 17, top: 10),
-                  child: Text(Translations.of(context).get('Categories'), style: AppTextStyles.body50),
-                ),
-                CategoriesSlider(categories: dummyCategories, isRTL: appProvider.isRTL, isCategorySelectable: true),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 17, right: 17, bottom: 40),
-            child: AppButtons.secondary(
-              child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    appProvider = Provider.of<AppProvider>(context, listen: false);
+    super.initState();
   }
-}
-
-class FilterContainer extends StatelessWidget {
-  final String title;
-  final Widget child;
-  final Border border;
-
-  FilterContainer({
-    this.title,
-    this.child,
-    this.border,
-  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-      decoration: BoxDecoration(border: border),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(title, style: AppTextStyles.body50),
-          SizedBox(height: 5),
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-class DeliveryInfoWithRadio extends StatelessWidget {
-  final int itemValue;
-  final int initRadioValue;
-  final Function onChanged;
-  final bool isRestaurant;
-
-  DeliveryInfoWithRadio({
-    this.itemValue,
-    this.initRadioValue,
-    this.onChanged,
-    this.isRestaurant,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return AppBottomSheet(
+      screenHeightFraction: 0.8,
+      title: 'Filters',
+      clearAction: () {},
+      applyAction: () {
+        Navigator.of(context).pop();
+      },
       children: [
-        Expanded(
-          flex: 1,
-          child: SizedBox(
-            height: 18,
-            child: Radio(
-              activeColor: AppColors.primary,
-              value: itemValue,
-              groupValue: initRadioValue,
-              onChanged: onChanged,
+        Padding(
+          padding: const EdgeInsets.only(left: 17, right: 17, bottom: 5),
+          child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
+        ),
+        ...deliveryTypesRadioItems(),
+        Container(
+          padding: const EdgeInsets.only(bottom: 5, top: 10, left: 17, right: 17),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.border),
+              top: BorderSide(color: AppColors.border),
             ),
           ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(Translations.of(context).get('Min Basket'), style: AppTextStyles.body50),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Text('${minSliderValue.round()} IQD'),
+                  Expanded(
+                    child: Slider(
+                      min: minSliderValue,
+                      max: maxSliderValue,
+                      value: sliderValue,
+                      label: '${sliderValue.round()} IQD',
+                      onChanged: (newValue) {
+                        setState(() {
+                          sliderValue = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                  Text(Translations.of(context).get("All")),
+                ],
+              ),
+            ],
+          ),
         ),
-        Expanded(
-          flex: 13,
-          child: DeliveryInfo(isRestaurant: isRestaurant),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: AppColors.border),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(Translations.of(context).get("Rating"), style: AppTextStyles.body50),
+              SizedBox(height: 5),
+              AppRatingBar(starSize: 30, onRatingUpdate: (value) => print(value)),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 5),
+          child: Text(Translations.of(context).get('Categories'), style: AppTextStyles.body50),
+        ),
+        CategoriesSlider(
+          categories: dummyCategories,
+          isRTL: appProvider.isRTL,
+          isCategorySelectable: true,
         ),
       ],
     );
+  }
+
+  List<Widget> deliveryTypesRadioItems() {
+    return List.generate(deliveryTypes.length, (i) {
+      return Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () => setState(() => selectedDeliveryTypeId = deliveryTypes[i]['id']),
+          child: Container(
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: appProvider.isRTL ? 17 : 12, right: appProvider.isRTL ? 12 : 17),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Radio(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  activeColor: AppColors.primary,
+                  value: deliveryTypes[i]["id"],
+                  groupValue: selectedDeliveryTypeId,
+                  onChanged: (newValue) => setState(() => selectedDeliveryTypeId = newValue),
+                ),
+                Expanded(
+                  child: DeliveryInfo(isRestaurant: i == 0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

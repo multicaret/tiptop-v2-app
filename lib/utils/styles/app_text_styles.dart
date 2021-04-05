@@ -28,6 +28,14 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle h2Secondary = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondaryDark,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle h3White = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,

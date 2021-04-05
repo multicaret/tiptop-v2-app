@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/food_category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
-import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 
 class CategoriesSlider extends StatefulWidget {
   final List<Category> categories;
@@ -24,10 +24,8 @@ class _CategoriesSliderState extends State<CategoriesSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-      color: AppColors.white,
-      height: 110,
+    return SizedBox(
+      height: restaurantCategoriesHeight,
       child: ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 10);
