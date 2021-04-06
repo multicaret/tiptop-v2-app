@@ -35,6 +35,7 @@ class HomeData {
     this.cart,
     this.estimatedArrivalTime,
     this.activeOrders,
+    this.totalActiveOrders,
     this.branch,
     this.distance,
     this.hasAvailableBranchesNow,
@@ -45,6 +46,7 @@ class HomeData {
   Cart cart;
   EstimatedArrivalTime estimatedArrivalTime;
   List<Order> activeOrders;
+  int totalActiveOrders;
   Branch branch;
   dynamic distance;
   bool hasAvailableBranchesNow;
@@ -55,6 +57,7 @@ class HomeData {
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
         activeOrders: json["activeOrders"] == null ? null : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
+        totalActiveOrders: json["totalActiveOrders"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
         distance: json["distance"],
         hasAvailableBranchesNow: json["hasAvailableBranchesNow"],

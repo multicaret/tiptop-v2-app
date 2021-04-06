@@ -125,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                                 HomeLiveTracking(
                                   isRTL: appProvider.isRTL,
                                   activeOrders: homeProvider.homeData.activeOrders,
+                                  totalActiveOrders: homeProvider.homeData.totalActiveOrders,
                                 ),
                               hideContent
                                   ? NoContentView(
