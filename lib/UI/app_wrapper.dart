@@ -3,14 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppWrapper extends StatefulWidget {
@@ -57,11 +55,7 @@ class _AppWrapperState extends State<AppWrapper> {
     if (index == 2) {
       return;
     }
-    setState(() {
-      _selectedTabIndex = index;
-      _cupertinoTabController.index = index;
-      print(_selectedTabIndex);
-    });
+    _cupertinoTabController.index = index;
   }
 
   List<BottomNavigationBarItem> _getCupertinoTabBarItems() {
@@ -103,39 +97,35 @@ class _AppWrapperState extends State<AppWrapper> {
     },
   ];
 
-  int _selectedTabIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeProvider>(
-      //TODO: test on iOS
-      builder: (c, homeProvider, _) => WillPopScope(
-        onWillPop: () async {
-          return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;
-        },
-        child: Stack(
-          children: [
-            CupertinoTabScaffold(
-              backgroundColor: AppColors.white,
-              controller: _cupertinoTabController,
-              tabBar: CupertinoTabBar(
-                onTap: onTabItemTapped,
-                backgroundColor: AppColors.primary,
-                activeColor: AppColors.secondaryDark,
-                inactiveColor: AppColors.white.withOpacity(0.5),
-                items: _getCupertinoTabBarItems(),
-              ),
-              tabBuilder: (BuildContext context, int index) {
-                return CupertinoTabView(
-                  builder: (BuildContext context) {
-                    return _cupertinoTabsList[index]['page'];
-                  },
-                );
-              },
+    print('Rebuilt app wrapper');
+    return WillPopScope(
+      onWillPop: () async {
+        return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;
+      },
+      child: Stack(
+        children: [
+          CupertinoTabScaffold(
+            backgroundColor: AppColors.white,
+            controller: _cupertinoTabController,
+            tabBar: CupertinoTabBar(
+              onTap: onTabItemTapped,
+              backgroundColor: AppColors.primary,
+              activeColor: AppColors.secondaryDark,
+              inactiveColor: AppColors.white.withOpacity(0.5),
+              items: _getCupertinoTabBarItems(),
             ),
-            CartFAB(),
-          ],
-        ),
+            tabBuilder: (BuildContext context, int index) {
+              return CupertinoTabView(
+                builder: (BuildContext context) {
+                  return _cupertinoTabsList[index]['page'];
+                },
+              );
+            },
+          ),
+          CartFAB(),
+        ],
       ),
     );
   }
