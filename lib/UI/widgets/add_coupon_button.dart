@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/dialogs/text_field_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-import 'UI/dialogs/confirm_alert_dialog.dart';
+class AddCouponButton extends StatelessWidget {
+  final String couponCode;
+  final Function deleteAction;
+  final Function enterCouponAction;
 
-class AddCouponButton extends StatefulWidget {
-  @override
-  _AddCouponButtonState createState() => _AddCouponButtonState();
-}
-
-class _AddCouponButtonState extends State<AddCouponButton> {
-  String couponValue;
-  bool isCouponSubmitted = false;
+  AddCouponButton({
+    @required this.couponCode,
+    @required this.deleteAction,
+    @required this.enterCouponAction,
+  });
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-
     return Material(
       color: AppColors.white,
       child: InkWell(
@@ -31,7 +26,7 @@ class _AddCouponButtonState extends State<AddCouponButton> {
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: AppColors.border)),
           ),
-          child: !isCouponSubmitted
+          child: couponCode == null
               ? Row(
                   children: [
                     Container(
@@ -51,21 +46,9 @@ class _AddCouponButtonState extends State<AddCouponButton> {
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(couponValue),
+                    Text(couponCode),
                     InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ConfirmAlertDialog(
-                            title: 'Are you sure you want to delete the coupon?',
-                          ),
-                        ).then((response) => {
-                              if (response != null && response)
-                                setState(() {
-                                  isCouponSubmitted = false;
-                                }),
-                            });
-                      },
+                      onTap: deleteAction,
                       child: Container(
                         width: 36,
                         height: 30,
@@ -80,24 +63,7 @@ class _AddCouponButtonState extends State<AddCouponButton> {
                   ],
                 ),
         ),
-        onTap: !isCouponSubmitted
-            ? () {
-                showDialog(
-                  context: context,
-                  builder: (context) => TextFieldDialog(
-                    textFieldHint: 'Enter Promo Code',
-                  ),
-                ).then((response) => {
-                      if (response is String && response.isNotEmpty)
-                        {
-                          setState(() {
-                            couponValue = response;
-                            isCouponSubmitted = true;
-                          }),
-                        }
-                    });
-              }
-            : null,
+        onTap: couponCode == null ? enterCouponAction : null,
       ),
     );
   }

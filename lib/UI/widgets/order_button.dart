@@ -10,11 +10,13 @@ class OrderButton extends StatelessWidget {
   final CartProvider cartProvider;
   final bool isRTL;
   final Function submitAction;
+  final String total;
 
   OrderButton({
     @required this.cartProvider,
     @required this.isRTL,
     this.submitAction,
+    this.total,
   });
 
   @override
@@ -76,7 +78,7 @@ class OrderButton extends StatelessWidget {
                       size: 20,
                     )
                   : Text(
-                      cartProvider.cartTotal,
+                      total,
                       style: AppTextStyles.h2.copyWith(fontWeight: FontWeight.w400),
                     ),
             )

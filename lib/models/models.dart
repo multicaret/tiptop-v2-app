@@ -573,5 +573,25 @@ class DialogAction {
   final dynamic popValue;
   final Function onTap;
 
-  DialogAction({@required this.text, this.buttonColor = AppColors.primary, this.buttonTextColor = AppColors.white, this.popValue, this.onTap});
+  DialogAction({
+    @required this.text,
+    this.buttonColor = AppColors.primary,
+    this.buttonTextColor = AppColors.white,
+    this.popValue,
+    this.onTap,
+  });
+}
+
+class PaymentSummaryTotal {
+  final String title;
+  final String value;
+  final bool isSavedAmount;
+  final bool isGrandTotal;
+
+  PaymentSummaryTotal({
+    @required this.title,
+    @required this.value,
+    this.isSavedAmount = false,
+    this.isGrandTotal = false,
+  });
 }

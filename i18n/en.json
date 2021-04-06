@@ -137,5 +137,7 @@
   "Cancel": "Cancel",
   "Are you sure you want to delete the coupon?": "Are you sure you want to delete the coupon?",
   "Add Coupon": "Add Coupon",
-  "Enter Promo Code": "Enter Promo Code"
+  "Enter Promo Code": "Enter Promo Code",
+  "Total Before Discount": "Total Before Discount",
+  "You Saved": "You Saved"
 }

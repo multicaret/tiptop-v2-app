@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
-import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
-import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/order_confirmed_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/UI/dialogs/text_field_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
+import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
-import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -22,7 +24,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class CheckoutPage extends StatefulWidget {
   static const routeName = '/checkout-page';
@@ -33,17 +34,21 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   bool _isInit = true;
-  bool _isLoading = false;
+  bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
+  bool _isLoadingValidateCoupon = false;
 
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
   AddressesProvider addressesProvider;
+  CouponValidationResponseData couponValidationResponseData;
+
+  final couponCodeNotifier = ValueNotifier<String>(null);
+  final paymentSummaryTotalsNotifier = ValueNotifier<List<PaymentSummaryTotal>>(null);
 
   CheckoutData checkoutData;
-  List<Map<String, String>> totals = [];
   Order submittedOrder;
 
   String notes;
@@ -52,25 +57,67 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Future<void> _createOrderAndGetCheckoutData() async {
-    setState(() => _isLoading = true);
+    setState(() => _isLoadingCreateOrder = true);
     await ordersProvider.createOrderAndGetCheckoutData(appProvider, homeProvider);
     checkoutData = ordersProvider.checkoutData;
-    totals = [
-      {
-        "title": "Total",
-        "value": checkoutData.total.formatted,
-      },
-      {
-        "title": "Delivery Fee",
-        "value": checkoutData.deliveryFee.formatted,
-      },
-      {
-        "title": "Grand Total",
-        "value": checkoutData.grandTotal.formatted,
-      },
+    paymentSummaryTotalsNotifier.value = [
+      PaymentSummaryTotal(
+        title: "Total",
+        value: checkoutData.total.formatted,
+      ),
+      PaymentSummaryTotal(
+        title: "Delivery Fee",
+        value: checkoutData.deliveryFee.formatted,
+      ),
+      PaymentSummaryTotal(
+        title: "Grand Total",
+        value: checkoutData.grandTotal.formatted,
+        isGrandTotal: true,
+      ),
     ];
     selectedPaymentMethodId = checkoutData.paymentMethods[0].id;
-    setState(() => _isLoading = false);
+    setState(() => _isLoadingCreateOrder = false);
+  }
+
+  Future<void> _validateCouponCode(String _couponCode) async {
+    setState(() => _isLoadingValidateCoupon = true);
+    try {
+      final responseData = await ordersProvider.validateCoupon(
+        appProvider: appProvider,
+        cartProvider: cartProvider,
+        homeProvider: homeProvider,
+        couponCode: _couponCode,
+      );
+      if (responseData == 401) {
+        setState(() => _isLoadingValidateCoupon = false);
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      }
+      couponValidationResponseData = ordersProvider.couponValidationResponseData;
+      couponCodeNotifier.value = _couponCode;
+      paymentSummaryTotalsNotifier.value = [
+        PaymentSummaryTotal(
+          title: "Total Before Discount",
+          value: couponValidationResponseData.totalBefore.formatted,
+        ),
+        PaymentSummaryTotal(
+          title: "You Saved",
+          value: couponValidationResponseData.discountedAmount.formatted,
+          isSavedAmount: true,
+        ),
+        PaymentSummaryTotal(
+          title: "Delivery Fee",
+          value: couponValidationResponseData.deliveryFee.formatted,
+        ),
+        PaymentSummaryTotal(
+          title: "Grand Total",
+          value: couponValidationResponseData.totalAfter.formatted,
+          isGrandTotal: true,
+        ),
+      ];
+    } catch (e) {
+      showToast(msg: 'Coupon Validation Failed');
+    }
+    setState(() => _isLoadingValidateCoupon = false);
   }
 
   @override
@@ -94,58 +141,99 @@ class _CheckoutPageState extends State<CheckoutPage> {
       appBar: AppBar(
         title: Text('Checkout'),
       ),
-      body: _isLoading
+      body: _isLoadingCreateOrder || _isLoadingValidateCoupon
           ? AppLoader()
           : Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                AddressSelectButton(isDisabled: true),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(17),
-                          color: AppColors.white,
-                          child: AppTextField(
-                            labelText: 'Notes',
-                            maxLines: 3,
-                            hintText: Translations.of(context).get('You can write your order notes here'),
-                            fit: true,
-                            onSaved: (value) {
-                              notes = value;
+              key: _formKey,
+              child: Column(
+                children: [
+                  AddressSelectButton(isDisabled: true),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(17),
+                            color: AppColors.white,
+                            child: AppTextField(
+                              labelText: 'Notes',
+                              maxLines: 3,
+                              hintText: Translations.of(context).get('You can write your order notes here'),
+                              fit: true,
+                              onSaved: (value) {
+                                notes = value;
+                              },
+                            ),
+                          ),
+                          SectionTitle('Payment Methods'),
+                          RadioSelectItems(
+                            items:
+                                checkoutData.paymentMethods.map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo}).toList(),
+                            selectedId: selectedPaymentMethodId,
+                            action: (value) => setState(() => selectedPaymentMethodId = value),
+                            isRTL: appProvider.isRTL,
+                          ),
+                          SectionTitle('Promotions'),
+                          ValueListenableBuilder(
+                            valueListenable: couponCodeNotifier,
+                            builder: (c, couponCode, _) {
+                              return AddCouponButton(
+                                couponCode: couponCode,
+                                enterCouponAction: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => TextFieldDialog(
+                                      textFieldHint: 'Enter Promo Code',
+                                    ),
+                                  ).then((_couponCode) {
+                                    if (_couponCode is String && _couponCode.isNotEmpty) {
+                                      _validateCouponCode(_couponCode);
+                                    }
+                                  });
+                                },
+                                deleteAction: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ConfirmAlertDialog(
+                                      title: 'Are you sure you want to delete the coupon?',
+                                    ),
+                                  ).then((response) {
+                                    if (response != null && response) {
+                                      couponCodeNotifier.value = null;
+                                      _createOrderAndGetCheckoutData();
+                                    }
+                                  });
+                                },
+                              );
                             },
                           ),
-                        ),
-                        SectionTitle('Payment Methods'),
-                        RadioSelectItems(
-                          items: checkoutData.paymentMethods
-                              .map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo})
-                              .toList(),
-                          selectedId: selectedPaymentMethodId,
-                          action: (value) => setState(() => selectedPaymentMethodId = value),
-                          isRTL: appProvider.isRTL,
-                        ),
-                        SectionTitle('Promotions'),
-                        AddCouponButton(),
-                        SectionTitle('Payment Summary'),
-                        PaymentSummary(
-                          totals: totals,
-                          isRTL: appProvider.isRTL,
-                        ),
-                      ],
+                          SectionTitle('Payment Summary'),
+                          ValueListenableBuilder(
+                            valueListenable: paymentSummaryTotalsNotifier,
+                            builder: (c, paymentSummaryTotals, _) => PaymentSummary(
+                              totals: paymentSummaryTotals,
+                              isRTL: appProvider.isRTL,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                OrderButton(
-                  cartProvider: cartProvider,
-                  isRTL: appProvider.isRTL,
-                  submitAction: _submitOrder,
-                ),
-              ],
+                  ValueListenableBuilder(
+                    valueListenable: paymentSummaryTotalsNotifier,
+                    builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
+                      PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+                      return OrderButton(
+                        cartProvider: cartProvider,
+                        total: total != null ? total.value : cartProvider.cartTotal,
+                        isRTL: appProvider.isRTL,
+                        submitAction: _submitOrder,
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
     );
   }
 

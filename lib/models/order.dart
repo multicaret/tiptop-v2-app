@@ -257,3 +257,24 @@ class OrderRatingAvailableIssue {
         "title": title,
       };
 }
+
+class CouponValidationResponseData {
+  CouponValidationResponseData({
+    this.discountedAmount,
+    this.deliveryFee,
+    this.totalBefore,
+    this.totalAfter,
+  });
+
+  DoubleRawIntFormatted discountedAmount;
+  DoubleRawIntFormatted deliveryFee;
+  DoubleRawIntFormatted totalBefore;
+  DoubleRawIntFormatted totalAfter;
+
+  factory CouponValidationResponseData.fromJson(Map<String, dynamic> json) => CouponValidationResponseData(
+    discountedAmount: DoubleRawIntFormatted.fromJson(json["discountedAmount"]),
+    deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
+    totalBefore: DoubleRawIntFormatted.fromJson(json["totalBefore"]),
+    totalAfter: DoubleRawIntFormatted.fromJson(json["totalAfter"]),
+  );
+}

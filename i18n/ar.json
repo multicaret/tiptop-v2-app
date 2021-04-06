@@ -137,5 +137,7 @@
   "Cancel": "إلغاء",
   "Are you sure you want to delete the coupon?": "هل أنت متأكد أنك تريد حذف القسيمة؟",
   "Add Coupon": "إضافة قسيمة",
-  "Enter Promo Code": "إدخال رمز العرض"
+  "Enter Promo Code": "إدخال رمز العرض",
+  "Total Before Discount": "المجموع قبل الخصم",
+  "You Saved": "قيمة الخصم"
 }

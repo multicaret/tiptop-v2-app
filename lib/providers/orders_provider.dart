@@ -16,6 +16,7 @@ class OrdersProvider with ChangeNotifier {
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
+  CouponValidationResponseData couponValidationResponseData;
 
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
@@ -159,6 +160,33 @@ class OrdersProvider with ChangeNotifier {
       throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
     await fetchAndSetPreviousOrders(appProvider, homeProvider);
+    notifyListeners();
+  }
+
+  Future<dynamic> validateCoupon({
+    AppProvider appProvider,
+    HomeProvider homeProvider,
+    CartProvider cartProvider,
+    String couponCode,
+  }) async {
+    final endpoint = 'coupons/$couponCode/validate';
+    Map<String, String> body = {
+      'branch_id': '${homeProvider.branchId}',
+      'cart_id': '${cartProvider.cart.id}',
+    };
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+    if (responseData == 401) {
+      return 401;
+    }
+    if (responseData["data"] == null || responseData["status"] != 200) {
+      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+    }
+
+    couponValidationResponseData = CouponValidationResponseData.fromJson(responseData["data"]);
     notifyListeners();
   }
 }

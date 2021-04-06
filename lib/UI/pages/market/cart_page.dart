@@ -62,6 +62,7 @@ class CartPage extends StatelessWidget {
             ),
             OrderButton(
               cartProvider: cartProvider,
+              total: cartProvider.cartTotal,
               isRTL: appProvider.isRTL,
             ),
           ],

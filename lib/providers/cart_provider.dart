@@ -53,7 +53,8 @@ class CartProvider with ChangeNotifier {
     
     if(cart == null || cart.id == null) {
       print('No cart');
-      showToast(msg: 'An Error Occurred! Please try logging out and in again');
+      showToast(msg: 'An Error Occurred! Logging out...');
+      appProvider.logout(clearSelectedAddress: true);
       return null;  
     }
     
