@@ -9,6 +9,7 @@ import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -57,7 +58,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
     return IgnorePointer(
       ignoring: true,
       child: Container(
-        height: HomePage.sliderHeight,
+        height: homeSliderHeight,
         child: Stack(
           children: [
             GoogleMap(

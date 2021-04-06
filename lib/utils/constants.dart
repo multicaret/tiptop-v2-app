@@ -18,3 +18,6 @@ const double marketProductUnitTitleHeight = 12;
 
 //Height of restaurant categories
 const double restaurantCategoriesHeight = 70;
+
+//Height of home page carousel
+const double homeSliderHeight = 212;

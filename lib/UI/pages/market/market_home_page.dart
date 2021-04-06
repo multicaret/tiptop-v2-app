@@ -17,12 +17,12 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
-  static double sliderHeight = 212;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         hideContent || isLoadingHomeData
                             ? Container(
-                                height: HomePage.sliderHeight,
+                                height: homeSliderHeight,
                                 color: AppColors.bg,
                               )
                             : AppCarousel(
