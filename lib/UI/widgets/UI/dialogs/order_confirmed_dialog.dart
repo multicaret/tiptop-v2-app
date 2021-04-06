@@ -13,22 +13,22 @@ class OrderConfirmedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppAlertDialog(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 50),
           child: Image(
             image: AssetImage('assets/images/order-cart${isLargeOrder ? '-large' : ''}.png'),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           Translations.of(context).get('Order Received'),
           style: AppTextStyles.bodyBold,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             Translations.of(context).get('You can track your order live on the map'),
             textAlign: TextAlign.center,

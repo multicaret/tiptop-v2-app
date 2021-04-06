@@ -47,7 +47,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
                           topRight: Radius.circular(8),
                         ),
                       ),
-                      padding: EdgeInsets.only(left: 130, top: 20, bottom: 20, right: 15),
+                      padding: const EdgeInsets.only(left: 130, top: 20, bottom: 20, right: 15),
                       margin: EdgeInsets.only(top: 20),
                       child: Column(
                         children: [
@@ -57,7 +57,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Row(
                             children: [
                               Expanded(
@@ -86,9 +86,9 @@ class RestaurantHeaderInfo extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(8),
-                          boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+                          boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                         ),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Image.asset('assets/images/restaurant-logo.png'),
                       ),
                     )
@@ -101,7 +101,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(left: 17, right: 17, bottom: 75),
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.only(
@@ -109,13 +109,13 @@ class RestaurantHeaderInfo extends StatelessWidget {
                 bottomRight: Radius.circular(8),
               ),
               boxShadow: [
-                BoxShadow(color: AppColors.shadow, blurRadius: 4, offset: Offset(0, 3)),
+                const BoxShadow(color: AppColors.shadow, blurRadius: 4, offset: Offset(0, 3)),
               ],
             ),
             child: Column(
               children: [
                 DeliveryInfo(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 DeliveryInfo(isRestaurant: true),
               ],
             ),

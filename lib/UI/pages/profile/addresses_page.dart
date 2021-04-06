@@ -122,7 +122,7 @@ class _AddressesPageState extends State<AddressesPage> {
       hasOverlayLoader: _isLoadingChangingAddress,
       body: _isLoadingAddress
           ? Center(
-              child: AppLoader(),
+              child: const AppLoader(),
             )
           : RefreshIndicator(
               onRefresh: _fetchAndSetAddresses,
@@ -147,7 +147,7 @@ class _AddressesPageState extends State<AddressesPage> {
         child: InkWell(
           onTap: () => _changeSelectedAddressWithConfirmation(addresses[i]),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -163,7 +163,7 @@ class _AddressesPageState extends State<AddressesPage> {
                         isAsset: false,
                       ),
                       Text(addresses[i].kind.title),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           addresses[i].address1,
@@ -203,7 +203,7 @@ class _AddressesPageState extends State<AddressesPage> {
             );
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(

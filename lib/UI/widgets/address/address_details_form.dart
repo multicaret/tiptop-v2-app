@@ -75,7 +75,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
     return Container(
       height: AddAddressPage.addressDetailsFormContainerHeight,
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+        boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
         color: AppColors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(40),
@@ -90,7 +90,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
         child: Form(
           key: widget.formKey,
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(left: 17, right: 17, top: 40, bottom: 40),
+            padding: const EdgeInsets.only(left: 17, right: 17, top: 40, bottom: 40),
             child: Column(
               children: [
                 Row(

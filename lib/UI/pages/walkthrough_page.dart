@@ -18,7 +18,7 @@ class WalkthroughPage extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return AppScaffold(
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
       bgColor: AppColors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -40,14 +40,14 @@ class WalkthroughPage extends StatelessWidget {
                     Translations.of(context).get('Continue Without Login'),
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 AppButtons.primary(
                   onPressed: () {
                     Navigator.of(context).pushReplacementNamed(OTPChooseMethodPage.routeName);
                   },
                   child: Text(Translations.of(context).get('Register')),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(OTPChooseMethodPage.routeName);
@@ -56,7 +56,7 @@ class WalkthroughPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(Translations.of(context).get('Already have an account?')),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text(
                         Translations.of(context).get('Login'),
                         style: AppTextStyles.bodySecondaryDark,

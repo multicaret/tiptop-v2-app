@@ -75,15 +75,15 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
                   height: 40,
                   width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: Colors.white,
-                    boxShadow: [BoxShadow(blurRadius: 10, color: AppColors.shadow)],
+                    boxShadow: [const BoxShadow(blurRadius: 10, color: AppColors.shadow)],
                   ),
                   child: Row(
                     children: [

@@ -91,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : Column(
               children: [
                 AppSearchField(
@@ -140,11 +140,11 @@ class _SearchPageState extends State<SearchPage> {
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             child: Row(
               children: [
                 AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(_terms[i].term),
               ],
             ),

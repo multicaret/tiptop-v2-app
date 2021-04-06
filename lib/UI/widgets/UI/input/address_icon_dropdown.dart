@@ -21,7 +21,7 @@ class AddressIconDropDown extends StatelessWidget {
       width: 100,
       height: 72,
       margin: EdgeInsets.only(right: 10, bottom: 20),
-      padding: EdgeInsets.only(left: 17, right: 10),
+      padding: const EdgeInsets.only(left: 17, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border, width: 1.5),
@@ -40,7 +40,7 @@ class AddressIconDropDown extends StatelessWidget {
               return DropdownMenuItem<int>(
                 value: value['id'],
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: CachedNetworkImage(
                     imageUrl: value['icon_url'],
                     width: 40,

@@ -23,7 +23,7 @@ class AppBarCartTotal extends StatelessWidget {
         bool noCart = cartProvider.noCart || homeProvider.noBranchFound || homeProvider.homeDataRequestError;
 
         return AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           opacity: isLoadingHomeData || noCart ? 0 : 1,
           child: GestureDetector(
             onTap: () {
@@ -40,11 +40,11 @@ class AppBarCartTotal extends StatelessWidget {
                     width: 130,
                     bottom: 10,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                        boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
                         color: AppColors.primary,
                       ),
                       child: isLoadingHomeData || noCart
@@ -70,7 +70,7 @@ class AppBarCartTotal extends StatelessWidget {
                     height: 33,
                     bottom: 10,
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       width: isLoadingHomeData || noCart ? 130 : 30,
                       decoration: BoxDecoration(
                         borderRadius: isLoadingHomeData || noCart

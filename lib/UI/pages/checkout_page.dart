@@ -145,7 +145,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: Text('Checkout'),
       ),
       body: _isLoadingCreateOrder || _isLoadingValidateCoupon
-          ? AppLoader()
+          ? const AppLoader()
           : Form(
               key: _formKey,
               child: Column(
@@ -156,7 +156,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(17),
+                            padding: const EdgeInsets.all(17),
                             color: AppColors.white,
                             child: AppTextField(
                               labelText: 'Notes',

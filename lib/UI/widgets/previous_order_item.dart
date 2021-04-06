@@ -33,7 +33,7 @@ class PreviousOrderItem extends StatelessWidget {
           background: Container(
             color: Colors.red,
             alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
-            padding: EdgeInsets.symmetric(horizontal: 17),
+            padding: const EdgeInsets.symmetric(horizontal: 17),
             child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
           ),
           confirmDismiss: (direction) async {

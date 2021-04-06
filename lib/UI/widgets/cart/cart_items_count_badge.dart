@@ -13,9 +13,9 @@ class CartItemsCountBadge extends StatelessWidget {
           : Container(
               alignment: Alignment.bottomRight,
               child: Container(
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: AppColors.secondaryDark,
+                  color: AppColors.secondary,
                   shape: BoxShape.circle,
                 ),
                 child: Text(

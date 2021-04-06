@@ -20,7 +20,7 @@ class ProductsGridView extends StatelessWidget {
     double productGridItemAspectRatio = productGridItemWidth / productGridItemHeight;
 
     return GridView.count(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
       physics: physics ?? NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisSpacing: 10,

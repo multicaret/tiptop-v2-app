@@ -21,9 +21,9 @@ class RatingInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppIcons.iconXsSecondary(FontAwesomeIcons.solidStar),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text('$ratingValue', style: AppTextStyles.subtitleSecondary),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           '($ratingsCount+)',
           style: hasWhiteBg ? AppTextStyles.subtitle50 : AppTextStyles.subtitleWhite50,

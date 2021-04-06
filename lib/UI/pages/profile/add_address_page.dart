@@ -149,9 +149,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+                boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,
               ),
               child: AppButtons.secondary(
@@ -166,7 +166,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             ),
           ),
           AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             bottom: addressLocationConfirmed ? 0 : -AddAddressPage.addressDetailsFormContainerHeight,
             right: 0,
             left: 0,

@@ -33,7 +33,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
   Widget build(BuildContext context) {
     return AppAlertDialog(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Form(
           key: _formKey,
           child: AppTextField(
@@ -49,7 +49,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
       actions: [
         DialogAction(
           text: 'Done',
-          buttonColor: AppColors.secondaryDark,
+          buttonColor: AppColors.secondary,
           onTap: _submit,
         ),
         DialogAction(

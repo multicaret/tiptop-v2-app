@@ -18,12 +18,12 @@ class DiscountTag extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.0),
-        color: AppColors.secondaryDark,
+        color: AppColors.secondary,
       ),
       child: Row(
         children: [
           AppIcons.iconSm(FontAwesomeIcons.tag),
-          SizedBox(width: 5.0),
+          const SizedBox(width: 5.0),
           Expanded(
             child: Text(
               '$value ${Translations.of(context).get('discount')}',

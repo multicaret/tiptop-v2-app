@@ -23,14 +23,14 @@ class ParentCategoriesTabs extends StatelessWidget {
       height: _parentsTabHeight,
       color: AppColors.primary,
       child: TabBar(
-        indicatorPadding: EdgeInsets.only(top: 6, left: 6, right: 6),
+        indicatorPadding: const EdgeInsets.only(top: 6, left: 6, right: 6),
         isScrollable: true,
         controller: tabController,
         labelStyle: AppTextStyles.subtitle,
         unselectedLabelStyle: AppTextStyles.subtitleWhite,
         unselectedLabelColor: AppColors.white,
         labelColor: AppColors.primary,
-        labelPadding: EdgeInsets.symmetric(horizontal: 15),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 15),
         indicator: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8),

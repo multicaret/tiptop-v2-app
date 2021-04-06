@@ -82,7 +82,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
       children: <Widget>[
         if (widget.index != 0 || widget.firstItemHasTitle)
           Container(
-            padding: EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
+            padding: const EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
             color: AppColors.bg,
             child: Text(
               widget.child.title,

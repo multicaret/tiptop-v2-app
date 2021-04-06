@@ -38,7 +38,7 @@ class CartFAB extends StatelessWidget {
                       color: AppColors.primaryLight,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(blurRadius: 10, color: AppColors.shadowDark),
+                        const BoxShadow(blurRadius: 10, color: AppColors.shadowDark),
                       ],
                     ),
                     child: AppIcons.iconLgSecondary(LineAwesomeIcons.shopping_cart),
@@ -48,13 +48,13 @@ class CartFAB extends StatelessWidget {
                       bottom: Platform.isIOS ? 30 : 10,
                       right: 0,
                       child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        padding: EdgeInsets.all(5),
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: AppColors.secondaryDark,
+                          color: AppColors.secondary,
                           shape: BoxShape.circle,
                           boxShadow: [
-                            BoxShadow(blurRadius: 6, color: AppColors.shadowDark),
+                            const BoxShadow(blurRadius: 6, color: AppColors.shadowDark),
                           ],
                         ),
                         alignment: Alignment.center,

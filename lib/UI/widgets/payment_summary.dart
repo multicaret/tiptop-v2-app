@@ -45,7 +45,7 @@ class PaymentSummary extends StatelessWidget {
                   style: {
                     "body": Style(
                       textAlign: TextAlign.end,
-                      color: totals[i].isGrandTotal ? AppColors.secondaryDark : totals[i].isSavedAmount ? Colors.green : AppColors.primary,
+                      color: totals[i].isGrandTotal ? AppColors.secondary : totals[i].isSavedAmount ? Colors.green : AppColors.primary,
                       fontWeight: totals[i].isGrandTotal || totals[i].isSavedAmount ? FontWeight.w600 : FontWeight.w400,
                       textDecoration: totals[i].isDiscounted ? TextDecoration.lineThrough : null,
                     ),

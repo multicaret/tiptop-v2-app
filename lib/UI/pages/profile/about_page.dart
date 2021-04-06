@@ -43,7 +43,7 @@ class _AboutPageState extends State<AboutPage> {
             ? Center(child: AppLoader())
             : SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                 child: Html(
                   shrinkWrap: true,
                   data: """${_about.content.formatted}""",

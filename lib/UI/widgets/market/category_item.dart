@@ -24,7 +24,7 @@ class CategoryItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
-              BoxShadow(
+              const BoxShadow(
                 blurRadius: 7,
                 color: AppColors.shadow,
               )
@@ -35,7 +35,7 @@ class CategoryItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Expanded(
           child: Text(
             title,

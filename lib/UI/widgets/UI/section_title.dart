@@ -13,7 +13,7 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
       color: AppColors.bg,
       child: Text(
         '${Translations.of(context).get(text)}${suffix ?? ''}',

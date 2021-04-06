@@ -5,7 +5,6 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class LanguageSelectPage extends StatelessWidget {
   static const routeName = '/language-select';
@@ -21,7 +20,7 @@ class LanguageSelectPage extends StatelessWidget {
       body: Container(
         height: screenSize.height,
         width: screenSize.width,
-        padding: EdgeInsets.symmetric(horizontal: 17),
+        padding: const EdgeInsets.symmetric(horizontal: 17),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/page-bg-pattern-white.png"),
@@ -35,7 +34,7 @@ class LanguageSelectPage extends StatelessWidget {
               'assets/images/tiptop-logo.png',
               width: screenSize.width / 2.5,
             ),
-            SizedBox(height: 67),
+            const SizedBox(height: 67),
             ..._languageItems(context, appLanguages, appProvider),
           ],
         ),
@@ -71,7 +70,7 @@ List<Widget> _languageItems(
                 height: 40,
               ),
             ),
-            SizedBox(width: 25),
+            const SizedBox(width: 25),
             Expanded(
               child: Text(
                 _appLanguages[i].title,

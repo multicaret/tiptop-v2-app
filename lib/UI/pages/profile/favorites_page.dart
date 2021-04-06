@@ -49,7 +49,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: Text(Translations.of(context).get('My Favorites')),
       ),
       body: _isLoadingFavoriteProducts
-          ? AppLoader()
+          ? const AppLoader()
           : RefreshIndicator(
               onRefresh: _fetchAndSetFavoriteProducts,
               child: ListView.builder(

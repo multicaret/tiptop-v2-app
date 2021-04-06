@@ -57,7 +57,7 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
             ),
             Positioned.fill(
               child: Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -78,7 +78,7 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                 ? Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.secondaryDark, width: 2),
+                        border: Border.all(color: AppColors.secondary, width: 2),
                         color: AppColors.primary.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(8),
                       ),

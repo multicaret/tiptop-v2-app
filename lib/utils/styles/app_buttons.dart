@@ -47,7 +47,7 @@ class AppButtons {
   static secondary({Function onPressed, Widget child}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: AppColors.secondaryDark,
+        primary: AppColors.secondary,
         onPrimary: AppColors.text,
       ),
       onPressed: onPressed,
@@ -58,7 +58,7 @@ class AppButtons {
   static secondaryXl({Function onPressed, Widget child}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: AppColors.secondaryDark,
+        primary: AppColors.secondary,
         onPrimary: AppColors.text,
         minimumSize: Size.fromHeight(150),
       ),
@@ -70,7 +70,7 @@ class AppButtons {
   static secondarySm({Function onPressed, Widget child}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: AppColors.secondaryDark,
+        primary: AppColors.secondary,
         onPrimary: AppColors.text,
         minimumSize: Size.fromHeight(45),
       ),

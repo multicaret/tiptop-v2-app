@@ -116,11 +116,11 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
       bgColor: AppColors.white,
       hasOverlayLoader: _isLoadingCheckOTPValidation,
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             OTPMethodsButtons(
               initOTPAction: (String method) {
                 if (method == 'sms') {
@@ -135,14 +135,14 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             ),
             if (pickedSMSMethod != null && pickedSMSMethod)
               _isLoadingFetchCountriesRequest
-                  ? AppLoader()
+                  ? const AppLoader()
                   : Form(
                       key: _phoneNumberFormKey,
                       child: Column(
                         children: [
-                          SizedBox(height: 40),
+                          const SizedBox(height: 40),
                           Text(Translations.of(context).get('Please Enter Your Phone Number')),
-                          SizedBox(height: 50),
+                          const SizedBox(height: 50),
                           Row(
                             textDirection: TextDirection.ltr,
                             children: [
@@ -154,7 +154,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                                   onChange: (selectedPhoneCode) => setState(() => phoneCountryCode = selectedPhoneCode),
                                 ),
                               ),
-                              SizedBox(width: 15),
+                              const SizedBox(width: 15),
                               Expanded(
                                 flex: 5,
                                 child: AppTextField(
@@ -178,7 +178,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                         ],
                       ),
                     ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);

@@ -71,7 +71,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(Translations.of(context).get('Min Basket'), style: AppTextStyles.body50),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Row(
                 children: [
                   Text('${minSliderValue.round()} IQD'),
@@ -101,7 +101,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(Translations.of(context).get("Rating"), style: AppTextStyles.body50),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               AppRatingBar(
                 initialRating: filterData['rating_value'],
                 starSize: 30,

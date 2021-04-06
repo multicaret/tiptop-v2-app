@@ -43,7 +43,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
             ? Center(child: AppLoader())
             : SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                 child: Html(
                   shrinkWrap: true,
                   data: """${_privacy.content.formatted}""",

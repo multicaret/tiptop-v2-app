@@ -32,7 +32,7 @@ class ProfileSettingItem extends StatelessWidget {
         child: InkWell(
           onTap: _determineTapMethod(context: context, action: action, route: route),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
             decoration: BoxDecoration(
               border: Border(
@@ -46,9 +46,9 @@ class ProfileSettingItem extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      color: AppColors.secondaryDark,
+                      color: AppColors.secondary,
                     ),
-                    SizedBox(width: 20.0),
+                    const SizedBox(width: 20.0),
                     Text(Translations.of(context).get(title)),
                   ],
                 ),

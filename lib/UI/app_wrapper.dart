@@ -91,7 +91,7 @@ class _AppWrapperState extends State<AppWrapper> {
             tabBar: CupertinoTabBar(
               onTap: onTabItemTapped,
               backgroundColor: AppColors.primary,
-              activeColor: AppColors.secondaryDark,
+              activeColor: AppColors.secondary,
               inactiveColor: AppColors.white.withOpacity(0.5),
               items: _getCupertinoTabBarItems(),
             ),

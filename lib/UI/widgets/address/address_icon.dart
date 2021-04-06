@@ -11,9 +11,15 @@ class AddressIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return             Container(
+    return Container(
       decoration: BoxDecoration(
-        border: isRTL ? Border(left: BorderSide(color: AppColors.border)) : Border(right: BorderSide(color: AppColors.border)),
+        border: isRTL
+            ? const Border(
+                left: BorderSide(color: AppColors.border),
+              )
+            : const Border(
+                right: BorderSide(color: AppColors.border),
+              ),
       ),
       padding: EdgeInsets.only(
         right: isRTL ? 0 : 10,
@@ -23,10 +29,12 @@ class AddressIcon extends StatelessWidget {
         right: isRTL ? 0 : 10,
         left: isRTL ? 10 : 0,
       ),
-      child: isAsset ? Image(
-        image: AssetImage(icon),
-        width: 37,
-      ) : CachedNetworkImage(imageUrl: icon, width: 37),
+      child: isAsset
+          ? Image(
+              image: AssetImage(icon),
+              width: 37,
+            )
+          : CachedNetworkImage(imageUrl: icon, width: 37),
     );
   }
 }

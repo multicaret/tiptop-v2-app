@@ -16,21 +16,21 @@ class LocationPermissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (c, appProvider, _) => AppScaffold(
-        bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+        bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               Image(
                 image: AssetImage('assets/images/location-permission-bg.png'),
                 width: MediaQuery.of(context).size.width * 0.8,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 Translations.of(context).get('location permission text'),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 120),
+              const SizedBox(height: 120),
               AppButtons.primary(
                 onPressed: () {
                   handleLocationPermission().then((isGranted) {
@@ -46,7 +46,7 @@ class LocationPermissionPage extends StatelessWidget {
                 },
                 child: Text(Translations.of(context).get('Use my location services')),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               GestureDetector(
                 onTap: () {
                   showDialog(

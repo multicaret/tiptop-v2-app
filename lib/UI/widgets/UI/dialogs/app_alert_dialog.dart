@@ -22,14 +22,14 @@ class AppAlertDialog extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       backgroundColor: AppColors.white,
-      contentPadding: EdgeInsets.all(10),
+      contentPadding: const EdgeInsets.all(10),
       content: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ...children,
-            if (actions != null && actions.length > 0) SizedBox(height: 20),
+            if (actions != null && actions.length > 0) const SizedBox(height: 20),
             if (actions != null && actions.length > 0)
               Row(
                 children: List.generate(

@@ -74,7 +74,7 @@ class AddressSelectButton extends StatelessWidget {
                         'ETA',
                         style: AppTextStyles.subtitleWhite,
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       if (!showSelectAddress && hasETA)
                         RichText(
                           overflow: TextOverflow.visible,
@@ -106,7 +106,7 @@ class AddressSelectButton extends StatelessWidget {
                     top: 10,
                     bottom: 10,
                   ),
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
@@ -153,7 +153,7 @@ class AddressSelectButton extends StatelessWidget {
                                           addressKindTitle ?? addressesProvider.selectedAddress.kind.title,
                                           style: AppTextStyles.subtitle,
                                         ),
-                                        SizedBox(width: 5),
+                                        const SizedBox(width: 5),
                                         Expanded(
                                           child: Text(
                                             addressText ?? addressesProvider.selectedAddress.address1,
@@ -169,7 +169,7 @@ class AddressSelectButton extends StatelessWidget {
                               ),
                               if (!isDisabled)
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: AppIcons.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
                                 ),
                             ],

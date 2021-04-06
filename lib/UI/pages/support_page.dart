@@ -45,14 +45,14 @@ class _SupportPageState extends State<SupportPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17),
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
       appBar: AppBar(
         title: Text(Translations.of(context).get('Support')),
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +61,7 @@ class _SupportPageState extends State<SupportPage> {
                     Translations.of(context).get('We are at your service 24/7. Please contact us via'),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Row(
                     children: [
                       Expanded(
@@ -77,7 +77,7 @@ class _SupportPageState extends State<SupportPage> {
                                 color: AppColors.primary,
                                 size: 50,
                               ),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               Text(
                                 Translations.of(context).get('Direct Call'),
                                 style: AppTextStyles.body,
@@ -86,7 +86,7 @@ class _SupportPageState extends State<SupportPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: AppButtons.primaryXl(
                           onPressed: () {
@@ -99,7 +99,7 @@ class _SupportPageState extends State<SupportPage> {
                                 color: AppColors.white,
                                 size: 50,
                               ),
-                              SizedBox(height: 15),
+                              const SizedBox(height: 15),
                               Text(
                                 Translations.of(context).get('Live Chat'),
                                 style: AppTextStyles.bodyWhite,
@@ -110,7 +110,7 @@ class _SupportPageState extends State<SupportPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

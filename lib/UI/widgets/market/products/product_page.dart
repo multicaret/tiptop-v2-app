@@ -99,7 +99,7 @@ class _ProductPageState extends State<ProductPage> {
         actions: [
           if (appProvider.isAuth)
             AnimatedOpacity(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               opacity: _isLoadingProduct ? 0 : 1,
               child: IconButton(
                 onPressed: _isLoadingInteractRequest ? null : interactWithProduct,
@@ -122,13 +122,13 @@ class _ProductPageState extends State<ProductPage> {
                     hasIndicator: true,
                     infinite: false,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     product.title,
                     style: AppTextStyles.h2,
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (hasDiscountedPrice)
                     FormattedPrice(
                       price: product.discountedPrice.formatted,
@@ -140,16 +140,16 @@ class _ProductPageState extends State<ProductPage> {
                     isLarge: true,
                   ),
                   if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (product.description != null) SectionTitle('Details'),
                   if (product.description != null)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 9),
+                      padding: const EdgeInsets.symmetric(horizontal: 9),
                       child: Html(
                         data: """${product.description.formatted}""",
                       ),
                     ),
-                  SizedBox(height: 105),
+                  const SizedBox(height: 105),
                 ],
               ),
             ),
@@ -161,7 +161,7 @@ class _ProductPageState extends State<ProductPage> {
               right: 0,
               height: 105,
               child: Container(
-                padding: EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
+                padding: const EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
                 height: 45,
                 color: AppColors.bg,
                 child: CartControls(

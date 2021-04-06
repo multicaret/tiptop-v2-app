@@ -34,7 +34,7 @@ class ChannelsButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 17, left: 17, top: 10),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 10),
       child: Row(
         children: List.generate(channels.length, (i) {
           return Expanded(
@@ -52,7 +52,7 @@ class ChannelsButtons extends StatelessWidget {
                         image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
                         width: 60,
                       ),
-                      if (channels[i]['title'] != null) SizedBox(width: 10),
+                      if (channels[i]['title'] != null) const SizedBox(width: 10),
                       if (channels[i]['title'] != null) Text(Translations.of(context).get(channels[i]['title'])),
                     ],
                   ),

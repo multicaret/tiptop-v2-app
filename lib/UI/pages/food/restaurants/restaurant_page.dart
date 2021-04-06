@@ -4,8 +4,8 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_horizontal_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -112,7 +112,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   child: Column(
                     children: [
                       AnimatedOpacity(
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         opacity: _isCollapsed ? 1 : 0,
                         child: IgnorePointer(
                           ignoring: !_isCollapsed,
@@ -135,7 +135,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       ),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         decoration: BoxDecoration(
                           border: _isCollapsed ? Border(bottom: BorderSide(color: AppColors.border)) : null,
                           color: AppColors.bg,
@@ -152,7 +152,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 StretchMode.zoomBackground,
               ],
               centerTitle: true,
-              titlePadding: EdgeInsets.all(0),
+              titlePadding: const EdgeInsets.all(0),
               background: RestaurantHeaderInfo(restaurant: restaurant),
             ),
           ),

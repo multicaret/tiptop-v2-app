@@ -43,7 +43,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   Future<void> _createEditProfileRequest() async {
     setState(() => _isLoadingCreateEditProfileRequest = true);
     final responseData = await otpProvider.createEditProfileRequest(appProvider);
-    if(responseData == 401) {
+    if (responseData == 401) {
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       return;
     }
@@ -58,7 +58,8 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
       appProvider = Provider.of<AppProvider>(context);
       otpProvider = Provider.of<OTPProvider>(context);
       formData = {
-        'full_name': appProvider.authUser == null || appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
+        'full_name':
+            appProvider.authUser == null || appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
         'email': appProvider.authUser == null ? null : appProvider.authUser.email,
         'region_id': appProvider.authUser == null || appProvider.authUser.region == null ? null : appProvider.authUser.region.id,
         'city_id': appProvider.authUser == null || appProvider.authUser.city == null ? null : appProvider.authUser.city.id,
@@ -76,18 +77,18 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     bool isProfileComplete = !appProvider.authUser.name.contains(appProvider.authUser.phone);
     return AppScaffold(
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
         title: Text(Translations.of(context).get('Complete Your Profile')),
       ),
       body: _isLoadingCreateEditProfileRequest
-          ? AppLoader()
+          ? const AppLoader()
           : SingleChildScrollView(
               child: Form(
                 key: _profileFormKey,
                 child: Column(
                   children: [
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Text(
                       isProfileComplete ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
                       style: AppTextStyles.bodyBold,
@@ -97,7 +98,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       Translations.of(context).get('Please fill out your details'),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     AppTextField(
                       keyboardType: TextInputType.name,
                       required: true,
@@ -136,7 +137,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       child: Text(Translations.of(context).get('Save')),
                       onPressed: () => _submit(context, appProvider),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

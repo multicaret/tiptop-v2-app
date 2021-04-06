@@ -22,7 +22,7 @@ class AddCouponButton extends StatelessWidget {
       child: InkWell(
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: AppColors.border)),
           ),
@@ -35,11 +35,11 @@ class AddCouponButton extends StatelessWidget {
                       child: AppIcons.iconXsSecondary(FontAwesomeIcons.plus),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
+                        boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 5)],
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(Translations.of(context).get('Add Coupon')),
                   ],
                 )
@@ -55,7 +55,7 @@ class AddCouponButton extends StatelessWidget {
                         child: AppIcons.iconXsSecondary(FontAwesomeIcons.trash),
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 5)],
+                          boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 5)],
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),

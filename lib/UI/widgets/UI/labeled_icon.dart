@@ -22,7 +22,7 @@ class LabeledIcon extends StatelessWidget {
       mainAxisAlignment: isLast ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         AppIcons.iconXs50(icon),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Expanded(
           child: Text(
             text,

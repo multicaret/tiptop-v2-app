@@ -46,7 +46,7 @@ class ScrollableHorizontalTabs extends StatelessWidget {
       child: InkWell(
         onTap: () => action(i),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.symmetric(vertical: 5, horizontal: _isCurrentChildSelected ? 10 : 0),
           alignment: Alignment.center,
           decoration: BoxDecoration(

@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBarActions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: isLoadingHomeData)] : null,
-      bodyPadding: EdgeInsets.all(0),
+      bodyPadding: const EdgeInsets.all(0),
       body: Consumer<HomeProvider>(
         builder: (c, homeProvider, _) {
           bool hideContent = homeProvider.homeDataRequestError || homeProvider.noBranchFound;
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 child: RefreshIndicator(
                   onRefresh: fetchAndSetHomeData,
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.only(bottom: 50.0),
+                    padding: const EdgeInsets.only(bottom: 50.0),
                     physics: AlwaysScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                                               ? 'An error occurred! Please try again later'
                                               : '')
                                   : isLoadingHomeData
-                                      ? AppLoader()
+                                      ? const AppLoader()
                                       : HomeCategoriesGrid(
                                           categories: categories,
                                           fetchAndSetHomeData: fetchAndSetHomeData,

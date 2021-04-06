@@ -7,7 +7,6 @@ import 'package:tiptop_v2/UI/widgets/market/products/product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -54,6 +53,7 @@ class _GridProductItemState extends State<GridProductItem> {
     bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
     bool hasDiscountedPrice = widget.product.discountedPrice != null && widget.product.discountedPrice.raw != 0;
     double cartButtonHeight = getCartControlButtonHeight(context);
+    // print('rebuilt product ${widget.product.title}');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,24 +62,26 @@ class _GridProductItemState extends State<GridProductItem> {
           height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? marketProductUnitTitleHeight : 0),
           child: Stack(
             children: [
-              Consumer<CartProvider>(builder: (c, cartProvider, _) {
-                int productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
+              GestureDetector(
+                onTap: openProductPage,
+                child: Consumer<CartProvider>(builder: (c, cartProvider, _) {
+                  int productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
 
-                return GestureDetector(
-                  onTap: openProductPage,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    height: getColItemHeight(3, context),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
-                      borderRadius: BorderRadius.circular(14),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(widget.product.media.cover),
+                  return GestureDetector(
+                    onTap: openProductPage,
+                    child: Container(
+                      height: getColItemHeight(3, context),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
+                        borderRadius: BorderRadius.circular(14),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(widget.product.media.cover),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
               Positioned(
                 bottom: widget.product.unit == null || widget.product.unit.title == null ? 0 : marketProductUnitTitleHeight,
                 left: cartControlsMargin,
@@ -108,7 +110,7 @@ class _GridProductItemState extends State<GridProductItem> {
             ],
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Expanded(
           child: GestureDetector(
             onTap: openProductPage,
@@ -122,7 +124,7 @@ class _GridProductItemState extends State<GridProductItem> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 if (hasDiscountedPrice)
                   FormattedPrice(
                     price: widget.product.discountedPrice.formatted,

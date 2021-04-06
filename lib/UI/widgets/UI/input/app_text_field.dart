@@ -98,7 +98,7 @@ class _AppTextFieldState extends State<AppTextField> {
         children: <Widget>[
           if (!widget.hasInnerLabel)
             Padding(
-              padding: EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.only(bottom: 6),
               child: RichText(
                 text: TextSpan(
                   text: Translations.of(context).get(widget.labelText),
@@ -145,7 +145,7 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(width: 1.5, color: AppColors.secondaryDark),
+                borderSide: BorderSide(width: 1.5, color: AppColors.secondary),
               ),
             ),
             onSaved: widget.onSaved,

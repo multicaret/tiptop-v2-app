@@ -44,7 +44,7 @@ class OTPMethodsButtons extends StatelessWidget {
           style: AppTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ...List.generate(_verificationMethods.length, (i) {
           return Container(
             padding: EdgeInsets.only(bottom: i == _verificationMethods.length - 1 ? 0 : 20),
@@ -60,7 +60,7 @@ class OTPMethodsButtons extends StatelessWidget {
                       child: Icon(_verificationMethods[i]['icon']),
                     ),
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Expanded(
                     flex: 3,
                     child: Text(

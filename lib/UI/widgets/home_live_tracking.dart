@@ -26,12 +26,12 @@ class HomeLiveTracking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       //ExpansionTile is showing the color of this container behind the children container when expanding
-      padding: EdgeInsets.only(right: 17, left: 17, top: 10),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 10),
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+          boxShadow: [const BoxShadow(blurRadius: 7, color: AppColors.shadow)],
           borderRadius: BorderRadius.circular(8.0),
-          // color: AppColors.secondaryDark,
+          // color: AppColors.secondary,
         ),
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -42,9 +42,9 @@ class HomeLiveTracking extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: ExpansionTile(
-              backgroundColor: AppColors.secondaryDark,
-              collapsedBackgroundColor: AppColors.secondaryDark,
-              childrenPadding: EdgeInsets.all(0),
+              backgroundColor: AppColors.secondary,
+              collapsedBackgroundColor: AppColors.secondary,
+              childrenPadding: const EdgeInsets.all(0),
               leading: Container(
                 height: 28,
                 width: 28,
@@ -64,7 +64,7 @@ class HomeLiveTracking extends StatelessWidget {
                       color: AppColors.white,
                       border: Border(bottom: BorderSide(color: AppColors.border)),
                     ),
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -89,7 +89,7 @@ class HomeLiveTracking extends StatelessWidget {
                                     activeOrders[i].address.kind.title,
                                     style: AppTextStyles.subtitle,
                                   ),
-                                  SizedBox(width: 5),
+                                  const SizedBox(width: 5),
                                   Expanded(
                                     child: Text(
                                       activeOrders[i].address.address1,
@@ -103,7 +103,7 @@ class HomeLiveTracking extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Expanded(
                           flex: 2,
                           child: AppButtons.primarySm(
@@ -126,7 +126,7 @@ class HomeLiveTracking extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${Translations.of(context).get('View All')} ($totalActiveOrders)'),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         AppIcons.iconSm(isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
                       ],
                     ),

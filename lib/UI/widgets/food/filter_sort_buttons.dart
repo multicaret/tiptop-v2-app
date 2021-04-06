@@ -32,13 +32,13 @@ class FilterSortButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(FontAwesomeIcons.filter),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(Translations.of(context).get("Filter")),
                 ],
               ),
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: AppButtons.primarySm(
               onPressed: () {
@@ -53,7 +53,7 @@ class FilterSortButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(FontAwesomeIcons.sort),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(Translations.of(context).get("Sort")),
                 ],
               ),

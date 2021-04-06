@@ -70,7 +70,7 @@ class _TestPageState extends State<TestPage> {
                     child: Text('5'),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: ElevatedButton(
                     key: ValueKey<String>('Scroll50'),
