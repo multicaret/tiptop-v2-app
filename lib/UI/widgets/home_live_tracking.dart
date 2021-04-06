@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -9,8 +10,12 @@ import 'address/address_icon.dart';
 
 class HomeLiveTracking extends StatelessWidget {
   final bool isRTL;
+  final List<Order> activeOrders;
 
-  HomeLiveTracking({this.isRTL});
+  HomeLiveTracking({
+    @required this.isRTL,
+    @required this.activeOrders,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +48,15 @@ class HomeLiveTracking extends StatelessWidget {
                   color: AppColors.white,
                 ),
                 child: Center(
-                  child: Text('1', style: AppTextStyles.subtitleBold),
+                  child: Text('${activeOrders.length}', style: AppTextStyles.subtitleBold),
                 ),
               ),
-              title: Text(Translations.of(context).get("Live Order"), style: AppTextStyles.bodyBold),
-              children: [
-                Container(
+              title: Text(Translations.of(context).get("Live Order(s)"), style: AppTextStyles.bodyBold),
+              children: List.generate(activeOrders.length, (i) {
+                return Container(
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    /*borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(8.0),
-                                          bottomRight: Radius.circular(8.0),
-                                        ),*/
+                    border: Border(bottom: BorderSide(color: AppColors.border)),
                   ),
                   padding: EdgeInsets.all(10.0),
                   child: Row(
@@ -62,7 +64,8 @@ class HomeLiveTracking extends StatelessWidget {
                     children: [
                       AddressIcon(
                         isRTL: isRTL,
-                        icon: 'assets/images/address-home-icon.png',
+                        isAsset: false,
+                        icon: activeOrders[i].address.kind.icon,
                       ),
                       Expanded(
                         flex: 3,
@@ -77,13 +80,13 @@ class HomeLiveTracking extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  'Home',
+                                  activeOrders[i].address.kind.title,
                                   style: AppTextStyles.subtitle,
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
                                   child: Text(
-                                    'Sultan Selim Mah. Tuna Cad. Yasam Evleri Residence',
+                                    activeOrders[i].address.address1,
                                     style: AppTextStyles.subtitle50,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -98,14 +101,14 @@ class HomeLiveTracking extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: AppButtons.primarySm(
-                          onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName),
+                          onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName, arguments: activeOrders[i]),
                           child: Text(Translations.of(context).get("Track Order")),
                         ),
                       )
                     ],
                   ),
-                )
-              ],
+                );
+              }),
             ),
           ),
         ),

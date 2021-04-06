@@ -121,7 +121,11 @@ class _HomePageState extends State<HomePage> {
                         if (currentView == 'market')
                           Column(
                             children: [
-                              HomeLiveTracking(isRTL: appProvider.isRTL),
+                              if (!isLoadingHomeData && homeProvider.homeData.activeOrders != null && homeProvider.homeData.activeOrders.length > 0)
+                                HomeLiveTracking(
+                                  isRTL: appProvider.isRTL,
+                                  activeOrders: homeProvider.homeData.activeOrders,
+                                ),
                               hideContent
                                   ? NoContentView(
                                       text: homeProvider.noBranchFound
