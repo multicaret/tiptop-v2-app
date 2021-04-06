@@ -20,7 +20,6 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -117,6 +116,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           isGrandTotal: true,
         ),
       ];
+      showToast(msg: 'Successfully validated coupon code!');
     } catch (e) {
       showToast(msg: 'Coupon Validation Failed');
     }
