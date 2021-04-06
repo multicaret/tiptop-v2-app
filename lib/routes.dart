@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/checkout_page.dart';
+import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
@@ -60,5 +61,6 @@ final routes = <String, WidgetBuilder>{
   OrderRatingPage.routeName: (BuildContext context) => OrderRatingPage(),
   SupportPage.routeName: (BuildContext context) => SupportPage(),
   ArticlePage.routeName: (BuildContext context) => ArticlePage(),
-  RestaurantPage.routeName: (BuildContext context) => RestaurantPage()
+  RestaurantPage.routeName: (BuildContext context) => RestaurantPage(),
+  FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
 };

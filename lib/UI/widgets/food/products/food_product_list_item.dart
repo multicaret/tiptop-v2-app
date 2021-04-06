@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -14,7 +15,9 @@ class FoodProductListItem extends StatelessWidget {
     return Material(
       color: AppColors.white,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: product);
+        },
         child: Container(
           height: foodProductListItemHeight,
           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
