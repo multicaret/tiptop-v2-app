@@ -20,35 +20,14 @@ class AppWrapper extends StatefulWidget {
 
 class _AppWrapperState extends State<AppWrapper> {
   final CupertinoTabController _cupertinoTabController = CupertinoTabController();
-  int currentTabIndex = 0;
 
-  //The keys were added for android onBackPressed function (source: https://github.com/flutter/flutter/issues/24105)
-  final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> thirdTabNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> fourthTabNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> fifthTabNavKey = GlobalKey<NavigatorState>();
+  List<GlobalKey<NavigatorState>> _getTabNavKeys() {
+    return List.generate(_cupertinoTabsList.length, (i) => GlobalKey<NavigatorState>());
+  }
 
   GlobalKey<NavigatorState> currentNavigatorKey() {
-    switch (_cupertinoTabController.index) {
-      case 0:
-        return firstTabNavKey;
-        break;
-      case 1:
-        return secondTabNavKey;
-        break;
-      case 2:
-        return thirdTabNavKey;
-        break;
-      case 3:
-        return fourthTabNavKey;
-        break;
-      case 4:
-        return fifthTabNavKey;
-        break;
-    }
-
-    return null;
+    List<GlobalKey<NavigatorState>> _tabNavKeys = _getTabNavKeys();
+    return _tabNavKeys[_cupertinoTabController.index];
   }
 
   void onTabItemTapped(int index) {
