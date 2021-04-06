@@ -45,12 +45,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   final couponCodeNotifier = ValueNotifier<String>(null);
   final paymentSummaryTotalsNotifier = ValueNotifier<List<PaymentSummaryTotal>>(null);
+  final selectedPaymentMethodNotifier = ValueNotifier<int>(null);
 
   CheckoutData checkoutData;
   Order submittedOrder;
 
   String notes;
-  int selectedPaymentMethodId;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -73,7 +73,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         isGrandTotal: true,
       ),
     ];
-    selectedPaymentMethodId = checkoutData.paymentMethods[0].id;
+    selectedPaymentMethodNotifier.value = checkoutData.paymentMethods[0].id;
     setState(() => _isLoadingCreateOrder = false);
   }
 
@@ -138,6 +138,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilt checkout page');
     return AppScaffold(
       hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
@@ -168,12 +169,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                           ),
                           SectionTitle('Payment Methods'),
-                          RadioSelectItems(
-                            items:
-                                checkoutData.paymentMethods.map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo}).toList(),
-                            selectedId: selectedPaymentMethodId,
-                            action: (value) => setState(() => selectedPaymentMethodId = value),
-                            isRTL: appProvider.isRTL,
+                          ValueListenableBuilder(
+                            valueListenable: selectedPaymentMethodNotifier,
+                            builder: (c, selectedPaymentMethodId, _) => RadioSelectItems(
+                              items: checkoutData.paymentMethods
+                                  .map((method) => {
+                                        'id': method.id,
+                                        'title': method.title,
+                                        'logo': method.logo,
+                                      })
+                                  .toList(),
+                              selectedId: selectedPaymentMethodId,
+                              action: (value) => selectedPaymentMethodNotifier.value = value,
+                              isRTL: appProvider.isRTL,
+                            ),
                           ),
                           SectionTitle('Promotions'),
                           ValueListenableBuilder(
@@ -247,7 +256,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         appProvider,
         cartProvider,
         addressesProvider,
-        paymentMethodId: selectedPaymentMethodId,
+        paymentMethodId: selectedPaymentMethodNotifier.value,
         notes: notes,
         couponCode: couponCodeNotifier.value,
       );
