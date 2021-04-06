@@ -34,7 +34,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ).then((response) {
                   if (response != null && response) {
-                    cartProvider.clearCart(appProvider, homeProvider).then((_) {
+                    cartProvider.clearCart(appProvider).then((_) {
                       showToast(msg: 'Cart Cleared Successfully!');
                       Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
                     }).catchError((e) {

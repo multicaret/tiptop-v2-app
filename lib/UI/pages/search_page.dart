@@ -32,7 +32,6 @@ class _SearchPageState extends State<SearchPage> {
   FocusNode searchFieldFocusNote = new FocusNode();
 
   ProductsProvider productsProvider;
-  HomeProvider homeProvider;
   SearchProvider searchProvider;
   List<Product> _searchedProducts = [];
   List<Term> _terms = [];
@@ -53,7 +52,6 @@ class _SearchPageState extends State<SearchPage> {
   void didChangeDependencies() {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
-      homeProvider = Provider.of<HomeProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
 
       fetchAndSetSearchTerms();
@@ -64,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
-    await searchProvider.fetchAndSetSearchTerms(homeProvider: homeProvider);
+    await searchProvider.fetchAndSetSearchTerms();
     _terms = searchProvider.terms;
     setState(() => _isLoading = false);
   }
@@ -164,7 +162,7 @@ class _SearchPageState extends State<SearchPage> {
         searchQuery = _searchQuery;
         _isLoading = true;
       });
-      await productsProvider.fetchSearchedProducts(_searchQuery, homeProvider: homeProvider);
+      await productsProvider.fetchSearchedProducts(_searchQuery);
       _searchedProducts = productsProvider.searchedProducts;
       if (_searchedProducts.isEmpty) {
         showToast(msg: Translations.of(context).get('No results match your search'));

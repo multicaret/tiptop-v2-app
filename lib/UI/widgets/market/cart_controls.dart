@@ -9,7 +9,6 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -33,7 +32,6 @@ class CartControls extends StatefulWidget {
 
 class _CartControlsState extends State<CartControls> {
   AppProvider appProvider;
-  HomeProvider homeProvider;
   AddressesProvider addressesProvider;
   bool _isInit = true;
 
@@ -41,7 +39,6 @@ class _CartControlsState extends State<CartControls> {
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
     }
     _isInit = false;
@@ -60,7 +57,6 @@ class _CartControlsState extends State<CartControls> {
       await cartProvider.addRemoveProduct(
         context: context,
         appProvider: appProvider,
-        homeProvider: homeProvider,
         isAdding: action == CartAction.ADD,
         product: widget.product,
       );

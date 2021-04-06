@@ -8,11 +8,11 @@ import 'home_provider.dart';
 class SearchProvider with ChangeNotifier {
   List<Term> terms = [];
 
-  Future<void> fetchAndSetSearchTerms({HomeProvider homeProvider}) async {
+  Future<void> fetchAndSetSearchTerms() async {
     final endpoint = 'search';
     final Map<String, String> body = {
-      'branch_id': homeProvider.branchId.toString(),
-      'chain_id': homeProvider.chainId.toString(),
+      'branch_id': HomeProvider.branchId.toString(),
+      'chain_id': HomeProvider.chainId.toString(),
     };
     final responseData = await AppProvider().get(endpoint: endpoint, body: body);
     var searchResponse = SearchResponse.fromJson(responseData);

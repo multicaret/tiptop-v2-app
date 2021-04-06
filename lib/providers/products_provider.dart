@@ -34,13 +34,13 @@ class ProductsProvider with ChangeNotifier {
     selectedParentChildCategories = selectedParent.childCategories;
   }
 
-  Future<void> fetchSearchedProducts(searchQuery, {HomeProvider homeProvider}) async {
+  Future<void> fetchSearchedProducts(searchQuery) async {
     final endpoint = 'search/products';
     try {
       final Map<String, String> body = {
         'q': searchQuery,
-        'branch_id': homeProvider.branchId.toString(),
-        'chain_id': homeProvider.chainId.toString(),
+        'branch_id': HomeProvider.branchId.toString(),
+        'chain_id': HomeProvider.chainId.toString(),
       };
       final responseData = await AppProvider().get(endpoint: endpoint, body: body);
       searchedProductsDataResponse = ProductsResponse.fromJson(responseData);

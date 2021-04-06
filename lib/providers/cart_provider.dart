@@ -46,10 +46,11 @@ class CartProvider with ChangeNotifier {
   Future<int> addRemoveProduct({
     @required BuildContext context,
     @required AppProvider appProvider,
-    @required HomeProvider homeProvider,
     @required bool isAdding,
     @required Product product,
   }) async {
+    print('branch and chain ids from add remove products request:');
+    print('${HomeProvider.branchId}, ${HomeProvider.chainId}');
     
     if(cart == null || cart.id == null) {
       print('No cart');
@@ -61,8 +62,8 @@ class CartProvider with ChangeNotifier {
     final endpoint = 'carts/${cart.id}/products/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
-      'chain_id': homeProvider.chainId,
-      'branch_id': homeProvider.branchId,
+      'chain_id': HomeProvider.chainId,
+      'branch_id': HomeProvider.branchId,
       'is_adding': isAdding,
     };
 
@@ -146,15 +147,15 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<void> clearCart(AppProvider appProvider, HomeProvider homeProvider) async {
+  Future<void> clearCart(AppProvider appProvider) async {
     final endpoint = 'carts/${cart.id}/delete';
     clearRequestedMoreThanAvailableQuantity();
     isLoadingClearCartRequest = true;
     notifyListeners();
 
     Map<String, dynamic> body = {
-      'branch_id': homeProvider.branchId,
-      'chain_id': homeProvider.chainId,
+      'branch_id': HomeProvider.branchId,
+      'chain_id': HomeProvider.chainId,
     };
 
     final responseData = await appProvider.post(

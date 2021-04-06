@@ -18,8 +18,9 @@ class HomeProvider with ChangeNotifier {
   EstimatedArrivalTime estimatedArrivalTime;
   List<Category> categories;
   List<Slide> slides;
-  int branchId;
-  int chainId;
+
+  static int branchId;
+  static int chainId;
 
   bool categorySelected = false;
   int selectedParentCategoryId;

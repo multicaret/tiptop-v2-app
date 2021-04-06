@@ -26,7 +26,6 @@ class GridProductItem extends StatefulWidget {
 
 class _GridProductItemState extends State<GridProductItem> {
   AppProvider appProvider;
-  HomeProvider homeProvider;
   CartProvider cartProvider;
   bool _isInit = true;
   bool requestedMoreThanAvailableQuantity = false;
@@ -36,7 +35,6 @@ class _GridProductItemState extends State<GridProductItem> {
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
       productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
     }

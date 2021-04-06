@@ -31,7 +31,6 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
   bool _isLoadingStoreRatingRequest = false;
   Order order;
   AppProvider appProvider;
-  HomeProvider homeProvider;
   OrdersProvider ordersProvider;
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
@@ -54,7 +53,6 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
       order = data["order"];
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       _createOrderRating();
     }
     _isInit = false;
@@ -85,7 +83,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
       print('ratingData');
       print(ratingData);
       try {
-        await ordersProvider.storeOrderRating(appProvider, homeProvider, order.id, ratingData);
+        await ordersProvider.storeOrderRating(appProvider, order.id, ratingData);
         setState(() => _isLoadingStoreRatingRequest = false);
         showToast(msg: 'Rating submitted successfully');
         Navigator.of(context).pop();

@@ -20,11 +20,11 @@ class OrdersProvider with ChangeNotifier {
 
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
-  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
+  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
-      'chain_id': '${homeProvider.chainId}',
-      'branch_id': '${homeProvider.branchId}',
+      'chain_id': '${HomeProvider.chainId}',
+      'branch_id': '${HomeProvider.branchId}',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,
@@ -48,7 +48,6 @@ class OrdersProvider with ChangeNotifier {
 
   Future<void> submitOrder(
     AppProvider appProvider,
-    HomeProvider homeProvider,
     CartProvider cartProvider,
     AddressesProvider addressesProvider, {
     @required int paymentMethodId,
@@ -68,8 +67,8 @@ class OrdersProvider with ChangeNotifier {
     }
 
     Map<String, dynamic> body = {
-      'branch_id': homeProvider.branchId,
-      'chain_id': homeProvider.chainId,
+      'branch_id': HomeProvider.branchId,
+      'chain_id': HomeProvider.chainId,
       'cart_id': cartProvider.cart.id,
       'payment_method_id': paymentMethodId,
       'address_id': addressesProvider.selectedAddress.id,
@@ -86,8 +85,6 @@ class OrdersProvider with ChangeNotifier {
       body: body,
       withToken: true,
     );
-    print('submitOrder responseData');
-    print(responseData);
 
     submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
     if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
@@ -98,10 +95,10 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider, HomeProvider homeProvider) async {
+  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider) async {
     final endpoint = 'orders';
     final Map<String, String> body = {
-      'chain_id': '${homeProvider.chainId}',
+      'chain_id': '${HomeProvider.chainId}',
     };
 
     final responseData = await appProvider.get(
@@ -153,7 +150,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> storeOrderRating(AppProvider appProvider, HomeProvider homeProvider, int orderId, Map<String, dynamic> ratingData) async {
+  Future<void> storeOrderRating(AppProvider appProvider, int orderId, Map<String, dynamic> ratingData) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.post(endpoint: endpoint, body: ratingData, withToken: true);
     if (responseData == 401) {
@@ -163,19 +160,18 @@ class OrdersProvider with ChangeNotifier {
     if (responseData["status"] != 200) {
       throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
-    await fetchAndSetPreviousOrders(appProvider, homeProvider);
+    await fetchAndSetPreviousOrders(appProvider);
     notifyListeners();
   }
 
   Future<dynamic> validateCoupon({
     AppProvider appProvider,
-    HomeProvider homeProvider,
     CartProvider cartProvider,
     String couponCode,
   }) async {
     final endpoint = 'coupons/$couponCode/validate';
     Map<String, String> body = {
-      'branch_id': '${homeProvider.branchId}',
+      'branch_id': '${HomeProvider.branchId}',
       'cart_id': '${cartProvider.cart.id}',
     };
     final responseData = await appProvider.get(

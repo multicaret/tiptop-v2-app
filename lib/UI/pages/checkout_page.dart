@@ -41,7 +41,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
-  HomeProvider homeProvider;
   AddressesProvider addressesProvider;
   CouponValidationResponseData couponValidationResponseData;
 
@@ -58,7 +57,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoadingCreateOrder = true);
-    await ordersProvider.createOrderAndGetCheckoutData(appProvider, homeProvider);
+    await ordersProvider.createOrderAndGetCheckoutData(appProvider);
     checkoutData = ordersProvider.checkoutData;
     paymentSummaryTotalsNotifier.value = [
       PaymentSummaryTotal(
@@ -85,7 +84,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final responseData = await ordersProvider.validateCoupon(
         appProvider: appProvider,
         cartProvider: cartProvider,
-        homeProvider: homeProvider,
         couponCode: _couponCode,
       );
       if (responseData == 401) {
@@ -130,7 +128,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (_isInit) {
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       _createOrderAndGetCheckoutData();
@@ -248,7 +245,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       setState(() => _isLoadingOrderSubmit = true);
       await ordersProvider.submitOrder(
         appProvider,
-        homeProvider,
         cartProvider,
         addressesProvider,
         paymentMethodId: selectedPaymentMethodId,

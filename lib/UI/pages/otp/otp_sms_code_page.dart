@@ -25,7 +25,6 @@ class OTPSMSCodePage extends StatefulWidget {
 class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
   OTPProvider otpProvider;
   AppProvider appProvider;
-  HomeProvider homeProvider;
   bool _isInit = true;
   String reference;
   DateTime validationDate;
@@ -42,7 +41,6 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     if (_isInit) {
       otpProvider = Provider.of<OTPProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       reference = data['reference'];
       phoneCountryCode = data['phone_country_code'];

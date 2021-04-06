@@ -35,7 +35,6 @@ class _AddressesPageState extends State<AddressesPage> {
   AddressesProvider addressesProvider;
   AppProvider appProvider;
   CartProvider cartProvider;
-  HomeProvider homeProvider;
 
   List<Address> addresses = [];
   List<Kind> kinds = [];
@@ -63,7 +62,7 @@ class _AddressesPageState extends State<AddressesPage> {
       ).then((response) {
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
-          cartProvider.clearCart(appProvider, homeProvider).then((_) {
+          cartProvider.clearCart(appProvider).then((_) {
             addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
               _changeSelectedAddress(_selectedAddress).then((_) {
                 showToast(msg: 'Cleared cart and changed address to (${_selectedAddress.kind.title}) successfully!');
@@ -95,7 +94,7 @@ class _AddressesPageState extends State<AddressesPage> {
     );
     if (response != null && response) {
       if(!cartProvider.noCart) {
-        await cartProvider.clearCart(appProvider, homeProvider);
+        await cartProvider.clearCart(appProvider);
         print('cart cleared as well :( ');
       }
       await addressesProvider.deleteAddress(appProvider, _addressId);
@@ -110,7 +109,6 @@ class _AddressesPageState extends State<AddressesPage> {
       appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       _fetchAndSetAddresses();
     }
     _isInit = false;
