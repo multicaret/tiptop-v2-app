@@ -151,6 +151,9 @@ class Order {
     this.id,
     this.address,
     this.completedAt,
+    this.couponCode,
+    this.couponDiscountAmount,
+    this.totalAfterCouponDiscount,
     this.deliveryFee,
     this.grandTotal,
     this.orderRating,
@@ -161,6 +164,9 @@ class Order {
   int id;
   Address address;
   EdAt completedAt;
+  String couponCode;
+  DoubleRawIntFormatted couponDiscountAmount;
+  DoubleRawIntFormatted totalAfterCouponDiscount;
   DoubleRawIntFormatted deliveryFee;
   DoubleRawIntFormatted grandTotal;
   OrderRating orderRating;
@@ -171,6 +177,9 @@ class Order {
         id: json["id"],
         address: Address.fromJson(json["address"]),
         completedAt: EdAt.fromJson(json["completedAt"]),
+        couponCode: json["couponCode"],
+        couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawIntFormatted.fromJson(json["couponDiscountAmount"]),
+        totalAfterCouponDiscount: json["totalAfterCouponDiscount"] == null ? null : DoubleRawIntFormatted.fromJson(json["totalAfterCouponDiscount"]),
         deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
@@ -274,10 +283,10 @@ class CouponValidationResponseData {
   DoubleRawIntFormatted grandTotal;
 
   factory CouponValidationResponseData.fromJson(Map<String, dynamic> json) => CouponValidationResponseData(
-    discountedAmount: DoubleRawIntFormatted.fromJson(json["discountedAmount"]),
-    deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
-    totalBefore: DoubleRawIntFormatted.fromJson(json["totalBefore"]),
-    totalAfter: DoubleRawIntFormatted.fromJson(json["totalAfter"]),
-    grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
-  );
+        discountedAmount: DoubleRawIntFormatted.fromJson(json["discountedAmount"]),
+        deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
+        totalBefore: DoubleRawIntFormatted.fromJson(json["totalBefore"]),
+        totalAfter: DoubleRawIntFormatted.fromJson(json["totalAfter"]),
+        grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+      );
 }

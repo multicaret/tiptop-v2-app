@@ -16,6 +16,7 @@ import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../order_rating_page.dart';
 
@@ -64,11 +65,29 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
     return Consumer2<AppProvider, OrdersProvider>(
       builder: (c, appProvider, ordersProvider, _) {
         Order order = ordersProvider.previousOrders.firstWhere((order) => order.id == orderId);
+        bool hasCoupon = order.couponDiscountAmount != null && order.couponDiscountAmount.raw != 0;
         totals = [
           PaymentSummaryTotal(
-            title: "Total",
+            title: hasCoupon ? "Total Before Discount" : "Total",
             value: order.cart.total.formatted,
+            isDiscounted: hasCoupon,
           ),
+        ];
+        if (hasCoupon) {
+          final couponTotals = [
+            PaymentSummaryTotal(
+              title: "You Saved",
+              value: order.couponDiscountAmount.formatted,
+              isSavedAmount: true,
+            ),
+            PaymentSummaryTotal(
+              title: "Total After Discount",
+              value: order.totalAfterCouponDiscount.formatted,
+            ),
+          ];
+          totals.addAll(couponTotals);
+        }
+        final lastTotals = [
           PaymentSummaryTotal(
             title: "Delivery Fee",
             value: order.deliveryFee.formatted,
@@ -79,6 +98,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
             isGrandTotal: true,
           ),
         ];
+        totals.addAll(lastTotals);
 
         return AppScaffold(
           hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
@@ -137,6 +157,25 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                           hasControls: false,
                         ),
                       ),
+                      if (hasCoupon) SectionTitle('Promotions'),
+                      if (hasCoupon)
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            border: Border(bottom: BorderSide(color: AppColors.border)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(Translations.of(context).get('Coupon Code')),
+                              Text(
+                                order.couponCode,
+                                style: AppTextStyles.bodyBold,
+                              ),
+                            ],
+                          ),
+                        ),
                       SectionTitle('Payment Summary'),
                       PaymentSummary(
                         totals: totals,
