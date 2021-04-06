@@ -587,11 +587,13 @@ class PaymentSummaryTotal {
   final String value;
   final bool isSavedAmount;
   final bool isGrandTotal;
+  final bool isDiscounted;
 
   PaymentSummaryTotal({
     @required this.title,
     @required this.value,
     this.isSavedAmount = false,
     this.isGrandTotal = false,
+    this.isDiscounted = false,
   });
 }

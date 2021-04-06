@@ -98,6 +98,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         PaymentSummaryTotal(
           title: "Total Before Discount",
           value: couponValidationResponseData.totalBefore.formatted,
+          isDiscounted: true,
         ),
         PaymentSummaryTotal(
           title: "You Saved",
@@ -105,12 +106,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
           isSavedAmount: true,
         ),
         PaymentSummaryTotal(
+          title: "Total After Discount",
+          value: couponValidationResponseData.totalAfter.formatted,
+        ),
+        PaymentSummaryTotal(
           title: "Delivery Fee",
           value: couponValidationResponseData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
-          value: couponValidationResponseData.totalAfter.formatted,
+          value: couponValidationResponseData.grandTotal.formatted,
           isGrandTotal: true,
         ),
       ];
@@ -248,6 +253,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         addressesProvider,
         paymentMethodId: selectedPaymentMethodId,
         notes: notes,
+        couponCode: couponCodeNotifier.value,
       );
       submittedOrder = ordersProvider.submittedOrder;
       setState(() => _isLoadingOrderSubmit = false);

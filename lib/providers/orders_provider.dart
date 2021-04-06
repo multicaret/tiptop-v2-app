@@ -39,7 +39,7 @@ class OrdersProvider with ChangeNotifier {
     createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
 
     if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(title: 'Error', message: createCheckoutResponse.message);
+      throw HttpException(title: 'Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     checkoutData = createCheckoutResponse.checkoutData;
@@ -53,6 +53,7 @@ class OrdersProvider with ChangeNotifier {
     AddressesProvider addressesProvider, {
     @required int paymentMethodId,
     @required String notes,
+    String couponCode,
   }) async {
     if (cartProvider.noCart) {
       print('No current cart!');
@@ -73,6 +74,7 @@ class OrdersProvider with ChangeNotifier {
       'payment_method_id': paymentMethodId,
       'address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
+      'coupon_redeem_code': couponCode,
     };
 
     print('Order submit request body:');
@@ -84,10 +86,12 @@ class OrdersProvider with ChangeNotifier {
       body: body,
       withToken: true,
     );
+    print('submitOrder responseData');
+    print(responseData);
 
     submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
     if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(title: 'Error', message: submitOrderResponse.message);
+      throw HttpException(title: 'Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     submittedOrder = submitOrderResponse.submittedOrder;

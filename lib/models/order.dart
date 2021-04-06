@@ -264,17 +264,20 @@ class CouponValidationResponseData {
     this.deliveryFee,
     this.totalBefore,
     this.totalAfter,
+    this.grandTotal,
   });
 
   DoubleRawIntFormatted discountedAmount;
   DoubleRawIntFormatted deliveryFee;
   DoubleRawIntFormatted totalBefore;
   DoubleRawIntFormatted totalAfter;
+  DoubleRawIntFormatted grandTotal;
 
   factory CouponValidationResponseData.fromJson(Map<String, dynamic> json) => CouponValidationResponseData(
     discountedAmount: DoubleRawIntFormatted.fromJson(json["discountedAmount"]),
     deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
     totalBefore: DoubleRawIntFormatted.fromJson(json["totalBefore"]),
     totalAfter: DoubleRawIntFormatted.fromJson(json["totalAfter"]),
+    grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
   );
 }

@@ -16,7 +16,6 @@ class PaymentSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(totals.length, (i) {
-
         return Container(
           width: double.infinity,
           padding: EdgeInsets.only(
@@ -34,7 +33,11 @@ class PaymentSummary extends StatelessWidget {
             children: [
               Text(
                 Translations.of(context).get(totals[i].title),
-                style: totals[i].isGrandTotal ? AppTextStyles.bodyBoldSecondaryDark : AppTextStyles.body,
+                style: totals[i].isGrandTotal
+                    ? AppTextStyles.bodyBoldSecondaryDark
+                    : totals[i].isSavedAmount
+                        ? AppTextStyles.bodyBold.copyWith(color: Colors.green)
+                        : AppTextStyles.body,
               ),
               Expanded(
                 child: Html(
@@ -42,8 +45,9 @@ class PaymentSummary extends StatelessWidget {
                   style: {
                     "body": Style(
                       textAlign: TextAlign.end,
-                      color: totals[i].isGrandTotal ? AppColors.secondaryDark : AppColors.primary,
-                      fontWeight: totals[i].isGrandTotal ? FontWeight.w600 : FontWeight.w400,
+                      color: totals[i].isGrandTotal ? AppColors.secondaryDark : totals[i].isSavedAmount ? Colors.green : AppColors.primary,
+                      fontWeight: totals[i].isGrandTotal || totals[i].isSavedAmount ? FontWeight.w600 : FontWeight.w400,
+                      textDecoration: totals[i].isDiscounted ? TextDecoration.lineThrough : null,
                     ),
                   },
                 ),
