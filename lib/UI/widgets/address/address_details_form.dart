@@ -9,7 +9,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../UI/input/address_icon_dropdown.dart';
 
-class AddressDetailsForm extends StatefulWidget {
+class AddressDetailsForm extends StatelessWidget {
   final Map<String, dynamic> addressDetailsFormData;
   final Function setAddressDetailsFormData;
   final Kind selectedKind;
@@ -19,6 +19,7 @@ class AddressDetailsForm extends StatefulWidget {
   final List<Map<String, dynamic>> regionsDropDownItems;
   final List<Map<String, dynamic>> citiesDropDownItems;
   final List<Map<String, dynamic>> addressIconsDropDownItems;
+  final TextEditingController addressAliasTextFieldController;
 
   AddressDetailsForm({
     @required this.addressDetailsFormData,
@@ -30,26 +31,8 @@ class AddressDetailsForm extends StatefulWidget {
     @required this.regionsDropDownItems,
     @required this.citiesDropDownItems,
     @required this.addressIconsDropDownItems,
+    @required this.addressAliasTextFieldController,
   });
-
-  @override
-  _AddressDetailsFormState createState() => _AddressDetailsFormState();
-}
-
-class _AddressDetailsFormState extends State<AddressDetailsForm> {
-  TextEditingController addressAliasFieldController = new TextEditingController();
-
-  @override
-  void initState() {
-    addressAliasFieldController.text = widget.selectedKind.title;
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    addressAliasFieldController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +53,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
           topRight: Radius.circular(40),
         ),
         child: Form(
-          key: widget.formKey,
+          key: formKey,
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(left: 17, right: 17, top: 40, bottom: 40),
             child: Column(
@@ -78,50 +61,50 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
                 Row(
                   children: [
                     AddressIconDropDown(
-                      currentIcon: widget.addressDetailsFormData['kind'],
-                      iconItems: widget.addressIconsDropDownItems,
+                      currentIcon: addressDetailsFormData['kind'],
+                      iconItems: addressIconsDropDownItems,
                       onChanged: (kindId) {
-                        widget.setAddressDetailsFormData('kind', kindId);
-                        addressAliasFieldController.text = widget.createAddressData.kinds.firstWhere((kind) => kind.id == kindId).title;
+                        setAddressDetailsFormData('kind', kindId);
+                        addressAliasTextFieldController.text = createAddressData.kinds.firstWhere((kind) => kind.id == kindId).title;
                       },
                     ),
                     Expanded(
                       child: AppTextField(
-                        controller: addressAliasFieldController,
+                        controller: addressAliasTextFieldController,
                         labelText: 'Address Title (Home, Work)',
-                        hintText: widget.selectedKind == null ? '' : widget.selectedKind.title,
+                        hintText: selectedKind == null ? '' : selectedKind.title,
                         required: true,
-                        onSaved: (value) => widget.setAddressDetailsFormData('alias', value),
+                        onSaved: (value) => setAddressDetailsFormData('alias', value),
                       ),
                     ),
                   ],
                 ),
                 AppDropDownButton(
                   labelText: 'City',
-                  defaultValue: widget.addressDetailsFormData['region_id'],
-                  items: widget.regionsDropDownItems,
-                  onChanged: (regionId) => widget.setAddressDetailsFormData('region_id', regionId),
+                  defaultValue: addressDetailsFormData['region_id'],
+                  items: regionsDropDownItems,
+                  onChanged: (regionId) => setAddressDetailsFormData('region_id', regionId),
                 ),
                 AppDropDownButton(
                   labelText: 'Neighborhood',
                   hintText: 'Select Neighborhood',
-                  defaultValue: widget.addressDetailsFormData['city_id'],
-                  items: widget.citiesDropDownItems,
-                  onChanged: (cityId) => widget.setAddressDetailsFormData('city_id', cityId),
+                  defaultValue: addressDetailsFormData['city_id'],
+                  items: citiesDropDownItems,
+                  onChanged: (cityId) => setAddressDetailsFormData('city_id', cityId),
                 ),
                 AppTextField(
                   labelText: 'Address',
                   required: true,
                   maxLines: 3,
-                  onSaved: (value) => widget.setAddressDetailsFormData('address1', value),
+                  onSaved: (value) => setAddressDetailsFormData('address1', value),
                 ),
                 AppTextField(
                   labelText: 'Directions',
                   hintText: 'General explanation on how to find you',
-                  onSaved: (value) => widget.setAddressDetailsFormData('notes', value),
+                  onSaved: (value) => setAddressDetailsFormData('notes', value),
                 ),
                 AppButtons.secondary(
-                  onPressed: widget.submitForm,
+                  onPressed: submitForm,
                   child: Text(Translations.of(context).get('Save')),
                 ),
               ],

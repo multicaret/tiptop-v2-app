@@ -30,6 +30,7 @@ class AddAddressPage extends StatefulWidget {
 
 class _AddAddressPageState extends State<AddAddressPage> {
   final GlobalKey<FormState> addressDetailsFormKey = GlobalKey();
+  TextEditingController addressAliasTextFieldController = new TextEditingController();
   bool _isInit = true;
   bool _isLoadingStoreAddressRequest = false;
   bool _isLoadingCreateAddressRequest = false;
@@ -119,6 +120,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       selectedKind = data['kind'];
       currentMarkerIcon = selectedKind.markerIcon;
+      addressAliasTextFieldController.text = selectedKind.title;
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -129,6 +131,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
     setState(() {
       addressLocationConfirmed = false;
     });
+  }
+
+  @override
+  void dispose() {
+    addressAliasTextFieldController.dispose();
+    super.dispose();
   }
 
   @override
@@ -185,6 +193,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             height: AddAddressPage.addressDetailsFormContainerHeight,
             child: AddressDetailsForm(
               formKey: addressDetailsFormKey,
+              addressAliasTextFieldController: addressAliasTextFieldController,
               addressDetailsFormData: addressDetailsFormData,
               selectedKind: selectedKind,
               submitForm: submitAddressDetailsForm,
