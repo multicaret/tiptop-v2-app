@@ -61,9 +61,13 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
                     const SizedBox(height: 5),
                     Row(
                       children: [
-                        LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        ),
                         const SizedBox(width: 10),
-                        LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        ),
                       ],
                     ),
                   ],
@@ -93,9 +97,13 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
                     const SizedBox(height: 5),
                     Row(
                       children: [
-                        LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        ),
                         const SizedBox(width: 10),
-                        LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        ),
                       ],
                     ),
                   ],
