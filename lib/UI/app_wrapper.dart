@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
+import 'package:tiptop_v2/UI/pages/home_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';

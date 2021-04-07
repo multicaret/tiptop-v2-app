@@ -14,6 +14,7 @@ import 'package:tiptop_v2/UI/widgets/market/home_categories_grid.dart';
 import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -52,7 +53,12 @@ class _HomePageState extends State<HomePage> {
   List<Slide> marketSlides = [];
   List<Slide> foodSlides = [];
 
-  bool hasActiveOrders = false;
+  bool hasActiveMarketOrders = false;
+  List<Order> activeMarketOrders = [];
+
+  bool hasActiveFoodOrders = false;
+  List<Order> activeFoodOrders = [];
+
   bool hideContent = false;
 
   Future<void> fetchAndSetHomeData() async {
@@ -64,13 +70,17 @@ class _HomePageState extends State<HomePage> {
         marketHomeData = homeProvider.marketHomeData;
         marketCategories = marketHomeData.categories;
         marketSlides = marketHomeData.slides;
-        hasActiveOrders =
+        hasActiveMarketOrders =
             appProvider.isAuth && homeProvider.marketHomeData.activeOrders != null && homeProvider.marketHomeData.activeOrders.length > 0;
+        activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
         hideContent = homeProvider.homeDataRequestError || homeProvider.marketNoBranchFound;
       } else {
         foodHomeData = homeProvider.foodHomeData;
         foodCategories = dummyFoodCategories;
         foodSlides = foodHomeData.slides;
+        hasActiveFoodOrders =
+            appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
+        activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
         // hideContent = homeProvider.homeDataRequestError || homeProvider.foodNoBranchFound;
       }
       setState(() => isLoadingHomeData = false);
@@ -137,36 +147,47 @@ class _HomePageState extends State<HomePage> {
                       changeView: (value) => channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
-                    if (homeProvider.selectedChannel == 'food')
-                      FoodHomePage(
-                        foodHomeData: foodHomeData,
-                        isLoadingHomeData: isLoadingHomeData,
-                      ),
-                    if (homeProvider.selectedChannel == 'grocery')
-                      Column(
-                        children: [
-                          if (hasActiveOrders)
-                            HomeLiveTracking(
-                              isRTL: appProvider.isRTL,
-                              activeOrders: homeProvider.marketHomeData.activeOrders,
-                              totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
-                            ),
-                          hideContent
-                              ? NoContentView(
-                                  text: homeProvider.marketNoBranchFound
-                                      ? 'No Branch Found'
-                                      : homeProvider.homeDataRequestError
-                                          ? 'An error occurred! Please try again later'
-                                          : '')
-                              : isLoadingHomeData
-                                  ? const AppLoader()
-                                  : HomeCategoriesGrid(
-                                      categories: marketCategories,
-                                      fetchAndSetHomeData: fetchAndSetHomeData,
-                                      isLoadingHomeData: isLoadingHomeData,
-                                    ),
-                        ],
-                      ),
+                    hideContent
+                        ? NoContentView(
+                            text: homeProvider.marketNoBranchFound
+                                ? 'No Branch Found'
+                                : homeProvider.homeDataRequestError
+                                    ? 'An error occurred! Please try again later'
+                                    : '')
+                        : isLoadingHomeData
+                            ? const AppLoader()
+                            : homeProvider.selectedChannel == 'grocery'
+                                ? Column(
+                                    children: [
+                                      if (hasActiveMarketOrders)
+                                        HomeLiveTracking(
+                                          isRTL: appProvider.isRTL,
+                                          activeOrders: homeProvider.marketHomeData.activeOrders,
+                                          totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
+                                        ),
+                                      HomeCategoriesGrid(
+                                        categories: marketCategories,
+                                        fetchAndSetHomeData: fetchAndSetHomeData,
+                                        isLoadingHomeData: isLoadingHomeData,
+                                      ),
+                                    ],
+                                  )
+                                : homeProvider.selectedChannel == 'food'
+                                    ? Column(
+                                        children: [
+                                          if (hasActiveFoodOrders)
+                                            HomeLiveTracking(
+                                              isRTL: appProvider.isRTL,
+                                              activeOrders: homeProvider.foodHomeData.activeOrders,
+                                              totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
+                                            ),
+                                          FoodHomePage(
+                                            foodHomeData: foodHomeData,
+                                            isLoadingHomeData: isLoadingHomeData,
+                                          ),
+                                        ],
+                                      )
+                                    : Container(),
                   ],
                 ),
               ),
