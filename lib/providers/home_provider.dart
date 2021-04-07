@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
-import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'addresses_provider.dart';
@@ -83,11 +81,6 @@ class HomeProvider with ChangeNotifier {
         withToken: appProvider.isAuth,
       );
 
-      if (responseData["data"] == null || responseData["status"] != 200) {
-        homeDataRequestError = true;
-        notifyListeners();
-        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-      }
       setHomeData(cartProvider, responseData["data"]);
       notifyListeners();
     } catch (e) {

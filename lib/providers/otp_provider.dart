@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/otp.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
-import 'package:tiptop_v2/utils/http_exception.dart';
 
 class OTPProvider with ChangeNotifier {
   String reference;
@@ -20,9 +18,6 @@ class OTPProvider with ChangeNotifier {
   Future<void> fetchAndSetCountries() async {
     final endpoint = 'countries';
     final responseData = await AppProvider().get(endpoint: endpoint);
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     List<Country> _countries = List<Country>.from(responseData["data"].map((x) => Country.fromJson(x)));
     countries = _countries.where((country) => country.phoneCode != null).toList();
   }
@@ -31,9 +26,6 @@ class OTPProvider with ChangeNotifier {
     final endpoint = 'otp/init-validation?method=$method';
     final responseData = await AppProvider().get(endpoint: endpoint);
 
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     OTPData otpData = OTPData.fromJson(responseData["data"]);
     deepLink = otpData.deepLink;
     reference = otpData.reference;
@@ -57,9 +49,7 @@ class OTPProvider with ChangeNotifier {
     );
     print('responseData');
     print(responseData);
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
+
     OTPValidationData otpValidationData = OTPValidationData.fromJson(responseData["data"]);
     validationStatus = otpValidationData.validationStatus;
     isNewUser = otpValidationData.newUser;
@@ -92,10 +82,6 @@ class OTPProvider with ChangeNotifier {
     print('checkOTPSMSValidation responseData');
     print(responseData);
 
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
-
     OTPValidationData otpValidationData = OTPValidationData.fromJson(responseData["data"]);
     validationStatus = otpValidationData.validationStatus;
     isNewUser = otpValidationData.newUser;
@@ -111,9 +97,6 @@ class OTPProvider with ChangeNotifier {
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
     if (responseData == 401) {
       return 401;
-    }
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     regions = List<Region>.from(responseData["data"]["regions"].map((x) => Region.fromJson(x)));
     cities = List<City>.from(responseData["data"]["cities"].map((x) => City.fromJson(x)));

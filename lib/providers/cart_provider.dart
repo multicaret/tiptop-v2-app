@@ -18,7 +18,8 @@ class CartProvider with ChangeNotifier {
   bool isLoadingClearCartRequest = false;
 
   void setMarketCart(Cart _marketCart) {
-    print('setting market cart${_marketCart == null ? ' (null)' : ', marketCart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
+    print(
+        'setting market cart${_marketCart == null ? ' (null)' : ', marketCart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
     marketCart = _marketCart;
     marketCartProducts = _marketCart.products == null ? [] : _marketCart.products;
     clearRequestedMoreThanAvailableQuantity();
@@ -32,10 +33,20 @@ class CartProvider with ChangeNotifier {
   }
 
   bool get noMarketCart =>
-      marketCart == null || marketCart.id == null || marketCart.total.raw == null || marketCart.total.raw == 0.0 || marketCartProducts == null || marketCart.productsCount == 0;
+      marketCart == null ||
+      marketCart.id == null ||
+      marketCart.total.raw == null ||
+      marketCart.total.raw == 0.0 ||
+      marketCartProducts == null ||
+      marketCart.productsCount == 0;
 
   bool get noFoodCart =>
-      foodCart == null || foodCart.id == null || foodCart.total.raw == null || foodCart.total.raw == 0.0 || marketCartProducts == null || foodCart.productsCount == 0;
+      foodCart == null ||
+      foodCart.id == null ||
+      foodCart.total.raw == null ||
+      foodCart.total.raw == 0.0 ||
+      marketCartProducts == null ||
+      foodCart.productsCount == 0;
 
   int getProductQuantity(int productId) {
     if (marketCart != null && marketCartProducts != null && marketCartProducts.length != 0) {
@@ -57,14 +68,14 @@ class CartProvider with ChangeNotifier {
   }) async {
     print('branch and chain ids from add remove products request:');
     print('${HomeProvider.branchId}, ${HomeProvider.chainId}');
-    
-    if(marketCart == null || marketCart.id == null) {
+
+    if (marketCart == null || marketCart.id == null) {
       print('No marketCart');
       showToast(msg: 'An Error Occurred! Logging out...');
       appProvider.logout(clearSelectedAddress: true);
-      return null;  
+      return null;
     }
-    
+
     final endpoint = 'carts/${marketCart.id}/products/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
@@ -161,19 +172,19 @@ class CartProvider with ChangeNotifier {
       'chain_id': HomeProvider.chainId,
     };
 
-    final responseData = await appProvider.post(
-      endpoint: endpoint,
-      body: body,
-      withToken: true,
-    );
+    try {
+      await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
 
-    if (responseData["status"] != 200) {
+      isLoadingClearCartRequest = false;
+      notifyListeners();
+    } catch (e) {
       isLoadingClearCartRequest = true;
       notifyListeners();
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+      throw e;
     }
-
-    isLoadingClearCartRequest = false;
-    notifyListeners();
   }
 }

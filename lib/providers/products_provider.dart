@@ -5,7 +5,6 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -58,10 +57,6 @@ class ProductsProvider with ChangeNotifier {
   Future<dynamic> fetchAndSetProduct(AppProvider appProvider, int productId) async {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
-    //Todo: Add (|| responseData["status"] != 200)
-    if (responseData["data"] == null) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     product = Product.fromJson(responseData["data"]);
     notifyListeners();
   }
@@ -84,18 +79,12 @@ class ProductsProvider with ChangeNotifier {
       print('Unauthenticated!');
       return 401;
     }
-    if (responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     notifyListeners();
   }
 
   Future<void> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
     final endpoint = 'profile/favorites';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
-    if(responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
     notifyListeners();
   }

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
-import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -27,13 +24,14 @@ class _SupportPageState extends State<SupportPage> {
 
   Future<void> _fetchAndSetSupportPhoneNumber() async {
     setState(() => _isLoading = true);
-    final responseData = await appProvider.get(endpoint: 'support');
-    if (responseData["data"] == null || responseData["status"] != 200) {
+    try {
+      final responseData = await appProvider.get(endpoint: 'support');
+      phoneNumber = responseData["data"]["supportNumber"];
       setState(() => _isLoading = false);
-      throw HttpException(title: 'Http Exception Error', message: responseData["message"] ?? getHttpExceptionMessage(responseData));
+    } catch (e) {
+      setState(() => _isLoading = false);
+      throw e;
     }
-    phoneNumber = responseData["data"]["supportNumber"];
-    setState(() => _isLoading = false);
   }
 
   @override

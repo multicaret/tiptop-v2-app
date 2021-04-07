@@ -188,6 +188,9 @@ class AppProvider with ChangeNotifier {
       }
 
       final responseData = json.decode(response.body);
+      if (responseData["data"] == null || responseData["status"] != 200) {
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+      }
       return responseData;
     } catch (error) {
       throw error;
@@ -231,6 +234,9 @@ class AppProvider with ChangeNotifier {
           print('Sending authenticated request without logging in!');
         }
         return 401;
+      }
+      if (responseData["status"] != 200) {
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }
       return responseData;
     } catch (error) {

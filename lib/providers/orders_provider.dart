@@ -143,9 +143,6 @@ class OrdersProvider with ChangeNotifier {
       print('Unauthenticated');
       return 401;
     }
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
     final availableIssuesArray = responseData["data"]["availableIssues"];
     orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
     notifyListeners();
@@ -183,10 +180,6 @@ class OrdersProvider with ChangeNotifier {
     if (responseData == 401) {
       return 401;
     }
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
-
     couponValidationResponseData = CouponValidationResponseData.fromJson(responseData["data"]);
     notifyListeners();
   }

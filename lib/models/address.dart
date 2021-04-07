@@ -1,33 +1,5 @@
 import 'models.dart';
 
-class CreateAddressResponseData {
-  CreateAddressResponseData({
-    this.createAddressData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  CreateAddressData createAddressData;
-  String errors;
-  String message;
-  int status;
-
-  factory CreateAddressResponseData.fromJson(Map<String, dynamic> json) => CreateAddressResponseData(
-        createAddressData: json["data"] == null ? null : CreateAddressData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": createAddressData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
-
 class CreateAddressData {
   CreateAddressData({
     this.regions,
@@ -57,34 +29,6 @@ class CreateAddressData {
         "kinds": List<dynamic>.from(kinds.map((x) => x.toJson())),
         "selectedRegion": selectedRegion.toJson(),
         "selectedCity": selectedCity.toJson(),
-      };
-}
-
-class AddressesResponseData {
-  AddressesResponseData({
-    this.addressesData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  AddressesData addressesData;
-  String errors;
-  String message;
-  int status;
-
-  factory AddressesResponseData.fromJson(Map<String, dynamic> json) => AddressesResponseData(
-        addressesData: json["data"] == null ? null : AddressesData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": addressesData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
       };
 }
 

@@ -1,38 +1,4 @@
-import 'dart:convert';
-
 import 'package:tiptop_v2/models/models.dart';
-
-SearchResponse searchResponseFromJson(String str) => SearchResponse.fromJson(json.decode(str));
-
-String searchResponseToJson(SearchResponse data) => json.encode(data.toJson());
-
-class SearchResponse {
-  SearchResponse({
-    this.search,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  Search search;
-  String errors;
-  String message;
-  int status;
-
-  factory SearchResponse.fromJson(Map<String, dynamic> json) => SearchResponse(
-        search: Search.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": search.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
 
 class Search {
   Search({
