@@ -6,10 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
-import 'package:tiptop_v2/UI/widgets/address/add_address_map.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_details_form.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/address/add_address_map.dart';
+import 'package:tiptop_v2/UI/widgets/address/address_details_form.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -50,6 +50,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
   Region selectedRegion;
   CreateAddressData createAddressData;
 
+  List<Map<String, dynamic>> regionsDropDownItems = [];
+  List<Map<String, dynamic>> citiesDropDownItems = [];
+  List<Map<String, dynamic>> addressIconsDropDownItems = [];
+
   Marker defaultMarker;
 
   Future<bool> _createAddress() async {
@@ -77,7 +81,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
           'notes': '',
         };
       });
-      print(addressDetailsFormData);
+      if (createAddressData != null) {
+        addressIconsDropDownItems = createAddressData.kinds.map((kind) => {'id': kind.id, 'icon_url': kind.icon}).toList();
+        regionsDropDownItems = createAddressData.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
+        print(regionsDropDownItems);
+        if(addressDetailsFormData['region_id'] != null) {
+          List<City> cities = createAddressData.cities.where((city) => city.region.id == addressDetailsFormData['region_id']).toList();
+          citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+        }
+      }
       setState(() => _isLoadingCreateAddressRequest = false);
       return true;
     } catch (e) {
@@ -177,21 +189,30 @@ class _AddAddressPageState extends State<AddAddressPage> {
               selectedKind: selectedKind,
               submitForm: submitAddressDetailsForm,
               createAddressData: createAddressData,
-              setRegionId: (id) => setState(() => addressDetailsFormData['region_id'] = id),
-              setCityId: (id) => setState(() => addressDetailsFormData['city_id'] = id),
-              setKindId: (id) {
+              addressIconsDropDownItems: addressIconsDropDownItems,
+              regionsDropDownItems: regionsDropDownItems,
+              citiesDropDownItems: citiesDropDownItems,
+              setAddressDetailsFormData: (key, value) {
                 setState(() {
-                  addressDetailsFormData['kind'] = id;
-                  addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == id).title;
-                  currentMarkerIcon = createAddressData.kinds.firstWhere((kind) => kind.id == id).markerIcon;
-                });
-                getAndCacheMarkerIcon(currentMarkerIcon).then((Uint8List markerIconBytes) {
-                  setState(() {
-                    defaultMarker = defaultMarker.copyWith(iconParam: BitmapDescriptor.fromBytes(markerIconBytes));
-                    markers = [defaultMarker];
-                  });
+                  addressDetailsFormData[key] = value;
                 });
                 // print(addressDetailsFormData);
+                if(key == 'region_id') {
+                  List<City> selectedRegionCities = createAddressData.cities.where((city) => city.region.id == value).toList();
+                  citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'name': city.name}).toList();
+                }
+                if (key == 'kind') {
+                  addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == value).title;
+                  setState(() {
+                    currentMarkerIcon = createAddressData.kinds.firstWhere((kind) => kind.id == value).markerIcon;
+                  });
+                  getAndCacheMarkerIcon(currentMarkerIcon).then((Uint8List markerIconBytes) {
+                    setState(() {
+                      defaultMarker = defaultMarker.copyWith(iconParam: BitmapDescriptor.fromBytes(markerIconBytes));
+                      markers = [defaultMarker];
+                    });
+                  });
+                }
               },
             ),
           )
@@ -223,6 +244,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       return;
     }
     addressDetailsFormKey.currentState.save();
+    print('addressDetailsFormData to submit');
     print(addressDetailsFormData);
     setState(() => _isLoadingStoreAddressRequest = true);
     await addressesProvider.storeAddress(appProvider, addressDetailsFormData);
