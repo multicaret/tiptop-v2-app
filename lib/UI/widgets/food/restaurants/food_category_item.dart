@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -38,7 +39,11 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
           ? EdgeInsets.only(right: widget.index == 0 ? 17 : 0, left: widget.index == widget.count - 1 ? 17 : 0)
           : EdgeInsets.only(left: widget.index == 0 ? 17 : 0, right: widget.index == widget.count - 1 ? 17 : 0),
       child: InkWell(
-        onTap: widget.isSelectable ? widget.onTap : null,
+        onTap: widget.isSelectable
+            ? widget.onTap
+            : () {
+                Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
+              },
         child: Stack(
           children: [
             Container(

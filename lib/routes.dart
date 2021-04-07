@@ -31,6 +31,7 @@ import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
 import 'UI/pages/faq_page.dart';
+import 'UI/pages/food/restaurants/restaurants_page.dart';
 import 'UI/widgets/market/products/product_page.dart';
 
 final routes = <String, WidgetBuilder>{
@@ -65,4 +66,5 @@ final routes = <String, WidgetBuilder>{
   RestaurantPage.routeName: (BuildContext context) => RestaurantPage(),
   FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
   FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
+  RestaurantsPage.routeName: (BuildContext context) => RestaurantsPage(),
 };
