@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       setState(() => isLoadingHomeData = true);
       await addressesProvider.fetchSelectedAddress();
       await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
-      if (homeProvider.selectedChannel == 'grocery') {
+      if (homeProvider.channelIsMarket) {
         marketHomeData = homeProvider.marketHomeData;
         marketCategories = marketHomeData.categories;
         marketSlides = marketHomeData.slides;
@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage> {
       }
       setState(() => isLoadingHomeData = false);
     } catch (e) {
-      //Todo: translate this string/reconsider what to do
       showToast(msg: 'An Error Occurred! Please try again later');
       setState(() => isLoadingHomeData = false);
       throw e;
@@ -135,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                             color: AppColors.bg,
                           )
                         : AppCarousel(
-                            images: homeProvider.selectedChannel == 'grocery'
+                            images: homeProvider.channelIsMarket
                                 ? marketSlides.map((slide) => slide.image).toList()
                                 : foodSlides.map((slide) => slide.image).toList(),
                             autoplayDuration: const Duration(milliseconds: 300),
@@ -156,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                                     : '')
                         : isLoadingHomeData
                             ? const AppLoader()
-                            : homeProvider.selectedChannel == 'grocery'
+                            : homeProvider.channelIsMarket
                                 ? Column(
                                     children: [
                                       if (hasActiveMarketOrders)

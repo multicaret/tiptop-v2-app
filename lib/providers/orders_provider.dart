@@ -54,7 +54,7 @@ class OrdersProvider with ChangeNotifier {
     @required String notes,
     String couponCode,
   }) async {
-    if (cartProvider.noCart) {
+    if (cartProvider.noMarketCart) {
       print('No current cart!');
       return false;
     }
@@ -69,7 +69,7 @@ class OrdersProvider with ChangeNotifier {
     Map<String, dynamic> body = {
       'branch_id': HomeProvider.branchId,
       'chain_id': HomeProvider.chainId,
-      'cart_id': cartProvider.cart.id,
+      'cart_id': cartProvider.marketCart.id,
       'payment_method_id': paymentMethodId,
       'address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
@@ -172,7 +172,7 @@ class OrdersProvider with ChangeNotifier {
     final endpoint = 'coupons/$couponCode/validate';
     Map<String, String> body = {
       'branch_id': '${HomeProvider.branchId}',
-      'cart_id': '${cartProvider.cart.id}',
+      'cart_id': '${cartProvider.marketCart.id}',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,

@@ -236,7 +236,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
                       return OrderButton(
                         cartProvider: cartProvider,
-                        total: total != null ? total.value : cartProvider.cartTotal,
+                        total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isRTL: appProvider.isRTL,
                         submitAction: _submitOrder,
                       );

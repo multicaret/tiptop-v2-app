@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/checkout_page.dart';
+import 'package:tiptop_v2/UI/pages/food/food_cart_page.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/live_chat_page.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
-import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_cart_page.dart';
 import 'package:tiptop_v2/UI/pages/order_rating_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_choose_method_page.dart';
@@ -52,7 +53,7 @@ final routes = <String, WidgetBuilder>{
   AppWrapper.routeName: (BuildContext context) => AppWrapper(),
   SearchPage.routeName: (BuildContext context) => SearchPage(),
   ProfilePage.routeName: (BuildContext context) => ProfilePage(),
-  CartPage.routeName: (BuildContext context) => CartPage(),
+  MarketCartPage.routeName: (BuildContext context) => MarketCartPage(),
   CheckoutPage.routeName: (BuildContext context) => CheckoutPage(),
   PreviousOrderPage.routeName: (BuildContext context) => PreviousOrderPage(),
   AddAddressPage.routeName: (BuildContext context) => AddAddressPage(),
@@ -63,4 +64,5 @@ final routes = <String, WidgetBuilder>{
   ArticlePage.routeName: (BuildContext context) => ArticlePage(),
   RestaurantPage.routeName: (BuildContext context) => RestaurantPage(),
   FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
+  FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
 };

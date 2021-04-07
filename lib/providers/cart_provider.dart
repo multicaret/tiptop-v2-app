@@ -8,32 +8,38 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class CartProvider with ChangeNotifier {
-  Cart cart;
-  List<CartProduct> cartProducts = [];
-  String cartTotal = '';
-  double doubleCartTotal = 0.0;
-  int cartProductsCount = 0;
+  Cart marketCart;
+  Cart foodCart;
+  List<CartProduct> marketCartProducts = [];
+  List<CartProduct> foodCartProducts = [];
   AddRemoveProductDataResponse addRemoveProductDataResponse;
 
   bool isLoadingAddRemoveRequest = false;
   bool isLoadingClearCartRequest = false;
 
-  void setMarketCart(Cart _cart) {
-    print('setting cart${_cart == null ? ' (null)' : ', cart id: ${_cart.id}'}, products count: ${_cart.products.length}');
-    cart = _cart;
-    cartTotal = _cart.total.formatted;
-    doubleCartTotal = _cart.total.raw;
-    cartProductsCount = _cart.productsCount > 0 ? _cart.productsCount : 0;
-    cartProducts = _cart.products == null ? [] : _cart.products;
+  void setMarketCart(Cart _marketCart) {
+    print('setting market cart${_marketCart == null ? ' (null)' : ', marketCart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
+    marketCart = _marketCart;
+    marketCartProducts = _marketCart.products == null ? [] : _marketCart.products;
     clearRequestedMoreThanAvailableQuantity();
   }
 
-  bool get noCart =>
-      cart == null || cart.id == null || doubleCartTotal == null || doubleCartTotal == 0.0 || cartProducts == null || cartProductsCount == 0;
+  void setFoodCart(Cart _foodCart) {
+    print('setting cart${_foodCart == null ? ' (null)' : ', marketCart id: ${_foodCart.id}'}, products count: ${_foodCart.products.length}');
+    foodCart = _foodCart;
+    foodCartProducts = _foodCart.products == null ? [] : _foodCart.products;
+    clearRequestedMoreThanAvailableQuantity();
+  }
+
+  bool get noMarketCart =>
+      marketCart == null || marketCart.id == null || marketCart.total.raw == null || marketCart.total.raw == 0.0 || marketCartProducts == null || marketCart.productsCount == 0;
+
+  bool get noFoodCart =>
+      foodCart == null || foodCart.id == null || foodCart.total.raw == null || foodCart.total.raw == 0.0 || marketCartProducts == null || foodCart.productsCount == 0;
 
   int getProductQuantity(int productId) {
-    if (cart != null && cartProducts != null && cartProducts.length != 0) {
-      CartProduct cartProduct = cartProducts.firstWhere((cartProduct) => cartProduct.product.id == productId, orElse: () => null);
+    if (marketCart != null && marketCartProducts != null && marketCartProducts.length != 0) {
+      CartProduct cartProduct = marketCartProducts.firstWhere((cartProduct) => cartProduct.product.id == productId, orElse: () => null);
       return cartProduct == null ? 0 : cartProduct.quantity;
     } else {
       return 0;
@@ -52,14 +58,14 @@ class CartProvider with ChangeNotifier {
     print('branch and chain ids from add remove products request:');
     print('${HomeProvider.branchId}, ${HomeProvider.chainId}');
     
-    if(cart == null || cart.id == null) {
-      print('No cart');
+    if(marketCart == null || marketCart.id == null) {
+      print('No marketCart');
       showToast(msg: 'An Error Occurred! Logging out...');
       appProvider.logout(clearSelectedAddress: true);
       return null;  
     }
     
-    final endpoint = 'carts/${cart.id}/products/adjust-quantity';
+    final endpoint = 'carts/${marketCart.id}/products/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
       'chain_id': HomeProvider.chainId,
@@ -70,7 +76,7 @@ class CartProvider with ChangeNotifier {
     isLoadingAddRemoveRequest = true;
 
     requestedMoreThanAvailableQuantity[product.id] = false;
-    List<CartProduct> _oldCartProducts = cartProducts;
+    List<CartProduct> _oldCartProducts = marketCartProducts;
     int oldProductQuantity = getProductQuantity(product.id);
     if (!isAdding && oldProductQuantity == 0) {
       return 0;
@@ -83,18 +89,18 @@ class CartProvider with ChangeNotifier {
             : oldProductQuantity - 1;
 
     if (!isAdding && oldProductQuantity == 1) {
-      cartProducts = cartProducts.where((cartProduct) => cartProduct.product.id != product.id).toList();
+      marketCartProducts = marketCartProducts.where((cartProduct) => cartProduct.product.id != product.id).toList();
       notifyListeners();
     } else if (oldProductQuantity == 0) {
       CartProduct _newTempCartProduct = CartProduct(
         product: product,
         quantity: requestedProductQuantity,
       );
-      cartProducts.add(_newTempCartProduct);
+      marketCartProducts.add(_newTempCartProduct);
       notifyListeners();
     } else {
-      int requestedCartProductIndex = cartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
-      cartProducts[requestedCartProductIndex].quantity = requestedProductQuantity;
+      int requestedCartProductIndex = marketCartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
+      marketCartProducts[requestedCartProductIndex].quantity = requestedProductQuantity;
       notifyListeners();
     }
 
@@ -107,7 +113,7 @@ class CartProvider with ChangeNotifier {
     isLoadingAddRemoveRequest = false;
     if (responseData == 401) {
       //Sending authenticated request without logging in!
-      cartProducts = _oldCartProducts;
+      marketCartProducts = _oldCartProducts;
       notifyListeners();
       showToast(msg: 'You need to log in first!');
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
@@ -119,36 +125,33 @@ class CartProvider with ChangeNotifier {
     if (addRemoveProductDataResponse.status == 422) {
       requestedMoreThanAvailableQuantity[product.id] = true;
       int productAvailableQuantity = addRemoveProductDataResponse.cartData.availableQuantity;
-      int requestedCartProductIndex = cartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
-      cartProducts[requestedCartProductIndex].quantity = productAvailableQuantity;
+      int requestedCartProductIndex = marketCartProducts.indexWhere((cartProduct) => cartProduct.product.id == product.id);
+      marketCartProducts[requestedCartProductIndex].quantity = productAvailableQuantity;
       notifyListeners();
       showToast(msg: 'There are only $productAvailableQuantity available ${product.title}');
       return productAvailableQuantity;
     }
 
     if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
-      cartProducts = _oldCartProducts;
+      marketCartProducts = _oldCartProducts;
       notifyListeners();
       throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
     }
 
-    cart = addRemoveProductDataResponse.cartData.cart;
-    cartTotal = cart.total.formatted;
-    doubleCartTotal = cart.total.raw;
-    cartProductsCount = cart.productsCount > 0 ? cart.productsCount : 0;
+    marketCart = addRemoveProductDataResponse.cartData.cart;
     notifyListeners();
 
     return getProductQuantity(product.id);
   }
 
   void clearRequestedMoreThanAvailableQuantity() {
-    if (cartProducts != null && cartProducts.length > 0) {
-      cartProducts.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
+    if (marketCartProducts != null && marketCartProducts.length > 0) {
+      marketCartProducts.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
     }
   }
 
   Future<void> clearCart(AppProvider appProvider) async {
-    final endpoint = 'carts/${cart.id}/delete';
+    final endpoint = 'carts/${marketCart.id}/delete';
     clearRequestedMoreThanAvailableQuantity();
     isLoadingClearCartRequest = true;
     notifyListeners();

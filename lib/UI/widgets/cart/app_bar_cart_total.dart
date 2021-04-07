@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/market/cart_page.dart';
+import 'package:tiptop_v2/UI/pages/food/food_cart_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_cart_page.dart';
+import 'package:tiptop_v2/UI/widgets/cart/animated_cart_total.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
-import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AppBarCartTotal extends StatelessWidget {
   final bool isLoadingHomeData;
@@ -20,77 +17,24 @@ class AppBarCartTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<CartProvider, HomeProvider, AppProvider>(
       builder: (c, cartProvider, homeProvider, appProvider, _) {
-        bool noCart = cartProvider.noCart || homeProvider.homeDataRequestError;
+        bool hideMarketCart = isLoadingHomeData || cartProvider.noMarketCart || homeProvider.homeDataRequestError;
+        bool hideFoodCart = isLoadingHomeData || cartProvider.noFoodCart || homeProvider.homeDataRequestError;
 
-        return AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: isLoadingHomeData || noCart ? 0 : 1,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).pushNamed(CartPage.routeName);
-            },
-            child: Container(
-              width: 130,
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: Stack(
-                children: [
-                  Positioned(
-                    height: 33,
-                    width: 130,
-                    bottom: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
-                        color: AppColors.primary,
-                      ),
-                      child: isLoadingHomeData || noCart
-                          ? Text('')
-                          : cartProvider.isLoadingAddRemoveRequest
-                              ? SpinKitThreeBounce(
-                                  color: AppColors.white,
-                                  size: 20,
-                                )
-                              //Todo: convert to Html widget
-                              : Text(
-                                  cartProvider.cartTotal,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.visible,
-                                  style: cartProvider.cartTotal != null && cartProvider.cartTotal.length > 12
-                                      ? AppTextStyles.subtitleXxsWhite
-                                      : AppTextStyles.subtitleXsWhiteBold,
-                                  textAlign: TextAlign.center,
-                                ),
-                    ),
-                  ),
-                  Positioned(
-                    height: 33,
-                    bottom: 10,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: isLoadingHomeData || noCart ? 130 : 30,
-                      decoration: BoxDecoration(
-                        borderRadius: isLoadingHomeData || noCart
-                            ? BorderRadius.circular(8)
-                            : BorderRadius.only(
-                                topLeft: Radius.circular(appProvider.isRTL ? 0 : 8),
-                                bottomLeft: Radius.circular(appProvider.isRTL ? 0 : 8),
-                                topRight: Radius.circular(appProvider.isRTL ? 8 : 0),
-                                bottomRight: Radius.circular(appProvider.isRTL ? 8 : 0),
-                              ),
-                        color: AppColors.white,
-                      ),
-                      child: AppIcons.icon(LineAwesomeIcons.shopping_cart),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return homeProvider.channelIsMarket
+            ? AnimatedCartTotal(
+                isRTL: appProvider.isRTL,
+                hideCart: hideMarketCart,
+                route: MarketCartPage.routeName,
+                isLoadingAddRemoveRequest: cartProvider.isLoadingAddRemoveRequest,
+                cartTotal: hideMarketCart ? '' : cartProvider.marketCart.total.formatted,
+              )
+            : AnimatedCartTotal(
+                isRTL: appProvider.isRTL,
+                hideCart: hideFoodCart,
+                route: FoodCartPage.routeName,
+                isLoadingAddRemoveRequest: cartProvider.isLoadingAddRemoveRequest,
+                cartTotal: hideFoodCart ? '' : cartProvider.foodCart.total.formatted,
+              );
       },
     );
   }

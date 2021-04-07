@@ -32,6 +32,8 @@ class HomeProvider with ChangeNotifier {
 
   String selectedChannel = 'grocery';
 
+  bool get channelIsMarket => selectedChannel == 'grocery';
+
   void setSelectedChannel(String _channel) {
     selectedChannel = _channel;
     print('Selected channel: $selectedChannel');
@@ -74,7 +76,7 @@ class HomeProvider with ChangeNotifier {
     homeDataRequestError = false;
     marketNoBranchFound = false;
     foodNoBranchFound = false;
-    // try {
+    try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
         body: body,
@@ -88,11 +90,11 @@ class HomeProvider with ChangeNotifier {
       }
       setHomeData(cartProvider, responseData["data"]);
       notifyListeners();
-/*    } catch (e) {
+    } catch (e) {
       homeDataRequestError = true;
       notifyListeners();
       throw e;
-    }*/
+    }
   }
 
   void setHomeData(CartProvider cartProvider, data) {
@@ -124,7 +126,7 @@ class HomeProvider with ChangeNotifier {
       }
 
       if (foodHomeData.cart != null) {
-        // cartProvider.setFoodCart(foodHomeData.cart);
+        cartProvider.setFoodCart(foodHomeData.cart);
       }
     }
   }

@@ -59,24 +59,24 @@ class AddressSelectButton extends StatelessWidget {
           height: 70,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: Container(
-                  width: screenSize.width * 0.2,
-                  color: AppColors.primary,
-                  alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
-                  padding: EdgeInsets.only(
-                    right: appDir == 'ltr' ? 17 : 0,
-                    left: appDir == 'ltr' ? 0 : 17,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'ETA',
-                        style: AppTextStyles.subtitleWhite,
-                      ),
-                      const SizedBox(height: 5),
-                      if (!showSelectAddress && hasETA)
+              if (!showSelectAddress && hasETA && estimatedArrivalTime != null)
+                Positioned.fill(
+                  child: Container(
+                    width: screenSize.width * 0.2,
+                    color: AppColors.primary,
+                    alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                      right: appDir == 'ltr' ? 17 : 0,
+                      left: appDir == 'ltr' ? 0 : 17,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'ETA',
+                          style: AppTextStyles.subtitleWhite,
+                        ),
+                        const SizedBox(height: 5),
                         RichText(
                           overflow: TextOverflow.visible,
                           text: TextSpan(
@@ -93,10 +93,10 @@ class AddressSelectButton extends StatelessWidget {
                           ),
                           maxLines: 1,
                         ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               Positioned(
                 left: appDir == 'ltr' ? 0 : null,
                 right: appDir == 'ltr' ? null : 0,

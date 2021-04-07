@@ -22,7 +22,7 @@ class OrderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: cartProvider.noCart
+      onTap: cartProvider.noMarketCart
           ? null
           : () {
               if (submitAction != null) {

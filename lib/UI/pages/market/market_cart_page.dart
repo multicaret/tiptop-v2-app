@@ -13,8 +13,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-class CartPage extends StatelessWidget {
-  static const routeName = '/cart';
+class MarketCartPage extends StatelessWidget {
+  static const routeName = '/market-cart';
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class CartPage extends StatelessWidget {
             Expanded(
               child: ListView(
                 physics: AlwaysScrollableScrollPhysics(),
-                children: cartProvider.cartProducts
+                children: cartProvider.marketCartProducts
                     .map((cartProduct) => ListProductItem(
                           product: cartProduct.product,
                           quantity: cartProduct.quantity,
@@ -62,7 +62,7 @@ class CartPage extends StatelessWidget {
             ),
             OrderButton(
               cartProvider: cartProvider,
-              total: cartProvider.cartTotal,
+              total: cartProvider.marketCart.total.formatted,
               isRTL: appProvider.isRTL,
             ),
           ],

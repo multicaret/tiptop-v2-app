@@ -52,7 +52,7 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {
-    if (!cartProvider.noCart) {
+    if (!cartProvider.noMarketCart) {
       //User wants to change address while he has filled cart
       showDialog(
         context: context,
@@ -93,7 +93,7 @@ class _AddressesPageState extends State<AddressesPage> {
       ),
     );
     if (response != null && response) {
-      if(!cartProvider.noCart) {
+      if(!cartProvider.noMarketCart) {
         await cartProvider.clearCart(appProvider);
         print('cart cleared as well :( ');
       }
