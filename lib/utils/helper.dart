@@ -12,6 +12,8 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
+import 'constants.dart';
+
 void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.BOTTOM}) {
   Fluttertoast.showToast(
       msg: msg,
@@ -95,6 +97,10 @@ double getCartControlsWidth(BuildContext context, {int colCount = 3}) {
 
 double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
   return getCartControlsWidth(context, colCount: colCount) / 3;
+}
+
+double getProductGridItemHeight(BuildContext context) {
+  return getColItemHeight(3, context) + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
 }
 
 bool isCallable(v) => v is Function;
