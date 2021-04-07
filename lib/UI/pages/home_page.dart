@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/food/food_categories_and_branches.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -9,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/UI/no_content_view.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_categories_and_branches.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/home_categories_grid.dart';
 import 'package:tiptop_v2/dummy_data.dart';

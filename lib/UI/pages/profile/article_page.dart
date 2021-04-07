@@ -10,12 +10,14 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ArticlePage extends StatefulWidget {
   static const routeName = '/article';
+
   @override
   _ArticlePageState createState() => _ArticlePageState();
 }
 
 class _ArticlePageState extends State<ArticlePage> {
   Article article;
+
   @override
   Widget build(BuildContext context) {
     final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;

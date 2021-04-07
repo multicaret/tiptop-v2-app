@@ -49,7 +49,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
       return;
     }
     regionsDropDownItems = otpProvider.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
-    if(formData['region_id'] != null) {
+    if (formData['region_id'] != null) {
       List<City> cities = otpProvider.cities.where((city) => city.region.id == formData['region_id']).toList();
       citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
     }

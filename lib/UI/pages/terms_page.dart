@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
-import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/models/static_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
