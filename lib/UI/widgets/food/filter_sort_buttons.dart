@@ -3,13 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
 class FilterSortButtons extends StatelessWidget {
   final Function onSortButtonPressed;
   final Function onFilterButtonPressed;
+  final List<Category> foodCategories;
 
-  FilterSortButtons({this.onSortButtonPressed, this.onFilterButtonPressed});
+  FilterSortButtons({
+    this.onSortButtonPressed,
+    this.onFilterButtonPressed,
+    @required this.foodCategories,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class FilterSortButtons extends StatelessWidget {
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
                   useRootNavigator: true,
-                  builder: (context) => FilterBottomSheet(),
+                  builder: (context) => FilterBottomSheet(foodCategories: foodCategories),
                 );
               },
               child: Row(

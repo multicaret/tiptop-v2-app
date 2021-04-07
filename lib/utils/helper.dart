@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -171,4 +172,18 @@ Alert appAlert({BuildContext context, String title, String description}) {
     title: title,
     desc: description,
   );
+}
+
+String getHttpExceptionMessage(responseData) {
+  String exceptionMessage = '';
+  if (responseData["message"] != null) {
+    exceptionMessage += 'Message: ' + responseData["message"];
+  }
+  if (responseData["file"] != null) {
+    exceptionMessage += '\nFile: ' + responseData["file"];
+  }
+  if (responseData["trace"] != null) {
+    exceptionMessage += '\nTrace: ' + '${responseData["trace"]}';
+  }
+  return exceptionMessage.isNotEmpty ? exceptionMessage : 'Unknown Error';
 }

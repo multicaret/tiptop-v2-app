@@ -18,7 +18,7 @@ class CartProvider with ChangeNotifier {
   bool isLoadingAddRemoveRequest = false;
   bool isLoadingClearCartRequest = false;
 
-  void setCart(Cart _cart) {
+  void setMarketCart(Cart _cart) {
     print('setting cart${_cart == null ? ' (null)' : ', cart id: ${_cart.id}'}, products count: ${_cart.products.length}');
     cart = _cart;
     cartTotal = _cart.total.formatted;

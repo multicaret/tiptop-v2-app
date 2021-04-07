@@ -6,11 +6,16 @@ import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
 import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FilterBottomSheet extends StatefulWidget {
+  final List<Category> foodCategories;
+
+  FilterBottomSheet({@required this.foodCategories});
+
   @override
   _FilterBottomSheetState createState() => _FilterBottomSheetState();
 }
@@ -115,7 +120,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           child: Text(Translations.of(context).get('Categories'), style: AppTextStyles.body50),
         ),
         CategoriesSlider(
-          categories: dummyCategories,
+          categories: widget.foodCategories,
           isRTL: appProvider.isRTL,
           selectedCategoryId: filterData['selected_category_id'],
           setSelectedCategoryId: (_selectedCategoryId) => setState(() => filterData['selected_category_id'] = _selectedCategoryId),

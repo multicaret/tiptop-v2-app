@@ -78,7 +78,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilt app wrapper');
+    // print('Rebuilt app wrapper');
     return WillPopScope(
       onWillPop: () async {
         return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;

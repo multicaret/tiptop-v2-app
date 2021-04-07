@@ -20,7 +20,7 @@ class AppBarCartTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<CartProvider, HomeProvider, AppProvider>(
       builder: (c, cartProvider, homeProvider, appProvider, _) {
-        bool noCart = cartProvider.noCart || homeProvider.noBranchFound || homeProvider.homeDataRequestError;
+        bool noCart = cartProvider.noCart || homeProvider.homeDataRequestError;
 
         return AnimatedOpacity(
           duration: const Duration(milliseconds: 300),

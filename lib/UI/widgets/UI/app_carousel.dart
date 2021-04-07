@@ -111,6 +111,7 @@ class _AppCarouselState extends State<AppCarousel> {
         (i) => CachedNetworkImage(
               imageUrl: widget.images[i],
               fit: BoxFit.cover,
+              width: double.infinity,
             ));
   }
 }

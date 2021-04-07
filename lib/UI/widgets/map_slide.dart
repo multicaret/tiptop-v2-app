@@ -40,8 +40,8 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
     if (_isInit) {
       homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      centerLat = (HomeProvider.branchLat + AppProvider.latitude) / 2;
-      centerLong = (HomeProvider.branchLong + AppProvider.longitude) / 2;
+      centerLat = (HomeProvider.marketBranchLat + AppProvider.latitude) / 2;
+      centerLong = (HomeProvider.marketBranchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
     }
     _isInit = false;
@@ -94,7 +94,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                             Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             Expanded(
                               child: Html(
-                                data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
+                                data: """${homeProvider.marketHomeData.branch.minimumOrder.formatted}""",
                                 style: {"body": AppTextStyles.htmlXsBold},
                               ),
                             ),
@@ -109,7 +109,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                             Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             Expanded(
                               child: Html(
-                                data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
+                                data: """${homeProvider.marketHomeData.branch.fixedDeliveryFee.formatted}""",
                                 style: {"body": AppTextStyles.htmlXsBold},
                               ),
                             ),
@@ -136,7 +136,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
     _mapController = controller;
     _controller.complete(controller);
 
-    LatLng branchLatLng = LatLng(HomeProvider.branchLat, HomeProvider.branchLong);
+    LatLng branchLatLng = LatLng(HomeProvider.marketBranchLat, HomeProvider.marketBranchLong);
     Uint8List branchMarkerIconBytes = await getBytesFromAsset(
       'assets/images/tiptop-marker-icon.png',
       targetWidth: 150,

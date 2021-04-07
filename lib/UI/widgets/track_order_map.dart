@@ -16,7 +16,7 @@ class _TrackOrderMapState extends State<TrackOrderMap> {
   double centerLong;
 
   double defaultZoom = 12.0;
-  LatLng initCameraPosition = LatLng((HomeProvider.branchLat + AppProvider.latitude) / 2, (HomeProvider.branchLong + AppProvider.longitude) / 2);
+  LatLng initCameraPosition = LatLng((HomeProvider.marketBranchLat + AppProvider.latitude) / 2, (HomeProvider.marketBranchLong + AppProvider.longitude) / 2);
 
   Marker homeMarker;
   Marker marketMarker;
@@ -48,7 +48,7 @@ class _TrackOrderMapState extends State<TrackOrderMap> {
         markerId: MarkerId('Market'),
         draggable: false,
         icon: BitmapDescriptor.fromBytes(marketMarkerIconBytes),
-        position: LatLng(HomeProvider.branchLat, HomeProvider.branchLong),
+        position: LatLng(HomeProvider.marketBranchLat, HomeProvider.marketBranchLong),
       );
       // add marker
       allMarkers.add(homeMarker);

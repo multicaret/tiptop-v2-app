@@ -1,33 +1,8 @@
-import 'dart:convert';
-
 import 'package:tiptop_v2/models/models.dart';
 
 import 'cart.dart';
 import 'category.dart';
 import 'order.dart';
-
-HomeDataResponse homeDataResponseFromJson(String str) => HomeDataResponse.fromJson(json.decode(str));
-
-class HomeDataResponse {
-  HomeDataResponse({
-    this.homeData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  HomeData homeData;
-  dynamic errors;
-  String message;
-  int status;
-
-  factory HomeDataResponse.fromJson(Map<String, dynamic> json) => HomeDataResponse(
-        homeData: json["data"] == null ? null : HomeData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-}
 
 class HomeData {
   HomeData({
@@ -61,7 +36,7 @@ class HomeData {
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
         distance: json["distance"],
         hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
-        categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
+        categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
       );
 }
 

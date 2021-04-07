@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -42,12 +43,12 @@ class AddressSelectButton extends StatelessWidget {
     return Consumer2<HomeProvider, AddressesProvider>(
       builder: (c, homeProvider, addressesProvider, _) {
         bool showSelectAddress = isLoadingHomeData ||
-            homeProvider.noBranchFound ||
             homeProvider.homeDataRequestError ||
-            homeProvider.estimatedArrivalTime == null ||
             !addressesProvider.addressIsSelected ||
             addressesProvider.selectedAddress == null ||
             !appProvider.isAuth;
+        EstimatedArrivalTime estimatedArrivalTime = homeProvider.getEstimateArrivalTime();
+        bool etaIsVisible = estimatedArrivalTime != null && forceAddressView || showSelectAddress || !hasETA;
 
         return Container(
           decoration: BoxDecoration(
@@ -82,10 +83,10 @@ class AddressSelectButton extends StatelessWidget {
                             style: AppTextStyles.bodyWhiteBold,
                             children: [
                               TextSpan(
-                                text: homeProvider.estimatedArrivalTime.value,
+                                text: estimatedArrivalTime.value,
                               ),
                               TextSpan(
-                                text: homeProvider.estimatedArrivalTime.unit,
+                                text: estimatedArrivalTime.unit,
                                 style: AppTextStyles.subtitleXsWhiteBold,
                               )
                             ],
@@ -110,7 +111,7 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: forceAddressView || showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
+                  width: etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null

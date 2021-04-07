@@ -66,7 +66,7 @@ final List<Restaurant> dummyRestaurants = [
   ),
 ];
 
-List<Category> dummyCategories = [
+List<Category> dummyFoodCategories = [
   Category(
     id: 1,
     title: 'Test Category 1',

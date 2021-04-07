@@ -21,7 +21,7 @@ class ChannelsButtons extends StatelessWidget {
       'image': 'assets/images/tiptop-logo-title-yellow.png',
     },
     {
-      'id': 'market',
+      'id': 'grocery',
       'title': 'Market',
       'image': 'assets/images/tiptop-logo-title-yellow.png',
     },
