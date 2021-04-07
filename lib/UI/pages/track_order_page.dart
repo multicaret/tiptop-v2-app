@@ -51,6 +51,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             addressKindIcon: order.address.kind.icon,
             addressKindTitle: order.address.kind.title,
             addressText: order.address.address1,
+            forceAddressView: true,
           ),
           Expanded(
             child: Stack(

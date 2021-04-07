@@ -42,8 +42,7 @@ class AddressSelectButton extends StatelessWidget {
 
     return Consumer2<HomeProvider, AddressesProvider>(
       builder: (c, homeProvider, addressesProvider, _) {
-        bool showSelectAddress = isLoadingHomeData ||
-            homeProvider.homeDataRequestError ||
+        bool showSelectAddress = homeProvider.homeDataRequestError ||
             !addressesProvider.addressIsSelected ||
             addressesProvider.selectedAddress == null ||
             !appProvider.isAuth;
@@ -111,7 +110,7 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: etaIsVisible ? screenSize.width : screenSize.width * 0.75,
+                  width: isLoadingHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null
@@ -123,7 +122,7 @@ class AddressSelectButton extends StatelessWidget {
                               Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                             }
                           },
-                    child: showSelectAddress && !forceAddressView
+                    child: isLoadingHomeData || (showSelectAddress && !forceAddressView)
                         ? Container(
                             child: Text(
                               Translations.of(context).get('Select Address'),
