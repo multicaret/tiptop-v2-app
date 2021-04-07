@@ -18,7 +18,7 @@ class SearchProvider with ChangeNotifier {
     var searchResponse = SearchResponse.fromJson(responseData);
     if (searchResponse.search == null || searchResponse.status != 200) {
       notifyListeners();
-      throw HttpException(title: 'Error', message: searchResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: searchResponse.message);
     }
 
     terms = searchResponse.search.terms;

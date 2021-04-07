@@ -176,8 +176,11 @@ Alert appAlert({BuildContext context, String title, String description}) {
 
 String getHttpExceptionMessage(responseData) {
   String exceptionMessage = '';
+  if (responseData["status"] != null) {
+    exceptionMessage += '\nStatus Code: ' + responseData["status"];
+  }
   if (responseData["message"] != null) {
-    exceptionMessage += 'Message: ' + responseData["message"];
+    exceptionMessage += '\nMessage: ' + responseData["message"];
   }
   if (responseData["file"] != null) {
     exceptionMessage += '\nFile: ' + responseData["file"];

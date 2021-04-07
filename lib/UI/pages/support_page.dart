@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -29,7 +30,7 @@ class _SupportPageState extends State<SupportPage> {
     final responseData = await appProvider.get(endpoint: 'support');
     if (responseData["data"] == null || responseData["status"] != 200) {
       setState(() => _isLoading = false);
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: responseData["message"] ?? getHttpExceptionMessage(responseData));
     }
     phoneNumber = responseData["data"]["supportNumber"];
     setState(() => _isLoading = false);

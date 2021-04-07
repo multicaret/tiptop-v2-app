@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'app_provider.dart';
@@ -39,7 +40,7 @@ class OrdersProvider with ChangeNotifier {
     createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
 
     if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(title: 'Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+      throw HttpException(title: 'Http Exception Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     checkoutData = createCheckoutResponse.checkoutData;
@@ -88,7 +89,7 @@ class OrdersProvider with ChangeNotifier {
 
     submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
     if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(title: 'Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+      throw HttpException(title: 'Http Exception Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     submittedOrder = submitOrderResponse.submittedOrder;
@@ -114,7 +115,7 @@ class OrdersProvider with ChangeNotifier {
     previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
 
     if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: previousOrdersResponseData.message ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
     }
 
     previousOrders = previousOrdersResponseData.previousOrders;
@@ -129,7 +130,7 @@ class OrdersProvider with ChangeNotifier {
     final responseData = await appProvider.post(endpoint: endpoint, withToken: true);
 
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     isLoadingDeleteOrderRequest = false;
     notifyListeners();
@@ -143,7 +144,7 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
     if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     final availableIssuesArray = responseData["data"]["availableIssues"];
     orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
@@ -158,7 +159,7 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     await fetchAndSetPreviousOrders(appProvider);
     notifyListeners();
@@ -183,7 +184,7 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
     if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
 
     couponValidationResponseData = CouponValidationResponseData.fromJson(responseData["data"]);

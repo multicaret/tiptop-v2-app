@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'local_storage.dart';
@@ -65,7 +66,7 @@ class AddressesProvider with ChangeNotifier {
     createAddressResponseData = CreateAddressResponseData.fromJson(responseData);
 
     if (createAddressResponseData.createAddressData == null || createAddressResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: createAddressResponseData.message);
+      throw HttpException(title: 'Http Exception Error', message: createAddressResponseData.message);
     }
 
     createAddressData = createAddressResponseData.createAddressData;
@@ -84,7 +85,7 @@ class AddressesProvider with ChangeNotifier {
 
 
     if (addressesResponseData.addressesData == null || addressesResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: addressesResponseData.message);
+      throw HttpException(title: 'Http Exception Error', message: addressesResponseData.message);
     }
 
     addresses = addressesResponseData.addressesData.addresses;
@@ -105,7 +106,7 @@ class AddressesProvider with ChangeNotifier {
     }
 
     if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: responseData["message"] ?? getHttpExceptionMessage(responseData));
     }
 
     selectedAddress = Address.fromJson(responseData["data"]["address"]);
@@ -127,7 +128,7 @@ class AddressesProvider with ChangeNotifier {
       return 401;
     }
     if(responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     if(selectedAddress != null && selectedAddress.id == addressId) {
       print('😱😱😱😱 Ya Lahweeee you are deleting selected address');

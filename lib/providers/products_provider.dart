@@ -5,6 +5,7 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -25,7 +26,7 @@ class ProductsProvider with ChangeNotifier {
     productsWithCategoriesDataResponse = productDataResponseFromJson(json.encode(responseData));
 
     if (productsWithCategoriesDataResponse.categoryParentsData == null || productsWithCategoriesDataResponse.status != 200) {
-      throw HttpException(title: 'Error', message: productsWithCategoriesDataResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: productsWithCategoriesDataResponse.message);
     }
 
     categoryParentsData = productsWithCategoriesDataResponse.categoryParentsData;
@@ -46,7 +47,7 @@ class ProductsProvider with ChangeNotifier {
       searchedProductsDataResponse = ProductsResponse.fromJson(responseData);
       searchedProducts = searchedProductsDataResponse.data == null ? [] : searchedProductsDataResponse.data;
       if (searchedProductsDataResponse.status != 200) {
-        throw HttpException(title: 'Error', message: searchedProductsDataResponse.message);
+        throw HttpException(title: 'Http Exception Error', message: searchedProductsDataResponse.message);
       }
     } catch (e) {
       print('@e Error');
@@ -59,7 +60,7 @@ class ProductsProvider with ChangeNotifier {
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     //Todo: Add (|| responseData["status"] != 200)
     if (responseData["data"] == null) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'No Data!');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     product = Product.fromJson(responseData["data"]);
     notifyListeners();
@@ -84,7 +85,7 @@ class ProductsProvider with ChangeNotifier {
       return 401;
     }
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     notifyListeners();
   }
@@ -93,7 +94,7 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'profile/favorites';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
     if(responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
     notifyListeners();

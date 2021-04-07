@@ -135,7 +135,7 @@ class CartProvider with ChangeNotifier {
     if (addRemoveProductDataResponse.cartData == null || addRemoveProductDataResponse.status != 200) {
       marketCartProducts = _oldCartProducts;
       notifyListeners();
-      throw HttpException(title: 'Error', message: addRemoveProductDataResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: addRemoveProductDataResponse.message);
     }
 
     marketCart = addRemoveProductDataResponse.cartData.cart;
@@ -170,7 +170,7 @@ class CartProvider with ChangeNotifier {
     if (responseData["status"] != 200) {
       isLoadingClearCartRequest = true;
       notifyListeners();
-      throw HttpException(title: 'Error', message: responseData["message"]);
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
 
     isLoadingClearCartRequest = false;

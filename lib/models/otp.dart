@@ -4,38 +4,6 @@ import 'package:tiptop_v2/models/user.dart';
 
 import 'models.dart';
 
-OTPDataResponse otpFromJson(String str) => OTPDataResponse.fromJson(json.decode(str));
-
-String otpToJson(OTPDataResponse data) => json.encode(data.toJson());
-
-class OTPDataResponse {
-  OTPDataResponse({
-    this.otpData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  OTPData otpData;
-  String errors;
-  String message;
-  int status;
-
-  factory OTPDataResponse.fromJson(Map<String, dynamic> json) => OTPDataResponse(
-        otpData: json["data"] == null ? null : OTPData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": otpData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
-
 class OTPData {
   OTPData({
     this.deepLink,
@@ -53,38 +21,6 @@ class OTPData {
   Map<String, dynamic> toJson() => {
         "deeplink": deepLink,
         "reference": reference,
-      };
-}
-
-OTPValidationDataResponse otpValidationDataResponseFromJson(String str) => OTPValidationDataResponse.fromJson(json.decode(str));
-
-String otpValidationDataResponseToJson(OTPValidationDataResponse data) => json.encode(data.toJson());
-
-class OTPValidationDataResponse {
-  OTPValidationDataResponse({
-    this.otpValidationData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  OTPValidationData otpValidationData;
-  dynamic errors;
-  String message;
-  int status;
-
-  factory OTPValidationDataResponse.fromJson(Map<String, dynamic> json) => OTPValidationDataResponse(
-        otpValidationData: json["data"] == null ? null : OTPValidationData.fromJson(json["data"]),
-        errors: handleErrors(json["errors"]),
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": otpValidationData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
       };
 }
 
