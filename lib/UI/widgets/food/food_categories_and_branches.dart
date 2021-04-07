@@ -14,20 +14,20 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class FoodHomePage extends StatefulWidget {
+class FoodCategoriesAndBranches extends StatefulWidget {
   final HomeData foodHomeData;
   final bool isLoadingHomeData;
 
-  FoodHomePage({
+  FoodCategoriesAndBranches({
     @required this.foodHomeData,
     @required this.isLoadingHomeData,
   });
 
   @override
-  _FoodHomePageState createState() => _FoodHomePageState();
+  _FoodCategoriesAndBranchesState createState() => _FoodCategoriesAndBranchesState();
 }
 
-class _FoodHomePageState extends State<FoodHomePage> {
+class _FoodCategoriesAndBranchesState extends State<FoodCategoriesAndBranches> {
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
   final List<Map<String, dynamic>> _listTypes = [

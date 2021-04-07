@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/food/food_home_page.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_categories_and_branches.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                                               activeOrders: homeProvider.foodHomeData.activeOrders,
                                               totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
                                             ),
-                                          FoodHomePage(
+                                          FoodCategoriesAndBranches(
                                             foodHomeData: foodHomeData,
                                             isLoadingHomeData: isLoadingHomeData,
                                           ),
