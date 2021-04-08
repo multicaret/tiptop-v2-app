@@ -141,22 +141,30 @@ class Media {
   Media({
     this.logo,
     this.cover,
+    this.coverThumbnail,
+    this.coverFull,
     this.gallery,
   });
 
   String logo;
-  dynamic cover;
+  String cover;
+  String coverThumbnail;
+  String coverFull;
   List<Gallery> gallery;
 
   factory Media.fromJson(Map<String, dynamic> json) => Media(
         logo: json["logo"],
         cover: json["cover"],
+        coverThumbnail: json["coverThumbnail"],
+        coverFull: json["coverFull"],
         gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "logo": logo,
         "cover": cover,
+        "coverThumbnail": coverThumbnail,
+        "coverFull": coverFull,
         "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
       };
 }

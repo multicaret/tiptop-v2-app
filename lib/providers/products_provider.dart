@@ -8,7 +8,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
-  ProductsWithCategoriesDataResponse productsWithCategoriesDataResponse;
   ProductsResponse searchedProductsDataResponse;
   CategoryParentsData categoryParentsData;
   Category selectedParent;
@@ -22,13 +21,8 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'categories/$selectedParentCategoryId/products';
 
     final responseData = await AppProvider().get(endpoint: endpoint);
-    productsWithCategoriesDataResponse = productDataResponseFromJson(json.encode(responseData));
 
-    if (productsWithCategoriesDataResponse.categoryParentsData == null || productsWithCategoriesDataResponse.status != 200) {
-      throw HttpException(title: 'Http Exception Error', message: productsWithCategoriesDataResponse.message);
-    }
-
-    categoryParentsData = productsWithCategoriesDataResponse.categoryParentsData;
+    categoryParentsData = CategoryParentsData.fromJson(responseData["data"]);
     parents = categoryParentsData.parentCategories;
     selectedParent = categoryParentsData.selectedParentCategory;
     selectedParentChildCategories = selectedParent.childCategories;

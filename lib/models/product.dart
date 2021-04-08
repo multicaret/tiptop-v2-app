@@ -3,29 +3,6 @@ import 'dart:convert';
 import 'category.dart';
 import 'models.dart';
 
-ProductsWithCategoriesDataResponse productDataResponseFromJson(String str) => ProductsWithCategoriesDataResponse.fromJson(json.decode(str));
-
-class ProductsWithCategoriesDataResponse {
-  ProductsWithCategoriesDataResponse({
-    this.categoryParentsData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  CategoryParentsData categoryParentsData;
-  String errors;
-  String message;
-  int status;
-
-  factory ProductsWithCategoriesDataResponse.fromJson(Map<String, dynamic> json) => ProductsWithCategoriesDataResponse(
-        categoryParentsData: json["data"] == null ? null : CategoryParentsData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-}
-
 class CategoryParentsData {
   CategoryParentsData({
     this.selectedParentCategory,
