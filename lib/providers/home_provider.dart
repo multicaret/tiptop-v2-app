@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
@@ -10,6 +11,7 @@ import 'local_storage.dart';
 
 class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
+  List<Category> marketCategories = [];
   HomeData foodHomeData;
 
   static int branchId;
@@ -29,7 +31,7 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'food';
+  String selectedChannel = 'grocery';
 
   bool get channelIsMarket => selectedChannel == 'grocery';
 
@@ -113,6 +115,21 @@ class HomeProvider with ChangeNotifier {
         marketBranchLat = marketHomeData.branch.latitude;
         marketBranchLong = marketHomeData.branch.longitude;
       }
+
+      final _marketCategories = marketHomeData.categories;
+      marketCategories = _marketCategories.where((parentCategory) {
+        bool atLeastOneChildHasProducts = false;
+        if (parentCategory.hasChildren) {
+          final childCategories = parentCategory.childCategories;
+          childCategories.forEach((child) {
+            if (child.products.length > 0) {
+              atLeastOneChildHasProducts = true;
+              return;
+            }
+          });
+        }
+        return parentCategory.hasChildren && atLeastOneChildHasProducts;
+      }).toList();
 
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);

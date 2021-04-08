@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/product_page.dart';
+import 'package:tiptop_v2/UI/pages/market/product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';

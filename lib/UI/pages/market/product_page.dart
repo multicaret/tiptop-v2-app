@@ -14,9 +14,9 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import '../../UI/app_carousel.dart';
-import '../../UI/app_scaffold.dart';
-import '../../UI/formatted_price.dart';
+import '../../widgets/UI/app_carousel.dart';
+import '../../widgets/UI/app_scaffold.dart';
+import '../../widgets/UI/formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = '/product';

@@ -45,8 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   HomeData marketHomeData;
   HomeData foodHomeData;
-  List<Category> marketCategories = [];
-  List<Category> foodCategories = [];
   List<Slide> marketSlides = [];
   List<Slide> foodSlides = [];
 
@@ -72,7 +70,6 @@ class _HomePageState extends State<HomePage> {
       hideMarketContent = homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
       if (!hideMarketContent) {
         marketHomeData = homeProvider.marketHomeData;
-        marketCategories = marketHomeData.categories;
         marketSlides = marketHomeData.slides;
         hasActiveMarketOrders =
             appProvider.isAuth && homeProvider.marketHomeData.activeOrders != null && homeProvider.marketHomeData.activeOrders.length > 0;
@@ -165,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                                           totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
                                         ),
                                       MarketHomeCategoriesGrid(
-                                        categories: marketCategories,
+                                        categories: homeProvider.marketCategories,
                                         fetchAndSetHomeData: fetchAndSetHomeData,
                                         isLoadingHomeData: isLoadingHomeData,
                                       ),

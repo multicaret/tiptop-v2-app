@@ -32,7 +32,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
 import 'UI/pages/faq_page.dart';
 import 'UI/pages/food/restaurants/restaurants_page.dart';
-import 'UI/widgets/market/products/product_page.dart';
+import 'UI/pages/market/product_page.dart';
 
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
