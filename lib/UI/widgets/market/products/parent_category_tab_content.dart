@@ -118,24 +118,22 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             onRefresh: _refreshData,
             child: _isRefreshingData
                 ? Center(child: AppLoader())
-                : ListView(
+                : ListView.builder(
                     controller: productsScrollController,
-                    children: List.generate(
-                      widget.children.length,
-                      (i) => ScrollableVerticalContent(
-                        index: i,
-                        count: widget.children.length,
-                        child: widget.children[i],
-                        scrollController: productsScrollController,
-                        //Fired when a child category is scrolled into view
-                        scrollSpyAction: (index) {
-                          selectedChildCategoryIdNotifier.value = widget.children[index].id;
-                          scrollToCategory(index);
-                        },
-                        categoriesHeights: childCategoriesHeights,
-                        singleTabContent: ProductsGridView(products: widget.children[i].products),
-                        pageTopOffset: 0,
-                      ),
+                    itemCount: widget.children.length,
+                    itemBuilder: (c, i) => ScrollableVerticalContent(
+                      index: i,
+                      count: widget.children.length,
+                      child: widget.children[i],
+                      scrollController: productsScrollController,
+                      //Fired when a child category is scrolled into view
+                      scrollSpyAction: (index) {
+                        selectedChildCategoryIdNotifier.value = widget.children[index].id;
+                        scrollToCategory(index);
+                      },
+                      categoriesHeights: childCategoriesHeights,
+                      singleTabContent: ProductsGridView(products: widget.children[i].products),
+                      pageTopOffset: 0,
                     ),
                   ),
           ),
