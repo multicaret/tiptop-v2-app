@@ -58,7 +58,6 @@ class _ProductPageState extends State<ProductPage> {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       product = data["product"];
       hasControls = data["has_controls"];
-      productIsFavorited = product.isFavorited;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       _fetchAndSetProduct();
