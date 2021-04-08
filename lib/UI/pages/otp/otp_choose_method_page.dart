@@ -119,6 +119,12 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppScaffold(
       bgColor: AppColors.white,
