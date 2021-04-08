@@ -81,12 +81,15 @@ class _HomePageState extends State<HomePage> {
         activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
       }
     } else {
-      foodHomeData = homeProvider.foodHomeData;
-      foodCategories = dummyFoodCategories;
-      foodSlides = foodHomeData.slides;
-      hasActiveFoodOrders = appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
-      activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
-      // hideFoodContent = homeProvider.homeDataRequestError || homeProvider.foodNoBranchFound;
+      hideFoodContent = homeProvider.homeDataRequestError || homeProvider.foodNoRestaurantFound;
+      if (!hideFoodContent) {
+        foodHomeData = homeProvider.foodHomeData;
+        foodCategories = dummyFoodCategories;
+        foodSlides = foodHomeData.slides;
+        hasActiveFoodOrders =
+            appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
+        activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
+      }
     }
   }
 

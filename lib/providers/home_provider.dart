@@ -20,7 +20,7 @@ class HomeProvider with ChangeNotifier {
 
   bool homeDataRequestError = false;
   bool marketNoBranchFound = false;
-  bool foodNoBranchFound = false;
+  bool foodNoRestaurantFound = false;
 
   static double marketBranchLat;
   static double marketBranchLong;
@@ -73,7 +73,7 @@ class HomeProvider with ChangeNotifier {
 
     homeDataRequestError = false;
     marketNoBranchFound = false;
-    foodNoBranchFound = false;
+    foodNoRestaurantFound = false;
     try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
@@ -108,8 +108,8 @@ class HomeProvider with ChangeNotifier {
       }
     } else {
       foodHomeData = HomeData.fromJson(data);
-      if (foodHomeData.branch == null) {
-        foodNoBranchFound = true;
+      if (foodHomeData.restaurants.length == 0) {
+        foodNoRestaurantFound = true;
       } else {
         branchId = foodHomeData.branch.id;
         if (foodHomeData.branch.chain != null) {
