@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
@@ -7,7 +8,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class FoodCategoryItem extends StatefulWidget {
+class FoodCategoryItem extends StatelessWidget {
   final Category category;
   final int index;
   final int count;
@@ -27,23 +28,14 @@ class FoodCategoryItem extends StatefulWidget {
   });
 
   @override
-  _FoodCategoryItemState createState() => _FoodCategoryItemState();
-}
-
-class _FoodCategoryItemState extends State<FoodCategoryItem> {
-  bool isSelected = false;
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.isRTL
-          ? EdgeInsets.only(
-              right: widget.index == 0 ? screenHorizontalPadding : 0, left: widget.index == widget.count - 1 ? screenHorizontalPadding : 0)
-          : EdgeInsets.only(
-              left: widget.index == 0 ? screenHorizontalPadding : 0, right: widget.index == widget.count - 1 ? screenHorizontalPadding : 0),
+      padding: isRTL
+          ? EdgeInsets.only(right: index == 0 ? screenHorizontalPadding : 0, left: index == count - 1 ? screenHorizontalPadding : 0)
+          : EdgeInsets.only(left: index == 0 ? screenHorizontalPadding : 0, right: index == count - 1 ? screenHorizontalPadding : 0),
       child: InkWell(
-        onTap: widget.isSelectable
-            ? widget.onTap
+        onTap: isSelectable
+            ? onTap
             : () {
                 Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
               },
@@ -56,8 +48,8 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(
-                    'assets/images/food.jpg',
+                  image: CachedNetworkImageProvider(
+                    category.thumbnail,
                   ),
                 ),
                 color: AppColors.primary50,
@@ -76,13 +68,13 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
                   ),
                 ),
                 child: Text(
-                  widget.category.title,
+                  category.title,
                   style: AppTextStyles.subtitleWhite,
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            widget.isSelected
+            isSelected
                 ? Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
