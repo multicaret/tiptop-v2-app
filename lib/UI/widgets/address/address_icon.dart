@@ -38,7 +38,8 @@ class AddressIcon extends StatelessWidget {
           : CachedNetworkImage(
               imageUrl: icon,
               width: 37,
-              placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+              height: 37,
+              placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 20),
             ),
     );
   }
