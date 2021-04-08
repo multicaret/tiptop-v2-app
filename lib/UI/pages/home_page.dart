@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/no_content_view.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
@@ -11,7 +10,6 @@ import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
-import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -71,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   void _setHomeData() {
     if (homeProvider.channelIsMarket) {
-      hideMarketContent = homeProvider.homeDataRequestError || homeProvider.marketNoBranchFound;
+      hideMarketContent = homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
       if (!hideMarketContent) {
         marketHomeData = homeProvider.marketHomeData;
         marketCategories = marketHomeData.categories;
@@ -81,10 +79,10 @@ class _HomePageState extends State<HomePage> {
         activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
       }
     } else {
-      hideFoodContent = homeProvider.homeDataRequestError || homeProvider.foodNoRestaurantFound;
+      hideFoodContent = homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
       if (!hideFoodContent) {
+        print('Setting food data in home page!');
         foodHomeData = homeProvider.foodHomeData;
-        foodCategories = dummyFoodCategories;
         foodSlides = foodHomeData.slides;
         hasActiveFoodOrders =
             appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
@@ -118,6 +116,7 @@ class _HomePageState extends State<HomePage> {
     return AppScaffold(
       appBarActions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: isLoadingHomeData)] : null,
       bodyPadding: const EdgeInsets.all(0),
+      hasOverlayLoader: isLoadingHomeData,
       body: Column(
         children: [
           AddressSelectButton(isLoadingHomeData: isLoadingHomeData),
@@ -141,21 +140,20 @@ class _HomePageState extends State<HomePage> {
                                 : foodSlides.map((slide) => slide.image).toList(),
                             autoplayDuration: const Duration(milliseconds: 300),
                             autoPlayInterval: const Duration(seconds: 7),
-                            // mapWidget: MapSlide(selectedAddress: addressesProvider.selectedAddress),
                           ),
                     ChannelsButtons(
                       currentView: homeProvider.selectedChannel,
-                      changeView: (value) => channelButtonAction(value),
+                      onPressed: (value) => isLoadingHomeData ? {} : channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
                     isLoadingHomeData
-                        ? const AppLoader()
+                        ? Container()
                         : homeProvider.channelIsMarket
                             ? hideMarketContent
                                 ? NoContentView(
                                     text: homeProvider.marketNoBranchFound
                                         ? 'No Branch Found'
-                                        : homeProvider.homeDataRequestError
+                                        : homeProvider.marketHomeDataRequestError
                                             ? 'An error occurred! Please try again later'
                                             : '')
                                 : Column(
@@ -174,20 +172,24 @@ class _HomePageState extends State<HomePage> {
                                     ],
                                   )
                             : homeProvider.selectedChannel == 'food'
-                                ? Column(
-                                    children: [
-                                      if (hasActiveFoodOrders)
-                                        HomeLiveTracking(
-                                          isRTL: appProvider.isRTL,
-                                          activeOrders: homeProvider.foodHomeData.activeOrders,
-                                          totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
-                                        ),
-                                      FoodHomeContent(
-                                        foodHomeData: foodHomeData,
-                                        isLoadingHomeData: isLoadingHomeData,
-                                      ),
-                                    ],
-                                  )
+                                ? hideFoodContent
+                                    ? NoContentView(
+                                        text: homeProvider.foodNoRestaurantFound
+                                            ? 'No Branch Found'
+                                            : homeProvider.foodHomeDataRequestError
+                                                ? 'An error occurred! Please try again later'
+                                                : '')
+                                    : Column(
+                                        children: [
+                                          if (hasActiveFoodOrders)
+                                            HomeLiveTracking(
+                                              isRTL: appProvider.isRTL,
+                                              activeOrders: homeProvider.foodHomeData.activeOrders,
+                                              totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
+                                            ),
+                                          FoodHomeContent(foodHomeData: foodHomeData),
+                                        ],
+                                      )
                                 : Container(),
                   ],
                 ),

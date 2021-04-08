@@ -17,8 +17,8 @@ class AppBarCartTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<CartProvider, HomeProvider, AppProvider>(
       builder: (c, cartProvider, homeProvider, appProvider, _) {
-        bool hideMarketCart = isLoadingHomeData || cartProvider.noMarketCart || homeProvider.homeDataRequestError;
-        bool hideFoodCart = isLoadingHomeData || cartProvider.noFoodCart || homeProvider.homeDataRequestError;
+        bool hideMarketCart = isLoadingHomeData || cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError;
+        bool hideFoodCart = isLoadingHomeData || cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError;
 
         return homeProvider.channelIsMarket
             ? AnimatedCartTotal(

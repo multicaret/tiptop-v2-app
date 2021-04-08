@@ -26,8 +26,8 @@ class CartFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<AppProvider, CartProvider, HomeProvider>(
       builder: (c, appProvider, cartProvider, homeProvider, _) {
-        bool hideMarketCart = cartProvider.noMarketCart || homeProvider.homeDataRequestError || !appProvider.isAuth;
-        bool hideFoodCart = cartProvider.noFoodCart || homeProvider.homeDataRequestError || !appProvider.isAuth;
+        bool hideMarketCart = cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError || !appProvider.isAuth;
+        bool hideFoodCart = cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError || !appProvider.isAuth;
 
         return Positioned(
           bottom: 0,

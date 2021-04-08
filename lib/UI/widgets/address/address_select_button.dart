@@ -43,10 +43,13 @@ class AddressSelectButton extends StatelessWidget {
 
     return Consumer2<HomeProvider, AddressesProvider>(
       builder: (c, homeProvider, addressesProvider, _) {
-        bool showSelectAddress = homeProvider.homeDataRequestError ||
-            !addressesProvider.addressIsSelected ||
-            addressesProvider.selectedAddress == null ||
-            !appProvider.isAuth;
+        bool tempShowSelectAddress = !addressesProvider.addressIsSelected || addressesProvider.selectedAddress == null || !appProvider.isAuth;
+        bool showSelectAddress = tempShowSelectAddress;
+        if (homeProvider.channelIsMarket) {
+          showSelectAddress = homeProvider.marketHomeDataRequestError || tempShowSelectAddress;
+        } else {
+          showSelectAddress = homeProvider.foodHomeDataRequestError || tempShowSelectAddress;
+        }
         EstimatedArrivalTime estimatedArrivalTime = homeProvider.getEstimateArrivalTime();
         bool etaIsVisible = estimatedArrivalTime != null && forceAddressView || showSelectAddress || !hasETA;
 

@@ -5,12 +5,12 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class ChannelsButtons extends StatelessWidget {
-  final Function changeView;
+  final Function onPressed;
   final String currentView;
   final bool isRTL;
 
   ChannelsButtons({
-    this.changeView,
+    this.onPressed,
     this.currentView,
     @required this.isRTL,
   });
@@ -45,7 +45,7 @@ class ChannelsButtons extends StatelessWidget {
                   bgColor: currentView == channels[i]['id'] ? AppColors.primary : AppColors.white,
                   textColor: currentView == channels[i]['id'] ? AppColors.white : AppColors.primary,
                   height: 45,
-                  onPressed: () => changeView(channels[i]['id']),
+                  onPressed: () => onPressed(channels[i]['id']),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
