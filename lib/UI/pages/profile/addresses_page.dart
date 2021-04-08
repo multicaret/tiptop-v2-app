@@ -14,6 +14,7 @@ import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -146,7 +147,7 @@ class _AddressesPageState extends State<AddressesPage> {
         child: InkWell(
           onTap: () => _changeSelectedAddressWithConfirmation(addresses[i]),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -202,7 +203,7 @@ class _AddressesPageState extends State<AddressesPage> {
             );
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(

@@ -24,3 +24,6 @@ const double homeSliderHeight = 212;
 
 //Screen left and right padding
 const double screenHorizontalPadding = 17;
+
+//Gutter of grids in the app
+const double appGridGutter = 10;

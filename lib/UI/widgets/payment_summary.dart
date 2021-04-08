@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -21,8 +22,8 @@ class PaymentSummary extends StatelessWidget {
           padding: EdgeInsets.only(
             top: 10,
             bottom: 10,
-            right: isRTL ? 17 : 7,
-            left: isRTL ? 7 : 17,
+            right: isRTL ? screenHorizontalPadding : 7,
+            left: isRTL ? 7 : screenHorizontalPadding,
           ),
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: AppColors.border)),

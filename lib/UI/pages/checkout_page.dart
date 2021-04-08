@@ -21,6 +21,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -156,7 +157,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       child: Column(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(17),
+                            padding: const EdgeInsets.all(screenHorizontalPadding),
                             color: AppColors.white,
                             child: AppTextField(
                               labelText: 'Notes',

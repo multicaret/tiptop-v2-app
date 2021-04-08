@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_i
 import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -35,7 +36,7 @@ class _RestaurantsIndexState extends State<RestaurantsIndex> {
       children: [
         FilterSortButtons(foodCategories: dummyFoodCategories),
         Padding(
-          padding: const EdgeInsets.only(left: 17.0, bottom: 5.0),
+          padding: const EdgeInsets.only(left: screenHorizontalPadding, bottom: 5.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -48,7 +49,7 @@ class _RestaurantsIndexState extends State<RestaurantsIndex> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(8),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
                         child: Image.asset(
                           _listTypes[i]['icon'],
                           color: activeListType == _listTypes[i]['type'] ? AppColors.primary : AppColors.primary50,

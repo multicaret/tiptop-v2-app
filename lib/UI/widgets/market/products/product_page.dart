@@ -8,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -160,7 +161,7 @@ class _ProductPageState extends State<ProductPage> {
               right: 0,
               height: 105,
               child: Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
+                padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
                 height: 45,
                 color: AppColors.bg,
                 child: CartControls(

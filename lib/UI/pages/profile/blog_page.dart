@@ -8,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/models/blog.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -46,7 +47,7 @@ class _BlogPageState extends State<BlogPage> {
       hasCurve: false,
       body: Container(
         color: AppColors.bg,
-        padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 20.0),
+        padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20.0),
         child: RefreshIndicator(
           onRefresh: _fetchAndSetContent,
           child: _isLoading
@@ -104,7 +105,7 @@ class ArticleTile extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(17.0),
+                    padding: const EdgeInsets.all(screenHorizontalPadding,),
                     child: Text(
                       article.exc.raw,
                       style: AppTextStyles.subtitle,
@@ -116,7 +117,7 @@ class ArticleTile extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: appProvider.isRTL ? EdgeInsets.only(left: 17.0) : EdgeInsets.only(right: 17.0),
+                padding: appProvider.isRTL ? EdgeInsets.only(left: screenHorizontalPadding) : EdgeInsets.only(right: screenHorizontalPadding,),
                 child: Container(
                   decoration: BoxDecoration(
                     boxShadow: [const BoxShadow(blurRadius: 4, color: AppColors.shadow)],

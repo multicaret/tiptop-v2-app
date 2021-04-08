@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -23,7 +24,7 @@ class ForceUpdateWidget extends StatelessWidget {
       hasCurve: true,
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       body: Column(
         children: [
           SizedBox(height: screenSize.height * 0.2),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -20,7 +21,7 @@ class LanguageSelectPage extends StatelessWidget {
       body: Container(
         height: screenSize.height,
         width: screenSize.width,
-        padding: const EdgeInsets.symmetric(horizontal: 17),
+        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/page-bg-pattern-white.png"),

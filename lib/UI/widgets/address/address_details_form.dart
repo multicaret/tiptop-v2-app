@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -55,7 +56,7 @@ class AddressDetailsForm extends StatelessWidget {
         child: Form(
           key: formKey,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 17, right: 17, top: 40, bottom: 40),
+            padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 40, bottom: 40),
             child: Column(
               children: [
                 Row(

@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/models/blog.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -30,7 +31,7 @@ class _ArticlePageState extends State<ArticlePage> {
         title: Text(article.title),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10.0),
         child: Column(
           children: [
             Container(

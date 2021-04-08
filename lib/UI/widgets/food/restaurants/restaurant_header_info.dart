@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_list_item_cover.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -27,8 +28,8 @@ class RestaurantHeaderInfo extends StatelessWidget {
             ),
             Positioned(
               bottom: 0,
-              right: 17,
-              left: 17,
+              right: screenHorizontalPadding,
+              left: screenHorizontalPadding,
               child: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -100,7 +101,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            margin: EdgeInsets.only(left: 17, right: 17, bottom: 75),
+            margin: EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 75),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             decoration: BoxDecoration(
               color: AppColors.white,

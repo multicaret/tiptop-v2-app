@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -60,7 +61,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(width: 1.5, color: AppColors.secondary),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
       ),
       onFieldSubmitted: (value) => widget.submitAction(value),
     );

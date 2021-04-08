@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -38,7 +39,7 @@ class AppBottomSheet extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: EdgeInsets.only(bottom: clearAction == null ? 10 : 0),
-            margin: EdgeInsets.only(top: 10, left: 17, right: 17, bottom: 20),
+            margin: EdgeInsets.only(top: 10, left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 20),
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
@@ -67,7 +68,7 @@ class AppBottomSheet extends StatelessWidget {
           ),
           if (applyAction != null)
             Padding(
-              padding: const EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
               child: AppButtons.secondary(
                 child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
                 onPressed: applyAction,

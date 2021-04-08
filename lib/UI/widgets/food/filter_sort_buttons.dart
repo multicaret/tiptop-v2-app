@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/food/filter_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
 class FilterSortButtons extends StatelessWidget {
@@ -20,7 +21,7 @@ class FilterSortButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 30.0),
       child: Row(
         children: [
           Expanded(

@@ -10,6 +10,7 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -65,8 +66,8 @@ class AddressSelectButton extends StatelessWidget {
                     color: AppColors.primary,
                     alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
                     padding: EdgeInsets.only(
-                      right: appDir == 'ltr' ? 17 : 0,
-                      left: appDir == 'ltr' ? 0 : 17,
+                      right: appDir == 'ltr' ? screenHorizontalPadding : 0,
+                      left: appDir == 'ltr' ? 0 : screenHorizontalPadding,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -101,8 +102,8 @@ class AddressSelectButton extends StatelessWidget {
                 right: appDir == 'ltr' ? null : 0,
                 child: AnimatedContainer(
                   padding: EdgeInsets.only(
-                    left: appDir == 'ltr' ? 17 : 0,
-                    right: appDir == 'ltr' ? 0 : 17,
+                    left: appDir == 'ltr' ? screenHorizontalPadding : 0,
+                    right: appDir == 'ltr' ? 0 : screenHorizontalPadding,
                     top: 10,
                     bottom: 10,
                   ),

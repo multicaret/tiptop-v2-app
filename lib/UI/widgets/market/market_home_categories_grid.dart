@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/market/products_page.dart';
 import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
 class MarketHomeCategoriesGrid extends StatelessWidget {
@@ -22,7 +23,7 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
     double crossAxisCount = colSize / (colSize + 25);
 
     return GridView.count(
-      padding: const EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
+      padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 10, bottom: 20),
       shrinkWrap: true,
       childAspectRatio: crossAxisCount,
       physics: NeverScrollableScrollPhysics(),

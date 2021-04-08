@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -36,8 +37,10 @@ class _FoodCategoryItemState extends State<FoodCategoryItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: widget.isRTL
-          ? EdgeInsets.only(right: widget.index == 0 ? 17 : 0, left: widget.index == widget.count - 1 ? 17 : 0)
-          : EdgeInsets.only(left: widget.index == 0 ? 17 : 0, right: widget.index == widget.count - 1 ? 17 : 0),
+          ? EdgeInsets.only(
+              right: widget.index == 0 ? screenHorizontalPadding : 0, left: widget.index == widget.count - 1 ? screenHorizontalPadding : 0)
+          : EdgeInsets.only(
+              left: widget.index == 0 ? screenHorizontalPadding : 0, right: widget.index == widget.count - 1 ? screenHorizontalPadding : 0),
       child: InkWell(
         onTap: widget.isSelectable
             ? widget.onTap
