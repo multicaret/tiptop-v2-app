@@ -5,12 +5,12 @@ import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-class HomeCategoriesGrid extends StatelessWidget {
+class MarketHomeCategoriesGrid extends StatelessWidget {
   final List<Category> categories;
   final Function fetchAndSetHomeData;
   final bool isLoadingHomeData;
 
-  HomeCategoriesGrid({
+  MarketHomeCategoriesGrid({
     @required this.categories,
     @required this.fetchAndSetHomeData,
     @required this.isLoadingHomeData,
