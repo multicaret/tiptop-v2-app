@@ -9,20 +9,20 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class FoodCategoriesAndBranches extends StatefulWidget {
+class FoodHomeContent extends StatefulWidget {
   final HomeData foodHomeData;
   final bool isLoadingHomeData;
 
-  FoodCategoriesAndBranches({
+  FoodHomeContent({
     @required this.foodHomeData,
     @required this.isLoadingHomeData,
   });
 
   @override
-  _FoodCategoriesAndBranchesState createState() => _FoodCategoriesAndBranchesState();
+  _FoodHomeContentState createState() => _FoodHomeContentState();
 }
 
-class _FoodCategoriesAndBranchesState extends State<FoodCategoriesAndBranches> {
+class _FoodHomeContentState extends State<FoodHomeContent> {
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
