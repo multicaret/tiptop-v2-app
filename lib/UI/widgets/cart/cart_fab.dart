@@ -9,7 +9,6 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 import 'cart_items_count_badge.dart';
 
@@ -51,7 +50,17 @@ class CartFAB extends StatelessWidget {
                         const BoxShadow(blurRadius: 10, color: AppColors.shadowDark),
                       ],
                     ),
-                    child: AppIcons.iconLgSecondary(LineAwesomeIcons.shopping_cart),
+                    child: homeProvider.channelIsMarket
+                        ? Icon(
+                            LineAwesomeIcons.shopping_cart,
+                            size: 50,
+                            color: hideMarketCart ? AppColors.primary50 : AppColors.secondary,
+                          )
+                        : Icon(
+                            LineAwesomeIcons.shopping_cart,
+                            size: 50,
+                            color: hideFoodCart ? AppColors.primary50 : AppColors.secondary,
+                          ),
                   ),
                   homeProvider.channelIsMarket
                       ? Positioned(
