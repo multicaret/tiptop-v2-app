@@ -4,7 +4,6 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class CartAnimatedButton extends StatelessWidget {
   final bool isRTL;
@@ -76,7 +75,7 @@ class CartAnimatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
-    double cartButtonHeight = getCartControlButtonHeight(context);
+    double cartButtonHeight = isModalControls ? 45 : getCartControlButtonHeight(context);
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 200),
@@ -88,21 +87,21 @@ class CartAnimatedButton extends StatelessWidget {
           height: cartButtonHeight,
           width: isModalControls ? screenThirdWidth : cartButtonHeight,
           decoration: BoxDecoration(
-            color: onTap == null ? AppColors.disabled : AppColors.primary,
+            color: onTap == null ? AppColors.primaryLight : AppColors.primary,
             borderRadius: getBorderRadius(cartAction, isRTL, quantity),
             boxShadow: [
               const BoxShadow(blurRadius: 6, color: AppColors.shadow),
             ],
           ),
-          child: onTap == null
-              ? AppIcons.iconXsWhite50(FontAwesomeIcons.plus)
-              : AppIcons.iconXsWhite(
-                  cartAction == CartAction.ADD
-                      ? FontAwesomeIcons.plus
-                      : quantity == 1
-                          ? FontAwesomeIcons.trashAlt
-                          : FontAwesomeIcons.minus,
-                ),
+          child: Icon(
+            cartAction == CartAction.ADD
+                ? FontAwesomeIcons.plus
+                : quantity == 1
+                    ? FontAwesomeIcons.trashAlt
+                    : FontAwesomeIcons.minus,
+            size: 14,
+            color: AppColors.white.withOpacity(onTap == null ? 0.6 : 1),
+          ),
         ),
       ),
     );

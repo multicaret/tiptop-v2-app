@@ -92,8 +92,6 @@ class CartProvider with ChangeNotifier {
       withToken: true,
       overrideStatusCheck: true,
     );
-    print('adjust market cart product quantity response data');
-    print(responseData);
 
     if (responseData == 401) {
       return 401;
@@ -101,6 +99,8 @@ class CartProvider with ChangeNotifier {
     CartData cartData = CartData.fromJson(responseData["data"]);
 
     if (responseData["data"] != null && responseData["status"] == 422) {
+      print('adjust market cart product quantity response data');
+      print(responseData);
       showToast(msg: 'There are only ${cartData.availableQuantity} available ${product.title}');
       requestedMoreThanAvailableQuantity[product.id] = true;
       isLoadingAdjustCartQuantityRequest = false;
@@ -110,6 +110,8 @@ class CartProvider with ChangeNotifier {
     }
 
     if (responseData["data"] == null || responseData["status"] != 200) {
+      print('adjust market cart product quantity response data');
+      print(responseData);
       isLoadingAdjustCartQuantityRequest = false;
       isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
       notifyListeners();
@@ -119,6 +121,14 @@ class CartProvider with ChangeNotifier {
     isLoadingAdjustCartQuantityRequest = false;
     isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
     marketCart = cartData.cart;
+
+    CartProduct adjustedProduct = marketCart.products.firstWhere((cartProduct) => cartProduct.product.id == product.id, orElse: () => null);
+    if (adjustedProduct != null) {
+      print('returned quantity: ${adjustedProduct.quantity}');
+    } else {
+      print('product not found! (or deleted from cart, hell if I know 🤷🏽‍)');
+    }
+
     notifyListeners();
 
     return getProductQuantity(product.id);

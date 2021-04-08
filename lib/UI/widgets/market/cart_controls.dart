@@ -117,14 +117,16 @@ class _CartControlsState extends State<CartControls> {
           cartAction: CartAction.REMOVE,
           isRTL: appProvider.isRTL,
           quantity: quantity,
-          onTap: cartProvider.isLoadingAdjustCartQuantityRequest ? null : () => adjustMarketProductQuantity(CartAction.REMOVE),
+          onTap: isLoadingQuantity ? null : () => adjustMarketProductQuantity(CartAction.REMOVE),
+          isModalControls: widget.isModalControls,
         ),
         //Add Button
         CartAnimatedButton(
           cartAction: CartAction.ADD,
           isRTL: appProvider.isRTL,
           quantity: quantity,
-          onTap: disableAddition || cartProvider.isLoadingAdjustCartQuantityRequest ? null : () => adjustMarketProductQuantity(CartAction.ADD),
+          onTap: disableAddition || isLoadingQuantity ? null : () => adjustMarketProductQuantity(CartAction.ADD),
+          isModalControls: widget.isModalControls,
         ),
         if (widget.isModalControls)
           AnimatedPositioned(
