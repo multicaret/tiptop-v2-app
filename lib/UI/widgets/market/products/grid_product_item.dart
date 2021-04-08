@@ -52,7 +52,7 @@ class GridProductItem extends StatelessWidget {
                         border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
                         borderRadius: BorderRadius.circular(14),
                         image: DecorationImage(
-                          image: CachedNetworkImageProvider(product.media.cover),
+                          image: CachedNetworkImageProvider(product.media.coverThumbnail),
                         ),
                       ),
                     ),
