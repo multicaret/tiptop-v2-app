@@ -145,17 +145,17 @@ class _HomePageState extends State<HomePage> {
                       changeView: (value) => channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
-                    hideMarketContent
-                        ? NoContentView(
-                            text: homeProvider.marketNoBranchFound
-                                ? 'No Branch Found'
-                                : homeProvider.homeDataRequestError
-                                    ? 'An error occurred! Please try again later'
-                                    : '')
-                        : isLoadingHomeData
-                            ? const AppLoader()
-                            : homeProvider.channelIsMarket
-                                ? Column(
+                    isLoadingHomeData
+                        ? const AppLoader()
+                        : homeProvider.channelIsMarket
+                            ? hideMarketContent
+                                ? NoContentView(
+                                    text: homeProvider.marketNoBranchFound
+                                        ? 'No Branch Found'
+                                        : homeProvider.homeDataRequestError
+                                            ? 'An error occurred! Please try again later'
+                                            : '')
+                                : Column(
                                     children: [
                                       if (hasActiveMarketOrders)
                                         HomeLiveTracking(
@@ -170,22 +170,22 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   )
-                                : homeProvider.selectedChannel == 'food'
-                                    ? Column(
-                                        children: [
-                                          if (hasActiveFoodOrders)
-                                            HomeLiveTracking(
-                                              isRTL: appProvider.isRTL,
-                                              activeOrders: homeProvider.foodHomeData.activeOrders,
-                                              totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
-                                            ),
-                                          FoodCategoriesAndBranches(
-                                            foodHomeData: foodHomeData,
-                                            isLoadingHomeData: isLoadingHomeData,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
+                            : homeProvider.selectedChannel == 'food'
+                                ? Column(
+                                    children: [
+                                      if (hasActiveFoodOrders)
+                                        HomeLiveTracking(
+                                          isRTL: appProvider.isRTL,
+                                          activeOrders: homeProvider.foodHomeData.activeOrders,
+                                          totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
+                                        ),
+                                      FoodCategoriesAndBranches(
+                                        foodHomeData: foodHomeData,
+                                        isLoadingHomeData: isLoadingHomeData,
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                   ],
                 ),
               ),
