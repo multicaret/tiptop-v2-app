@@ -27,7 +27,8 @@ class ProductsPage extends StatefulWidget {
   _ProductsPageState createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin {
+class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  AppProvider appProvider;
   TabController tabController;
   int currentTabIndex = 0;
 
@@ -35,6 +36,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
 
   @override
   void initState() {
+    appProvider = Provider.of<AppProvider>(context, listen: false);
     selectedParentIndex = widget.parents.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
 
     tabController = TabController(length: widget.parents.length, vsync: this);
@@ -51,7 +53,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
+    super.build(context);
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
@@ -87,4 +89,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
