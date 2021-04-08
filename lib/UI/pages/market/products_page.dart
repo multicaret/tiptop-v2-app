@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_categories_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_category_tab_content.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -45,6 +45,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
   @override
   void dispose() {
     tabController.dispose();
+    print('Disposed products page!');
     super.dispose();
   }
 

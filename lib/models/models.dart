@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
 class EnumValues<T> {
   Map<String, T> map;
   Map<T, String> reverseMap;
@@ -138,22 +141,30 @@ class Media {
   Media({
     this.logo,
     this.cover,
+    this.coverThumbnail,
+    this.coverFull,
     this.gallery,
   });
 
   String logo;
-  dynamic cover;
+  String cover;
+  String coverThumbnail;
+  String coverFull;
   List<Gallery> gallery;
 
   factory Media.fromJson(Map<String, dynamic> json) => Media(
         logo: json["logo"],
         cover: json["cover"],
+        coverThumbnail: json["coverThumbnail"],
+        coverFull: json["coverFull"],
         gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "logo": logo,
         "cover": cover,
+        "coverThumbnail": coverThumbnail,
+        "coverFull": coverFull,
         "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
       };
 }
@@ -162,6 +173,7 @@ class City {
   City({
     this.id,
     this.name,
+    this.nameEnglish,
     this.description,
     this.code,
     this.country,
@@ -173,7 +185,8 @@ class City {
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   dynamic description;
   dynamic code;
   Country country;
@@ -185,7 +198,8 @@ class City {
 
   factory City.fromJson(Map<String, dynamic> json) => City(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         description: json["description"],
         code: json["code"],
         country: Country.fromJson(json["country"]),
@@ -198,7 +212,8 @@ class City {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "description": description,
         "code": code,
         "country": country.toJson(),
@@ -214,47 +229,39 @@ class Country {
   Country({
     this.id,
     this.name,
+    this.nameEnglish,
+    this.phoneCode,
     this.alpha2Code,
     this.alpha3Code,
-    this.numericCode,
-    this.phoneCode,
     this.flagUrl,
-    this.currency,
-    this.timezone,
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   String alpha2Code;
   String alpha3Code;
-  int numericCode;
   String phoneCode;
   String flagUrl;
-  Currency currency;
-  Timezone timezone;
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         alpha2Code: json["alpha2Code"],
         alpha3Code: json["alpha3Code"],
-        numericCode: json["numericCode"],
         phoneCode: json["phoneCode"],
         flagUrl: json["flagUrl"],
-        currency: Currency.fromJson(json["currency"]),
-        timezone: Timezone.fromJson(json["timezone"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "alpha2Code": alpha2Code,
         "alpha3Code": alpha3Code,
-        "numericCode": numericCode,
         "phoneCode": phoneCode,
         "flagUrl": flagUrl,
-        "currency": currency.toJson(),
-        "timezone": timezone.toJson(),
       };
 }
 
@@ -330,46 +337,30 @@ class Timezone {
       };
 }
 
-class Name {
-  Name({
-    this.original,
-    this.translated,
-  });
-
-  String original;
-  String translated;
-
-  factory Name.fromJson(Map<String, dynamic> json) => Name(
-        original: json["original"],
-        translated: json["translated"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "original": original,
-        "translated": translated,
-      };
-}
-
 class Region {
   Region({
     this.id,
     this.name,
+    this.nameEnglish,
     this.code,
   });
 
   int id;
-  Name name;
+  String name;
+  String nameEnglish;
   String code;
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
         id: json["id"],
-        name: Name.fromJson(json["name"]),
+        name: json["name"],
+        nameEnglish: json["nameEnglish"],
         code: json["code"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name.toJson(),
+        "name": name,
+        "nameEnglish": nameEnglish,
         "code": code,
       };
 }
@@ -557,5 +548,60 @@ class Language {
     this.logo,
     this.locale,
     this.countryCode,
+  });
+}
+
+enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
+
+class Restaurant {
+  Restaurant({this.id, this.title, this.cover, this.discountValue});
+
+  int id;
+  String title;
+  String cover;
+  String discountValue;
+}
+
+dynamic handleErrors(errors) {
+  if (errors == null) return errors;
+  if (errors is String) return errors;
+  Map<String, dynamic> formattedErrors = {};
+  if (errors is Map) {
+    errors.forEach((index, error) {
+      formattedErrors[index] = List<String>.from(errors[index].map((x) => x));
+    });
+  }
+  return formattedErrors;
+}
+
+class DialogAction {
+  final String text;
+  final Color buttonColor;
+  final Color buttonTextColor;
+  final dynamic popValue;
+  final Function onTap;
+
+  DialogAction({
+    @required this.text,
+    this.buttonColor = AppColors.primary,
+    this.buttonTextColor = AppColors.white,
+    this.popValue,
+    this.onTap,
+  });
+}
+
+class PaymentSummaryTotal {
+  final String title;
+  final String value;
+  final bool isSavedAmount;
+  final bool isGrandTotal;
+  final bool isDiscounted;
+
+  PaymentSummaryTotal({
+    @required this.title,
+    @required this.value,
+    this.isSavedAmount = false,
+    this.isGrandTotal = false,
+    this.isDiscounted = false,
   });
 }

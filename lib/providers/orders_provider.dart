@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'app_provider.dart';
@@ -16,14 +17,15 @@ class OrdersProvider with ChangeNotifier {
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
+  CouponValidationResponseData couponValidationResponseData;
 
   List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
-  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider, HomeProvider homeProvider) async {
+  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
-      'chain_id': '${homeProvider.chainId}',
-      'branch_id': '${homeProvider.branchId}',
+      'chain_id': '${HomeProvider.chainId}',
+      'branch_id': '${HomeProvider.branchId}',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,
@@ -38,7 +40,7 @@ class OrdersProvider with ChangeNotifier {
     createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
 
     if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(title: 'Error', message: createCheckoutResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     checkoutData = createCheckoutResponse.checkoutData;
@@ -47,13 +49,13 @@ class OrdersProvider with ChangeNotifier {
 
   Future<void> submitOrder(
     AppProvider appProvider,
-    HomeProvider homeProvider,
     CartProvider cartProvider,
     AddressesProvider addressesProvider, {
     @required int paymentMethodId,
     @required String notes,
+    String couponCode,
   }) async {
-    if (cartProvider.noCart) {
+    if (cartProvider.noMarketCart) {
       print('No current cart!');
       return false;
     }
@@ -66,12 +68,13 @@ class OrdersProvider with ChangeNotifier {
     }
 
     Map<String, dynamic> body = {
-      'branch_id': homeProvider.branchId,
-      'chain_id': homeProvider.chainId,
-      'cart_id': cartProvider.cart.id,
+      'branch_id': HomeProvider.branchId,
+      'chain_id': HomeProvider.chainId,
+      'cart_id': cartProvider.marketCart.id,
       'payment_method_id': paymentMethodId,
       'address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
+      'coupon_redeem_code': couponCode,
     };
 
     print('Order submit request body:');
@@ -86,17 +89,17 @@ class OrdersProvider with ChangeNotifier {
 
     submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
     if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(title: 'Error', message: submitOrderResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     submittedOrder = submitOrderResponse.submittedOrder;
     notifyListeners();
   }
 
-  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider, HomeProvider homeProvider) async {
+  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider) async {
     final endpoint = 'orders';
     final Map<String, String> body = {
-      'chain_id': '${homeProvider.chainId}',
+      'chain_id': '${HomeProvider.chainId}',
     };
 
     final responseData = await appProvider.get(
@@ -112,7 +115,7 @@ class OrdersProvider with ChangeNotifier {
     previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
 
     if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: previousOrdersResponseData.message ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
     }
 
     previousOrders = previousOrdersResponseData.previousOrders;
@@ -127,7 +130,7 @@ class OrdersProvider with ChangeNotifier {
     final responseData = await appProvider.post(endpoint: endpoint, withToken: true);
 
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
     isLoadingDeleteOrderRequest = false;
     notifyListeners();
@@ -140,15 +143,12 @@ class OrdersProvider with ChangeNotifier {
       print('Unauthenticated');
       return 401;
     }
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
-    }
     final availableIssuesArray = responseData["data"]["availableIssues"];
     orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
     notifyListeners();
   }
 
-  Future<void> storeOrderRating(AppProvider appProvider, HomeProvider homeProvider, int orderId, Map<String, dynamic> ratingData) async {
+  Future<void> storeOrderRating(AppProvider appProvider, int orderId, Map<String, dynamic> ratingData) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.post(endpoint: endpoint, body: ratingData, withToken: true);
     if (responseData == 401) {
@@ -156,9 +156,31 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
     if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
-    await fetchAndSetPreviousOrders(appProvider, homeProvider);
+    await fetchAndSetPreviousOrders(appProvider);
+    notifyListeners();
+  }
+
+  Future<dynamic> validateCoupon({
+    AppProvider appProvider,
+    CartProvider cartProvider,
+    String couponCode,
+  }) async {
+    final endpoint = 'coupons/$couponCode/validate';
+    Map<String, String> body = {
+      'branch_id': '${HomeProvider.branchId}',
+      'cart_id': '${cartProvider.marketCart.id}',
+    };
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+    if (responseData == 401) {
+      return 401;
+    }
+    couponValidationResponseData = CouponValidationResponseData.fromJson(responseData["data"]);
     notifyListeners();
   }
 }

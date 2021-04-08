@@ -6,12 +6,13 @@ import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressSelectButton extends StatelessWidget {
@@ -41,13 +42,12 @@ class AddressSelectButton extends StatelessWidget {
 
     return Consumer2<HomeProvider, AddressesProvider>(
       builder: (c, homeProvider, addressesProvider, _) {
-        bool showSelectAddress = isLoadingHomeData ||
-            homeProvider.noBranchFound ||
-            homeProvider.homeDataRequestError ||
-            homeProvider.estimatedArrivalTime == null ||
+        bool showSelectAddress = homeProvider.homeDataRequestError ||
             !addressesProvider.addressIsSelected ||
             addressesProvider.selectedAddress == null ||
             !appProvider.isAuth;
+        EstimatedArrivalTime estimatedArrivalTime = homeProvider.getEstimateArrivalTime();
+        bool etaIsVisible = estimatedArrivalTime != null && forceAddressView || showSelectAddress || !hasETA;
 
         return Container(
           decoration: BoxDecoration(
@@ -58,44 +58,44 @@ class AddressSelectButton extends StatelessWidget {
           height: 70,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: Container(
-                  width: screenSize.width * 0.2,
-                  color: AppColors.primary,
-                  alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
-                  padding: EdgeInsets.only(
-                    right: appDir == 'ltr' ? 17 : 0,
-                    left: appDir == 'ltr' ? 0 : 17,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'ETA',
-                        style: AppTextStyles.subtitleWhite,
-                      ),
-                      SizedBox(height: 5),
-                      if (!showSelectAddress && hasETA)
+              if (!showSelectAddress && hasETA && estimatedArrivalTime != null)
+                Positioned.fill(
+                  child: Container(
+                    width: screenSize.width * 0.2,
+                    color: AppColors.primary,
+                    alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                      right: appDir == 'ltr' ? 17 : 0,
+                      left: appDir == 'ltr' ? 0 : 17,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'ETA',
+                          style: AppTextStyles.subtitleWhite,
+                        ),
+                        const SizedBox(height: 5),
                         RichText(
                           overflow: TextOverflow.visible,
                           text: TextSpan(
                             style: AppTextStyles.bodyWhiteBold,
                             children: [
                               TextSpan(
-                                text: homeProvider.estimatedArrivalTime.value,
+                                text: estimatedArrivalTime.value,
                               ),
                               TextSpan(
-                                text: homeProvider.estimatedArrivalTime.unit,
+                                text: estimatedArrivalTime.unit,
                                 style: AppTextStyles.subtitleXsWhiteBold,
                               )
                             ],
                           ),
                           maxLines: 1,
                         ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               Positioned(
                 left: appDir == 'ltr' ? 0 : null,
                 right: appDir == 'ltr' ? null : 0,
@@ -106,11 +106,11 @@ class AddressSelectButton extends StatelessWidget {
                     top: 10,
                     bottom: 10,
                   ),
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: forceAddressView || showSelectAddress || !hasETA ? screenSize.width : screenSize.width * 0.75,
+                  width: isLoadingHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null
@@ -122,7 +122,7 @@ class AddressSelectButton extends StatelessWidget {
                               Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                             }
                           },
-                    child: showSelectAddress && !forceAddressView
+                    child: isLoadingHomeData || (showSelectAddress && !forceAddressView)
                         ? Container(
                             child: Text(
                               Translations.of(context).get('Select Address'),
@@ -153,7 +153,7 @@ class AddressSelectButton extends StatelessWidget {
                                           addressKindTitle ?? addressesProvider.selectedAddress.kind.title,
                                           style: AppTextStyles.subtitle,
                                         ),
-                                        SizedBox(width: 5),
+                                        const SizedBox(width: 5),
                                         Expanded(
                                           child: Text(
                                             addressText ?? addressesProvider.selectedAddress.address1,
@@ -169,8 +169,8 @@ class AddressSelectButton extends StatelessWidget {
                               ),
                               if (!isDisabled)
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: AppIcon.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: AppIcons.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
                                 ),
                             ],
                           ),

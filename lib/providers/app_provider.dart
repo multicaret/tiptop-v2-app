@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/boot.dart';
 import 'package:tiptop_v2/models/models.dart';
-import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/user.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 
 import 'local_storage.dart';
 
@@ -44,6 +45,8 @@ class AppProvider with ChangeNotifier {
   static double longitude;
 
   LocalStorage storageActions = LocalStorage.getActions();
+
+  bool isFirstOpen = true;
 
   // Locale Related.
   bool localeSelected = false;
@@ -99,6 +102,17 @@ class AppProvider with ChangeNotifier {
     return myHeader;
   }
 
+  Future<void> checkIfIsFirstOpen() async {
+    var isFirstOpenKeyExists = storageActions.checkKey(key: 'is_first_open');
+    isFirstOpen = !isFirstOpenKeyExists;
+    print('First time opening the app: $isFirstOpen');
+    if (isFirstOpen) {
+      // await sendAppFirstVisitEvent();
+      await storageActions.save(key: 'is_first_open', data: false);
+      isFirstOpen = false;
+    }
+  }
+
   fetchLocale() async {
     var languageCode = storageActions.getData(key: 'language_code');
     if (languageCode == null) {
@@ -112,11 +126,28 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
+/*  static final facebookAppEvents = FacebookAppEvents();
+  Mixpanel mixpanel;
+
+  Future<void> initMixpanel() async {
+    mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
+    mixpanel.setServerURL("https://api-eu.mixpanel.com");
+  }*/
+
+  bool isLocationPermissionGranted = false;
+
   Future<void> bootActions() async {
     initInstaBug();
     await fetchBootConfigurations();
     await fetchLocale();
-    await handleLocationPermission();
+
+    //Init Analytics
+    // await initMixpanel();
+    // await facebookAppEvents.setAdvertiserTracking(enabled: true);
+
+    await checkIfIsFirstOpen();
+    isLocationPermissionGranted = await getLocationPermissionStatus();
+
     await AddressesProvider().fetchSelectedAddress();
   }
 
@@ -149,7 +180,7 @@ class AppProvider with ChangeNotifier {
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
-          logout();
+          logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
         }
@@ -157,6 +188,9 @@ class AppProvider with ChangeNotifier {
       }
 
       final responseData = json.decode(response.body);
+      if (responseData["data"] == null || responseData["status"] != 200) {
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+      }
       return responseData;
     } catch (error) {
       throw error;
@@ -195,11 +229,14 @@ class AppProvider with ChangeNotifier {
       if (response.statusCode == 401) {
         if (token != null) {
           print('Sending authenticated request with expired token! Logging out...');
-          logout();
+          logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
         }
         return 401;
+      }
+      if (responseData["status"] != 200) {
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }
       return responseData;
     } catch (error) {
@@ -233,14 +270,12 @@ class AppProvider with ChangeNotifier {
         endpoint: 'profile',
         body: userData,
       );
-
       if (responseData['data'] == null) {
         throw HttpException(
           title: 'Error',
           message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
         );
       }
-
       User updatedUser = User.fromJson(responseData['data']['user']);
       updateUserData(updatedUser, token);
 
@@ -272,11 +307,13 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> logout() async {
+  Future<void> logout({bool clearSelectedAddress = false}) async {
     token = null;
     userId = null;
     await storageActions.deleteData(key: 'userData');
-    await storageActions.deleteData(key: 'selected_address');
+    if (clearSelectedAddress) {
+      await storageActions.deleteData(key: 'selected_address');
+    }
     print('Deleted user data and logged out');
     notifyListeners();
   }
@@ -309,18 +346,20 @@ class AppProvider with ChangeNotifier {
     return deviceData;
   }
 
-  Future<Map<String, dynamic>> loadMobileAppData() async {
+  Future<Map<String, dynamic>> loadMobileAppDetails() async {
     PackageInfo deviceData = await getDeviceData();
     Map<String, dynamic> platformState = await initPlatformState();
 
     return getMobileApp(deviceData, platformState);
   }
 
+  Map<String, dynamic> mobileAppDetails;
+
   Future<void> fetchBootConfigurations() async {
-    final mobileAppData = await loadMobileAppData();
+    mobileAppDetails = await loadMobileAppDetails();
     final Map<String, String> body = {
-      'build_number': mobileAppData['buildNumber'],
-      'platform': mobileAppData['device']['platform'],
+      'build_number': mobileAppDetails['buildNumber'],
+      'platform': mobileAppDetails['device']['platform'],
     };
     final responseData = await get(endpoint: 'boot', body: body);
     BootResponse bootResponse = BootResponse.fromJson(responseData);
@@ -347,4 +386,19 @@ class AppProvider with ChangeNotifier {
 
     // notifyListeners();
   }
+
+/*  Future<void> sendAppFirstVisitEvent() async {
+    print('Sending app open event!');
+    Map<String, dynamic> params = {
+      'platform': mobileAppDetails['device']['platform'],
+      'user_language': _appLocale.languageCode,
+    };
+    print('params');
+    print(params);
+    await facebookAppEvents.logEvent(
+      name: 'first_visit',
+      parameters: params,
+    );
+    mixpanel.track('first_visit', properties: params);
+  }*/
 }

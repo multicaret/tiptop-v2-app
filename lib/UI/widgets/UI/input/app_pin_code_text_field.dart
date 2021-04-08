@@ -37,12 +37,12 @@ class _AppPinCodeTextFieldState extends State<AppPinCodeTextField> {
       controller: _pinEditingController,
       decoration: BoxLooseDecoration(
         textStyle: AppTextStyles.bodyBold,
-        strokeColorBuilder: PinListenColorBuilder(AppColors.secondaryDark, AppColors.border),
+        strokeColorBuilder: PinListenColorBuilder(AppColors.secondary, AppColors.border),
         strokeWidth: 1.5,
         radius: Radius.circular(8),
         gapSpace: 16,
         bgColorBuilder: _invalidForm ? null : PinListenColorBuilder(AppColors.bg, AppColors.bg),
-        errorTextStyle: AppTextStyles.dynamicValues(color: AppColors.secondaryDark, fontSize: 14),
+        errorTextStyle: AppTextStyles.dynamicValues(color: AppColors.secondary, fontSize: 14),
       ),
     );
   }

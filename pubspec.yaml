@@ -56,11 +56,16 @@ dependencies:
   dismissible_page: ^0.6.1
   instabug_flutter: ^9.1.8
   flutter_launcher_icons: ^0.9.0
-  flutter_cache_manager: ^3.0.0
+  flutter_cache_manager: ^3.0.1
   package_info: ^2.0.0
   device_info: ^2.0.0
   launch_review: ^3.0.1
   flutter_rating_bar: ^4.0.0
+  rflutter_alert: ^2.0.2
+  carousel_slider: ^3.0.0
+  facebook_app_events: ^0.11.2
+  mixpanel_flutter: ^1.1.0
+  flutter_svg: ^0.20.0-nullsafety.3
 
 dev_dependencies:
   flutter_test:

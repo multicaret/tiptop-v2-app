@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RadioSelectItems extends StatelessWidget {
   final List<dynamic> items;
@@ -48,15 +48,15 @@ class RadioSelectItems extends StatelessWidget {
                         value: items[i]["id"],
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         groupValue: selectedId,
-                        activeColor: AppColors.secondaryDark,
+                        activeColor: AppColors.secondary,
                         onChanged: (itemId) => action(itemId),
                       ),
                       if (items[i]["icon"] != null)
                         Padding(
                           padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
-                          child: AppIcon.icon50(items[i]["icon"]),
+                          child: AppIcons.icon50(items[i]["icon"]),
                         ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(items[i]["title"]),
                     ],
                   ),
@@ -65,7 +65,7 @@ class RadioSelectItems extends StatelessWidget {
                         ? Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                              boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
                             ),
                             child: Image(
                               alignment: Alignment.centerRight,

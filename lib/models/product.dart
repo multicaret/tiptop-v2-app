@@ -3,29 +3,6 @@ import 'dart:convert';
 import 'category.dart';
 import 'models.dart';
 
-ProductsWithCategoriesDataResponse productDataResponseFromJson(String str) => ProductsWithCategoriesDataResponse.fromJson(json.decode(str));
-
-class ProductsWithCategoriesDataResponse {
-  ProductsWithCategoriesDataResponse({
-    this.categoryParentsData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  CategoryParentsData categoryParentsData;
-  String errors;
-  String message;
-  int status;
-
-  factory ProductsWithCategoriesDataResponse.fromJson(Map<String, dynamic> json) => ProductsWithCategoriesDataResponse(
-        categoryParentsData: json["data"] == null ? null : CategoryParentsData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-}
-
 class CategoryParentsData {
   CategoryParentsData({
     this.selectedParentCategory,
@@ -47,6 +24,7 @@ class Product {
   Product({
     this.id,
     this.uuid,
+    this.englishTitle,
     this.title,
     this.description,
     this.excerpt,
@@ -73,6 +51,7 @@ class Product {
 
   int id;
   String uuid;
+  String englishTitle;
   String title;
   StringRawStringFormatted description;
   StringRawStringFormatted excerpt;
@@ -99,6 +78,7 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
         uuid: json["uuid"],
+        englishTitle: json["englishTitle"],
         title: json["title"],
         description: json["description"] == null ? null : StringRawStringFormatted.fromJson(json["description"]),
         excerpt: json["excerpt"] == null ? null : StringRawStringFormatted.fromJson(json["excerpt"]),
@@ -126,6 +106,7 @@ class Product {
   Map<String, dynamic> toJson() => {
         "id": id,
         "uuid": uuid,
+        "englishTitle": englishTitle,
         "title": title,
         "description": description,
         "excerpt": excerpt,

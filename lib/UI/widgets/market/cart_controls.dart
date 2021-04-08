@@ -9,10 +9,10 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class CartControls extends StatefulWidget {
@@ -26,15 +26,12 @@ class CartControls extends StatefulWidget {
     this.isModalControls = false,
   });
 
-  static double productUnitTitleHeight = 12;
-
   @override
   _CartControlsState createState() => _CartControlsState();
 }
 
 class _CartControlsState extends State<CartControls> {
   AppProvider appProvider;
-  HomeProvider homeProvider;
   AddressesProvider addressesProvider;
   bool _isInit = true;
 
@@ -42,7 +39,6 @@ class _CartControlsState extends State<CartControls> {
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
     }
     _isInit = false;
@@ -61,7 +57,6 @@ class _CartControlsState extends State<CartControls> {
       await cartProvider.addRemoveProduct(
         context: context,
         appProvider: appProvider,
-        homeProvider: homeProvider,
         isAdding: action == CartAction.ADD,
         product: widget.product,
       );
@@ -87,14 +82,14 @@ class _CartControlsState extends State<CartControls> {
               left: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
               height: widget.cartButtonHeight,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 width: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
                 height: widget.cartButtonHeight,
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(quantity == 0 ? 10 : 0),
                   boxShadow: [
-                    BoxShadow(blurRadius: 6, color: AppColors.shadow),
+                    const BoxShadow(blurRadius: 6, color: AppColors.shadow),
                   ],
                 ),
                 child: Center(
@@ -128,21 +123,21 @@ class _CartControlsState extends State<CartControls> {
             ),
             if (widget.isModalControls)
               AnimatedPositioned(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 right: 0,
                 left: 0,
                 top: quantity == 0 ? 0 : widget.cartButtonHeight,
                 bottom: quantity == 0 ? 0 : -widget.cartButtonHeight,
                 child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   opacity: quantity == 0 ? 1 : 0,
-                  child: ElevatedButton(
+                  child: AppButtons.primary(
                     onPressed: () => editCartAction(CartAction.ADD, cartProvider),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AppIcon.iconWhite(LineAwesomeIcons.shopping_cart),
-                        SizedBox(width: 5),
+                        AppIcons.iconWhite(LineAwesomeIcons.shopping_cart),
+                        const SizedBox(width: 5),
                         Text(
                           'Add to Cart',
                           style: AppTextStyles.button,
@@ -192,7 +187,7 @@ class _CartControlsState extends State<CartControls> {
         bottomRight: Radius.circular(quantity == 0 || isRTL ? 10 : 0),
       );
     } else {
-      return BorderRadius.only(
+      return const BorderRadius.only(
         topLeft: Radius.circular(10),
         topRight: Radius.circular(10),
         bottomLeft: Radius.circular(10),
@@ -219,26 +214,26 @@ class _CartControlsState extends State<CartControls> {
     bool disableAddition = false,
   }) {
     return AnimatedPositioned(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       left: widget.isModalControls
           ? getModalLeftOffset(screenThirdWidth, action, isRTL)
           : getLeftOffset(action, isRTL, widget.cartButtonHeight, quantity),
       child: InkWell(
         onTap: disableAddition ? null : () => editCartAction(action, cartProvider),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           height: widget.cartButtonHeight,
           width: widget.isModalControls ? screenThirdWidth : widget.cartButtonHeight,
           decoration: BoxDecoration(
             color: disableAddition ? AppColors.disabled : AppColors.primary,
             borderRadius: getBorderRadius(action, isRTL, quantity),
             boxShadow: [
-              BoxShadow(blurRadius: 6, color: AppColors.shadow),
+              const BoxShadow(blurRadius: 6, color: AppColors.shadow),
             ],
           ),
           child: disableAddition
-              ? AppIcon.iconXsWhite50(FontAwesomeIcons.plus)
-              : AppIcon.iconXsWhite(
+              ? AppIcons.iconXsWhite50(FontAwesomeIcons.plus)
+              : AppIcons.iconXsWhite(
                   action == CartAction.ADD
                       ? FontAwesomeIcons.plus
                       : quantity == 1

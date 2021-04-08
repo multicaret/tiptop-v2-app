@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'local_storage.dart';
 
 class AddressesProvider with ChangeNotifier {
-  CreateAddressResponseData createAddressResponseData;
   CreateAddressData createAddressData;
 
-  AddressesResponseData addressesResponseData;
   List<Address> addresses = [];
   List<Kind> kinds = [];
 
@@ -62,13 +61,7 @@ class AddressesProvider with ChangeNotifier {
       return 401;
     }
 
-    createAddressResponseData = CreateAddressResponseData.fromJson(responseData);
-
-    if (createAddressResponseData.createAddressData == null || createAddressResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: createAddressResponseData.message);
-    }
-
-    createAddressData = createAddressResponseData.createAddressData;
+    createAddressData = CreateAddressData.fromJson(responseData["data"]);
 
     notifyListeners();
   }
@@ -80,15 +73,9 @@ class AddressesProvider with ChangeNotifier {
       return 401;
     }
 
-    addressesResponseData = AddressesResponseData.fromJson(responseData);
-
-
-    if (addressesResponseData.addressesData == null || addressesResponseData.status != 200) {
-      throw HttpException(title: 'Error', message: addressesResponseData.message);
-    }
-
-    addresses = addressesResponseData.addressesData.addresses;
-    kinds = addressesResponseData.addressesData.kinds;
+    AddressesData addressesData = AddressesData.fromJson(responseData["data"]);
+    addresses = addressesData.addresses;
+    kinds = addressesData.kinds;
     notifyListeners();
   }
 
@@ -102,10 +89,6 @@ class AddressesProvider with ChangeNotifier {
 
     if (responseData == 401) {
       return 401;
-    }
-
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
     }
 
     selectedAddress = Address.fromJson(responseData["data"]["address"]);
@@ -123,13 +106,10 @@ class AddressesProvider with ChangeNotifier {
   Future<dynamic> deleteAddress(AppProvider appProvider, int addressId) async {
     final endpoint = 'profile/addresses/$addressId/delete';
     final responseData = await appProvider.post(endpoint: endpoint);
-    if(responseData == 401) {
+    if (responseData == 401) {
       return 401;
     }
-    if(responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
-    }
-    if(selectedAddress != null && selectedAddress.id == addressId) {
+    if (selectedAddress != null && selectedAddress.id == addressId) {
       print('😱😱😱😱 Ya Lahweeee you are deleting selected address');
       storageActions.deleteData(key: 'selected_address');
       selectedAddress = null;

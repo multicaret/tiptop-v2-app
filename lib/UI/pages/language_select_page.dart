@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class LanguageSelectPage extends StatelessWidget {
   static const routeName = '/language-select';
@@ -20,7 +20,7 @@ class LanguageSelectPage extends StatelessWidget {
       body: Container(
         height: screenSize.height,
         width: screenSize.width,
-        padding: EdgeInsets.symmetric(horizontal: 17),
+        padding: const EdgeInsets.symmetric(horizontal: 17),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/page-bg-pattern-white.png"),
@@ -34,7 +34,7 @@ class LanguageSelectPage extends StatelessWidget {
               'assets/images/tiptop-logo.png',
               width: screenSize.width / 2.5,
             ),
-            SizedBox(height: 67),
+            const SizedBox(height: 67),
             ..._languageItems(context, appLanguages, appProvider),
           ],
         ),
@@ -51,7 +51,7 @@ List<Widget> _languageItems(
   return List.generate(_appLanguages.length, (i) {
     return Container(
       padding: EdgeInsets.only(bottom: i == _appLanguages.length - 1 ? 0 : 15),
-      child: ElevatedButton(
+      child: AppButtons.secondary(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i].locale);
           //Todo: remove this when profile screen has language selection
@@ -70,7 +70,7 @@ List<Widget> _languageItems(
                 height: 40,
               ),
             ),
-            SizedBox(width: 25),
+            const SizedBox(width: 25),
             Expanded(
               child: Text(
                 _appLanguages[i].title,
@@ -78,12 +78,6 @@ List<Widget> _languageItems(
               ),
             ),
           ],
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: AppColors.secondary,
-          onPrimary: AppColors.text,
-          textStyle: AppTextStyles.body,
-          side: BorderSide(color: AppColors.secondaryDark),
         ),
       ),
     );

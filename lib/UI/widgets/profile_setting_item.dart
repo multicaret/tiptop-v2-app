@@ -5,7 +5,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class ProfileSettingItem extends StatelessWidget {
   final IconData icon;
@@ -32,7 +32,7 @@ class ProfileSettingItem extends StatelessWidget {
         child: InkWell(
           onTap: _determineTapMethod(context: context, action: action, route: route),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 70,
             decoration: BoxDecoration(
               border: Border(
@@ -46,13 +46,13 @@ class ProfileSettingItem extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      color: AppColors.secondaryDark,
+                      color: AppColors.secondary,
                     ),
-                    SizedBox(width: 20.0),
+                    const SizedBox(width: 20.0),
                     Text(Translations.of(context).get(title)),
                   ],
                 ),
-                if (hasTrailing) trailing ?? AppIcon.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                if (hasTrailing) trailing ?? AppIcons.iconPrimary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
               ],
             ),
           ),

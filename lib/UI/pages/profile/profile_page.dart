@@ -87,7 +87,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 ProfileAuthHeader(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ProfileSettingItem(
                   title: 'Support',
                   icon: FontAwesomeIcons.headphones,
@@ -105,9 +105,9 @@ class ProfilePage extends StatelessWidget {
                   isRTL: appProvider.isRTL,
                   isAssetLogo: true,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ..._getProfileSettingItems(context, profileItems),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 if (appProvider.isAuth)
                   ProfileSettingItem(
                     title: 'Logout',
@@ -115,7 +115,7 @@ class ProfilePage extends StatelessWidget {
                     action: appProvider.logout,
                     hasTrailing: false,
                   ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 ProfileSettingItem(
                   title: 'Version',
                   icon: FontAwesomeIcons.mobileAlt,
@@ -124,7 +124,7 @@ class ProfilePage extends StatelessWidget {
                     style: AppTextStyles.body50,
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
               ],
             ),
           ),

@@ -28,6 +28,14 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle h2Secondary = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondary,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle h3White = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
@@ -72,14 +80,23 @@ class AppTextStyles {
     fontFamily: 'NeoSansArabic',
     color: AppColors.text,
     fontSize: 14,
+    height: 1,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     decoration: TextDecoration.none,
   );
 
+  static const TextStyle subtitleSecondary = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondary,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle subtitleSecondaryBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 14,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -104,9 +121,19 @@ class AppTextStyles {
 
   static const TextStyle subtitleXxsSecondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 10,
-    fontWeight: FontWeight.bold,
+    height: 1,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleXxsSecondaryBold = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondary,
+    fontSize: 10,
+    height: 1,
+    fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
   );
 
@@ -165,7 +192,7 @@ class AppTextStyles {
 
   static const TextStyle bodyBoldSecondaryDark = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 16,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -181,7 +208,7 @@ class AppTextStyles {
 
   static const TextStyle bodySecondaryDark = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
@@ -190,6 +217,14 @@ class AppTextStyles {
   static const TextStyle subtitleWhite = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static const TextStyle subtitleWhite50 = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.white50,
     fontSize: 14,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,

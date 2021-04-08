@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'address/address_icon.dart';
@@ -24,7 +24,7 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.border),
@@ -52,7 +52,7 @@ class OrderItem extends StatelessWidget {
                           order.completedAt.formatted,
                           style: AppTextStyles.body50,
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(order.address.kind.title)
                       ],
                     )
@@ -64,7 +64,7 @@ class OrderItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                    boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
                   ),
                   child: Row(
                     children: [
@@ -80,7 +80,7 @@ class OrderItem extends StatelessWidget {
                             bottomRight: Radius.circular(isRTL ? 8 : 0),
                           ),
                         ),
-                        child: AppIcon.icon(LineAwesomeIcons.shopping_cart),
+                        child: AppIcons.icon(LineAwesomeIcons.shopping_cart),
                       ),
                       Expanded(
                         child: Html(
@@ -102,9 +102,9 @@ class OrderItem extends StatelessWidget {
             ),
           ),
           if(!isDisabled)
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           if(!isDisabled)
-          AppIcon.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+          AppIcons.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
         ],
       ),
     );

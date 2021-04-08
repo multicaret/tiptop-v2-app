@@ -32,7 +32,7 @@ class ListProductItem extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 15),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
@@ -64,12 +64,12 @@ class ListProductItem extends StatelessWidget {
             child: InkWell(
               onTap: openProductPage,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(product.title),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
                     if (hasDiscountedPrice)
                       FormattedPrice(
@@ -96,7 +96,7 @@ class ListProductItem extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: AppColors.bg,
               ),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Text('$quantity'),
             )
         ],

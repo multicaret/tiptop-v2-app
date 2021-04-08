@@ -24,7 +24,6 @@ class User {
     this.suspendedAt,
     this.createdAt,
     this.updatedAt,
-    this.mobileApp,
     this.settings,
     this.currency,
     this.country,
@@ -54,7 +53,6 @@ class User {
   EdAt suspendedAt;
   EdAt createdAt;
   EdAt updatedAt;
-  MobileApp mobileApp;
   Settings settings;
   Currency currency;
   Country country;
@@ -84,7 +82,6 @@ class User {
         suspendedAt: EdAt.fromJson(json["suspendedAt"]),
         createdAt: EdAt.fromJson(json["createdAt"]),
         updatedAt: EdAt.fromJson(json["updatedAt"]),
-        mobileApp: MobileApp.fromJson(json["mobileApp"]),
         settings: Settings.fromJson(json["settings"]),
         currency: json["currency"] == null ? null : Currency.fromJson(json["currency"]),
         country: json["country"] == null ? null : Country.fromJson(json["country"]),
@@ -115,7 +112,6 @@ class User {
         "suspendedAt": suspendedAt.toJson(),
         "createdAt": createdAt.toJson(),
         "updatedAt": updatedAt.toJson(),
-        "mobileApp": mobileApp.toJson(),
         "settings": settings.toJson(),
         "currency": currency == null ? null : currency.toJson(),
         "country": country == null ? null : country.toJson(),

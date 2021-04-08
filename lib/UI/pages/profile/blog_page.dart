@@ -47,11 +47,11 @@ class _BlogPageState extends State<BlogPage> {
       hasCurve: false,
       body: Container(
         color: AppColors.bg,
-        padding: EdgeInsets.only(left: 17.0, right: 17.0, top: 20.0),
+        padding: const EdgeInsets.only(left: 17.0, right: 17.0, top: 20.0),
         child: RefreshIndicator(
           onRefresh: _fetchAndSetContent,
           child: _isLoading
-              ? Center(child: AppLoader())
+              ? const Center(child: const AppLoader())
               : ListView.builder(
                   itemCount: _articles.length,
                   itemBuilder: (context, i) => ArticleTile(article: _articles[i]),
@@ -96,7 +96,7 @@ class ArticleTile extends StatelessWidget {
                           size: 14.0,
                           color: AppColors.text50,
                         ),
-                        SizedBox(width: 5.0),
+                        const SizedBox(width: 5.0),
                         Text(
                           article.updatedAt.formatted,
                           style: AppTextStyles.subtitle50,
@@ -120,7 +120,7 @@ class ArticleTile extends StatelessWidget {
                 padding: appProvider.isRTL ? EdgeInsets.only(left: 17.0) : EdgeInsets.only(right: 17.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    boxShadow: [BoxShadow(blurRadius: 4, color: AppColors.shadow)],
+                    boxShadow: [const BoxShadow(blurRadius: 4, color: AppColors.shadow)],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),

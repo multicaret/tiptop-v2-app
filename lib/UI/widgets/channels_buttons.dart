@@ -1,81 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class ChannelsButtons extends StatelessWidget {
   final Function changeView;
   final String currentView;
+  final bool isRTL;
 
-  ChannelsButtons({this.changeView, this.currentView});
+  ChannelsButtons({
+    this.changeView,
+    this.currentView,
+    @required this.isRTL,
+  });
+
+  final List<Map<String, dynamic>> channels = [
+    {
+      'id': 'food',
+      'title': 'Food',
+      'image': 'assets/images/tiptop-logo-title-yellow.png',
+    },
+    {
+      'id': 'grocery',
+      'title': 'Market',
+      'image': 'assets/images/tiptop-logo-title-yellow.png',
+    },
+    /*{
+      'id': 'carrefour',
+      'image': 'assets/images/carrefour-logo.png',
+    },*/
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 17, left: 17, top: 10),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 10),
       child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: currentView == 'food' ? AppColors.primary : AppColors.white,
-                onPrimary: currentView == 'food' ? AppColors.white :AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
-              onPressed: () {
-                changeView('food');
-              },
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Image(
-                      image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
-                    ),
+        children: List.generate(channels.length, (i) {
+          return Expanded(
+            child: Padding(
+                padding: i < channels.length - 1 ? EdgeInsets.only(right: isRTL ? 0 : 16, left: isRTL ? 16 : 0) : EdgeInsets.all(0),
+                child: AppButtons.dynamic(
+                  bgColor: currentView == channels[i]['id'] ? AppColors.primary : AppColors.white,
+                  textColor: currentView == channels[i]['id'] ? AppColors.white : AppColors.primary,
+                  height: 45,
+                  onPressed: () => changeView(channels[i]['id']),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(
+                        image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                        width: 60,
+                      ),
+                      if (channels[i]['title'] != null) const SizedBox(width: 10),
+                      if (channels[i]['title'] != null) Text(Translations.of(context).get(channels[i]['title'])),
+                    ],
                   ),
-                  SizedBox(width: 3),
-                  Text(Translations.of(context).get('Food')),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: currentView == 'market' ? AppColors.primary : AppColors.white,
-                onPrimary: currentView == 'market' ? AppColors.white :AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
-              onPressed: () {
-                changeView('market');
-              },
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Image(
-                      image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
-                    ),
-                  ),
-                  SizedBox(width: 3),
-                  Text(Translations.of(context).get('Market')),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.white,
-                onPrimary: AppColors.primary,
-                minimumSize: Size.fromHeight(45),
-              ),
-              onPressed: () {},
-              child: Image(
-                image: AssetImage('assets/images/carrefour-logo.png'),
-              ),
-            ),
-          )
-        ],
+                )),
+          );
+        }),
       ),
     );
   }

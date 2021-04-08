@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AppDropDownButton extends StatelessWidget {
@@ -10,12 +10,14 @@ class AppDropDownButton extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final Function onChanged;
   final String labelText;
+  final String hintText;
 
   AppDropDownButton({
     @required this.defaultValue,
     @required this.items,
     @required this.onChanged,
     this.labelText,
+    this.hintText = '',
   });
 
   @override
@@ -29,14 +31,14 @@ class AppDropDownButton extends StatelessWidget {
         children: [
           if (labelText != null)
             Padding(
-              padding: EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.only(bottom: 6),
               child: Text(
                 Translations.of(context).get(labelText),
                 style: AppTextStyles.bodyBold,
               ),
             ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 17),
+            padding: const EdgeInsets.symmetric(horizontal: 17),
             margin: EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
               color: AppColors.bg,
@@ -46,11 +48,12 @@ class AppDropDownButton extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 value: defaultValue,
-                icon: AppIcon.icon(FontAwesomeIcons.angleDown),
+                icon: AppIcons.icon(FontAwesomeIcons.angleDown),
                 style: AppTextStyles.body,
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,
                 isExpanded: true,
+                hint: hintText != null && hintText.isNotEmpty ? Text(Translations.of(context).get(hintText)) : null,
                 items: <Map<String, dynamic>>[...items].map<DropdownMenuItem<int>>(
                   (Map<String, dynamic> value) {
                     return DropdownMenuItem<int>(

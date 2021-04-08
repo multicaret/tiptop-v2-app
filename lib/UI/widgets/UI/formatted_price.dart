@@ -33,7 +33,7 @@ class FormattedPrice extends StatelessWidget {
           ),
           "body": Style.fromTextStyle(
             AppTextStyles.dynamicValues(
-              color: isDiscounted ? AppColors.text50 : AppColors.secondaryDark,
+              color: isDiscounted ? AppColors.text50 : AppColors.secondary,
               height: isLarge ? 1 : 0.3,
               fontSize: isDiscounted
                   ? isLarge

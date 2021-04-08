@@ -56,5 +56,22 @@
             <string>itms-beta</string>
             <string>itms</string>
     </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>fb1289011161459969</string>
+      </array>
+      </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>1289011161459969</string>
+    <key>FacebookDisplayName</key>
+    <string>TipTop</string>
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <true/>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <true/>
 </dict>
 </plist>

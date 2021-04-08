@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class AddressIconDropDown extends StatelessWidget {
   final List<Map<String, dynamic>> iconItems;
@@ -21,7 +21,7 @@ class AddressIconDropDown extends StatelessWidget {
       width: 100,
       height: 72,
       margin: EdgeInsets.only(right: 10, bottom: 20),
-      padding: EdgeInsets.only(left: 17, right: 10),
+      padding: const EdgeInsets.only(left: 17, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border, width: 1.5),
@@ -32,7 +32,7 @@ class AddressIconDropDown extends StatelessWidget {
         child: DropdownButtonHideUnderline(
           child: DropdownButton<int>(
             value: currentIcon,
-            icon: AppIcon.icon(FontAwesomeIcons.angleDown),
+            icon: AppIcons.icon(FontAwesomeIcons.angleDown),
             isExpanded: true,
             itemHeight: 72,
             onChanged: onChanged,
@@ -40,7 +40,7 @@ class AddressIconDropDown extends StatelessWidget {
               return DropdownMenuItem<int>(
                 value: value['id'],
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: CachedNetworkImage(
                     imageUrl: value['icon_url'],
                     width: 40,

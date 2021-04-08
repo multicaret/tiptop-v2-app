@@ -5,12 +5,12 @@ import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-class HomeCategoriesGrid extends StatelessWidget {
+class MarketHomeCategoriesGrid extends StatelessWidget {
   final List<Category> categories;
   final Function fetchAndSetHomeData;
   final bool isLoadingHomeData;
 
-  HomeCategoriesGrid({
+  MarketHomeCategoriesGrid({
     @required this.categories,
     @required this.fetchAndSetHomeData,
     @required this.isLoadingHomeData,
@@ -22,7 +22,7 @@ class HomeCategoriesGrid extends StatelessWidget {
     double crossAxisCount = colSize / (colSize + 25);
 
     return GridView.count(
-      padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
       shrinkWrap: true,
       childAspectRatio: crossAxisCount,
       physics: NeverScrollableScrollPhysics(),
@@ -45,7 +45,7 @@ class HomeCategoriesGrid extends StatelessWidget {
                 },
                 child: CategoryItem(
                   title: category.title,
-                  imageUrl: category.cover,
+                  imageUrl: category.thumbnail,
                 ),
               ))
           .toList(),

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,9 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
+import 'constants.dart';
 
 void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.BOTTOM}) {
   Fluttertoast.showToast(
@@ -95,6 +99,10 @@ double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
   return getCartControlsWidth(context, colCount: colCount) / 3;
 }
 
+double getProductGridItemHeight(BuildContext context) {
+  return getColItemHeight(3, context) + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
+}
+
 bool isCallable(v) => v is Function;
 
 Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
@@ -162,4 +170,29 @@ Map<String, dynamic> getMobileApp(PackageInfo deviceData, Map<String, dynamic> p
       'version': Platform.isAndroid ? platformState['version.release'] : platformState['utsname.version'],
     },
   };
+}
+
+Alert appAlert({BuildContext context, String title, String description}) {
+  return Alert(
+    context: context,
+    title: title,
+    desc: description,
+  );
+}
+
+String getHttpExceptionMessage(responseData) {
+  String exceptionMessage = '';
+  if (responseData["status"] != null) {
+    exceptionMessage += '\nStatus Code: ' + responseData["status"];
+  }
+  if (responseData["message"] != null) {
+    exceptionMessage += '\nMessage: ' + responseData["message"];
+  }
+  if (responseData["file"] != null) {
+    exceptionMessage += '\nFile: ' + responseData["file"];
+  }
+  if (responseData["trace"] != null) {
+    exceptionMessage += '\nTrace: ' + '${responseData["trace"]}';
+  }
+  return exceptionMessage.isNotEmpty ? exceptionMessage : 'Unknown Error';
 }

@@ -6,7 +6,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icon.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ProfileAuthHeader extends StatelessWidget {
@@ -22,7 +22,7 @@ class ProfileAuthHeader extends StatelessWidget {
             );
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 80.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -33,18 +33,18 @@ class ProfileAuthHeader extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  child: AppIcon.iconMdPrimary(FontAwesomeIcons.solidUser),
+                  child: AppIcons.iconMdPrimary(FontAwesomeIcons.solidUser),
                   height: 55.0,
                   width: 55.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow, blurRadius: 6),
+                      const BoxShadow(color: AppColors.shadow, blurRadius: 6),
                     ],
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                SizedBox(width: 10.0),
+                const SizedBox(width: 10.0),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,16 +59,17 @@ class ProfileAuthHeader extends StatelessWidget {
                                   style: AppTextStyles.bodyBoldSecondaryDark,
                                 ),
                                 Text(
-                                  '${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
+                                  '+${appProvider.authUser.phoneCode} ${appProvider.authUser.phone}',
                                   style: AppTextStyles.subtitle,
+                                  textDirection: TextDirection.ltr,
                                 ),
                               ],
                             )
                           : Text('${Translations.of(context).get("Register")} / ${Translations.of(context).get("Log In")}',
                               style: AppTextStyles.bodyBold),
                       appProvider.isAuth
-                          ? AppIcon.iconSecondary(FontAwesomeIcons.pen)
-                          : AppIcon.iconSecondary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight)
+                          ? AppIcons.iconSecondary(FontAwesomeIcons.pen)
+                          : AppIcons.iconSecondary(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight)
                     ],
                   ),
                 ),

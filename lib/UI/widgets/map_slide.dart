@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/market/home_page.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -39,8 +39,8 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
     if (_isInit) {
       homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      centerLat = (HomeProvider.branchLat + AppProvider.latitude) / 2;
-      centerLong = (HomeProvider.branchLong + AppProvider.longitude) / 2;
+      centerLat = (HomeProvider.marketBranchLat + AppProvider.latitude) / 2;
+      centerLong = (HomeProvider.marketBranchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
     }
     _isInit = false;
@@ -54,71 +54,74 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      height: HomePage.sliderHeight,
-      child: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
-            mapType: MapType.normal,
-            markers: Set.from(allMarkers),
-            compassEnabled: false,
-            zoomControlsEnabled: false,
-            zoomGesturesEnabled: false,
-            myLocationButtonEnabled: false,
-            indoorViewEnabled: false,
-            onMapCreated: _onMapCreated,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
-                height: 40,
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  boxShadow: [BoxShadow(blurRadius: 10, color: AppColors.shadow)],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
-                          Expanded(
-                            child: Html(
-                              data: """${homeProvider.homeData.branch.minimumOrder.formatted}""",
-                              style: {"body": AppTextStyles.htmlXsBold},
+    return IgnorePointer(
+      ignoring: true,
+      child: Container(
+        height: homeSliderHeight,
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
+              mapType: MapType.normal,
+              markers: Set.from(allMarkers),
+              compassEnabled: false,
+              zoomControlsEnabled: false,
+              zoomGesturesEnabled: false,
+              myLocationButtonEnabled: false,
+              indoorViewEnabled: false,
+              onMapCreated: _onMapCreated,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6.0),
+                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [const BoxShadow(blurRadius: 10, color: AppColors.shadow)],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
+                            Expanded(
+                              child: Html(
+                                data: """${homeProvider.marketHomeData.branch.minimumOrder.formatted}""",
+                                style: {"body": AppTextStyles.htmlXsBold},
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    VerticalDivider(thickness: 1.5),
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
-                          Expanded(
-                            child: Html(
-                              data: """${homeProvider.homeData.branch.fixedDeliveryFee.formatted}""",
-                              style: {"body": AppTextStyles.htmlXsBold},
+                      VerticalDivider(thickness: 1.5),
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: [
+                            Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
+                            Expanded(
+                              child: Html(
+                                data: """${homeProvider.marketHomeData.branch.fixedDeliveryFee.formatted}""",
+                                style: {"body": AppTextStyles.htmlXsBold},
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -132,7 +135,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
     _mapController = controller;
     _controller.complete(controller);
 
-    LatLng branchLatLng = LatLng(HomeProvider.branchLat, HomeProvider.branchLong);
+    LatLng branchLatLng = LatLng(HomeProvider.marketBranchLat, HomeProvider.marketBranchLong);
     Uint8List branchMarkerIconBytes = await getBytesFromAsset(
       'assets/images/tiptop-marker-icon.png',
       targetWidth: 150,
