@@ -13,10 +13,10 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../UI/formatted_price.dart';
 
-class GridProductItem extends StatelessWidget {
+class MarketGridProductItem extends StatelessWidget {
   final Product product;
 
-  const GridProductItem({@required this.product});
+  const MarketGridProductItem({@required this.product});
 
   void openProductPage(BuildContext context) {
     Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {

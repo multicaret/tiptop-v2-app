@@ -9,12 +9,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../UI/formatted_price.dart';
 
-class ListProductItem extends StatelessWidget {
+class MarketListProductItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
 
-  ListProductItem({
+  MarketListProductItem({
     this.quantity,
     @required this.product,
     this.hasControls = true,

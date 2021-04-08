@@ -5,7 +5,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
@@ -108,7 +108,7 @@ class _SearchPageState extends State<SearchPage> {
                     ? Expanded(
                         child: Container(
                           color: AppColors.white,
-                          child: ProductsGridView(
+                          child: MarketProductsGridView(
                             products: _searchedProducts,
                             physics: AlwaysScrollableScrollPhysics(),
                           ),

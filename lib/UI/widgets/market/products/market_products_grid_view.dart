@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/grid_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_grid_product_item.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-class ProductsGridView extends StatelessWidget {
+class MarketProductsGridView extends StatelessWidget {
   final List<Product> products;
   final ScrollPhysics physics;
 
-  const ProductsGridView({
+  const MarketProductsGridView({
     @required this.products,
     this.physics,
   });
@@ -29,7 +29,7 @@ class ProductsGridView extends StatelessWidget {
         crossAxisCount: 3,
         childAspectRatio: productGridItemAspectRatio,
       ),
-      itemBuilder: (c, i) => GridProductItem(product: products[i]),
+      itemBuilder: (c, i) => MarketGridProductItem(product: products[i]),
     );
   }
 }
