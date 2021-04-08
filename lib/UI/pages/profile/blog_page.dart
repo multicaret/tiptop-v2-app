@@ -105,7 +105,7 @@ class ArticleTile extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(screenHorizontalPadding,),
+                    padding: const EdgeInsets.all(screenHorizontalPadding),
                     child: Text(
                       article.exc.raw,
                       style: AppTextStyles.subtitle,
@@ -117,7 +117,7 @@ class ArticleTile extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: appProvider.isRTL ? EdgeInsets.only(left: screenHorizontalPadding) : EdgeInsets.only(right: screenHorizontalPadding,),
+                padding: appProvider.isRTL ? EdgeInsets.only(left: screenHorizontalPadding) : EdgeInsets.only(right: screenHorizontalPadding),
                 child: Container(
                   decoration: BoxDecoration(
                     boxShadow: [const BoxShadow(blurRadius: 4, color: AppColors.shadow)],
