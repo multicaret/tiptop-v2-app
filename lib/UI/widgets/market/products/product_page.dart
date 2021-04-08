@@ -166,7 +166,6 @@ class _ProductPageState extends State<ProductPage> {
                 child: CartControls(
                   isModalControls: true,
                   product: product,
-                  cartButtonHeight: 45,
                 ),
               ),
             )

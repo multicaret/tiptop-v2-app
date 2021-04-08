@@ -29,7 +29,6 @@ class MarketGridProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool hasUnitTitle = product.unit != null && product.unit.title != null;
     bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
-    double cartButtonHeight = getCartControlButtonHeight(context);
     // print('rebuilt grid product item ${product.title}');
 
     return Column(
@@ -63,10 +62,9 @@ class MarketGridProductItem extends StatelessWidget {
                 bottom: product.unit == null || product.unit.title == null ? 0 : marketProductUnitTitleHeight,
                 left: cartControlsMargin,
                 right: cartControlsMargin,
-                height: cartButtonHeight,
+                height: getCartControlButtonHeight(context),
                 child: CartControls(
-                  product: product,
-                  cartButtonHeight: cartButtonHeight,
+                  product: product
                 ),
               ),
               if (hasUnitTitle)

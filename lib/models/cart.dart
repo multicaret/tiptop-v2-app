@@ -85,7 +85,7 @@ class Cart {
         userId: json["userId"],
         chainId: json["chainId"],
         branchId: json["branchId"],
-        products: List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
+        products: json["products"] == null ? <CartProduct>[] : List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

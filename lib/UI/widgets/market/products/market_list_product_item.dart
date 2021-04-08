@@ -85,7 +85,7 @@ class MarketListProductItem extends StatelessWidget {
             Container(
               width: 99,
               height: 33,
-              child: CartControls(product: product, cartButtonHeight: 33),
+              child: CartControls(product: product),
             ),
           if (quantity != null && !hasControls)
             Container(
