@@ -120,6 +120,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
                 : ListView.builder(
                     controller: productsScrollController,
                     itemCount: widget.children.length,
+                    physics: AlwaysScrollableScrollPhysics(),
                     itemBuilder: (c, i) => ScrollableVerticalContent(
                       index: i,
                       count: widget.children.length,
