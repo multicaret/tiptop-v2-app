@@ -48,7 +48,6 @@ class _ProductPageState extends State<ProductPage> {
     await productsProvider.fetchAndSetProduct(appProvider, product.id);
     product = productsProvider.product;
     productIsFavorited = product.isFavorited;
-    print('productIsFavorited: $productIsFavorited');
     setState(() => _isLoadingProduct = false);
   }
 

@@ -85,7 +85,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
       if (createAddressData != null) {
         addressIconsDropDownItems = createAddressData.kinds.map((kind) => {'id': kind.id, 'icon_url': kind.icon}).toList();
         regionsDropDownItems = createAddressData.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
-        print(regionsDropDownItems);
         if (addressDetailsFormData['region_id'] != null) {
           List<City> cities = createAddressData.cities.where((city) => city.region.id == addressDetailsFormData['region_id']).toList();
           citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
@@ -239,7 +238,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
       ),
     );
     if (dialogResponse != null && dialogResponse) {
-      print(pickedPosition);
       final response = await _createAddress();
       if (response) {
         setState(() => addressLocationConfirmed = true);

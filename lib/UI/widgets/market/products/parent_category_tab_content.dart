@@ -89,7 +89,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           'height': (rowsCount * productGridItemHeight) + (10 * 2) + (10 * (rowsCount - 1)),
         };
       });
-      print(childCategoriesHeights);
     }
     _isInit = false;
     super.didChangeDependencies();
