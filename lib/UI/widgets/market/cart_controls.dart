@@ -48,7 +48,7 @@ class _CartControlsState extends State<CartControls> {
     super.didChangeDependencies();
   }
 
-  Future<void> editCartAction(CartAction action, CartProvider cartProvider) async {
+  Future<void> adjustMarketProductQuantity(CartAction action) async {
     if (!appProvider.isAuth) {
       showToast(msg: 'You Need to Log In First!');
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
@@ -57,12 +57,16 @@ class _CartControlsState extends State<CartControls> {
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
-      await cartProvider.addRemoveProduct(
-        context: context,
+      final responseData = await cartProvider.adjustMarketProductQuantity(
         appProvider: appProvider,
         isAdding: action == CartAction.ADD,
         product: widget.product,
       );
+      if (responseData == 401) {
+        showToast(msg: 'You need to log in first!');
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
     }
   }
 
