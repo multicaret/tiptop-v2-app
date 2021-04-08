@@ -9,8 +9,8 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dar
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../../../../dummy_data.dart';
 
@@ -49,7 +49,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
     if (_isInit) {
       restaurant = ModalRoute.of(context).settings.arguments as Branch;
       expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
-          hasDoubleDelivery: restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled);
+          hasDoubleDelivery:
+              restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled);
       print('expandedHeaderHeight');
       print(expandedHeaderHeight);
       categoriesScrollController = AutoScrollController(

@@ -15,6 +15,7 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import 'cart_animated_button.dart';
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class CartAnimatedButton extends StatelessWidget {
   final bool isRTL;

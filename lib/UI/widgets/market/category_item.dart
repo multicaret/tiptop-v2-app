@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class CategoryItem extends StatelessWidget {
   final String imageUrl;
