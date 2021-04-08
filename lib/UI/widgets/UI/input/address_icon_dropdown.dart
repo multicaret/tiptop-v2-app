@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -45,6 +46,7 @@ class AddressIconDropDown extends StatelessWidget {
                     imageUrl: value['icon_url'],
                     width: 40,
                     alignment: Alignment.center,
+                    placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
                   ),
                 ),
               );

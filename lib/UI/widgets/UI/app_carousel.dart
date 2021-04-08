@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AppCarousel extends StatefulWidget {
@@ -112,6 +113,9 @@ class _AppCarouselState extends State<AppCarousel> {
               imageUrl: widget.images[i],
               fit: BoxFit.cover,
               width: double.infinity,
+              placeholder: (_, __) => SpinKitFadingCircle(
+                color: AppColors.secondary,
+              ),
             ));
   }
 }

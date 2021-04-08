@@ -27,6 +27,13 @@ class OTPChooseMethodPage extends StatefulWidget {
 }
 
 class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsBindingObserver {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   final GlobalKey<FormState> _phoneNumberFormKey = GlobalKey();
   OTPProvider otpProvider;
   AppProvider appProvider;

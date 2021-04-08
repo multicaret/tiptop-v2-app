@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
@@ -89,7 +89,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           'height': (rowsCount * productGridItemHeight) + (10 * 2) + (10 * (rowsCount - 1)),
         };
       });
-      print(childCategoriesHeights);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -132,7 +131,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
                         scrollToCategory(index);
                       },
                       categoriesHeights: childCategoriesHeights,
-                      singleTabContent: ProductsGridView(products: widget.children[i].products),
+                      singleTabContent: MarketProductsGridView(products: widget.children[i].products),
                       pageTopOffset: 0,
                     ),
                   ),

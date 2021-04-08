@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
@@ -34,8 +35,6 @@ class _BlogPageState extends State<BlogPage> {
     final responseData = await AppProvider().get(endpoint: 'blog');
     BlogResponse staticPageResponse = BlogResponse.fromJson(responseData);
     _articles = staticPageResponse.articles;
-    print("_articles");
-    print(_articles.length);
     setState(() {
       _isLoading = false;
     });
@@ -127,6 +126,7 @@ class ArticleTile extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl: article.cover,
+                      placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
                     ),
                   ),
                 ),

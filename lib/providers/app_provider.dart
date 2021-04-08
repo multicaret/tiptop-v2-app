@@ -188,7 +188,7 @@ class AppProvider with ChangeNotifier {
       }
 
       final responseData = json.decode(response.body);
-      if (responseData["data"] == null || responseData["status"] != 200) {
+      if (responseData["status"] != 200) {
         throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }
       return responseData;

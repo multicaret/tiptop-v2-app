@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -78,6 +79,7 @@ class RadioSelectItems extends StatelessWidget {
                             imageUrl: items[i]["logo"],
                             width: 30,
                             fit: BoxFit.cover,
+                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
                           ),
                 ],
               ),

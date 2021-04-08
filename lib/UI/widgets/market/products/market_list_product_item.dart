@@ -9,12 +9,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../UI/formatted_price.dart';
 
-class ListProductItem extends StatelessWidget {
+class MarketListProductItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
 
-  ListProductItem({
+  MarketListProductItem({
     this.quantity,
     @required this.product,
     this.hasControls = true,
@@ -39,10 +39,7 @@ class ListProductItem extends StatelessWidget {
           bottom: BorderSide(width: 1, color: AppColors.border),
         ),
       ),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -55,7 +52,7 @@ class ListProductItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: AppColors.border, width: 1.5),
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(product.media.cover),
+                    image: CachedNetworkImageProvider(product.media.coverThumbnail),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -84,13 +81,13 @@ class ListProductItem extends StatelessWidget {
               ),
             ),
           ),
-          if(hasControls)
+          if (hasControls)
             Container(
               width: 99,
               height: 33,
               child: CartControls(product: product, cartButtonHeight: 33),
             ),
-          if(quantity != null && !hasControls)
+          if (quantity != null && !hasControls)
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
