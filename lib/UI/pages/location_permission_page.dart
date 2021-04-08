@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/location_permission_dialog.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
@@ -16,7 +17,7 @@ class LocationPermissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (c, appProvider, _) => AppScaffold(
-        bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
+        bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
         body: SingleChildScrollView(
           child: Column(
             children: [

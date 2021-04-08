@@ -22,7 +22,7 @@ class Category {
   StringRawStringFormatted description;
   bool hasChildren;
   String cover;
-  dynamic thumbnail;
+  String thumbnail;
   List<Category> childCategories;
   List<Product> products;
 
@@ -35,8 +35,8 @@ class Category {
         hasChildren: json["hasChildren"],
         cover: json["cover"],
         thumbnail: json["thumbnail"],
-        childCategories: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
-        products: json["products"] == null ? null : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
+        childCategories: json["children"] == null ? <Category>[] : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
+        products: json["products"] == null ? <Product>[] : List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

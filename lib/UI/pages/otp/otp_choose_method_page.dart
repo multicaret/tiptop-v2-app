@@ -10,6 +10,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
@@ -118,12 +119,18 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppScaffold(
       bgColor: AppColors.white,
       hasOverlayLoader: _isLoadingCheckOTPValidation,
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       body: SingleChildScrollView(
         child: Column(
           children: [

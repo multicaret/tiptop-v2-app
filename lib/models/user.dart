@@ -116,6 +116,6 @@ class User {
         "currency": currency == null ? null : currency.toJson(),
         "country": country == null ? null : country.toJson(),
         "region": region == null ? null : region.toJson(),
-        "city": region == null ? null : city.toJson(),
+        "city": city == null ? null : city.toJson(),
       };
 }

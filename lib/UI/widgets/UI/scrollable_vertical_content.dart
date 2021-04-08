@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -82,7 +83,7 @@ class _ScrollableVerticalContentState extends State<ScrollableVerticalContent> {
       children: <Widget>[
         if (widget.index != 0 || widget.firstItemHasTitle)
           Container(
-            padding: const EdgeInsets.only(right: 17, left: 17, top: 30, bottom: 5),
+            padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 30, bottom: 5),
             color: AppColors.bg,
             child: Text(
               widget.child.title,

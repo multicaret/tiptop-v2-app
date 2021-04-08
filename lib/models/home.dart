@@ -13,8 +13,8 @@ class HomeData {
     this.totalActiveOrders,
     this.branch,
     this.distance,
-    this.hasAvailableBranchesNow,
     this.categories,
+    this.restaurants,
   });
 
   List<Slide> slides;
@@ -23,9 +23,9 @@ class HomeData {
   List<Order> activeOrders;
   int totalActiveOrders;
   Branch branch;
-  dynamic distance;
-  bool hasAvailableBranchesNow;
+  double distance;
   List<Category> categories;
+  List<Branch> restaurants;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
         slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
@@ -34,9 +34,9 @@ class HomeData {
         activeOrders: json["activeOrders"] == null ? null : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
         totalActiveOrders: json["totalActiveOrders"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
-        distance: json["distance"],
-        hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
+        distance: json["distance"] == null ? 0.0 : json["distance"].toDouble(),
         categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
+        restaurants: json["restaurants"] == null ? <Branch>[] : List<Branch>.from(json["restaurants"].map((x) => Branch.fromJson(x))),
       );
 }
 
@@ -63,42 +63,48 @@ class EstimatedArrivalTime {
 class Branch {
   Branch({
     this.id,
+    this.title,
     this.regionId,
     this.cityId,
-    this.minimumOrder,
-    this.underMinimumOrderDeliveryFee,
-    this.fixedDeliveryFee,
+    this.tiptopDelivery,
+    this.restaurantDelivery,
     this.primaryPhoneNumber,
     this.secondaryPhoneNumber,
     this.whatsappPhoneNumber,
+    this.rating,
+    this.workingHours,
     this.latitude,
     this.longitude,
     this.chain,
   });
 
   int id;
+  String title;
   int regionId;
   int cityId;
-  IntRawStringFormatted minimumOrder;
-  IntRawStringFormatted underMinimumOrderDeliveryFee;
-  IntRawStringFormatted fixedDeliveryFee;
+  BranchDelivery tiptopDelivery;
+  BranchDelivery restaurantDelivery;
   String primaryPhoneNumber;
   String secondaryPhoneNumber;
   String whatsappPhoneNumber;
+  BranchRating rating;
+  WorkingHours workingHours;
   double latitude;
   double longitude;
   Chain chain;
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
         id: json["id"],
+        title: json["title"],
         regionId: json["regionId"],
         cityId: json["cityId"],
-        minimumOrder: IntRawStringFormatted.fromJson(json["minimumOrder"]),
-        underMinimumOrderDeliveryFee: IntRawStringFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
-        fixedDeliveryFee: IntRawStringFormatted.fromJson(json["fixedDeliveryFee"]),
+        tiptopDelivery: BranchDelivery.fromJson(json["tiptopDelivery"]),
+        restaurantDelivery: BranchDelivery.fromJson(json["restaurantDelivery"]),
         primaryPhoneNumber: json["primaryPhoneNumber"],
         secondaryPhoneNumber: json["secondaryPhoneNumber"],
         whatsappPhoneNumber: json["whatsappPhoneNumber"],
+        rating: BranchRating.fromJson(json["rating"]),
+        workingHours: WorkingHours.fromJson(json["workingHours"]),
         latitude: json["latitude"],
         longitude: json["longitude"],
         chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
@@ -106,11 +112,11 @@ class Branch {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "title": title,
         "regionId": regionId,
         "cityId": cityId,
-        "minimumOrder": minimumOrder.toJson(),
-        "underMinimumOrderDeliveryFee": underMinimumOrderDeliveryFee.toJson(),
-        "fixedDeliveryFee": fixedDeliveryFee.toJson(),
+        "tiptopDelivery": tiptopDelivery.toJson(),
+        "restaurantDelivery": restaurantDelivery.toJson(),
         "primaryPhoneNumber": primaryPhoneNumber,
         "secondaryPhoneNumber": secondaryPhoneNumber,
         "whatsappPhoneNumber": whatsappPhoneNumber,
@@ -118,6 +124,121 @@ class Branch {
         "longitude": longitude,
         "chain": chain == null ? null : chain.toJson(),
       };
+}
+
+class BranchDelivery {
+  BranchDelivery({
+    this.isDeliveryEnabled,
+    this.minimumOrder,
+    this.underMinimumOrderDeliveryFee,
+    this.fixedDeliveryFee,
+    this.freeDeliveryThreshold,
+    this.minDeliveryMinutes,
+    this.maxDeliveryMinutes,
+  });
+
+  bool isDeliveryEnabled;
+  DoubleRawIntFormatted minimumOrder;
+  DoubleRawIntFormatted underMinimumOrderDeliveryFee;
+  DoubleRawIntFormatted fixedDeliveryFee;
+  DoubleRawIntFormatted freeDeliveryThreshold;
+  int minDeliveryMinutes;
+  int maxDeliveryMinutes;
+
+  factory BranchDelivery.fromJson(Map<String, dynamic> json) => BranchDelivery(
+        isDeliveryEnabled: json["isDeliveryEnabled"],
+        minimumOrder: DoubleRawIntFormatted.fromJson(json["minimumOrder"]),
+        underMinimumOrderDeliveryFee: DoubleRawIntFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
+        fixedDeliveryFee: DoubleRawIntFormatted.fromJson(json["fixedDeliveryFee"]),
+        freeDeliveryThreshold: DoubleRawIntFormatted.fromJson(json["freeDeliveryThreshold"]),
+        minDeliveryMinutes: json["minDeliveryMinutes"],
+        maxDeliveryMinutes: json["maxDeliveryMinutes"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isDeliveryEnabled": isDeliveryEnabled,
+        "minimumOrder": minimumOrder.toJson(),
+        "underMinimumOrderDeliveryFee": underMinimumOrderDeliveryFee.toJson(),
+        "fixedDeliveryFee": fixedDeliveryFee.toJson(),
+        "freeDeliveryThreshold": freeDeliveryThreshold.toJson(),
+        "minDeliveryMinutes": minDeliveryMinutes,
+        "maxDeliveryMinutes": maxDeliveryMinutes,
+      };
+}
+
+class BranchRating {
+  BranchRating({
+    this.colorHexadecimal,
+    this.colorRGBA,
+    this.averageRaw,
+    this.averageFormatted,
+    this.countRaw,
+    this.countFormatted,
+  });
+
+  String colorHexadecimal;
+  String colorRGBA;
+  double averageRaw;
+  String averageFormatted;
+  int countRaw;
+  String countFormatted;
+
+  factory BranchRating.fromJson(Map<String, dynamic> json) => BranchRating(
+        colorHexadecimal: json["colorHexadecimal"],
+        colorRGBA: json["colorRGBA"],
+        averageRaw: json["averageRaw"].toDouble(),
+        averageFormatted: json["averageFormatted"],
+        countRaw: json["countRaw"],
+        countFormatted: json["countFormatted"],
+      );
+}
+
+class WorkingHours {
+  List<String> offs;
+  String offsRendered;
+  String opensAt;
+  String closesAt;
+  bool isOpen;
+  List<Schedule> schedule;
+
+  WorkingHours({
+    this.offs,
+    this.offsRendered,
+    this.opensAt,
+    this.closesAt,
+    this.isOpen,
+    this.schedule,
+  });
+
+  factory WorkingHours.fromJson(Map<String, dynamic> json) => WorkingHours(
+        offs: List<String>.from(json["offs"].map((x) => x)),
+        offsRendered: json["offsRendered"],
+        opensAt: json["opensAt"],
+        closesAt: json["closesAt"],
+        isOpen: json["isOpen"],
+        schedule: List<Schedule>.from(json["schedule"].map((x) => Schedule.fromJson(x))),
+      );
+}
+
+class Schedule {
+  int id;
+  String day;
+  String opensAt;
+  String closesAt;
+
+  Schedule({
+    this.id,
+    this.day,
+    this.opensAt,
+    this.closesAt,
+  });
+
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+        id: json["id"],
+        day: json["day"],
+        opensAt: json["opensAt"],
+        closesAt: json["closesAt"],
+      );
 }
 
 class Chain {

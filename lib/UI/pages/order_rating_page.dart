@@ -10,8 +10,8 @@ import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -115,7 +115,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                           ),
                           SectionTitle('Please Rate Your Experience'),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                             decoration: BoxDecoration(
                               color: AppColors.white,
                               border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -124,7 +124,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                               children: [
                                 AppRatingBar(
                                   starsGutter: ratingStarsGutter,
-                                  starSize: (screenSize.width - (ratingStarsGutter * 5) - (17 * 2)) / 5,
+                                  starSize: (screenSize.width - (ratingStarsGutter * 5) - (screenHorizontalPadding * 2)) / 5,
                                   onRatingUpdate: (value) {
                                     setState(() {
                                       _ratingValue = value;
@@ -160,7 +160,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                           Form(
                             key: _ratingFormKey,
                             child: Container(
-                              padding: const EdgeInsets.only(left: 17, right: 17, top: 20),
+                              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20),
                               color: AppColors.white,
                               child: AppTextField(
                                 labelText: 'Your comment',
@@ -176,7 +176,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+                    padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
                     decoration: BoxDecoration(
                       color: AppColors.bg,
                       boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],

@@ -4,10 +4,10 @@ import 'package:tiptop_v2/UI/widgets/UI/app_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
-import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -60,12 +60,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       applyAction: _submit,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 17, right: 17, bottom: 5),
+          padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 5),
           child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
         ),
         ...deliveryTypesRadioItems(),
         Container(
-          padding: const EdgeInsets.only(bottom: 5, top: 10, left: 17, right: 17),
+          padding: const EdgeInsets.only(bottom: 5, top: 10, left: screenHorizontalPadding, right: screenHorizontalPadding,),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppColors.border),
@@ -96,7 +96,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: screenHorizontalPadding),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppColors.border),
@@ -116,7 +116,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 5),
+          padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
           child: Text(Translations.of(context).get('Categories'), style: AppTextStyles.body50),
         ),
         CategoriesSlider(
@@ -136,7 +136,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         child: InkWell(
           onTap: () => setState(() => filterData['delivery_type_id'] = deliveryTypes[i]['id']),
           child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10, left: appProvider.isRTL ? 17 : 12, right: appProvider.isRTL ? 12 : 17),
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: appProvider.isRTL ? screenHorizontalPadding : 12, right: appProvider.isRTL ? 12 : screenHorizontalPadding,),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

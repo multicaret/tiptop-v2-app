@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/pages/checkout_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -33,7 +34,7 @@ class OrderButton extends StatelessWidget {
             },
       child: Container(
         color: AppColors.primary,
-        padding: const EdgeInsets.only(top: 20, bottom: 40, left: 17, right: 17),
+        padding: const EdgeInsets.only(top: 20, bottom: 40, left: screenHorizontalPadding, right: screenHorizontalPadding,),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -59,7 +60,7 @@ class OrderButton extends StatelessWidget {
             Container(
               height: 45,
               alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 17),
+              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.only(
@@ -72,7 +73,7 @@ class OrderButton extends StatelessWidget {
                   const BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
                 ],
               ),
-              child: cartProvider.isLoadingAddRemoveRequest
+              child: cartProvider.isLoadingAdjustCartQuantityRequest
                   ? SpinKitThreeBounce(
                       color: AppColors.primary,
                       size: 20,

@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/models/static_page.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 
 class AboutPage extends StatefulWidget {
   static const routeName = '/about';
@@ -43,7 +44,7 @@ class _AboutPageState extends State<AboutPage> {
             ? Center(child: AppLoader())
             : SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                 child: Html(
                   shrinkWrap: true,
                   data: """${_about.content.formatted}""",

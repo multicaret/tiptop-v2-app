@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -33,7 +34,7 @@ class PreviousOrderItem extends StatelessWidget {
           background: Container(
             color: Colors.red,
             alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: 17),
+            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
             child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
           ),
           confirmDismiss: (direction) async {

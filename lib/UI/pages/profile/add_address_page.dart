@@ -15,6 +15,7 @@ import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
@@ -168,7 +169,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
               decoration: BoxDecoration(
                 boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,

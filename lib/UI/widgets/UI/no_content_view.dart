@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class NoContentView extends StatelessWidget {
@@ -9,7 +10,7 @@ class NoContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 17.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: screenHorizontalPadding),
       child: Container(
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(

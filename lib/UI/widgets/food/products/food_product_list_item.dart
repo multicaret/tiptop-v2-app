@@ -20,7 +20,7 @@ class FoodProductListItem extends StatelessWidget {
         },
         child: Container(
           height: foodProductListItemHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppColors.border),

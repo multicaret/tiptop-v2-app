@@ -50,19 +50,6 @@ String requiredFieldValidator(BuildContext context, String value) {
   return null;
 }
 
-/*
-String priceAndCurrency({dynamic price, Currency currency}) {
-  String currencySymbol = NumberFormat.simpleCurrency().simpleCurrencySymbol(currency.code);
-  String formattedPrice = NumberFormat.decimalPattern('en').format(price);
-  String priceAndCurrency = currency.isSymbolAfter ? '$formattedPrice $currencySymbol' : '$currencySymbol $formattedPrice';
-  return priceAndCurrency;
-}
-
-String currencySymbol(Currency currency) {
-  return NumberFormat.simpleCurrency().simpleCurrencySymbol(currency.code);
-}
- */
-
 String formatDate(BuildContext context, dynamic dateTime, {bool withWeekDay = false}) {
   AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
@@ -79,13 +66,10 @@ String formatTime(BuildContext context, dynamic dateTime) {
   return formattedTime;
 }
 
-double screenGutter = 17;
-double gridGutter = 10;
-
 double getColItemHeight(int colCount, BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  return (screenWidth - (screenGutter * 2) - (gridGutter * (colCount - 1))) / colCount;
+  return (screenWidth - (screenHorizontalPadding * 2) - (appGridGutter * (colCount - 1))) / colCount;
 }
 
 double cartControlsMargin = 10;

@@ -13,6 +13,7 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -133,7 +134,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                               ? null
                               : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -160,7 +161,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                       if (hasCoupon) SectionTitle('Promotions'),
                       if (hasCoupon)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                           decoration: BoxDecoration(
                             color: AppColors.white,
                             border: Border(bottom: BorderSide(color: AppColors.border)),

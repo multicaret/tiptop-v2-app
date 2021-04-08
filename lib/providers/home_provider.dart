@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
@@ -10,6 +11,7 @@ import 'local_storage.dart';
 
 class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
+  List<Category> marketCategories = [];
   HomeData foodHomeData;
 
   static int branchId;
@@ -18,9 +20,10 @@ class HomeProvider with ChangeNotifier {
   bool categorySelected = false;
   int selectedParentCategoryId;
 
-  bool homeDataRequestError = false;
+  bool marketHomeDataRequestError = false;
+  bool foodHomeDataRequestError = false;
   bool marketNoBranchFound = false;
-  bool foodNoBranchFound = false;
+  bool foodNoRestaurantFound = false;
 
   static double marketBranchLat;
   static double marketBranchLong;
@@ -71,9 +74,10 @@ class HomeProvider with ChangeNotifier {
       'selected_address_id': addressesProvider.selectedAddress == null ? '' : '${addressesProvider.selectedAddress.id}',
     };
 
-    homeDataRequestError = false;
+    marketHomeDataRequestError = false;
+    foodHomeDataRequestError = false;
     marketNoBranchFound = false;
-    foodNoBranchFound = false;
+    foodNoRestaurantFound = false;
     try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
@@ -84,14 +88,22 @@ class HomeProvider with ChangeNotifier {
       setHomeData(cartProvider, responseData["data"]);
       notifyListeners();
     } catch (e) {
-      homeDataRequestError = true;
+      if (selectedChannel == 'grocery') {
+        print('An error happened in market home data request');
+        marketHomeDataRequestError = true;
+        // throw e;
+      } else {
+        print('An error happened in food home data request');
+        foodHomeDataRequestError = true;
+        // throw e;
+      }
       notifyListeners();
-      throw e;
     }
   }
 
   void setHomeData(CartProvider cartProvider, data) {
     if (selectedChannel == 'grocery') {
+      print('Setting market home data...');
       marketHomeData = HomeData.fromJson(data);
       if (marketHomeData.branch == null) {
         marketNoBranchFound = true;
@@ -104,18 +116,29 @@ class HomeProvider with ChangeNotifier {
         marketBranchLong = marketHomeData.branch.longitude;
       }
 
+      final _marketCategories = marketHomeData.categories;
+      marketCategories = _marketCategories.where((parentCategory) {
+        bool atLeastOneChildHasProducts = false;
+        if (parentCategory.hasChildren) {
+          final childCategories = parentCategory.childCategories;
+          childCategories.forEach((child) {
+            if (child.products.length > 0) {
+              atLeastOneChildHasProducts = true;
+              return;
+            }
+          });
+        }
+        return parentCategory.hasChildren && atLeastOneChildHasProducts;
+      }).toList();
+
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);
       }
     } else {
+      print('Setting food home data...');
       foodHomeData = HomeData.fromJson(data);
-      if (foodHomeData.branch == null) {
-        foodNoBranchFound = true;
-      } else {
-        branchId = foodHomeData.branch.id;
-        if (foodHomeData.branch.chain != null) {
-          chainId = foodHomeData.branch.chain.id;
-        }
+      if (foodHomeData.restaurants.length == 0) {
+        foodNoRestaurantFound = true;
       }
 
       if (foodHomeData.cart != null) {

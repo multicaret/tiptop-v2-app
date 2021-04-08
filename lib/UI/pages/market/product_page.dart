@@ -8,14 +8,15 @@ import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import '../../UI/app_carousel.dart';
-import '../../UI/app_scaffold.dart';
-import '../../UI/formatted_price.dart';
+import '../../widgets/UI/app_carousel.dart';
+import '../../widgets/UI/app_scaffold.dart';
+import '../../widgets/UI/formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = '/product';
@@ -35,7 +36,7 @@ class _ProductPageState extends State<ProductPage> {
   bool _isInit = true;
   bool _isLoadingProduct = false;
   bool _isLoadingInteractRequest = false;
-  bool productIsFavorited;
+  bool productIsFavorited = false;
   ProductsProvider productsProvider;
   AppProvider appProvider;
   Product product;
@@ -57,7 +58,6 @@ class _ProductPageState extends State<ProductPage> {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       product = data["product"];
       hasControls = data["has_controls"];
-      productIsFavorited = product.isFavorited;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       _fetchAndSetProduct();
@@ -160,13 +160,12 @@ class _ProductPageState extends State<ProductPage> {
               right: 0,
               height: 105,
               child: Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 40, right: 17, left: 17),
+                padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
                 height: 45,
                 color: AppColors.bg,
                 child: CartControls(
                   isModalControls: true,
                   product: product,
-                  cartButtonHeight: 45,
                 ),
               ),
             )

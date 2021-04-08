@@ -71,17 +71,12 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
             child: TabBarView(
               controller: tabController,
               children: List.generate(widget.parents.length, (i) {
-                bool hasChildCategories = widget.parents[i].hasChildren && widget.parents[i].childCategories.length != 0;
                 List<Category> children = widget.parents[i].childCategories.where((child) => child.products.length > 0).toList();
 
-                return hasChildCategories
-                    ? ParentCategoryTabContent(
-                        children: children,
-                        refreshHomeData: widget.refreshHomeData,
-                      )
-                    : Center(
-                        child: Text('No Sub Categories/Products'),
-                      );
+                return ParentCategoryTabContent(
+                  children: children,
+                  refreshHomeData: widget.refreshHomeData,
+                );
               }),
             ),
           ),

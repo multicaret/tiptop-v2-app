@@ -212,6 +212,7 @@ class AppProvider with ChangeNotifier {
     Map<String, dynamic> body,
     bool withToken = false,
     bool isPut = false,
+    bool overrideStatusCheck = false,
   }) async {
     try {
       final root = await this.endpointRoot();
@@ -235,7 +236,7 @@ class AppProvider with ChangeNotifier {
         }
         return 401;
       }
-      if (responseData["status"] != 200) {
+      if (responseData["status"] != 200 && !overrideStatusCheck) {
         throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }
       return responseData;

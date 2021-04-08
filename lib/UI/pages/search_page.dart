@@ -11,6 +11,7 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -139,7 +140,7 @@ class _SearchPageState extends State<SearchPage> {
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
             child: Row(
               children: [
                 AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),

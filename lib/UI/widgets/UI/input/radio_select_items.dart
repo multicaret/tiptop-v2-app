@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -34,8 +35,8 @@ class RadioSelectItems extends StatelessWidget {
               padding: EdgeInsets.only(
                 top: hasBorder ? 10 : 5,
                 bottom: hasBorder ? 10 : 5,
-                left: isRTL ? 17 : 7,
-                right: isRTL ? 7 : 17,
+                left: isRTL ? screenHorizontalPadding : 7,
+                right: isRTL ? 7 : screenHorizontalPadding,
               ),
               decoration: BoxDecoration(
                 border: hasBorder ? Border(bottom: BorderSide(color: AppColors.border)) : null,
@@ -79,7 +80,7 @@ class RadioSelectItems extends StatelessWidget {
                             imageUrl: items[i]["logo"],
                             width: 30,
                             fit: BoxFit.cover,
-                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary, size: 20,),
                           ),
                 ],
               ),

@@ -2,34 +2,6 @@ import 'package:tiptop_v2/models/product.dart';
 
 import 'models.dart';
 
-class AddRemoveProductDataResponse {
-  AddRemoveProductDataResponse({
-    this.cartData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  CartData cartData;
-  String errors;
-  dynamic message;
-  int status;
-
-  factory AddRemoveProductDataResponse.fromJson(Map<String, dynamic> json) => AddRemoveProductDataResponse(
-        cartData: json["data"] == null ? null : CartData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": cartData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
-
 class CartData {
   CartData({
     this.cart,
@@ -85,7 +57,7 @@ class Cart {
         userId: json["userId"],
         chainId: json["chainId"],
         branchId: json["branchId"],
-        products: List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
+        products: json["products"] == null ? <CartProduct>[] : List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

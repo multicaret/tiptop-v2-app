@@ -93,7 +93,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                             Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             Expanded(
                               child: Html(
-                                data: """${homeProvider.marketHomeData.branch.minimumOrder.formatted}""",
+                                data: """${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}""",
                                 style: {"body": AppTextStyles.htmlXsBold},
                               ),
                             ),
@@ -108,7 +108,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                             Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             Expanded(
                               child: Html(
-                                data: """${homeProvider.marketHomeData.branch.fixedDeliveryFee.formatted}""",
+                                data: """${homeProvider.marketHomeData.branch.tiptopDelivery.fixedDeliveryFee.formatted}""",
                                 style: {"body": AppTextStyles.htmlXsBold},
                               ),
                             ),

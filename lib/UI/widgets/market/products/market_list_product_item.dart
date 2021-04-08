@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/product_page.dart';
+import 'package:tiptop_v2/UI/pages/market/product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -32,7 +33,7 @@ class MarketListProductItem extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 15),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
@@ -85,7 +86,7 @@ class MarketListProductItem extends StatelessWidget {
             Container(
               width: 99,
               height: 33,
-              child: CartControls(product: product, cartButtonHeight: 33),
+              child: CartControls(product: product),
             ),
           if (quantity != null && !hasControls)
             Container(

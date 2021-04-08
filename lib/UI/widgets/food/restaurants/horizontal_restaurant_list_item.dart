@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HorizontalRestaurantListItem extends StatelessWidget {
@@ -16,7 +17,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 130,
-      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10.0),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.primary50)),
       ),

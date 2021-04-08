@@ -47,7 +47,7 @@ class _FaqPageState extends State<FaqPage> {
               ? Center(child: AppLoader())
               : SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
-                  // padding: const EdgeInsets.symmetric(horizontal: 17),
+                  // padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: List.generate(

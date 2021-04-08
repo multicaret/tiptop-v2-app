@@ -52,7 +52,7 @@ class MarketCartPage extends StatelessWidget {
             Expanded(
               child: ListView(
                 physics: AlwaysScrollableScrollPhysics(),
-                children: cartProvider.marketCartProducts
+                children: cartProvider.marketCart.products
                     .map((cartProduct) => MarketListProductItem(
                           product: cartProduct.product,
                           quantity: cartProduct.quantity,

@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_list_item_cover.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -24,7 +25,7 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20.0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.border),

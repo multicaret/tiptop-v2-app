@@ -135,7 +135,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       ),
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
                         decoration: BoxDecoration(
                           border: _isCollapsed ? Border(bottom: BorderSide(color: AppColors.border)) : null,
                           color: AppColors.bg,

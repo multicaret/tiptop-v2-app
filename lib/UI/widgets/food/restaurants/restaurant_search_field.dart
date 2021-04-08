@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -19,7 +20,7 @@ class RestaurantSearchField extends StatelessWidget {
           filled: true,
           prefixIcon: AppIcons.icon(FontAwesomeIcons.search),
           fillColor: AppColors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(width: 0, color: Colors.transparent),

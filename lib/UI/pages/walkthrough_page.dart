@@ -3,6 +3,7 @@ import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_choose_method_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -18,7 +19,7 @@ class WalkthroughPage extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return AppScaffold(
-      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       bgColor: AppColors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

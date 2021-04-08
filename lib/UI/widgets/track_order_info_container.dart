@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/triangle_painter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -17,7 +18,6 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
   double sliderValue = 1;
   double leftPosition = 30;
   int sliderDivisions = 3;
-  double screenGutter = 17.0;
   double sliderIndicatorWidth = 55.0;
   double sliderIndicatorHeight = 65.0;
   double sliderSideGutter = 20;
@@ -32,7 +32,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double infoContainerWidth = screenSize.width - (screenGutter * 2);
+    double infoContainerWidth = screenSize.width - (screenHorizontalPadding * 2);
 
     return Consumer<AppProvider>(
       builder: (c, appProvider, _) => Column(
@@ -70,8 +70,8 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: screenGutter),
-            padding: EdgeInsets.symmetric(horizontal: screenGutter, vertical: 20),
+            margin: EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+            padding: EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
             width: infoContainerWidth,
             decoration: BoxDecoration(
               color: AppColors.white,
@@ -190,7 +190,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
   }
 
   double getOffset(double screenWidth) {
-    double sliderDivisionWidth = (screenWidth - (screenGutter * 4) - (sliderSideGutter * 2)) / sliderDivisions;
-    return ((sliderValue - 1) * sliderDivisionWidth) + (screenGutter * 2) - (sliderIndicatorWidth / 2) + sliderSideGutter;
+    double sliderDivisionWidth = (screenWidth - (screenHorizontalPadding * 4) - (sliderSideGutter * 2)) / sliderDivisions;
+    return ((sliderValue - 1) * sliderDivisionWidth) + (screenHorizontalPadding * 2) - (sliderIndicatorWidth / 2) + sliderSideGutter;
   }
 }

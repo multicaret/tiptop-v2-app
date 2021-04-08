@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -26,7 +27,7 @@ class HomeLiveTracking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       //ExpansionTile is showing the color of this container behind the children container when expanding
-      padding: const EdgeInsets.only(right: 17, left: 17, top: 10),
+      padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 10),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [const BoxShadow(blurRadius: 7, color: AppColors.shadow)],
