@@ -36,7 +36,7 @@ class _ProductPageState extends State<ProductPage> {
   bool _isInit = true;
   bool _isLoadingProduct = false;
   bool _isLoadingInteractRequest = false;
-  bool productIsFavorited;
+  bool productIsFavorited = false;
   ProductsProvider productsProvider;
   AppProvider appProvider;
   Product product;

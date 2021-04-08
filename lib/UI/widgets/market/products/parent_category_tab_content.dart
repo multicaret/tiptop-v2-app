@@ -52,7 +52,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       axis: Axis.vertical,
     );
 
-    selectedChildCategoryIdNotifier.value = widget.children[0].id;
+    selectedChildCategoryIdNotifier.value = widget.children.length > 0 ? widget.children[0].id : null;
     super.initState();
   }
 
