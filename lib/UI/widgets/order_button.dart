@@ -73,7 +73,7 @@ class OrderButton extends StatelessWidget {
                   const BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
                 ],
               ),
-              child: cartProvider.isLoadingAddRemoveRequest
+              child: cartProvider.isLoadingAdjustCartQuantityRequest
                   ? SpinKitThreeBounce(
                       color: AppColors.primary,
                       size: 20,

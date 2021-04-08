@@ -71,10 +71,13 @@ class _CartControlsState extends State<CartControls> {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
     double cartButtonHeight = widget.isModalControls ? 45 : getCartControlButtonHeight(context);
-        int quantity = cartProvider.getProductQuantity(widget.product.id);
-        bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
-            ? false
-            : cartProvider.requestedMoreThanAvailableQuantity[widget.product.id];
+    int quantity = cartProvider.getProductQuantity(widget.product.id);
+    bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
+        ? false
+        : cartProvider.requestedMoreThanAvailableQuantity[widget.product.id];
+    bool isLoadingQuantity = cartProvider.isLoadingAdjustMarketProductQuantityRequest[widget.product.id] == null
+        ? false
+        : cartProvider.isLoadingAdjustMarketProductQuantityRequest[widget.product.id];
 
     return Stack(
       children: [
@@ -94,14 +97,14 @@ class _CartControlsState extends State<CartControls> {
               ],
             ),
             child: Center(
-              child: cartProvider.isLoadingAddRemoveRequest
+              child: isLoadingQuantity
                   ? SpinKitFadingCircle(color: AppColors.primary, size: cartButtonHeight * 0.6)
                   : Text(
-                quantity == 0 ? '' : '$quantity',
-                style: quantity.toString().length >= 2 ? AppTextStyles.subtitleXsBold : AppTextStyles.subtitleBold,
-                maxLines: 1,
-                overflow: TextOverflow.visible,
-              ),
+                      quantity == 0 ? '' : '$quantity',
+                      style: quantity.toString().length >= 2 ? AppTextStyles.subtitleXsBold : AppTextStyles.subtitleBold,
+                      maxLines: 1,
+                      overflow: TextOverflow.visible,
+                    ),
             ),
           ),
         ),
@@ -110,14 +113,14 @@ class _CartControlsState extends State<CartControls> {
           cartAction: CartAction.REMOVE,
           isRTL: appProvider.isRTL,
           quantity: quantity,
-          onTap: cartProvider.isLoadingAddRemoveRequest ? null : () => adjustMarketProductQuantity(CartAction.REMOVE),
+          onTap: cartProvider.isLoadingAdjustCartQuantityRequest ? null : () => adjustMarketProductQuantity(CartAction.REMOVE),
         ),
         //Add Button
         CartAnimatedButton(
           cartAction: CartAction.ADD,
           isRTL: appProvider.isRTL,
           quantity: quantity,
-          onTap: disableAddition || cartProvider.isLoadingAddRemoveRequest ? null : () => adjustMarketProductQuantity(CartAction.ADD),
+          onTap: disableAddition || cartProvider.isLoadingAdjustCartQuantityRequest ? null : () => adjustMarketProductQuantity(CartAction.ADD),
         ),
         if (widget.isModalControls)
           AnimatedPositioned(

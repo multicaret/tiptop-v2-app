@@ -25,14 +25,14 @@ class AppBarCartTotal extends StatelessWidget {
                 isRTL: appProvider.isRTL,
                 hideCart: hideMarketCart,
                 route: MarketCartPage.routeName,
-                isLoadingAddRemoveRequest: cartProvider.isLoadingAddRemoveRequest,
+                isLoadingAdjustCartQuantityRequest: cartProvider.isLoadingAdjustCartQuantityRequest,
                 cartTotal: hideMarketCart ? '' : cartProvider.marketCart.total.formatted,
               )
             : AnimatedCartTotal(
                 isRTL: appProvider.isRTL,
                 hideCart: hideFoodCart,
                 route: FoodCartPage.routeName,
-                isLoadingAddRemoveRequest: cartProvider.isLoadingAddRemoveRequest,
+                isLoadingAdjustCartQuantityRequest: cartProvider.isLoadingAdjustCartQuantityRequest,
                 cartTotal: hideFoodCart ? '' : cartProvider.foodCart.total.formatted,
               );
       },

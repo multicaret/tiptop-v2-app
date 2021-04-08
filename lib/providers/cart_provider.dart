@@ -10,7 +10,7 @@ class CartProvider with ChangeNotifier {
   Cart marketCart;
   Cart foodCart;
 
-  bool isLoadingAddRemoveRequest = false;
+  bool isLoadingAdjustCartQuantityRequest = false;
   bool isLoadingClearCartRequest = false;
 
   void setMarketCart(Cart _marketCart) {
@@ -42,6 +42,7 @@ class CartProvider with ChangeNotifier {
   }
 
   Map<int, bool> requestedMoreThanAvailableQuantity = {};
+  Map<int, bool> isLoadingAdjustMarketProductQuantityRequest = {};
 
   Future<int> adjustMarketProductQuantity({
     @required AppProvider appProvider,
@@ -68,7 +69,8 @@ class CartProvider with ChangeNotifier {
       'is_adding': isAdding,
     };
 
-    isLoadingAddRemoveRequest = true;
+    isLoadingAdjustCartQuantityRequest = true;
+    isLoadingAdjustMarketProductQuantityRequest[product.id] = true;
     requestedMoreThanAvailableQuantity[product.id] = false;
     notifyListeners();
 
@@ -89,18 +91,21 @@ class CartProvider with ChangeNotifier {
     if (responseData["data"] != null && responseData["status"] == 422) {
       showToast(msg: 'There are only ${cartData.availableQuantity} available ${product.title}');
       requestedMoreThanAvailableQuantity[product.id] = true;
-      isLoadingAddRemoveRequest = false;
+      isLoadingAdjustCartQuantityRequest = false;
+      isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
       notifyListeners();
       return null;
     }
 
     if (responseData["data"] == null || responseData["status"] != 200) {
-      isLoadingAddRemoveRequest = false;
+      isLoadingAdjustCartQuantityRequest = false;
+      isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
       notifyListeners();
       throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
 
-    isLoadingAddRemoveRequest = false;
+    isLoadingAdjustCartQuantityRequest = false;
+    isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
     marketCart = cartData.cart;
     notifyListeners();
 
