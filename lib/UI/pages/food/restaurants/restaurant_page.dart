@@ -49,10 +49,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
     if (_isInit) {
       restaurant = ModalRoute.of(context).settings.arguments as Branch;
       expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
-          hasDoubleDelivery:
-              restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled);
-      print('expandedHeaderHeight');
-      print(expandedHeaderHeight);
+        hasDoubleDelivery: restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled,
+      );
       categoriesScrollController = AutoScrollController(
         viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.horizontal,

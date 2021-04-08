@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_list_item_cover.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_cover_with_info.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -22,10 +22,8 @@ class RestaurantHeaderInfo extends StatelessWidget {
       children: [
         Stack(
           children: [
-            RestaurantListItemCover(
+            RestaurantCoverWithInfo(
               restaurant: restaurant,
-              isFavorited: false,
-              hasRating: false,
               hasBorderRadius: false,
               height: restaurantCoverHeight,
             ),
@@ -73,11 +71,12 @@ class RestaurantHeaderInfo extends StatelessWidget {
                                   style: AppTextStyles.subtitle50,
                                 ),
                               ),
-                              RatingInfo(
-                                ratingValue: 4.5,
-                                ratingsCount: 350,
-                                hasWhiteBg: true,
-                              ),
+                              if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
+                                RatingInfo(
+                                  ratingValue: restaurant.rating.averageRaw,
+                                  ratingsCount: restaurant.rating.countRaw,
+                                  hasWhiteBg: true,
+                                ),
                             ],
                           )
                         ],

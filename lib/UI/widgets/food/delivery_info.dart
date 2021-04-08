@@ -10,10 +10,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class DeliveryInfo extends StatelessWidget {
   final BranchDelivery restaurantDelivery;
   final bool isRestaurant;
+  final bool hasDeliveryFeeItem;
 
   DeliveryInfo({
     @required this.restaurantDelivery,
     this.isRestaurant = false,
+    this.hasDeliveryFeeItem = true,
   });
 
   @override
@@ -44,6 +46,7 @@ class DeliveryInfo extends StatelessWidget {
                   text: '${restaurantDelivery.minDeliveryMinutes}-${restaurantDelivery.maxDeliveryMinutes}',
                 ),
               ),
+              if(hasDeliveryFeeItem)
               Expanded(
                 child: LabeledIcon(
                   icon: LineAwesomeIcons.truck_moving,
