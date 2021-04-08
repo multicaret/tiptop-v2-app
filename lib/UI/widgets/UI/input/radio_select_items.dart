@@ -79,7 +79,7 @@ class RadioSelectItems extends StatelessWidget {
                             imageUrl: items[i]["logo"],
                             width: 30,
                             fit: BoxFit.cover,
-                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary, size: 20,),
                           ),
                 ],
               ),
