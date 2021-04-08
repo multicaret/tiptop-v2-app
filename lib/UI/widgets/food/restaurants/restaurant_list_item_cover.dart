@@ -1,13 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/UI/discount_tag.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
-import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RestaurantListItemCover extends StatelessWidget {
-  final Restaurant restaurant;
+  final Branch restaurant;
   final Function favoriteAction;
   final bool isFavorited;
   final bool hasRating;
@@ -32,7 +33,7 @@ class RestaurantListItemCover extends StatelessWidget {
         borderRadius: BorderRadius.circular(hasBorderRadius ? 8 : 0),
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage(restaurant.cover),
+          image: CachedNetworkImageProvider(restaurant.chain.media.cover),
         ),
       ),
       child: Column(
@@ -40,10 +41,11 @@ class RestaurantListItemCover extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: restaurant.discountValue != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+            // mainAxisAlignment: restaurant.discountValue != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (restaurant.discountValue != null) DiscountTag(value: restaurant.discountValue),
+              // if (restaurant.discountValue != null) DiscountTag(value: restaurant.discountValue),
               GestureDetector(
                 onTap: favoriteAction,
                 child: Container(

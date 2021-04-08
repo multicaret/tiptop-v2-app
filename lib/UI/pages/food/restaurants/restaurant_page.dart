@@ -7,8 +7,9 @@ import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
-import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../../../../dummy_data.dart';
@@ -23,6 +24,10 @@ class RestaurantPage extends StatefulWidget {
 class _RestaurantPageState extends State<RestaurantPage> {
   AutoScrollController categoriesScrollController;
   AutoScrollController productsScrollController;
+  bool _isInit = true;
+
+  Branch restaurant;
+  double expandedHeaderHeight;
 
   final selectedCategoryIdNotifier = ValueNotifier<int>(null);
   List<Map<String, dynamic>> categoriesHeights;
@@ -31,36 +36,44 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   void scrollListener() {
     if (productsScrollController.hasClients) {
-      if (productsScrollController.offset >= (restaurantPageExpandedHeaderHeight - restaurantPageCollapsedHeaderHeight)) {
+      if (productsScrollController.offset >= expandedHeaderHeight - restaurantPageCollapsedHeaderHeight) {
         _collapsedNotifier.value = true;
-      } else if (productsScrollController.offset < (restaurantPageExpandedHeaderHeight - restaurantPageCollapsedHeaderHeight)) {
+      } else if (productsScrollController.offset < (expandedHeaderHeight - restaurantPageCollapsedHeaderHeight)) {
         _collapsedNotifier.value = false;
       }
     }
   }
 
   @override
-  void initState() {
-    categoriesScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.horizontal,
-    );
+  void didChangeDependencies() {
+    if (_isInit) {
+      restaurant = ModalRoute.of(context).settings.arguments as Branch;
+      expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
+          hasDoubleDelivery: restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled);
+      print('expandedHeaderHeight');
+      print(expandedHeaderHeight);
+      categoriesScrollController = AutoScrollController(
+        viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.horizontal,
+      );
 
-    productsScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.vertical,
-    );
-    productsScrollController.addListener(scrollListener);
+      productsScrollController = AutoScrollController(
+        viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical,
+      );
+      productsScrollController.addListener(scrollListener);
 
-    selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
+      selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
 
-    categoriesHeights = List.generate(
-        dummyFoodCategories.length,
-        (i) => {
-              'id': dummyFoodCategories[i].id,
-              'height': foodProductListItemHeight * dummyFoodCategories[i].products.length,
-            });
-    super.initState();
+      categoriesHeights = List.generate(
+          dummyFoodCategories.length,
+          (i) => {
+                'id': dummyFoodCategories[i].id,
+                'height': foodProductListItemHeight * dummyFoodCategories[i].products.length,
+              });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -86,7 +99,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   @override
   Widget build(BuildContext context) {
-    Restaurant restaurant = ModalRoute.of(context).settings.arguments as Restaurant;
     return AppScaffold(
       hasCurve: false,
       body: CustomScrollView(
@@ -95,11 +107,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
-            stretch: true,
-            onStretchTrigger: () async {
-              print('Pulled down!');
-            },
-            expandedHeight: restaurantPageExpandedHeaderHeight,
+            expandedHeight: expandedHeaderHeight,
             collapsedHeight: restaurantPageCollapsedHeaderHeight,
             backgroundColor: AppColors.bg,
             pinned: true,
@@ -137,10 +145,18 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
                         decoration: BoxDecoration(
-                          border: _isCollapsed ? Border(bottom: BorderSide(color: AppColors.border)) : null,
+                          border: _isCollapsed
+                              ? const Border(
+                                  bottom: BorderSide(color: AppColors.border),
+                                )
+                              : null,
                           color: AppColors.bg,
                         ),
-                        child: RestaurantSearchField(),
+                        child: RestaurantSearchField(onTap: () {
+                          selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
+                          scrollToCategory(0);
+                          scrollToProducts(0);
+                        }),
                       ),
                     ],
                   ),
@@ -178,7 +194,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         (j) => FoodProductListItem(product: dummyFoodCategories[i].products[j]),
                       ),
                     ),
-                    pageTopOffset: restaurantPageExpandedHeaderHeight,
+                    pageTopOffset: expandedHeaderHeight,
                   );
                 },
               ),

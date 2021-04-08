@@ -5,13 +5,14 @@ import 'package:tiptop_v2/UI/widgets/UI/dicount_badge.dart';
 import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_list_item_cover.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class VerticalRestaurantListItem extends StatefulWidget {
-  final Restaurant restaurant;
+  final Branch restaurant;
 
   VerticalRestaurantListItem({@required this.restaurant});
 
@@ -92,7 +93,7 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
                             ),
                           ],
                         ),
-                        if (widget.restaurant.discountValue != null) DiscountBadge(value: widget.restaurant.discountValue),
+                        // if (widget.restaurant.discountValue != null) DiscountBadge(value: widget.restaurant.discountValue),
                       ],
                     ),
                     const SizedBox(height: 5),

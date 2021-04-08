@@ -10,7 +10,6 @@ import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
-import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -184,7 +183,10 @@ class _HomePageState extends State<HomePage> {
                                               activeOrders: homeProvider.foodHomeData.activeOrders,
                                               totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
                                             ),
-                                          FoodHomeContent(foodHomeData: foodHomeData),
+                                          FoodHomeContent(
+                                            foodHomeData: foodHomeData,
+                                            isRTL: appProvider.isRTL,
+                                          ),
                                         ],
                                       )
                                 : Container(),

@@ -87,6 +87,11 @@ double getProductGridItemHeight(BuildContext context) {
   return getColItemHeight(3, context) + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
 }
 
+double getRestaurantPageExpandedHeaderHeight({bool hasDoubleDelivery = false}) {
+  double deliveryInfoContainerHeight = hasDoubleDelivery ? ((restaurantSingleDeliveryInfoHeight * 2) + 10) : restaurantSingleDeliveryInfoHeight;
+  return restaurantCoverHeight + (20 * 2) + deliveryInfoContainerHeight + sliverAppBarSearchBarHeight;
+}
+
 bool isCallable(v) => v is Function;
 
 Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {

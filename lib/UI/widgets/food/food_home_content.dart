@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurants_index.dart';
 import 'package:tiptop_v2/models/home.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
 
 class FoodHomeContent extends StatelessWidget {
   final HomeData foodHomeData;
+  final bool isRTL;
 
   FoodHomeContent({
     @required this.foodHomeData,
+    @required this.isRTL,
   });
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -25,9 +26,10 @@ class FoodHomeContent extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
           color: AppColors.white,
-          child: CategoriesSlider(categories: foodHomeData.categories, isRTL: appProvider.isRTL),
+          child: CategoriesSlider(categories: foodHomeData.categories, isRTL: isRTL),
         ),
-        RestaurantsIndex(),
+        FilterSortButtons(foodCategories: foodHomeData.categories),
+        RestaurantsIndex(restaurants: foodHomeData.restaurants),
       ],
     );
   }

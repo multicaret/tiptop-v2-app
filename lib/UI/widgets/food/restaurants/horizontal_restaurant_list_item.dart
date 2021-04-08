@@ -1,14 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
-import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HorizontalRestaurantListItem extends StatelessWidget {
-  final Restaurant restaurant;
+  final Branch restaurant;
 
   HorizontalRestaurantListItem({@required this.restaurant});
 
@@ -31,8 +32,8 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
-                      restaurant.cover,
+                    image: CachedNetworkImageProvider(
+                      restaurant.chain.media.logo,
                     ),
                   ),
                 ),
@@ -62,30 +63,53 @@ class HorizontalRestaurantListItem extends StatelessWidget {
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(restaurant.title),
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
-                        const SizedBox(width: 5),
-                        Expanded(child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20')),
-                        const SizedBox(width: 10),
-                        Expanded(child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD')),
-                      ],
-                    ),
+                    if (restaurant.tiptopDelivery.isDeliveryEnabled)
+                      Row(
+                        children: [
+                          CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: LabeledIcon(
+                              icon: FontAwesomeIcons.hourglassHalf,
+                              text: '${restaurant.tiptopDelivery.minDeliveryMinutes}-${restaurant.tiptopDelivery.maxDeliveryMinutes}',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: LabeledIcon(
+                              icon: FontAwesomeIcons.shoppingBasket,
+                              text: restaurant.tiptopDelivery.minimumOrder.formatted,
+                            ),
+                          ),
+                        ],
+                      ),
                     const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleIcon(iconText: 'R'),
-                        const SizedBox(width: 5),
-                        Expanded(child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20')),
-                        const SizedBox(width: 10),
-                        Expanded(child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD')),
-                      ],
-                    ),
+                    if (restaurant.restaurantDelivery.isDeliveryEnabled)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleIcon(iconText: 'R'),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: LabeledIcon(
+                              icon: FontAwesomeIcons.hourglassHalf,
+                              text: '${restaurant.restaurantDelivery.minDeliveryMinutes}-${restaurant.restaurantDelivery.maxDeliveryMinutes}',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: LabeledIcon(
+                              icon: FontAwesomeIcons.shoppingBasket,
+                              text: restaurant.restaurantDelivery.minimumOrder.formatted,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ],
