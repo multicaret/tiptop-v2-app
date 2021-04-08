@@ -20,7 +20,6 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,35 +58,35 @@ class _HomePageState extends State<HomePage> {
   bool hasActiveFoodOrders = false;
   List<Order> activeFoodOrders = [];
 
-  bool hideContent = false;
+  bool hideMarketContent = false;
+  bool hideFoodContent = false;
 
   Future<void> fetchAndSetHomeData() async {
-    try {
-      setState(() => isLoadingHomeData = true);
-      await addressesProvider.fetchSelectedAddress();
-      await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
-      if (homeProvider.channelIsMarket) {
+    setState(() => isLoadingHomeData = true);
+    await addressesProvider.fetchSelectedAddress();
+    await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
+    _setHomeData();
+    setState(() => isLoadingHomeData = false);
+  }
+
+  void _setHomeData() {
+    if (homeProvider.channelIsMarket) {
+      hideMarketContent = homeProvider.homeDataRequestError || homeProvider.marketNoBranchFound;
+      if (!hideMarketContent) {
         marketHomeData = homeProvider.marketHomeData;
         marketCategories = marketHomeData.categories;
         marketSlides = marketHomeData.slides;
         hasActiveMarketOrders =
             appProvider.isAuth && homeProvider.marketHomeData.activeOrders != null && homeProvider.marketHomeData.activeOrders.length > 0;
         activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
-        hideContent = homeProvider.homeDataRequestError || homeProvider.marketNoBranchFound;
-      } else {
-        foodHomeData = homeProvider.foodHomeData;
-        foodCategories = dummyFoodCategories;
-        foodSlides = foodHomeData.slides;
-        hasActiveFoodOrders =
-            appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
-        activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
-        // hideContent = homeProvider.homeDataRequestError || homeProvider.foodNoBranchFound;
       }
-      setState(() => isLoadingHomeData = false);
-    } catch (e) {
-      showToast(msg: 'An Error Occurred! Please try again later');
-      setState(() => isLoadingHomeData = false);
-      throw e;
+    } else {
+      foodHomeData = homeProvider.foodHomeData;
+      foodCategories = dummyFoodCategories;
+      foodSlides = foodHomeData.slides;
+      hasActiveFoodOrders = appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
+      activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
+      // hideFoodContent = homeProvider.homeDataRequestError || homeProvider.foodNoBranchFound;
     }
   }
 
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    hideContent || isLoadingHomeData
+                    hideMarketContent || isLoadingHomeData
                         ? Container(
                             height: homeSliderHeight,
                             color: AppColors.bg,
@@ -146,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                       changeView: (value) => channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
-                    hideContent
+                    hideMarketContent
                         ? NoContentView(
                             text: homeProvider.marketNoBranchFound
                                 ? 'No Branch Found'

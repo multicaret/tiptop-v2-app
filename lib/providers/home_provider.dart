@@ -86,7 +86,6 @@ class HomeProvider with ChangeNotifier {
     } catch (e) {
       homeDataRequestError = true;
       notifyListeners();
-      throw e;
     }
   }
 
