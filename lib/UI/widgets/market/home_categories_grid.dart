@@ -45,7 +45,7 @@ class HomeCategoriesGrid extends StatelessWidget {
                 },
                 child: CategoryItem(
                   title: category.title,
-                  imageUrl: category.cover,
+                  imageUrl: category.thumbnail,
                 ),
               ))
           .toList(),
