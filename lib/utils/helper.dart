@@ -183,16 +183,16 @@ Alert appAlert({BuildContext context, String title, String description}) {
 String getHttpExceptionMessage(responseData) {
   String exceptionMessage = '';
   if (responseData["status"] != null) {
-    exceptionMessage += '\nStatus Code: ' + responseData["status"];
+    exceptionMessage += '\nStatus Code: ${responseData["status"]}';
   }
   if (responseData["message"] != null) {
-    exceptionMessage += '\nMessage: ' + responseData["message"];
+    exceptionMessage += '\nMessage: ${responseData["message"]}';
   }
   if (responseData["file"] != null) {
-    exceptionMessage += '\nFile: ' + responseData["file"];
+    exceptionMessage += '\nFile: ${responseData["file"]}';
   }
   if (responseData["trace"] != null) {
-    exceptionMessage += '\nTrace: ' + '${responseData["trace"]}';
+    exceptionMessage += '\nTrace: ${responseData["trace"]}';
   }
   return exceptionMessage.isNotEmpty ? exceptionMessage : 'Unknown Error';
 }
