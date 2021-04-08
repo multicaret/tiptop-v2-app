@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class AddressIcon extends StatelessWidget {
@@ -34,7 +35,11 @@ class AddressIcon extends StatelessWidget {
               image: AssetImage(icon),
               width: 37,
             )
-          : CachedNetworkImage(imageUrl: icon, width: 37),
+          : CachedNetworkImage(
+              imageUrl: icon,
+              width: 37,
+              placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+            ),
     );
   }
 }
