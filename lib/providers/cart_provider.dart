@@ -27,10 +27,22 @@ class CartProvider with ChangeNotifier {
   }
 
   bool get noMarketCart =>
-      marketCart == null || marketCart.id == null || marketCart.total.raw == null || marketCart.total.raw == 0.0 || marketCart.productsCount == 0;
+      marketCart == null ||
+      marketCart.id == null ||
+      marketCart.total.raw == null ||
+      marketCart.total.raw == 0.0 ||
+      marketCart.productsCount == 0 ||
+      marketCart.products == null ||
+      marketCart.products.length == 0;
 
   bool get noFoodCart =>
-      foodCart == null || foodCart.id == null || foodCart.total.raw == null || foodCart.total.raw == 0.0 || foodCart.productsCount == 0;
+      foodCart == null ||
+      foodCart.id == null ||
+      foodCart.total.raw == null ||
+      foodCart.total.raw == 0.0 ||
+      foodCart.productsCount == 0 ||
+      foodCart.products == null ||
+      foodCart.products.length == 0;
 
   int getProductQuantity(int productId) {
     if (marketCart != null && marketCart.products.length != 0) {
