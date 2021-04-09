@@ -106,9 +106,9 @@ class _ProductPageState extends State<ProductPage> {
             ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Positioned.fill(
+          Expanded(
             child: RefreshIndicator(
               onRefresh: _fetchAndSetProduct,
               child: ListView(
@@ -142,21 +142,23 @@ class _ProductPageState extends State<ProductPage> {
                         data: """${product.description.formatted}""",
                       ),
                     ),
-                  const SizedBox(height: 105),
                 ],
               ),
             ),
           ),
           if (hasControls)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
+            Container(
+              padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
               height: 105,
+              color: AppColors.bg,
               child: Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
+                constraints: BoxConstraints(maxHeight: 45),
                 height: 45,
-                color: AppColors.bg,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(color: AppColors.shadow, blurRadius: 6),
+                  ],
+                ),
                 child: CartControls(
                   isModalControls: true,
                   product: product,
