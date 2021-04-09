@@ -77,7 +77,7 @@ class _ProductPageState extends State<ProductPage> {
       await productsProvider.interactWithProduct(
         appProvider,
         product.id,
-        _productIsFavorited ? Interactions.UN_FAVORITE : Interactions.FAVORITE,
+        _productIsFavorited ? Interaction.UN_FAVORITE : Interaction.FAVORITE,
       );
       setState(() => _isLoadingInteractRequest = false);
       showToast(msg: _productIsFavorited ? 'Successfully removed product from favorites!' : 'Successfully added product to favorites!');

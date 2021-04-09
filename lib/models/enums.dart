@@ -43,14 +43,14 @@ enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
 
 enum CartAction { ADD, REMOVE }
 
-enum Interactions {FAVORITE, UN_FAVORITE}
+enum Interaction {FAVORITE, UN_FAVORITE}
 
-String getInteractionValue(Interactions _interaction) {
+String getInteractionValue(Interaction _interaction) {
   switch(_interaction) {
-    case Interactions.FAVORITE:
+    case Interaction.FAVORITE:
       return "favorite";
     break;
-    case Interactions.UN_FAVORITE:
+    case Interaction.UN_FAVORITE:
       return "unfavorite";
     break;
     default:

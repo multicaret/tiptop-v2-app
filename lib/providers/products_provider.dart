@@ -54,7 +54,7 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, Interactions interaction) async {
+  Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, Interaction interaction) async {
     final endpoint = 'products/$productId/interact';
     final body = {
       "action": getInteractionValue(interaction),
