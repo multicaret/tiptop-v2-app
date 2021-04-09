@@ -1,5 +1,8 @@
-//Height of product list item in Food channel
-const double foodProductListItemHeight = 120;
+//Small vertical padding of list items
+const double listItemVerticalPaddingSm = 10;
+
+//Default vertical padding of list items
+const double listItemVerticalPadding = 20;
 
 //Height of tab bar of scrollable widget (e.g. restaurant page menu categories, market child categories tabs)
 const double scrollableHorizontalTabBarHeight = 50;
@@ -18,6 +21,12 @@ const double restaurantLogoSize = 100;
 
 //Height of delivery info container of restaurant (tiptop and/or restaurant)
 const double restaurantSingleDeliveryInfoHeight = 60;
+
+//Height of product list item in Food channel
+const double foodProductListItemHeight = 130;
+
+//Food product thumbnail size (height & width) (e.g. in food product list item widget)
+const double foodProductThumbnailSize = foodProductListItemHeight - (listItemVerticalPaddingSm * 2);
 
 //Height of unit title below cart controls in market products
 const double marketProductUnitTitleHeight = 12;
