@@ -14,7 +14,6 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
@@ -23,10 +22,12 @@ import 'cart_animated_button.dart';
 class CartControls extends StatefulWidget {
   final Product product;
   final bool isModalControls;
+  final bool isListItem;
 
   CartControls({
     @required this.product,
     this.isModalControls = false,
+    this.isListItem = false,
   });
 
   @override
@@ -131,7 +132,7 @@ class _CartControlsState extends State<CartControls> {
           isModalControls: widget.isModalControls,
           isLoadingFirstAddition: quantity == 0 && isLoadingQuantity,
         ),
-        if (widget.isModalControls)
+        if (widget.isModalControls || widget.isListItem)
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             right: 0,
@@ -146,16 +147,23 @@ class _CartControlsState extends State<CartControls> {
                 child: quantity == 0 && isLoadingQuantity
                     ? SpinKitThreeBounce(
                         color: AppColors.white,
-                        size: 20,
+                        size:  20,
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AppIcons.iconWhite(LineAwesomeIcons.shopping_cart),
-                          const SizedBox(width: 5),
-                          Text(
-                            Translations.of(context).get('Add To Cart'),
-                            style: AppTextStyles.button,
+                          Icon(
+                            LineAwesomeIcons.shopping_cart,
+                            color: AppColors.white,
+                            size: widget.isListItem ? 14 : 20,
+                          ),
+                          SizedBox(width: widget.isListItem ? 2 : 5),
+                          Expanded(
+                            child: Text(
+                              Translations.of(context).get('Add To Cart'),
+                              maxLines: 1,
+                              style: widget.isListItem ? AppTextStyles.subtitleXxsWhite : AppTextStyles.button,
+                            ),
                           ),
                         ],
                       ),

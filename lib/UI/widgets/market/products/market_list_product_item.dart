@@ -82,7 +82,7 @@ class MarketListProductItem extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
               ),
-              child: CartControls(product: product),
+              child: CartControls(product: product, isListItem: true),
             ),
           if (quantity != null && !hasControls)
             Container(
