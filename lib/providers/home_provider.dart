@@ -41,6 +41,15 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool getRestaurantFavoriteStatus(int restaurantId) {
+    if(foodHomeData != null && foodHomeData.restaurants.length != 0) {
+      final targetRestaurant = foodHomeData.restaurants.firstWhere((restaurant) => restaurant.id == restaurantId, orElse: () => null);
+      return targetRestaurant == null ? false : targetRestaurant.isFavorited;
+    } else {
+      return false;
+    }
+  }
+
   EstimatedArrivalTime getEstimateArrivalTime() {
     if (selectedChannel == 'grocery') {
       return marketHomeData == null ? null : marketHomeData.estimatedArrivalTime;

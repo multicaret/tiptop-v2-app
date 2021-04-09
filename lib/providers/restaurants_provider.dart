@@ -7,6 +7,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 class RestaurantsProvider with ChangeNotifier {
   Branch restaurant;
   List<Category> menuCategories;
+  List<Branch> favoriteRestaurants = [];
 
   Future<void> fetchAndSetRestaurant(AppProvider appProvider, int restaurantId) async {
     final endpoint = 'restaurants/$restaurantId';
@@ -34,6 +35,17 @@ class RestaurantsProvider with ChangeNotifier {
       print('Unauthenticated!');
       return 401;
     }
+    notifyListeners();
+  }
+
+  Future<dynamic> fetchAndSetFavoriteRestaurants(AppProvider appProvider) async {
+    final endpoint = 'profile/restaurants/favorites';
+    final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if (responseData == 401) {
+      print('Unauthenticated!');
+      return 401;
+    }
+    favoriteRestaurants = List<Branch>.from(responseData["data"]["restaurants"].map((x) => Branch.fromJson(x)));
     notifyListeners();
   }
  }

@@ -75,9 +75,13 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
+  Future<dynamic> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
     final endpoint = 'profile/favorites';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
+    if (responseData == 401) {
+      print('Unauthenticated!');
+      return 401;
+    }
     favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
     notifyListeners();
   }
