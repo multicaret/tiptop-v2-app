@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_item.dart';
-import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -74,7 +73,10 @@ class _RestaurantsIndexState extends State<RestaurantsIndex> {
           itemBuilder: (c, i) => Material(
             color: AppColors.white,
             child: InkWell(
-              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: widget.restaurants[i]),
+              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                RestaurantPage.routeName,
+                arguments: widget.restaurants[i].id,
+              ),
               child: activeListType == ListType.HORIZONTALLY_STACKED
                   ? HorizontalRestaurantListItem(restaurant: widget.restaurants[i])
                   : VerticalRestaurantListItem(restaurant: widget.restaurants[i]),
