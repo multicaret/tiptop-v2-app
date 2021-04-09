@@ -52,22 +52,26 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
       ),
       body: _isLoadingFavoriteRestaurants
           ? const AppLoader()
-          : RefreshIndicator(
-              onRefresh: _fetchAndSetFavoriteRestaurants,
-              child: ListView.builder(
-                itemCount: favoriteRestaurants.length,
-                itemBuilder: (c, i) => Material(
-                  color: AppColors.white,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                      RestaurantPage.routeName,
-                      arguments: favoriteRestaurants[i].id,
+          : favoriteRestaurants.length == 0
+              ? Center(
+                  child: Text('No favorite restaurants added yet!'),
+                )
+              : RefreshIndicator(
+                  onRefresh: _fetchAndSetFavoriteRestaurants,
+                  child: ListView.builder(
+                    itemCount: favoriteRestaurants.length,
+                    itemBuilder: (c, i) => Material(
+                      color: AppColors.white,
+                      child: InkWell(
+                        onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                          RestaurantPage.routeName,
+                          arguments: favoriteRestaurants[i].id,
+                        ),
+                        child: VerticalRestaurantListItem(restaurant: favoriteRestaurants[i]),
+                      ),
                     ),
-                    child: VerticalRestaurantListItem(restaurant: favoriteRestaurants[i]),
                   ),
                 ),
-              ),
-            ),
     );
   }
 }
