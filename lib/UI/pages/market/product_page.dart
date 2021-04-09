@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -16,7 +17,6 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../widgets/UI/app_carousel.dart';
 import '../../widgets/UI/app_scaffold.dart';
-import '../../widgets/UI/formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = '/product';
@@ -28,7 +28,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -89,7 +89,6 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     productGallery = [product.media.cover, ...product.media.gallery.map((galleryItem) => galleryItem.file)];
-    hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
 
     return AppScaffold(
       bgColor: AppColors.white,
@@ -128,14 +127,9 @@ class _ProductPageState extends State<ProductPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  if (hasDiscountedPrice)
-                    FormattedPrice(
-                      price: product.discountedPrice.formatted,
-                      isLarge: true,
-                    ),
-                  FormattedPrice(
-                    price: product.price.formatted,
-                    isDiscounted: hasDiscountedPrice,
+                  FormattedPrices(
+                    price: product.price,
+                    discountedPrice: product.discountedPrice,
                     isLarge: true,
                   ),
                   if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),

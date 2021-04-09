@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/UI/pages/market/product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -23,8 +24,6 @@ class MarketListProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
-
     void openProductPage() {
       Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
         "product": product,
@@ -69,13 +68,9 @@ class MarketListProductItem extends StatelessWidget {
                     Text(product.title),
                     const SizedBox(height: 10),
                     if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
-                    if (hasDiscountedPrice)
-                      FormattedPrice(
-                        price: product.discountedPrice.formatted,
-                      ),
-                    FormattedPrice(
-                      price: product.price.formatted,
-                      isDiscounted: hasDiscountedPrice,
+                    FormattedPrices(
+                      price: product.price,
+                      discountedPrice: product.discountedPrice,
                     ),
                   ],
                 ),

@@ -12,6 +12,7 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../../UI/formatted_price.dart';
+import '../../formatted_prices.dart';
 
 class MarketGridProductItem extends StatelessWidget {
   final Product product;
@@ -28,7 +29,6 @@ class MarketGridProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool hasUnitTitle = product.unit != null && product.unit.title != null;
-    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
     // print('rebuilt grid product item ${product.title}');
 
     return Column(
@@ -98,11 +98,10 @@ class MarketGridProductItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 10),
-                if (hasDiscountedPrice)
-                  FormattedPrice(
-                    price: product.discountedPrice.formatted,
-                  ),
-                FormattedPrice(price: product.price.formatted, isDiscounted: hasDiscountedPrice),
+                FormattedPrices(
+                  price: product.price,
+                  discountedPrice: product.discountedPrice,
+                ),
                 if (product.unitText != null) Expanded(child: Text(product.unitText, style: AppTextStyles.subtitleXs50))
               ],
             ),
