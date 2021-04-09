@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -11,6 +12,7 @@ class CartAnimatedButton extends StatelessWidget {
   final CartAction cartAction;
   final int quantity;
   final bool isModalControls;
+  final bool isLoadingFirstAddition;
 
   const CartAnimatedButton({
     @required this.isRTL,
@@ -18,6 +20,7 @@ class CartAnimatedButton extends StatelessWidget {
     @required this.cartAction,
     @required this.quantity,
     this.isModalControls = false,
+    this.isLoadingFirstAddition = false,
   });
 
   double getLeftOffset(CartAction cartAction, bool isRTL, double cartButtonHeight, int quantity) {
@@ -93,15 +96,20 @@ class CartAnimatedButton extends StatelessWidget {
               const BoxShadow(blurRadius: 6, color: AppColors.shadow),
             ],
           ),
-          child: Icon(
-            cartAction == CartAction.ADD
-                ? FontAwesomeIcons.plus
-                : quantity == 1
-                    ? FontAwesomeIcons.trashAlt
-                    : FontAwesomeIcons.minus,
-            size: 14,
-            color: AppColors.white.withOpacity(onTap == null ? 0.6 : 1),
-          ),
+          child: !isModalControls && isLoadingFirstAddition
+              ? SpinKitFadingCircle(
+                  color: AppColors.white,
+                  size: cartButtonHeight * 0.6,
+                )
+              : Icon(
+                  cartAction == CartAction.ADD
+                      ? FontAwesomeIcons.plus
+                      : quantity == 1
+                          ? FontAwesomeIcons.trashAlt
+                          : FontAwesomeIcons.minus,
+                  size: 14,
+                  color: AppColors.white.withOpacity(onTap == null ? 0.6 : 1),
+                ),
         ),
       ),
     );

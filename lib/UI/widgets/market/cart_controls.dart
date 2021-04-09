@@ -4,6 +4,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -128,6 +129,7 @@ class _CartControlsState extends State<CartControls> {
           quantity: quantity,
           onTap: disableAddition || isLoadingQuantity ? null : () => adjustMarketProductQuantity(CartAction.ADD),
           isModalControls: widget.isModalControls,
+          isLoadingFirstAddition: quantity == 0 && isLoadingQuantity,
         ),
         if (widget.isModalControls)
           AnimatedPositioned(
@@ -141,17 +143,22 @@ class _CartControlsState extends State<CartControls> {
               opacity: quantity == 0 ? 1 : 0,
               child: AppButtons.primary(
                 onPressed: () => adjustMarketProductQuantity(CartAction.ADD),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppIcons.iconWhite(LineAwesomeIcons.shopping_cart),
-                    const SizedBox(width: 5),
-                    Text(
-                      'Add to Cart',
-                      style: AppTextStyles.button,
-                    ),
-                  ],
-                ),
+                child: quantity == 0 && isLoadingQuantity
+                    ? SpinKitThreeBounce(
+                        color: AppColors.white,
+                        size: 20,
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppIcons.iconWhite(LineAwesomeIcons.shopping_cart),
+                          const SizedBox(width: 5),
+                          Text(
+                            Translations.of(context).get('Add To Cart'),
+                            style: AppTextStyles.button,
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),
