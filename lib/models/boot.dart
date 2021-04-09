@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'enums.dart';
 import 'models.dart';
 
 BootResponse bootResponseFromJson(String str) => BootResponse.fromJson(json.decode(str));

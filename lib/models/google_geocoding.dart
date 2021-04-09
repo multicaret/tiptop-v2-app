@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'enums.dart';
 import 'models.dart';
 
 GoogleGeocodeResponse geocodeResponseFromJson(String str) => GoogleGeocodeResponse.fromJson(json.decode(str));

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'enums.dart';
 import 'models.dart';
 
 GooglePlacesResponse googlePlacesResponseFromJson(String str) => GooglePlacesResponse.fromJson(json.decode(str));
