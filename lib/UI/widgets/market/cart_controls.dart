@@ -158,7 +158,7 @@ class _CartControlsState extends State<CartControls> {
                             size: widget.isListItem ? 14 : 20,
                           ),
                           SizedBox(width: widget.isListItem ? 2 : 5),
-                          Expanded(
+                          Flexible(
                             child: Text(
                               Translations.of(context).get('Add To Cart'),
                               maxLines: 1,
