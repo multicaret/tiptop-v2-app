@@ -142,7 +142,7 @@ class _CartControlsState extends State<CartControls> {
               duration: const Duration(milliseconds: 300),
               opacity: quantity == 0 ? 1 : 0,
               child: AppButtons.primary(
-                onPressed: () => adjustMarketProductQuantity(CartAction.ADD),
+                onPressed: () => isLoadingQuantity ? {} : adjustMarketProductQuantity(CartAction.ADD),
                 child: quantity == 0 && isLoadingQuantity
                     ? SpinKitThreeBounce(
                         color: AppColors.white,
