@@ -110,11 +110,3 @@ class Dialog {
         "content": content,
       };
 }
-
-enum ForceUpdate { DISABLED, SOFT, HARD }
-
-final forceUpdateValues = EnumValues({
-  "0": ForceUpdate.DISABLED,
-  "1": ForceUpdate.SOFT,
-  "2": ForceUpdate.HARD,
-});

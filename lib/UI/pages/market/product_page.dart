@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
@@ -73,7 +74,11 @@ class _ProductPageState extends State<ProductPage> {
       _isLoadingInteractRequest = true;
     });
     try {
-      await productsProvider.interactWithProduct(appProvider, product.id, _productIsFavorited ? 'unfavorite' : 'favorite');
+      await productsProvider.interactWithProduct(
+        appProvider,
+        product.id,
+        _productIsFavorited ? Interactions.UN_FAVORITE : Interactions.FAVORITE,
+      );
       setState(() => _isLoadingInteractRequest = false);
       showToast(msg: _productIsFavorited ? 'Successfully removed product from favorites!' : 'Successfully added product to favorites!');
     } catch (e) {

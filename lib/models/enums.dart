@@ -30,6 +30,31 @@ final googleResponseStatusValues = EnumValues({
   "UNKNOWN_ERROR": GoogleResponseStatus.UNKNOWN_ERROR,
 });
 
+enum ForceUpdate { DISABLED, SOFT, HARD }
+
+final forceUpdateValues = EnumValues({
+  "0": ForceUpdate.DISABLED,
+  "1": ForceUpdate.SOFT,
+  "2": ForceUpdate.HARD,
+});
+
+
 enum ListType { HORIZONTALLY_STACKED, VERTICALLY_STACKED }
 
 enum CartAction { ADD, REMOVE }
+
+enum Interactions {FAVORITE, UN_FAVORITE}
+
+String getInteractionValue(Interactions _interaction) {
+  switch(_interaction) {
+    case Interactions.FAVORITE:
+      return "favorite";
+    break;
+    case Interactions.UN_FAVORITE:
+      return "unfavorite";
+    break;
+    default:
+      return "";
+    break;
+  }
+}

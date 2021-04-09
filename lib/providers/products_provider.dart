@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -53,14 +54,14 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, String action) async {
+  Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, Interactions interaction) async {
     final endpoint = 'products/$productId/interact';
     final body = {
-      "action": action,
+      "action": getInteractionValue(interaction),
     };
     print(body);
     print('productId $productId');
-    print('action: $action');
+    print('action: ${getInteractionValue(interaction)}');
     final responseData = await appProvider.post(
       endpoint: endpoint,
       body: body,
