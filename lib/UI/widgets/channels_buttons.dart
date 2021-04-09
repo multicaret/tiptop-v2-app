@@ -44,7 +44,7 @@ class ChannelsButtons extends StatelessWidget {
                 child: AppButtons.dynamic(
                   bgColor: currentView == channels[i]['id'] ? AppColors.primary : AppColors.white,
                   textColor: currentView == channels[i]['id'] ? AppColors.white : AppColors.primary,
-                  height: 45,
+                  height: buttonHeightSm,
                   onPressed: () => onPressed(channels[i]['id']),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

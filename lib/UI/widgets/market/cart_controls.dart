@@ -76,7 +76,7 @@ class _CartControlsState extends State<CartControls> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
-    double cartButtonHeight = widget.isModalControls ? 45 : getCartControlButtonHeight(context);
+    double cartButtonHeight = widget.isModalControls ? buttonHeightSm : getCartControlButtonHeight(context);
     int quantity = cartProvider.getProductQuantity(widget.product.id);
     bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
         ? false

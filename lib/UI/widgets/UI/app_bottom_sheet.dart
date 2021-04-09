@@ -68,7 +68,12 @@ class AppBottomSheet extends StatelessWidget {
           ),
           if (applyAction != null)
             Padding(
-              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(
+                left: screenHorizontalPadding,
+                right: screenHorizontalPadding,
+                top: listItemVerticalPadding,
+                bottom: actionButtonBottomPadding,
+              ),
               child: AppButtons.secondary(
                 child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
                 onPressed: applyAction,

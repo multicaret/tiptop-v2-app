@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -42,7 +43,7 @@ class AppAlertDialog extends StatelessWidget {
                       child: AppButtons.dynamic(
                         bgColor: actions[i].buttonColor,
                         textColor: actions[i].buttonTextColor,
-                        height: 45,
+                        height: buttonHeightSm,
                         child: Text(Translations.of(context).get(actions[i].text)),
                         onPressed: actions[i].onTap ??
                             () {

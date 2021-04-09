@@ -42,3 +42,15 @@ const double screenHorizontalPadding = 17;
 
 //Gutter of grids in the app
 const double appGridGutter = 10;
+
+//Height of default app button
+const double buttonHeight = 55;
+
+//Height of small app button
+const double buttonHeightSm = 45;
+
+//Action button bottom padding (to account for dock line) (e.g. order button bottom padding)
+const double actionButtonBottomPadding = 40;
+
+//Action button container height (e.g. order button height, add to cart button height in product page)
+const double actionButtonContainerHeight = actionButtonBottomPadding + buttonHeightSm + listItemVerticalPadding;

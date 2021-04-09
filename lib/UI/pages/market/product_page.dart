@@ -148,12 +148,17 @@ class _ProductPageState extends State<ProductPage> {
           ),
           if (hasControls)
             Container(
-              padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
-              height: 105,
+              padding: const EdgeInsets.only(
+                top: listItemVerticalPadding,
+                bottom: actionButtonBottomPadding,
+                right: screenHorizontalPadding,
+                left: screenHorizontalPadding,
+              ),
+              height: actionButtonContainerHeight,
               color: AppColors.bg,
               child: Container(
-                constraints: BoxConstraints(maxHeight: 45),
-                height: 45,
+                constraints: BoxConstraints(maxHeight: buttonHeightSm),
+                height: buttonHeightSm,
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(color: AppColors.shadow, blurRadius: 6),

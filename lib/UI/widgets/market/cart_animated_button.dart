@@ -78,7 +78,7 @@ class CartAnimatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
-    double cartButtonHeight = isModalControls ? 45 : getCartControlButtonHeight(context);
+    double cartButtonHeight = isModalControls ? buttonHeightSm : getCartControlButtonHeight(context);
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 200),
