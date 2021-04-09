@@ -28,7 +28,9 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
   Future<void> _fetchAndSetFavoriteRestaurants() async {
     setState(() => _isLoadingFavoriteRestaurants = true);
     await restaurantsProvider.fetchAndSetFavoriteRestaurants(appProvider);
-    favoriteRestaurants = restaurantsProvider.favoriteRestaurants;
+    favoriteRestaurants = restaurantsProvider.favoriteRestaurants
+        .where((maybeFavoriteRestaurant) => restaurantsProvider.getRestaurantFavoriteStatus(maybeFavoriteRestaurant.id))
+        .toList();
     setState(() => _isLoadingFavoriteRestaurants = false);
   }
 
@@ -45,6 +47,9 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
 
   @override
   Widget build(BuildContext context) {
+    favoriteRestaurants = restaurantsProvider.favoriteRestaurants
+        .where((maybeFavoriteRestaurant) => restaurantsProvider.getRestaurantFavoriteStatus(maybeFavoriteRestaurant.id))
+        .toList();
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(

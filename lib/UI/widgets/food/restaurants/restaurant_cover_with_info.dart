@@ -41,7 +41,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // if (restaurant.discountValue != null) DiscountTag(value: restaurant.discountValue),
-              RestaurantFavoriteButton(restaurantId: restaurant.id, isFavorited: restaurant.isFavorited),
+              RestaurantFavoriteButton(restaurantId: restaurant.id),
             ],
           ),
           if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)

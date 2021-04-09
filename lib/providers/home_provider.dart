@@ -3,6 +3,7 @@ import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'addresses_provider.dart';
@@ -31,7 +32,7 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'grocery';
+  String selectedChannel = 'food';
 
   bool get channelIsMarket => selectedChannel == 'grocery';
 
@@ -39,15 +40,6 @@ class HomeProvider with ChangeNotifier {
     selectedChannel = _channel;
     print('Selected channel: $selectedChannel');
     notifyListeners();
-  }
-
-  bool getRestaurantFavoriteStatus(int restaurantId) {
-    if(foodHomeData != null && foodHomeData.restaurants.length != 0) {
-      final targetRestaurant = foodHomeData.restaurants.firstWhere((restaurant) => restaurant.id == restaurantId, orElse: () => null);
-      return targetRestaurant == null ? false : targetRestaurant.isFavorited;
-    } else {
-      return false;
-    }
   }
 
   EstimatedArrivalTime getEstimateArrivalTime() {
@@ -63,6 +55,7 @@ class HomeProvider with ChangeNotifier {
     AppProvider appProvider,
     CartProvider cartProvider,
     AddressesProvider addressesProvider,
+    RestaurantsProvider restaurantsProvider,
   ) async {
     final endpoint = 'home';
 
@@ -94,7 +87,7 @@ class HomeProvider with ChangeNotifier {
         withToken: appProvider.isAuth,
       );
 
-      setHomeData(cartProvider, responseData["data"]);
+      setHomeData(cartProvider, restaurantsProvider, responseData["data"]);
       notifyListeners();
     } catch (e) {
       if (selectedChannel == 'grocery') {
@@ -104,13 +97,13 @@ class HomeProvider with ChangeNotifier {
       } else {
         print('An error happened in food home data request');
         foodHomeDataRequestError = true;
-        // throw e;
+        throw e;
       }
       notifyListeners();
     }
   }
 
-  void setHomeData(CartProvider cartProvider, data) {
+  void setHomeData(CartProvider cartProvider, RestaurantsProvider restaurantsProvider, data) {
     if (selectedChannel == 'grocery') {
       print('Setting market home data...');
       marketHomeData = HomeData.fromJson(data);
@@ -148,6 +141,11 @@ class HomeProvider with ChangeNotifier {
       foodHomeData = HomeData.fromJson(data);
       if (foodHomeData.restaurants.length == 0) {
         foodNoRestaurantFound = true;
+      } else {
+        foodHomeData.restaurants.forEach((restaurant) {
+          restaurantsProvider.restaurantsFavoriteStatuses[restaurant.id] = restaurant.isFavorited;
+        });
+        print(restaurantsProvider.restaurantsFavoriteStatuses);
       }
 
       if (foodHomeData.cart != null) {
