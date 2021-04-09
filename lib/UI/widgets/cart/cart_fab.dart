@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/market_cart_page.dart';
@@ -51,11 +52,16 @@ class CartFAB extends StatelessWidget {
                       ],
                     ),
                     child: homeProvider.channelIsMarket
-                        ? Icon(
-                            LineAwesomeIcons.shopping_cart,
-                            size: 50,
-                            color: hideMarketCart ? AppColors.primary50 : AppColors.secondary,
-                          )
+                        ? cartProvider.isLoadingAdjustCartQuantityRequest
+                            ? SpinKitFadingCircle(
+                                color: AppColors.secondary,
+                                size: 30,
+                              )
+                            : Icon(
+                                LineAwesomeIcons.shopping_cart,
+                                size: 50,
+                                color: hideMarketCart ? AppColors.primary50 : AppColors.secondary,
+                              )
                         : Icon(
                             LineAwesomeIcons.shopping_cart,
                             size: 50,
