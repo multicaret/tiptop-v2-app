@@ -9,14 +9,13 @@ import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
-
-import '../../../../dummy_data.dart';
 
 class RestaurantPage extends StatefulWidget {
   static const routeName = '/restaurant';
@@ -33,6 +32,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   int restaurantId;
   Branch restaurant;
+  List<Category> menuCategories;
   double expandedHeaderHeight;
 
   AppProvider appProvider;
@@ -57,9 +57,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     setState(() => _isLoadingRestaurantShowRequest = true);
     await restaurantsProvider.fetchAndSetRestaurant(appProvider, restaurantId);
     restaurant = restaurantsProvider.restaurant;
-    expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
-      hasDoubleDelivery: restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled,
-    );
+    menuCategories = restaurantsProvider.menuCategories;
     setState(() => _isLoadingRestaurantShowRequest = false);
   }
 
@@ -75,12 +73,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
       axis: Axis.vertical,
     );
     productsScrollController.addListener(scrollListener);
-    categoriesHeights = List.generate(
-        dummyFoodCategories.length,
-        (i) => {
-              'id': dummyFoodCategories[i].id,
-              'height': foodProductListItemHeight * dummyFoodCategories[i].products.length,
-            });
     super.initState();
   }
 
@@ -90,8 +82,19 @@ class _RestaurantPageState extends State<RestaurantPage> {
       restaurantId = ModalRoute.of(context).settings.arguments as int;
       appProvider = Provider.of<AppProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
-      _fetchAndSetRestaurant();
-      selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
+      _fetchAndSetRestaurant().then((_) {
+        expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
+          hasDoubleDelivery:
+              restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled,
+        );
+        categoriesHeights = List.generate(
+            menuCategories.length,
+            (i) => {
+                  'id': menuCategories[i].id,
+                  'height': foodProductListItemHeight * menuCategories[i].products.length,
+                });
+        selectedCategoryIdNotifier.value = menuCategories[0].id;
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -151,12 +154,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                   valueListenable: selectedCategoryIdNotifier,
                                   builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
                                     isInverted: true,
-                                    children: dummyFoodCategories,
+                                    children: menuCategories,
                                     itemScrollController: categoriesScrollController,
                                     selectedChildCategoryId: _selectedChildCategoryId,
                                     //Fired when a child category is clicked
                                     action: (i) {
-                                      selectedCategoryIdNotifier.value = dummyFoodCategories[i].id;
+                                      selectedCategoryIdNotifier.value = menuCategories[i].id;
                                       scrollToCategory(i);
                                       scrollToProducts(i);
                                     },
@@ -177,7 +180,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                               ),
                               child: RestaurantSearchField(
                                 onTap: () {
-                                  selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
+                                  selectedCategoryIdNotifier.value = menuCategories[0].id;
                                   scrollToCategory(0);
                                   scrollToProducts(0);
                                 },
@@ -200,23 +203,23 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     List.generate(
-                      dummyFoodCategories.length,
+                      menuCategories.length,
                       (i) {
                         return ScrollableVerticalContent(
-                          child: dummyFoodCategories[i],
+                          child: menuCategories[i],
                           index: i,
-                          count: dummyFoodCategories.length,
+                          count: menuCategories.length,
                           scrollController: productsScrollController,
                           scrollSpyAction: (i) {
-                            selectedCategoryIdNotifier.value = dummyFoodCategories[i].id;
+                            selectedCategoryIdNotifier.value = menuCategories[i].id;
                             scrollToCategory(i);
                           },
                           firstItemHasTitle: true,
                           categoriesHeights: categoriesHeights,
                           singleTabContent: Column(
                             children: List.generate(
-                              dummyFoodCategories[i].products.length,
-                              (j) => FoodProductListItem(product: dummyFoodCategories[i].products[j]),
+                              menuCategories[i].products.length,
+                              (j) => FoodProductListItem(product: menuCategories[i].products[j]),
                             ),
                           ),
                           pageTopOffset: expandedHeaderHeight,
