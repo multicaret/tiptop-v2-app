@@ -11,7 +11,7 @@ import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class FavoriteRestaurantsPage extends StatefulWidget {
-  static const routeName = '/favorites';
+  static const routeName = '/favorite-restaurants';
 
   @override
   _FavoriteRestaurantsPageState createState() => _FavoriteRestaurantsPageState();
