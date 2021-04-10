@@ -28,8 +28,8 @@ class FoodHomeContent extends StatelessWidget {
           color: AppColors.white,
           child: CategoriesSlider(categories: foodHomeData.categories, isRTL: isRTL),
         ),
-        FilterSortButtons(foodCategories: foodHomeData.categories),
-        RestaurantsIndex(restaurants: foodHomeData.restaurants),
+        FilterSortButtons(),
+        RestaurantsIndex(),
       ],
     );
   }

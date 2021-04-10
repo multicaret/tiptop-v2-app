@@ -6,14 +6,14 @@ import 'package:tiptop_v2/utils/constants.dart';
 class CategoriesSlider extends StatelessWidget {
   final List<Category> categories;
   final bool isRTL;
-  final Function setSelectedCategoryId;
-  final int selectedCategoryId;
+  final Function setSelectedCategories;
+  final List<int> selectedCategories;
 
   CategoriesSlider({
     @required this.categories,
     @required this.isRTL,
-    this.setSelectedCategoryId,
-    this.selectedCategoryId,
+    this.setSelectedCategories,
+    this.selectedCategories,
   });
 
   @override
@@ -26,15 +26,20 @@ class CategoriesSlider extends StatelessWidget {
         },
         itemCount: categories.length,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, i) => FoodCategoryItem(
-          category: categories[i],
-          index: i,
-          count: categories.length,
-          isRTL: isRTL,
-          isSelectable: setSelectedCategoryId != null,
-          onTap: () => setSelectedCategoryId(categories[i].id),
-          isSelected: selectedCategoryId == categories[i].id,
-        ),
+        itemBuilder: (context, i) {
+          bool isSelected = selectedCategories == null
+              ? false
+              : selectedCategories.firstWhere((categoryId) => categoryId == categories[i].id, orElse: () => null) != null;
+          return FoodCategoryItem(
+            category: categories[i],
+            index: i,
+            count: categories.length,
+            isRTL: isRTL,
+            isSelectable: setSelectedCategories != null,
+            onTap: () => setSelectedCategories(categories[i].id),
+            isSelected: isSelected,
+          );
+        },
       ),
     );
   }

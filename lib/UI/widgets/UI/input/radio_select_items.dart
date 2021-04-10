@@ -7,7 +7,7 @@ import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RadioSelectItems extends StatelessWidget {
   final List<dynamic> items;
-  final int selectedId;
+  final dynamic selectedId;
   final Function action;
   final bool isRTL;
   final bool isAssetLogo;
@@ -54,10 +54,12 @@ class RadioSelectItems extends StatelessWidget {
                         onChanged: (itemId) => action(itemId),
                       ),
                       if (items[i]["icon"] != null)
-                        Padding(
-                          padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
-                          child: AppIcons.icon50(items[i]["icon"]),
-                        ),
+                        items[i]["icon"] is Widget
+                            ? items[i]["icon"]
+                            : Padding(
+                                padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
+                                child: AppIcons.icon50(items[i]["icon"]),
+                              ),
                       const SizedBox(width: 10),
                       Text(items[i]["title"]),
                     ],
@@ -80,7 +82,10 @@ class RadioSelectItems extends StatelessWidget {
                             imageUrl: items[i]["logo"],
                             width: 30,
                             fit: BoxFit.cover,
-                            placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary, size: 20,),
+                            placeholder: (_, __) => SpinKitDoubleBounce(
+                              color: AppColors.secondary,
+                              size: 20,
+                            ),
                           ),
                 ],
               ),

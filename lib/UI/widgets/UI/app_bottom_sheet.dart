@@ -6,6 +6,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../bottom_sheet_indicator.dart';
+import 'app_loader.dart';
 
 class AppBottomSheet extends StatelessWidget {
   final double screenHeightFraction;
@@ -13,6 +14,7 @@ class AppBottomSheet extends StatelessWidget {
   final String title;
   final Function clearAction;
   final Function applyAction;
+  final bool isLoading;
 
   AppBottomSheet({
     @required this.screenHeightFraction,
@@ -20,6 +22,7 @@ class AppBottomSheet extends StatelessWidget {
     @required this.title,
     this.clearAction,
     this.applyAction,
+    this.isLoading = false,
   });
 
   @override
@@ -59,12 +62,16 @@ class AppBottomSheet extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: children,
-              ),
-            ),
+            child: isLoading
+                ? const Center(
+                    child: const AppLoader(),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: children,
+                    ),
+                  ),
           ),
           if (applyAction != null)
             Padding(

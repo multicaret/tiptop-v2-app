@@ -31,7 +31,7 @@ class DeliveryInfo extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Text(
-                  Translations.of(context).get(isRestaurant ? "Restaurant delivery" : "TipTop delivery"),
+                  Translations.of(context).get(isRestaurant ? "Restaurant Delivery" : "TipTop Delivery"),
                   style: AppTextStyles.subtitle,
                 ),
               ),

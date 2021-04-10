@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -8,7 +9,60 @@ import 'package:tiptop_v2/utils/helper.dart';
 class RestaurantsProvider with ChangeNotifier {
   Branch restaurant;
   List<Category> menuCategories;
+  List<Category> foodCategories;
   List<Branch> favoriteRestaurants = [];
+  List<Branch> restaurants = [];
+  ListType activeListType = ListType.HORIZONTALLY_STACKED;
+
+  List<Map<String, dynamic>> listTypes = [
+    {
+      'type': ListType.HORIZONTALLY_STACKED,
+      'icon': 'assets/images/list-view-icon.png',
+    },
+    {
+      'type': ListType.VERTICALLY_STACKED,
+      'icon': 'assets/images/grid-view-icon.png',
+    },
+  ];
+
+  List<Map<String, dynamic>> restaurantDeliveryTypes = [
+    {
+      'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.TIPTOP),
+      'title': 'TipTop Delivery',
+      'type': RestaurantDeliveryType.TIPTOP,
+      'icon': CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
+    },
+    {
+      'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.RESTAURANT),
+      'title': 'Restaurant Delivery',
+      'type': RestaurantDeliveryType.RESTAURANT,
+      'icon': CircleIcon(iconText: 'R'),
+    },
+  ];
+
+  void setFilterData({Map<String, dynamic> data, String key, dynamic value}) {
+    if (key != null && value != null) {
+      filterData[key] = value;
+    } else {
+      filterData = data;
+    }
+    print(filterData);
+    notifyListeners();
+  }
+
+  void setActiveListType(ListType value) {
+    activeListType = value;
+    notifyListeners();
+  }
+
+  double minCartValue;
+  double maxCartValue;
+  Map<String, dynamic> filterData = {
+    'delivery_type': null,
+    'min_cart_value': null,
+    'rating_value': 0.0,
+    'categories': <int>[],
+  };
 
   Map<int, bool> restaurantsFavoriteStatuses = {};
 
@@ -74,6 +128,16 @@ class RestaurantsProvider with ChangeNotifier {
     favoriteRestaurants.forEach((favoriteRestaurant) {
       restaurantsFavoriteStatuses[favoriteRestaurant.id] = true;
     });
+    notifyListeners();
+  }
+
+  Future<void> createFilters() async {
+    final endpoint = 'restaurants/filter';
+    final responseData = await AppProvider().get(endpoint: endpoint);
+    foodCategories = List<Category>.from(responseData["data"]["categories"].map((x) => Category.fromJson(x)));
+    minCartValue = responseData["data"]["minCart"] == null ? 0.0 : responseData["data"]["minCart"].toDouble();
+    maxCartValue = responseData["data"]["maxCart"] == null ? 0.0 : responseData["data"]["maxCart"].toDouble();
+    filterData['min_cart_value'] = minCartValue;
     notifyListeners();
   }
 }

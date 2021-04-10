@@ -58,3 +58,19 @@ String getInteractionValue(Interaction _interaction) {
     break;
   }
 }
+
+enum RestaurantDeliveryType { TIPTOP, RESTAURANT }
+
+String getRestaurantDeliveryTypeString(RestaurantDeliveryType _type) {
+  switch(_type) {
+    case RestaurantDeliveryType.TIPTOP:
+      return "tiptop";
+      break;
+    case RestaurantDeliveryType.RESTAURANT:
+      return "restaurant";
+      break;
+    default:
+      return "";
+      break;
+  }
+}
