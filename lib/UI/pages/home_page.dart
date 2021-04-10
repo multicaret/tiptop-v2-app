@@ -20,6 +20,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -48,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   HomeProvider homeProvider;
   CartProvider cartProvider;
   AddressesProvider addressesProvider;
+  RestaurantsProvider restaurantsProvider;
 
   HomeData marketHomeData;
   HomeData foodHomeData;
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeData() async {
     setState(() => isLoadingHomeData = true);
     await addressesProvider.fetchSelectedAddress();
-    await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider);
+    await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider, restaurantsProvider);
     _setHomeData();
     setState(() => isLoadingHomeData = false);
   }
@@ -108,6 +110,7 @@ class _HomePageState extends State<HomePage> {
       homeProvider = Provider.of<HomeProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
+      restaurantsProvider = Provider.of<RestaurantsProvider>(context);
       fetchAndSetHomeData();
       _oneSignalNotifiService = Provider.of<OneSignalNotifi>(context);
       if (_oneSignalNotifiService != null && _oneSignalNotifiService.getPayload != null) {
@@ -199,7 +202,10 @@ class _HomePageState extends State<HomePage> {
                                               activeOrders: homeProvider.foodHomeData.activeOrders,
                                               totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
                                             ),
-                                          FoodHomeContent(foodHomeData: foodHomeData),
+                                          FoodHomeContent(
+                                            foodHomeData: foodHomeData,
+                                            isRTL: appProvider.isRTL,
+                                          ),
                                         ],
                                       )
                                 : Container(),

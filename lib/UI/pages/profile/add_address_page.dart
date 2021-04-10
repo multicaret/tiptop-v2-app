@@ -169,7 +169,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(
+                left: screenHorizontalPadding,
+                right: screenHorizontalPadding,
+                top: listItemVerticalPadding,
+                bottom: actionButtonBottomPadding,
+              ),
               decoration: BoxDecoration(
                 boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,

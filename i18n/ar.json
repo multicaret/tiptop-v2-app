@@ -49,6 +49,8 @@
   "Invalid Form": "البيانات خاطئة أو ناقصة",
   "My Addresses": "العناوين",
   "My Favorites": "مفضلتي",
+  "Favorite Products": "المنتجات المفضلة لدي",
+  "Favorite Restaurants": "المطاعم المفضلة لدي",
   "Previous Orders": "الطلبات السابقة",
   "Payment Methods": "طرق الدفع",
   "Support": "الدعم",
@@ -143,5 +145,7 @@
   "Total Before Discount": "المجموع قبل الخصم",
   "Total After Discount": "المجموع بعد الخصم",
   "You Saved": "قيمة الخصم",
-  "View All": "استعرض الكل"
+  "View All": "استعرض الكل",
+  "Closes at": "وقت الإغلاق",
+  "Add To Cart": "اضف الى السلة"
 }

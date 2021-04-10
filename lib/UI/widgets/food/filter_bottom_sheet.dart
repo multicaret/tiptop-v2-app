@@ -63,7 +63,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 5),
           child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
         ),
-        ...deliveryTypesRadioItems(),
+        // ...deliveryTypesRadioItems(),
         Container(
           padding: const EdgeInsets.only(bottom: 5, top: 10, left: screenHorizontalPadding, right: screenHorizontalPadding,),
           decoration: BoxDecoration(

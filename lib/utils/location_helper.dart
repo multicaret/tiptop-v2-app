@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart' as locationPkg;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/google_geocoding.dart';
 import 'package:tiptop_v2/models/google_places.dart';
 import 'package:tiptop_v2/models/models.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_grid_product_item.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class MarketProductsGridView extends StatelessWidget {
   final List<Product> products;

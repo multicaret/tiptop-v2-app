@@ -12,8 +12,6 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-import 'constants.dart';
-
 void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.BOTTOM}) {
   Fluttertoast.showToast(
       msg: msg,
@@ -64,27 +62,6 @@ String formatTime(BuildContext context, dynamic dateTime) {
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
   String formattedTime = DateFormat('hh:mm a', appProvider.appLocale.languageCode).format(_dateTime);
   return formattedTime;
-}
-
-double getColItemHeight(int colCount, BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-
-  return (screenWidth - (screenHorizontalPadding * 2) - (appGridGutter * (colCount - 1))) / colCount;
-}
-
-double cartControlsMargin = 10;
-
-double getCartControlsWidth(BuildContext context, {int colCount = 3}) {
-  double colItemHeight = getColItemHeight(colCount, context);
-  return colItemHeight - (cartControlsMargin * 2);
-}
-
-double getCartControlButtonHeight(BuildContext context, {int colCount = 3}) {
-  return getCartControlsWidth(context, colCount: colCount) / 3;
-}
-
-double getProductGridItemHeight(BuildContext context) {
-  return getColItemHeight(3, context) + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
 }
 
 bool isCallable(v) => v is Function;

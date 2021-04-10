@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_item.dart';
-import 'package:tiptop_v2/dummy_data.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import '../filter_sort_buttons.dart';
-
 class RestaurantsIndex extends StatefulWidget {
+  final List<Branch> restaurants;
+
+  RestaurantsIndex({@required this.restaurants});
+
   @override
   _RestaurantsIndexState createState() => _RestaurantsIndexState();
 }
@@ -34,13 +36,12 @@ class _RestaurantsIndexState extends State<RestaurantsIndex> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FilterSortButtons(foodCategories: dummyFoodCategories),
         Padding(
           padding: const EdgeInsets.only(left: screenHorizontalPadding, bottom: 5.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('${Translations.of(context).get("Restaurants")} (${dummyRestaurants.length})', style: AppTextStyles.body50),
+              Text('${Translations.of(context).get("Restaurants")} (${widget.restaurants.length})', style: AppTextStyles.body50),
               Row(
                 children: List.generate(
                   _listTypes.length,
@@ -68,14 +69,17 @@ class _RestaurantsIndexState extends State<RestaurantsIndex> {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: dummyRestaurants.length,
+          itemCount: widget.restaurants.length,
           itemBuilder: (c, i) => Material(
             color: AppColors.white,
             child: InkWell(
-              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: dummyRestaurants[i]),
+              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                RestaurantPage.routeName,
+                arguments: widget.restaurants[i].id,
+              ),
               child: activeListType == ListType.HORIZONTALLY_STACKED
-                  ? HorizontalRestaurantListItem(restaurant: dummyRestaurants[i])
-                  : VerticalRestaurantListItem(restaurant: dummyRestaurants[i]),
+                  ? HorizontalRestaurantListItem(restaurant: widget.restaurants[i])
+                  : VerticalRestaurantListItem(restaurant: widget.restaurants[i]),
             ),
           ),
         ),

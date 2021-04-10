@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import 'app_colors.dart';
 
 class AppButtons {
@@ -8,7 +9,7 @@ class AppButtons {
     Widget child,
     Color textColor = AppColors.white,
     Color bgColor = AppColors.primary,
-    double height = 55,
+    double height = buttonHeight,
   }) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -38,7 +39,7 @@ class AppButtons {
 
   static primarySm({Function onPressed, Widget child}) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(45)),
+      style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(buttonHeightSm)),
       onPressed: onPressed,
       child: child,
     );
@@ -72,7 +73,7 @@ class AppButtons {
       style: ElevatedButton.styleFrom(
         primary: AppColors.secondary,
         onPrimary: AppColors.text,
-        minimumSize: Size.fromHeight(45),
+        minimumSize: Size.fromHeight(buttonHeightSm),
       ),
       onPressed: onPressed,
       child: child,

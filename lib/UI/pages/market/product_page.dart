@@ -4,7 +4,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
@@ -16,7 +18,6 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../widgets/UI/app_carousel.dart';
 import '../../widgets/UI/app_scaffold.dart';
-import '../../widgets/UI/formatted_price.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = '/product';
@@ -28,7 +29,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -73,7 +74,11 @@ class _ProductPageState extends State<ProductPage> {
       _isLoadingInteractRequest = true;
     });
     try {
-      await productsProvider.interactWithProduct(appProvider, product.id, _productIsFavorited ? 'unfavorite' : 'favorite');
+      await productsProvider.interactWithProduct(
+        appProvider,
+        product.id,
+        _productIsFavorited ? Interaction.UN_FAVORITE : Interaction.FAVORITE,
+      );
       setState(() => _isLoadingInteractRequest = false);
       showToast(msg: _productIsFavorited ? 'Successfully removed product from favorites!' : 'Successfully added product to favorites!');
     } catch (e) {
@@ -89,7 +94,6 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     productGallery = [product.media.cover, ...product.media.gallery.map((galleryItem) => galleryItem.file)];
-    hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
 
     return AppScaffold(
       bgColor: AppColors.white,
@@ -107,9 +111,9 @@ class _ProductPageState extends State<ProductPage> {
             ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Positioned.fill(
+          Expanded(
             child: RefreshIndicator(
               onRefresh: _fetchAndSetProduct,
               child: ListView(
@@ -128,14 +132,9 @@ class _ProductPageState extends State<ProductPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  if (hasDiscountedPrice)
-                    FormattedPrice(
-                      price: product.discountedPrice.formatted,
-                      isLarge: true,
-                    ),
-                  FormattedPrice(
-                    price: product.price.formatted,
-                    isDiscounted: hasDiscountedPrice,
+                  FormattedPrices(
+                    price: product.price,
+                    discountedPrice: product.discountedPrice,
                     isLarge: true,
                   ),
                   if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
@@ -148,21 +147,28 @@ class _ProductPageState extends State<ProductPage> {
                         data: """${product.description.formatted}""",
                       ),
                     ),
-                  const SizedBox(height: 105),
                 ],
               ),
             ),
           ),
           if (hasControls)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 105,
+            Container(
+              padding: const EdgeInsets.only(
+                top: listItemVerticalPadding,
+                bottom: actionButtonBottomPadding,
+                right: screenHorizontalPadding,
+                left: screenHorizontalPadding,
+              ),
+              height: actionButtonContainerHeight,
+              color: AppColors.bg,
               child: Container(
-                padding: const EdgeInsets.only(top: 20, bottom: 40, right: screenHorizontalPadding, left: screenHorizontalPadding),
-                height: 45,
-                color: AppColors.bg,
+                constraints: BoxConstraints(maxHeight: buttonHeightSm),
+                height: buttonHeightSm,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(color: AppColors.shadow, blurRadius: 6),
+                  ],
+                ),
                 child: CartControls(
                   isModalControls: true,
                   product: product,

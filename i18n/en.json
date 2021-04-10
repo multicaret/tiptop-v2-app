@@ -49,6 +49,8 @@
   "Invalid Form": "Invalid Form",
   "My Addresses": "My Addresses",
   "My Favorites": "My Favorites",
+  "Favorite Products": "Favorite Products",
+  "Favorite Restaurants": "Favorite Restaurants",
   "Previous Orders": "Previous Orders",
   "Payment Methods": "Payment Methods",
   "Support": "Support",
@@ -143,5 +145,7 @@
   "Total Before Discount": "Total Before Discount",
   "Total After Discount": "Total After Discount",
   "You Saved": "You Saved",
-  "View All": "View All"
+  "View All": "View All",
+  "Closes at": "Closes at",
+  "Add To Cart": "Add To Cart"
 }

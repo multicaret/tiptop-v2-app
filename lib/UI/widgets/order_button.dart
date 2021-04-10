@@ -34,13 +34,18 @@ class OrderButton extends StatelessWidget {
             },
       child: Container(
         color: AppColors.primary,
-        padding: const EdgeInsets.only(top: 20, bottom: 40, left: screenHorizontalPadding, right: screenHorizontalPadding,),
+        padding: const EdgeInsets.only(
+          top: listItemVerticalPadding,
+          bottom: actionButtonBottomPadding,
+          left: screenHorizontalPadding,
+          right: screenHorizontalPadding,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Container(
-                height: 45,
+                height: buttonHeightSm,
                 child: Text(Translations.of(context).get(submitAction == null ? 'Continue' : 'Order Now')),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -58,7 +63,7 @@ class OrderButton extends StatelessWidget {
               ),
             ),
             Container(
-              height: 45,
+              height: buttonHeightSm,
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
               decoration: BoxDecoration(

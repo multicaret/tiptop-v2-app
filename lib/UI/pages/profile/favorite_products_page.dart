@@ -8,14 +8,14 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 
-class FavoritesPage extends StatefulWidget {
+class FavoriteProductsPage extends StatefulWidget {
   static const routeName = '/favorites';
 
   @override
-  _FavoritesPageState createState() => _FavoritesPageState();
+  _FavoriteProductsPageState createState() => _FavoriteProductsPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class _FavoriteProductsPageState extends State<FavoriteProductsPage> {
   bool _isInit = true;
   bool _isLoadingFavoriteProducts = false;
 
@@ -46,7 +46,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('My Favorites')),
+        title: Text(Translations.of(context).get('Favorite Products')),
       ),
       body: _isLoadingFavoriteProducts
           ? const AppLoader()

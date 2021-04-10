@@ -176,7 +176,12 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 40),
+                    padding: const EdgeInsets.only(
+                      left: screenHorizontalPadding,
+                      right: screenHorizontalPadding,
+                      top: listItemVerticalPadding,
+                      bottom: actionButtonBottomPadding,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.bg,
                       boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],

@@ -76,6 +76,8 @@ class Branch {
     this.latitude,
     this.longitude,
     this.chain,
+    this.isFavorited,
+    this.categories,
   });
 
   int id;
@@ -92,6 +94,8 @@ class Branch {
   double latitude;
   double longitude;
   Chain chain;
+  bool isFavorited;
+  List<Category> categories;
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
         id: json["id"],
@@ -107,7 +111,9 @@ class Branch {
         workingHours: WorkingHours.fromJson(json["workingHours"]),
         latitude: json["latitude"],
         longitude: json["longitude"],
+        isFavorited: json["isFavorited"],
         chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
+        categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

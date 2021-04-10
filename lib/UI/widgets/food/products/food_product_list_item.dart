@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -36,27 +39,38 @@ class FoodProductListItem extends StatelessWidget {
                   children: [
                     Text(product.title),
                     const SizedBox(height: 10),
-                    Text(
-                      'Lorem ipsum dolor sit amit. Lorem ipsum dolor sit amit. Lorem ipsum dolor sit amit. ',
-                      style: AppTextStyles.subtitle50,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (product.excerpt != null && product.excerpt.formatted != null)
+                      Expanded(
+                        child: Text(
+                          product.excerpt.raw,
+                          style: AppTextStyles.subtitle50,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     const SizedBox(height: 10),
-                    Text(
-                      '140 IQD',
-                      style: AppTextStyles.subtitleSecondary,
+                    FormattedPrices(
+                      price: product.price,
+                      discountedPrice: product.discountedPrice,
                     )
                   ],
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/images/food.jpg',
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
+              SizedBox(width: 5),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(width: 0.5, color: AppColors.border),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: product.media.coverThumbnail,
+                    fit: BoxFit.cover,
+                    width: foodProductThumbnailSize,
+                    height: foodProductThumbnailSize,
+                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary),
+                  ),
                 ),
               ),
             ],

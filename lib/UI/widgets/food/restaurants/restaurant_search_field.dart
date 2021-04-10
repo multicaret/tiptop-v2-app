@@ -6,6 +6,10 @@ import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class RestaurantSearchField extends StatelessWidget {
+  final Function onTap;
+
+  RestaurantSearchField({this.onTap});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,6 +18,7 @@ class RestaurantSearchField extends StatelessWidget {
         boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
       ),
       child: TextFormField(
+        onTap: onTap,
         decoration: InputDecoration(
           hintText: 'What are you looking for?',
           hintStyle: AppTextStyles.body50,

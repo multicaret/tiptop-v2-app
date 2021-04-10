@@ -19,7 +19,8 @@ import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
-import 'package:tiptop_v2/UI/pages/profile/favorites_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/favorite_products_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
@@ -41,7 +42,7 @@ final routes = <String, WidgetBuilder>{
   FaqPage.routeName: (BuildContext context) => FaqPage(),
   AddressesPage.routeName: (BuildContext context) => AddressesPage(),
   BlogPage.routeName: (BuildContext context) => BlogPage(),
-  FavoritesPage.routeName: (BuildContext context) => FavoritesPage(),
+  FavoriteProductsPage.routeName: (BuildContext context) => FavoriteProductsPage(),
   PaymentMethodsPage.routeName: (BuildContext context) => PaymentMethodsPage(),
   PreviousOrdersPage.routeName: (BuildContext context) => PreviousOrdersPage(),
   LiveChatPage.routeName: (BuildContext context) => LiveChatPage(),
@@ -67,4 +68,5 @@ final routes = <String, WidgetBuilder>{
   FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
   FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
   RestaurantsPage.routeName: (BuildContext context) => RestaurantsPage(),
+  FavoriteRestaurantsPage.routeName: (BuildContext context) => FavoriteRestaurantsPage(),
 };
