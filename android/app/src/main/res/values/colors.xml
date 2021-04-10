@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <color name="splash_color">#ffc73c</color>
+    <color name="colorPrimary">#293351</color>
+    <color name="colorSecondary">#ffb200</color>
+    <color name="colorAccent">#293351</color>
+    <color name="colorDarkSecondary">#BD8605</color>
 </resources>

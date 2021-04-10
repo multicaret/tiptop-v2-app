@@ -3,10 +3,13 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://maven.zohodl.com' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6, 0.99.99]'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -16,6 +19,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://sdks.instabug.com/nexus/repository/instabug-cp" }
+        maven { url 'https://maven.zohodl.com' }
     }
 }
 
