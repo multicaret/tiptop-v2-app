@@ -1,7 +1,7 @@
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_expansion_tile.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/models/faq.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -47,7 +47,7 @@ class _FaqPageState extends State<FaqPage> {
               ? Center(child: AppLoader())
               : SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
-                  // padding: EdgeInsets.symmetric(horizontal: 17),
+                  // padding: const EdgeInsets.symmetric(horizontal: 17),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: List.generate(

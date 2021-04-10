@@ -20,7 +20,6 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -41,24 +40,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
-  HomeProvider homeProvider;
   AddressesProvider addressesProvider;
   CouponValidationResponseData couponValidationResponseData;
 
   final couponCodeNotifier = ValueNotifier<String>(null);
   final paymentSummaryTotalsNotifier = ValueNotifier<List<PaymentSummaryTotal>>(null);
+  final selectedPaymentMethodNotifier = ValueNotifier<int>(null);
 
   CheckoutData checkoutData;
   Order submittedOrder;
 
   String notes;
-  int selectedPaymentMethodId;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoadingCreateOrder = true);
-    await ordersProvider.createOrderAndGetCheckoutData(appProvider, homeProvider);
+    await ordersProvider.createOrderAndGetCheckoutData(appProvider);
     checkoutData = ordersProvider.checkoutData;
     paymentSummaryTotalsNotifier.value = [
       PaymentSummaryTotal(
@@ -75,7 +73,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         isGrandTotal: true,
       ),
     ];
-    selectedPaymentMethodId = checkoutData.paymentMethods[0].id;
+    selectedPaymentMethodNotifier.value = checkoutData.paymentMethods[0].id;
     setState(() => _isLoadingCreateOrder = false);
   }
 
@@ -85,7 +83,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final responseData = await ordersProvider.validateCoupon(
         appProvider: appProvider,
         cartProvider: cartProvider,
-        homeProvider: homeProvider,
         couponCode: _couponCode,
       );
       if (responseData == 401) {
@@ -119,6 +116,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           isGrandTotal: true,
         ),
       ];
+      showToast(msg: 'Successfully validated coupon code!');
     } catch (e) {
       showToast(msg: 'Coupon Validation Failed');
     }
@@ -130,7 +128,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (_isInit) {
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       _createOrderAndGetCheckoutData();
@@ -141,13 +138,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilt checkout page');
     return AppScaffold(
       hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
         title: Text('Checkout'),
       ),
       body: _isLoadingCreateOrder || _isLoadingValidateCoupon
-          ? AppLoader()
+          ? const AppLoader()
           : Form(
               key: _formKey,
               child: Column(
@@ -158,7 +156,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(17),
+                            padding: const EdgeInsets.all(17),
                             color: AppColors.white,
                             child: AppTextField(
                               labelText: 'Notes',
@@ -171,12 +169,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                           ),
                           SectionTitle('Payment Methods'),
-                          RadioSelectItems(
-                            items:
-                                checkoutData.paymentMethods.map((method) => {'id': method.id, 'title': method.title, 'logo': method.logo}).toList(),
-                            selectedId: selectedPaymentMethodId,
-                            action: (value) => setState(() => selectedPaymentMethodId = value),
-                            isRTL: appProvider.isRTL,
+                          ValueListenableBuilder(
+                            valueListenable: selectedPaymentMethodNotifier,
+                            builder: (c, selectedPaymentMethodId, _) => RadioSelectItems(
+                              items: checkoutData.paymentMethods
+                                  .map((method) => {
+                                        'id': method.id,
+                                        'title': method.title,
+                                        'logo': method.logo,
+                                      })
+                                  .toList(),
+                              selectedId: selectedPaymentMethodId,
+                              action: (value) => selectedPaymentMethodNotifier.value = value,
+                              isRTL: appProvider.isRTL,
+                            ),
                           ),
                           SectionTitle('Promotions'),
                           ValueListenableBuilder(
@@ -230,7 +236,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
                       return OrderButton(
                         cartProvider: cartProvider,
-                        total: total != null ? total.value : cartProvider.cartTotal,
+                        total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isRTL: appProvider.isRTL,
                         submitAction: _submitOrder,
                       );
@@ -248,10 +254,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       setState(() => _isLoadingOrderSubmit = true);
       await ordersProvider.submitOrder(
         appProvider,
-        homeProvider,
         cartProvider,
         addressesProvider,
-        paymentMethodId: selectedPaymentMethodId,
+        paymentMethodId: selectedPaymentMethodNotifier.value,
         notes: notes,
         couponCode: couponCodeNotifier.value,
       );

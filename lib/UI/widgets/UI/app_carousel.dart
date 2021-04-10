@@ -85,16 +85,16 @@ class _AppCarouselState extends State<AppCarousel> {
             children: List.generate(widget.images.length, (index) {
               return AnimatedContainer(
                 margin: EdgeInsets.symmetric(horizontal: 3),
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 height: _currentSlide == index ? 10 : 8,
                 width: _currentSlide == index ? 10 : 8,
                 child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   opacity: _currentSlide == index ? 1 : 0.5,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.secondaryDark,
+                      color: AppColors.secondary,
                     ),
                   ),
                 ),
@@ -111,6 +111,7 @@ class _AppCarouselState extends State<AppCarousel> {
         (i) => CachedNetworkImage(
               imageUrl: widget.images[i],
               fit: BoxFit.cover,
+              width: double.infinity,
             ));
   }
 }

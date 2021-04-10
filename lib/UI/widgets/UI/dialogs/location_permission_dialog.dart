@@ -14,18 +14,18 @@ class LocationPermissionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppAlertDialog(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           Translations.of(context).get('Location Permission'),
           style: AppTextStyles.bodyBold,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           Translations.of(context).get('Location services must be turned on in order to use the app'),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         AppButtons.primary(
           onPressed: action,
           child: Text(Translations.of(context).get('Go to Settings')),

@@ -10,7 +10,7 @@ class RestaurantSearchField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+        boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
       ),
       child: TextFormField(
         decoration: InputDecoration(
@@ -19,7 +19,7 @@ class RestaurantSearchField extends StatelessWidget {
           filled: true,
           prefixIcon: AppIcons.icon(FontAwesomeIcons.search),
           fillColor: AppColors.white,
-          contentPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(width: 0, color: Colors.transparent),

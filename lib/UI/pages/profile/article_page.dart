@@ -10,12 +10,14 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ArticlePage extends StatefulWidget {
   static const routeName = '/article';
+
   @override
   _ArticlePageState createState() => _ArticlePageState();
 }
 
 class _ArticlePageState extends State<ArticlePage> {
   Article article;
+
   @override
   Widget build(BuildContext context) {
     final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
@@ -32,14 +34,14 @@ class _ArticlePageState extends State<ArticlePage> {
           children: [
             Container(
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(blurRadius: 5, color: AppColors.shadow)],
+                boxShadow: [const BoxShadow(blurRadius: 5, color: AppColors.shadow)],
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: CachedNetworkImage(imageUrl: article.cover),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Icon(
@@ -47,7 +49,7 @@ class _ArticlePageState extends State<ArticlePage> {
                   size: 14.0,
                   color: AppColors.text50,
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 Text(
                   article.updatedAt.formatted,
                   style: AppTextStyles.subtitle50,

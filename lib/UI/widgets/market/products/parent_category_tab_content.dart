@@ -81,7 +81,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      productGridItemHeight = (getColItemHeight(3, context) * 2);
+      productGridItemHeight = getProductGridItemHeight(context);
       childCategoriesHeights = List.generate(widget.children.length, (i) {
         int rowsCount = (widget.children[i].products.length / 3).ceil();
         return {

@@ -4,8 +4,8 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_horizontal_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -52,13 +52,13 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
     productsScrollController.addListener(scrollListener);
 
-    selectedCategoryIdNotifier.value = dummyCategories[0].id;
+    selectedCategoryIdNotifier.value = dummyFoodCategories[0].id;
 
     categoriesHeights = List.generate(
-        dummyCategories.length,
+        dummyFoodCategories.length,
         (i) => {
-              'id': dummyCategories[i].id,
-              'height': foodProductListItemHeight * dummyCategories[i].products.length,
+              'id': dummyFoodCategories[i].id,
+              'height': foodProductListItemHeight * dummyFoodCategories[i].products.length,
             });
     super.initState();
   }
@@ -112,7 +112,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   child: Column(
                     children: [
                       AnimatedOpacity(
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         opacity: _isCollapsed ? 1 : 0,
                         child: IgnorePointer(
                           ignoring: !_isCollapsed,
@@ -120,12 +120,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                             valueListenable: selectedCategoryIdNotifier,
                             builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
                               isInverted: true,
-                              children: dummyCategories,
+                              children: dummyFoodCategories,
                               itemScrollController: categoriesScrollController,
                               selectedChildCategoryId: _selectedChildCategoryId,
                               //Fired when a child category is clicked
                               action: (i) {
-                                selectedCategoryIdNotifier.value = dummyCategories[i].id;
+                                selectedCategoryIdNotifier.value = dummyFoodCategories[i].id;
                                 scrollToCategory(i);
                                 scrollToProducts(i);
                               },
@@ -135,7 +135,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       ),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         decoration: BoxDecoration(
                           border: _isCollapsed ? Border(bottom: BorderSide(color: AppColors.border)) : null,
                           color: AppColors.bg,
@@ -152,30 +152,30 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 StretchMode.zoomBackground,
               ],
               centerTitle: true,
-              titlePadding: EdgeInsets.all(0),
+              titlePadding: const EdgeInsets.all(0),
               background: RestaurantHeaderInfo(restaurant: restaurant),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               List.generate(
-                dummyCategories.length,
+                dummyFoodCategories.length,
                 (i) {
                   return ScrollableVerticalContent(
-                    child: dummyCategories[i],
+                    child: dummyFoodCategories[i],
                     index: i,
-                    count: dummyCategories.length,
+                    count: dummyFoodCategories.length,
                     scrollController: productsScrollController,
                     scrollSpyAction: (i) {
-                      selectedCategoryIdNotifier.value = dummyCategories[i].id;
+                      selectedCategoryIdNotifier.value = dummyFoodCategories[i].id;
                       scrollToCategory(i);
                     },
                     firstItemHasTitle: true,
                     categoriesHeights: categoriesHeights,
                     singleTabContent: Column(
                       children: List.generate(
-                        dummyCategories[i].products.length,
-                        (j) => FoodProductListItem(product: dummyCategories[i].products[j]),
+                        dummyFoodCategories[i].products.length,
+                        (j) => FoodProductListItem(product: dummyFoodCategories[i].products[j]),
                       ),
                     ),
                     pageTopOffset: restaurantPageExpandedHeaderHeight,

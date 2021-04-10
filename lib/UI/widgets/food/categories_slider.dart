@@ -22,7 +22,7 @@ class CategoriesSlider extends StatelessWidget {
       height: restaurantCategoriesHeight,
       child: ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(width: 10);
+          return const SizedBox(width: 10);
         },
         itemCount: categories.length,
         scrollDirection: Axis.horizontal,

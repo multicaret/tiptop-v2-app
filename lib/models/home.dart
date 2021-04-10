@@ -1,38 +1,16 @@
-import 'dart:convert';
-
 import 'package:tiptop_v2/models/models.dart';
 
 import 'cart.dart';
 import 'category.dart';
-
-HomeDataResponse homeDataResponseFromJson(String str) => HomeDataResponse.fromJson(json.decode(str));
-
-class HomeDataResponse {
-  HomeDataResponse({
-    this.homeData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  HomeData homeData;
-  dynamic errors;
-  String message;
-  int status;
-
-  factory HomeDataResponse.fromJson(Map<String, dynamic> json) => HomeDataResponse(
-        homeData: json["data"] == null ? null : HomeData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-}
+import 'order.dart';
 
 class HomeData {
   HomeData({
     this.slides,
     this.cart,
     this.estimatedArrivalTime,
+    this.activeOrders,
+    this.totalActiveOrders,
     this.branch,
     this.distance,
     this.hasAvailableBranchesNow,
@@ -42,6 +20,8 @@ class HomeData {
   List<Slide> slides;
   Cart cart;
   EstimatedArrivalTime estimatedArrivalTime;
+  List<Order> activeOrders;
+  int totalActiveOrders;
   Branch branch;
   dynamic distance;
   bool hasAvailableBranchesNow;
@@ -51,10 +31,12 @@ class HomeData {
         slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
+        activeOrders: json["activeOrders"] == null ? null : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
+        totalActiveOrders: json["totalActiveOrders"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
         distance: json["distance"],
         hasAvailableBranchesNow: json["hasAvailableBranchesNow"],
-        categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
+        categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
       );
 }
 

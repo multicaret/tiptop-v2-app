@@ -22,7 +22,7 @@ class ProfileAuthHeader extends StatelessWidget {
             );
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             height: 80.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -39,12 +39,12 @@ class ProfileAuthHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      BoxShadow(color: AppColors.shadow, blurRadius: 6),
+                      const BoxShadow(color: AppColors.shadow, blurRadius: 6),
                     ],
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                SizedBox(width: 10.0),
+                const SizedBox(width: 10.0),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

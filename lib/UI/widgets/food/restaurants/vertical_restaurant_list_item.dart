@@ -24,7 +24,7 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 20.0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.border),
@@ -38,9 +38,9 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
             isFavorited: isFavorited,
             favoriteAction: () => setState(() => isFavorited = !isFavorited),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(widget.restaurant.title),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -58,12 +58,16 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       children: [
-                        LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
-                        SizedBox(width: 10),
-                        LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        ),
                       ],
                     ),
                   ],
@@ -90,12 +94,16 @@ class _VerticalRestaurantListItemState extends State<VerticalRestaurantListItem>
                         if (widget.restaurant.discountValue != null) DiscountBadge(value: widget.restaurant.discountValue),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       children: [
-                        LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
-                        SizedBox(width: 10),
-                        LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20'),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD'),
+                        ),
                       ],
                     ),
                   ],

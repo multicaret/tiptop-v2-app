@@ -13,7 +13,7 @@ class CircleIcon extends StatelessWidget {
 
   CircleIcon({
     this.bgColor = AppColors.primary,
-    this.iconColor = AppColors.secondaryDark,
+    this.iconColor = AppColors.secondary,
     this.iconImage,
     this.iconData,
     this.size = 18,
@@ -26,7 +26,7 @@ class CircleIcon extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      padding: EdgeInsets.all(3),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: AppColors.primary,
         shape: BoxShape.circle,
@@ -34,7 +34,7 @@ class CircleIcon extends StatelessWidget {
       child: iconData != null
           ? Icon(
               iconData,
-              color: AppColors.secondaryDark,
+              color: AppColors.secondary,
               size: 10,
             )
           : iconText != null

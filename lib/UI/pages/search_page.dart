@@ -4,12 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -32,7 +31,6 @@ class _SearchPageState extends State<SearchPage> {
   FocusNode searchFieldFocusNote = new FocusNode();
 
   ProductsProvider productsProvider;
-  HomeProvider homeProvider;
   SearchProvider searchProvider;
   List<Product> _searchedProducts = [];
   List<Term> _terms = [];
@@ -53,7 +51,6 @@ class _SearchPageState extends State<SearchPage> {
   void didChangeDependencies() {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
-      homeProvider = Provider.of<HomeProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
 
       fetchAndSetSearchTerms();
@@ -64,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
-    await searchProvider.fetchAndSetSearchTerms(homeProvider: homeProvider);
+    await searchProvider.fetchAndSetSearchTerms();
     _terms = searchProvider.terms;
     setState(() => _isLoading = false);
   }
@@ -93,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : Column(
               children: [
                 AppSearchField(
@@ -142,11 +139,11 @@ class _SearchPageState extends State<SearchPage> {
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             child: Row(
               children: [
                 AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(_terms[i].term),
               ],
             ),
@@ -164,7 +161,7 @@ class _SearchPageState extends State<SearchPage> {
         searchQuery = _searchQuery;
         _isLoading = true;
       });
-      await productsProvider.fetchSearchedProducts(_searchQuery, homeProvider: homeProvider);
+      await productsProvider.fetchSearchedProducts(_searchQuery);
       _searchedProducts = productsProvider.searchedProducts;
       if (_searchedProducts.isEmpty) {
         showToast(msg: Translations.of(context).get('No results match your search'));

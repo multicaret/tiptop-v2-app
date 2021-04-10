@@ -4,17 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -35,7 +34,6 @@ class _AddressesPageState extends State<AddressesPage> {
   AddressesProvider addressesProvider;
   AppProvider appProvider;
   CartProvider cartProvider;
-  HomeProvider homeProvider;
 
   List<Address> addresses = [];
   List<Kind> kinds = [];
@@ -53,7 +51,7 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {
-    if (!cartProvider.noCart) {
+    if (!cartProvider.noMarketCart) {
       //User wants to change address while he has filled cart
       showDialog(
         context: context,
@@ -63,7 +61,7 @@ class _AddressesPageState extends State<AddressesPage> {
       ).then((response) {
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
-          cartProvider.clearCart(appProvider, homeProvider).then((_) {
+          cartProvider.clearCart(appProvider).then((_) {
             addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
               _changeSelectedAddress(_selectedAddress).then((_) {
                 showToast(msg: 'Cleared cart and changed address to (${_selectedAddress.kind.title}) successfully!');
@@ -94,8 +92,8 @@ class _AddressesPageState extends State<AddressesPage> {
       ),
     );
     if (response != null && response) {
-      if(!cartProvider.noCart) {
-        await cartProvider.clearCart(appProvider, homeProvider);
+      if (!cartProvider.noMarketCart) {
+        await cartProvider.clearCart(appProvider);
         print('cart cleared as well :( ');
       }
       await addressesProvider.deleteAddress(appProvider, _addressId);
@@ -110,7 +108,6 @@ class _AddressesPageState extends State<AddressesPage> {
       appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       _fetchAndSetAddresses();
     }
     _isInit = false;
@@ -124,7 +121,7 @@ class _AddressesPageState extends State<AddressesPage> {
       hasOverlayLoader: _isLoadingChangingAddress,
       body: _isLoadingAddress
           ? Center(
-              child: AppLoader(),
+              child: const AppLoader(),
             )
           : RefreshIndicator(
               onRefresh: _fetchAndSetAddresses,
@@ -149,7 +146,7 @@ class _AddressesPageState extends State<AddressesPage> {
         child: InkWell(
           onTap: () => _changeSelectedAddressWithConfirmation(addresses[i]),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -165,7 +162,7 @@ class _AddressesPageState extends State<AddressesPage> {
                         isAsset: false,
                       ),
                       Text(addresses[i].kind.title),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           addresses[i].address1,
@@ -205,7 +202,7 @@ class _AddressesPageState extends State<AddressesPage> {
             );
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border(

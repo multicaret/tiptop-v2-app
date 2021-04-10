@@ -48,7 +48,7 @@ class RadioSelectItems extends StatelessWidget {
                         value: items[i]["id"],
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         groupValue: selectedId,
-                        activeColor: AppColors.secondaryDark,
+                        activeColor: AppColors.secondary,
                         onChanged: (itemId) => action(itemId),
                       ),
                       if (items[i]["icon"] != null)
@@ -56,7 +56,7 @@ class RadioSelectItems extends StatelessWidget {
                           padding: EdgeInsets.only(left: isRTL ? 5 : 15, right: isRTL ? 15 : 5),
                           child: AppIcons.icon50(items[i]["icon"]),
                         ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(items[i]["title"]),
                     ],
                   ),
@@ -65,7 +65,7 @@ class RadioSelectItems extends StatelessWidget {
                         ? Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                              boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
                             ),
                             child: Image(
                               alignment: Alignment.centerRight,

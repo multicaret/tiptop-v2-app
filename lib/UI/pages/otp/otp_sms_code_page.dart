@@ -9,7 +9,6 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_pin_code_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -25,7 +24,6 @@ class OTPSMSCodePage extends StatefulWidget {
 class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
   OTPProvider otpProvider;
   AppProvider appProvider;
-  HomeProvider homeProvider;
   bool _isInit = true;
   String reference;
   DateTime validationDate;
@@ -42,7 +40,6 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     if (_isInit) {
       otpProvider = Provider.of<OTPProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       reference = data['reference'];
       phoneCountryCode = data['phone_country_code'];
@@ -59,26 +56,26 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
       bgImage: "assets/images/page-bg-pattern-white.png",
       body: Column(
         children: [
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Text(Translations.of(context).get('Check your messages')),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(Translations.of(context).get('We sent a message to your number')),
-          SizedBox(height: 7),
+          const SizedBox(height: 7),
           Text(
             '+$phoneCountryCode $phoneNumber',
             style: AppTextStyles.bodyBold,
             textDirection: TextDirection.ltr,
           ),
           Text(Translations.of(context).get('with verification code')),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 70),
+            padding: const EdgeInsets.symmetric(horizontal: 70),
             child: AppPinCodeTextField(
               length: 6,
               onComplete: (code) => _submitCode(code),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           CustomTimer(
             from: Duration(minutes: 3),
             to: Duration(minutes: 0),
@@ -93,14 +90,14 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
               );
             },
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 Translations.of(context).get('Has it not arrived yet?'),
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               GestureDetector(
                 onTap: () {
                   //Todo: implement sending code again

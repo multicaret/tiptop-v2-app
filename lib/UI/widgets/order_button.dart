@@ -22,7 +22,7 @@ class OrderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: cartProvider.noCart
+      onTap: cartProvider.noMarketCart
           ? null
           : () {
               if (submitAction != null) {
@@ -33,7 +33,7 @@ class OrderButton extends StatelessWidget {
             },
       child: Container(
         color: AppColors.primary,
-        padding: EdgeInsets.only(top: 20, bottom: 40, left: 17, right: 17),
+        padding: const EdgeInsets.only(top: 20, bottom: 40, left: 17, right: 17),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -43,7 +43,7 @@ class OrderButton extends StatelessWidget {
                 child: Text(Translations.of(context).get(submitAction == null ? 'Continue' : 'Order Now')),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.secondaryDark,
+                  color: AppColors.secondary,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(isRTL ? 0 : 8),
                     bottomLeft: Radius.circular(isRTL ? 0 : 8),
@@ -51,7 +51,7 @@ class OrderButton extends StatelessWidget {
                     bottomRight: Radius.circular(isRTL ? 8 : 0),
                   ),
                   boxShadow: [
-                    BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
+                    const BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
                   ],
                 ),
               ),
@@ -59,7 +59,7 @@ class OrderButton extends StatelessWidget {
             Container(
               height: 45,
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 17),
+              padding: const EdgeInsets.symmetric(horizontal: 17),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.only(
@@ -69,7 +69,7 @@ class OrderButton extends StatelessWidget {
                   bottomLeft: Radius.circular(isRTL ? 8 : 0),
                 ),
                 boxShadow: [
-                  BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
+                  const BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
                 ],
               ),
               child: cartProvider.isLoadingAddRemoveRequest

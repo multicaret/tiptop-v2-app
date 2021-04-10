@@ -19,16 +19,16 @@ class ConfirmAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppAlertDialog(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         if (image != null)
           Padding(
-            padding: EdgeInsets.only(left: 100, right: 100, bottom: 20),
+            padding: const EdgeInsets.only(left: 100, right: 100, bottom: 20),
             child: Image(
               image: AssetImage(image),
             ),
           ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
             Translations.of(context).get(title),
             textAlign: TextAlign.center,
@@ -39,7 +39,7 @@ class ConfirmAlertDialog extends StatelessWidget {
       actions: [
         DialogAction(
           text: 'Yes',
-          buttonColor: AppColors.secondaryDark,
+          buttonColor: AppColors.secondary,
           popValue: true,
         ),
         DialogAction(

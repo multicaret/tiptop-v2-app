@@ -133,7 +133,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                               ? null
                               : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -160,7 +160,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                       if (hasCoupon) SectionTitle('Promotions'),
                       if (hasCoupon)
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
                           decoration: BoxDecoration(
                             color: AppColors.white,
                             border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -181,7 +181,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                         totals: totals,
                         isRTL: appProvider.isRTL,
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),

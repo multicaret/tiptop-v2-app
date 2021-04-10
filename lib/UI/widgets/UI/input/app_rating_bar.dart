@@ -51,7 +51,7 @@ class AppRatingBar extends StatelessWidget {
           itemPadding: EdgeInsets.symmetric(horizontal: starsGutter / 2),
           onRatingUpdate: onRatingUpdate,
         ),
-        if (hasLabel) SizedBox(width: 5),
+        if (hasLabel) const SizedBox(width: 5),
         if (hasLabel) Text('$initialRating', style: AppTextStyles.subtitle),
       ],
     );

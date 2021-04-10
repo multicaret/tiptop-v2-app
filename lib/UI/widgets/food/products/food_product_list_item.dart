@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -14,10 +15,12 @@ class FoodProductListItem extends StatelessWidget {
     return Material(
       color: AppColors.white,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: product);
+        },
         child: Container(
           height: foodProductListItemHeight,
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppColors.border),
@@ -32,14 +35,14 @@ class FoodProductListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(product.title),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       'Lorem ipsum dolor sit amit. Lorem ipsum dolor sit amit. Lorem ipsum dolor sit amit. ',
                       style: AppTextStyles.subtitle50,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       '140 IQD',
                       style: AppTextStyles.subtitleSecondary,

@@ -22,7 +22,7 @@ class HomeCategoriesGrid extends StatelessWidget {
     double crossAxisCount = colSize / (colSize + 25);
 
     return GridView.count(
-      padding: EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
+      padding: const EdgeInsets.only(right: 17, left: 17, top: 10, bottom: 20),
       shrinkWrap: true,
       childAspectRatio: crossAxisCount,
       physics: NeverScrollableScrollPhysics(),

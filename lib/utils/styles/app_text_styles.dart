@@ -30,7 +30,7 @@ class AppTextStyles {
 
   static const TextStyle h2Secondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 20,
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
@@ -88,7 +88,7 @@ class AppTextStyles {
 
   static const TextStyle subtitleSecondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 14,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
@@ -96,7 +96,7 @@ class AppTextStyles {
 
   static const TextStyle subtitleSecondaryBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 14,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -121,7 +121,7 @@ class AppTextStyles {
 
   static const TextStyle subtitleXxsSecondary = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 10,
     height: 1,
     fontWeight: FontWeight.w400,
@@ -130,7 +130,7 @@ class AppTextStyles {
 
   static const TextStyle subtitleXxsSecondaryBold = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 10,
     height: 1,
     fontWeight: FontWeight.w600,
@@ -192,7 +192,7 @@ class AppTextStyles {
 
   static const TextStyle bodyBoldSecondaryDark = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 16,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
@@ -208,7 +208,7 @@ class AppTextStyles {
 
   static const TextStyle bodySecondaryDark = const TextStyle(
     fontFamily: 'NeoSansArabic',
-    color: AppColors.secondaryDark,
+    color: AppColors.secondary,
     fontSize: 16,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,

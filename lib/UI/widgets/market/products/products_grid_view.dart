@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/grid_product_item.dart';
 import 'package:tiptop_v2/models/product.dart';
-import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
 class ProductsGridView extends StatelessWidget {
@@ -16,11 +15,11 @@ class ProductsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double productGridItemWidth = getColItemHeight(3, context);
-    double productGridItemHeight = productGridItemWidth + getCartControlButtonHeight(context) / 2 + marketProductUnitTitleHeight + (10 * 2) + (14 * 6);
+    double productGridItemHeight = getProductGridItemHeight(context);
     double productGridItemAspectRatio = productGridItemWidth / productGridItemHeight;
 
     return GridView.count(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
       physics: physics ?? NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisSpacing: 10,

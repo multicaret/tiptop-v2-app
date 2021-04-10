@@ -43,7 +43,7 @@ class AppScaffold extends StatelessWidget {
           Positioned(
             top: 0,
             child: Container(
-              color: AppColors.secondaryDark,
+              color: AppColors.secondary,
               child: Image.asset(
                 'assets/images/appbar-bg-pattern.png',
                 width: screenSize.width,
@@ -86,7 +86,7 @@ class AppScaffold extends StatelessWidget {
           if (hasOverlay)
             Positioned.fill(
               child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 opacity: hasOverlay ? 1 : 0,
                 child: Container(
                   color: AppColors.primary.withOpacity(0.8),
@@ -101,12 +101,12 @@ class AppScaffold extends StatelessWidget {
                   child: Container(
                     width: 100,
                     height: 100,
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: AppColors.white.withOpacity(0.9),
                     ),
-                    child: AppLoader(),
+                    child: const AppLoader(),
                   ),
                 ),
               ),

@@ -58,9 +58,9 @@ class _AppSearchFieldState extends State<AppSearchField> {
           borderSide: BorderSide(width: 1.5, color: AppColors.border),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(width: 1.5, color: AppColors.secondaryDark),
+          borderSide: BorderSide(width: 1.5, color: AppColors.secondary),
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
       ),
       onFieldSubmitted: (value) => widget.submitAction(value),
     );

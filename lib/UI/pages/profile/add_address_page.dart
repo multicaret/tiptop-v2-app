@@ -6,10 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
-import 'package:tiptop_v2/UI/widgets/address/add_address_map.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_details_form.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/address/add_address_map.dart';
+import 'package:tiptop_v2/UI/widgets/address/address_details_form.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -30,6 +30,7 @@ class AddAddressPage extends StatefulWidget {
 
 class _AddAddressPageState extends State<AddAddressPage> {
   final GlobalKey<FormState> addressDetailsFormKey = GlobalKey();
+  TextEditingController addressAliasTextFieldController = new TextEditingController();
   bool _isInit = true;
   bool _isLoadingStoreAddressRequest = false;
   bool _isLoadingCreateAddressRequest = false;
@@ -49,6 +50,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
   City selectedCity;
   Region selectedRegion;
   CreateAddressData createAddressData;
+
+  List<Map<String, dynamic>> regionsDropDownItems = [];
+  List<Map<String, dynamic>> citiesDropDownItems = [];
+  List<Map<String, dynamic>> addressIconsDropDownItems = [];
 
   Marker defaultMarker;
 
@@ -77,7 +82,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
           'notes': '',
         };
       });
-      print(addressDetailsFormData);
+      if (createAddressData != null) {
+        addressIconsDropDownItems = createAddressData.kinds.map((kind) => {'id': kind.id, 'icon_url': kind.icon}).toList();
+        regionsDropDownItems = createAddressData.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
+        print(regionsDropDownItems);
+        if (addressDetailsFormData['region_id'] != null) {
+          List<City> cities = createAddressData.cities.where((city) => city.region.id == addressDetailsFormData['region_id']).toList();
+          citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+        }
+      }
       setState(() => _isLoadingCreateAddressRequest = false);
       return true;
     } catch (e) {
@@ -107,6 +120,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       selectedKind = data['kind'];
       currentMarkerIcon = selectedKind.markerIcon;
+      addressAliasTextFieldController.text = selectedKind.title;
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -117,6 +131,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
     setState(() {
       addressLocationConfirmed = false;
     });
+  }
+
+  @override
+  void dispose() {
+    addressAliasTextFieldController.dispose();
+    super.dispose();
   }
 
   @override
@@ -149,9 +169,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
             left: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
+              padding: const EdgeInsets.only(left: 17, right: 17, top: 20, bottom: 40),
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+                boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 color: AppColors.white,
               ),
               child: AppButtons.secondary(
@@ -166,32 +186,42 @@ class _AddAddressPageState extends State<AddAddressPage> {
             ),
           ),
           AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             bottom: addressLocationConfirmed ? 0 : -AddAddressPage.addressDetailsFormContainerHeight,
             right: 0,
             left: 0,
             height: AddAddressPage.addressDetailsFormContainerHeight,
             child: AddressDetailsForm(
               formKey: addressDetailsFormKey,
+              addressAliasTextFieldController: addressAliasTextFieldController,
               addressDetailsFormData: addressDetailsFormData,
               selectedKind: selectedKind,
               submitForm: submitAddressDetailsForm,
               createAddressData: createAddressData,
-              setRegionId: (id) => setState(() => addressDetailsFormData['region_id'] = id),
-              setCityId: (id) => setState(() => addressDetailsFormData['city_id'] = id),
-              setKindId: (id) {
+              addressIconsDropDownItems: addressIconsDropDownItems,
+              regionsDropDownItems: regionsDropDownItems,
+              citiesDropDownItems: citiesDropDownItems,
+              setAddressDetailsFormData: (key, value) {
                 setState(() {
-                  addressDetailsFormData['kind'] = id;
-                  addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == id).title;
-                  currentMarkerIcon = createAddressData.kinds.firstWhere((kind) => kind.id == id).markerIcon;
-                });
-                getAndCacheMarkerIcon(currentMarkerIcon).then((Uint8List markerIconBytes) {
-                  setState(() {
-                    defaultMarker = defaultMarker.copyWith(iconParam: BitmapDescriptor.fromBytes(markerIconBytes));
-                    markers = [defaultMarker];
-                  });
+                  addressDetailsFormData[key] = value;
                 });
                 // print(addressDetailsFormData);
+                if (key == 'region_id') {
+                  List<City> selectedRegionCities = createAddressData.cities.where((city) => city.region.id == value).toList();
+                  citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'name': city.name}).toList();
+                }
+                if (key == 'kind') {
+                  addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == value).title;
+                  setState(() {
+                    currentMarkerIcon = createAddressData.kinds.firstWhere((kind) => kind.id == value).markerIcon;
+                  });
+                  getAndCacheMarkerIcon(currentMarkerIcon).then((Uint8List markerIconBytes) {
+                    setState(() {
+                      defaultMarker = defaultMarker.copyWith(iconParam: BitmapDescriptor.fromBytes(markerIconBytes));
+                      markers = [defaultMarker];
+                    });
+                  });
+                }
               },
             ),
           )
@@ -223,6 +253,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       return;
     }
     addressDetailsFormKey.currentState.save();
+    print('addressDetailsFormData to submit');
     print(addressDetailsFormData);
     setState(() => _isLoadingStoreAddressRequest = true);
     await addressesProvider.storeAddress(appProvider, addressDetailsFormData);

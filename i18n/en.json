@@ -91,7 +91,7 @@
   "Use This Address": "Use This Address",
   "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "Your order will be delivered to the pinned location on the map, please confirm your pinned location",
   "Track Order": "Track Order",
-  "Live Order": "Live Order",
+  "Live Order(s)": "Live Order(s)",
   "Track your order": "Track your order",
   "Preparing": "Preparing",
   "On the way": "On the way",
@@ -105,6 +105,7 @@
   "Are you sure you want to change your selected Address? Your cart will be cleared": "Are you sure you want to change your selected Address? Your cart will be cleared",
   "Are you sure you want to delete this address?": "Are you sure you want to delete this address?",
   "All Restaurants": "All Restaurants",
+  "Restaurants": "Restaurants",
   "Categories": "Categories",
   "Restaurant delivery": "Restaurant delivery",
   "TipTop delivery": "TipTop delivery",
@@ -141,5 +142,6 @@
   "Enter Promo Code": "Enter Promo Code",
   "Total Before Discount": "Total Before Discount",
   "Total After Discount": "Total After Discount",
-  "You Saved": "You Saved"
+  "You Saved": "You Saved",
+  "View All": "View All"
 }

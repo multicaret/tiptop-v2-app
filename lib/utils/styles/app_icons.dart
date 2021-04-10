@@ -24,15 +24,15 @@ class AppIcons {
   }
 
   static iconSecondary(IconData iconName) {
-    return Icon(iconName, color: AppColors.secondaryDark, size: 20);
+    return Icon(iconName, color: AppColors.secondary, size: 20);
   }
 
   static iconMdSecondary(IconData iconName) {
-    return Icon(iconName, color: AppColors.secondaryDark, size: 30);
+    return Icon(iconName, color: AppColors.secondary, size: 30);
   }
 
   static iconLgSecondary(IconData iconName) {
-    return Icon(iconName, color: AppColors.secondaryDark, size: 50);
+    return Icon(iconName, color: AppColors.secondary, size: 50);
   }
 
   static icon50(IconData iconName) {
@@ -44,7 +44,7 @@ class AppIcons {
   }
 
   static iconSmSecondary(IconData iconName) {
-    return Icon(iconName, color: AppColors.secondaryDark, size: 18);
+    return Icon(iconName, color: AppColors.secondary, size: 18);
   }
 
   static iconWhite(IconData iconName) {
@@ -76,7 +76,7 @@ class AppIcons {
   }
 
   static iconXsSecondary(IconData iconName) {
-    return Icon(iconName, color: AppColors.secondaryDark, size: 14);
+    return Icon(iconName, color: AppColors.secondary, size: 14);
   }
 
   static iconXs50(IconData iconName) {

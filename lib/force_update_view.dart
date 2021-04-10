@@ -23,16 +23,16 @@ class ForceUpdateWidget extends StatelessWidget {
       hasCurve: true,
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
       body: Column(
         children: [
           SizedBox(height: screenSize.height * 0.2),
           getUpperImage(screenSize),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           getDialogTitle(),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           getDialogContent(),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           AppButtons.primary(
             onPressed: () {
               if (appProvider.bootConfigs.data['clear_local_storage'] != null && appProvider.bootConfigs.data['clear_local_storage'] == 1) {

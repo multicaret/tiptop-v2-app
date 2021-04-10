@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: AppColors.primary,
-            accentColor: AppColors.secondary,
+            accentColor: AppColors.secondaryLight,
             scaffoldBackgroundColor: Colors.transparent,
             fontFamily: 'NeoSansArabic',
             textTheme: TextTheme(
@@ -118,7 +118,7 @@ class _MyAppState extends State<MyApp> {
               activeTrackColor: AppColors.primary,
               inactiveTrackColor: AppColors.primary50,
               thumbColor: AppColors.primary,
-              valueIndicatorColor: AppColors.secondaryDark,
+              valueIndicatorColor: AppColors.secondary,
             ),
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),

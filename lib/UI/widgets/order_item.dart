@@ -24,7 +24,7 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.border),
@@ -52,7 +52,7 @@ class OrderItem extends StatelessWidget {
                           order.completedAt.formatted,
                           style: AppTextStyles.body50,
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(order.address.kind.title)
                       ],
                     )
@@ -64,7 +64,7 @@ class OrderItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
+                    boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
                   ),
                   child: Row(
                     children: [
@@ -102,7 +102,7 @@ class OrderItem extends StatelessWidget {
             ),
           ),
           if(!isDisabled)
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           if(!isDisabled)
           AppIcons.iconSecondary(isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
         ],

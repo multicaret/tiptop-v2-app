@@ -31,14 +31,14 @@ class AppDropDownButton extends StatelessWidget {
         children: [
           if (labelText != null)
             Padding(
-              padding: EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.only(bottom: 6),
               child: Text(
                 Translations.of(context).get(labelText),
                 style: AppTextStyles.bodyBold,
               ),
             ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 17),
+            padding: const EdgeInsets.symmetric(horizontal: 17),
             margin: EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
               color: AppColors.bg,

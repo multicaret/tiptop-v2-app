@@ -39,7 +39,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             margin: EdgeInsets.only(
               left: appProvider.isRTL ? 0 : getOffset(screenSize.width),
               right: appProvider.isRTL ? getOffset(screenSize.width) : 0,
@@ -50,10 +50,10 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                 Container(
                   width: sliderIndicatorWidth,
                   height: sliderIndicatorWidth,
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+                    boxShadow: [const BoxShadow(blurRadius: 7, color: AppColors.shadow)],
                     color: AppColors.white,
                   ),
                   child: Image.asset(
@@ -79,7 +79,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
-              boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+              boxShadow: [const BoxShadow(blurRadius: 7, color: AppColors.shadow)],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -112,12 +112,12 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
                   margin: EdgeInsets.only(top: 40, bottom: 10),
                   height: 80,
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    boxShadow: [BoxShadow(blurRadius: 7, color: AppColors.shadow)],
+                    boxShadow: [const BoxShadow(blurRadius: 7, color: AppColors.shadow)],
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -131,13 +131,13 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                             width: 55.0,
                             decoration: BoxDecoration(
                               boxShadow: [
-                                BoxShadow(color: AppColors.shadow, blurRadius: 4),
+                                const BoxShadow(color: AppColors.shadow, blurRadius: 4),
                               ],
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(4.0),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Text('Lara')
                         ],
                       ),
@@ -159,7 +159,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                             ),
                             onTap: () {},
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           InkWell(
                             child: Container(
                               height: 30,

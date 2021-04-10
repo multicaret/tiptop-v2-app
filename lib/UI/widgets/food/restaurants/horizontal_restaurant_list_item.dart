@@ -16,7 +16,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 130,
-      padding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.primary50)),
       ),
@@ -57,7 +57,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,20 +68,20 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                     Row(
                       children: [
                         CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Expanded(child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20')),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD')),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         CircleIcon(iconText: 'R'),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Expanded(child: LabeledIcon(icon: FontAwesomeIcons.hourglassHalf, text: '15-20')),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(child: LabeledIcon(icon: FontAwesomeIcons.shoppingBasket, text: '25 IQD')),
                       ],
                     ),

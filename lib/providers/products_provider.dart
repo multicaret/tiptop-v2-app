@@ -25,7 +25,7 @@ class ProductsProvider with ChangeNotifier {
     productsWithCategoriesDataResponse = productDataResponseFromJson(json.encode(responseData));
 
     if (productsWithCategoriesDataResponse.categoryParentsData == null || productsWithCategoriesDataResponse.status != 200) {
-      throw HttpException(title: 'Error', message: productsWithCategoriesDataResponse.message);
+      throw HttpException(title: 'Http Exception Error', message: productsWithCategoriesDataResponse.message);
     }
 
     categoryParentsData = productsWithCategoriesDataResponse.categoryParentsData;
@@ -34,19 +34,19 @@ class ProductsProvider with ChangeNotifier {
     selectedParentChildCategories = selectedParent.childCategories;
   }
 
-  Future<void> fetchSearchedProducts(searchQuery, {HomeProvider homeProvider}) async {
+  Future<void> fetchSearchedProducts(searchQuery) async {
     final endpoint = 'search/products';
     try {
       final Map<String, String> body = {
         'q': searchQuery,
-        'branch_id': homeProvider.branchId.toString(),
-        'chain_id': homeProvider.chainId.toString(),
+        'branch_id': HomeProvider.branchId.toString(),
+        'chain_id': HomeProvider.chainId.toString(),
       };
       final responseData = await AppProvider().get(endpoint: endpoint, body: body);
       searchedProductsDataResponse = ProductsResponse.fromJson(responseData);
       searchedProducts = searchedProductsDataResponse.data == null ? [] : searchedProductsDataResponse.data;
       if (searchedProductsDataResponse.status != 200) {
-        throw HttpException(title: 'Error', message: searchedProductsDataResponse.message);
+        throw HttpException(title: 'Http Exception Error', message: searchedProductsDataResponse.message);
       }
     } catch (e) {
       print('@e Error');
@@ -57,10 +57,6 @@ class ProductsProvider with ChangeNotifier {
   Future<dynamic> fetchAndSetProduct(AppProvider appProvider, int productId) async {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
-    //Todo: Add (|| responseData["status"] != 200)
-    if (responseData["data"] == null) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'No Data!');
-    }
     product = Product.fromJson(responseData["data"]);
     notifyListeners();
   }
@@ -83,18 +79,12 @@ class ProductsProvider with ChangeNotifier {
       print('Unauthenticated!');
       return 401;
     }
-    if (responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
-    }
     notifyListeners();
   }
 
   Future<void> fetchAndSetFavoriteProducts(AppProvider appProvider) async {
     final endpoint = 'profile/favorites';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
-    if(responseData["data"] == null || responseData["status"] != 200) {
-      throw HttpException(title: 'Error', message: responseData["message"] ?? 'Unknown');
-    }
     favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
     notifyListeners();
   }

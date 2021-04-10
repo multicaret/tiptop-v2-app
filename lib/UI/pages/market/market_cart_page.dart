@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/list_product_item.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/list_product_item.dart';
 import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -13,8 +13,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-class CartPage extends StatelessWidget {
-  static const routeName = '/cart';
+class MarketCartPage extends StatelessWidget {
+  static const routeName = '/market-cart';
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ).then((response) {
                   if (response != null && response) {
-                    cartProvider.clearCart(appProvider, homeProvider).then((_) {
+                    cartProvider.clearCart(appProvider).then((_) {
                       showToast(msg: 'Cart Cleared Successfully!');
                       Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
                     }).catchError((e) {
@@ -52,7 +52,7 @@ class CartPage extends StatelessWidget {
             Expanded(
               child: ListView(
                 physics: AlwaysScrollableScrollPhysics(),
-                children: cartProvider.cartProducts
+                children: cartProvider.marketCartProducts
                     .map((cartProduct) => ListProductItem(
                           product: cartProduct.product,
                           quantity: cartProduct.quantity,
@@ -62,7 +62,7 @@ class CartPage extends StatelessWidget {
             ),
             OrderButton(
               cartProvider: cartProvider,
-              total: cartProvider.cartTotal,
+              total: cartProvider.marketCart.total.formatted,
               isRTL: appProvider.isRTL,
             ),
           ],

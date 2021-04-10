@@ -25,14 +25,14 @@ class CountryCodeDropDown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 6),
+          padding: const EdgeInsets.only(bottom: 6),
           child: Text(
             Translations.of(context).get('Country Code'),
             style: AppTextStyles.bodyBold,
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 17),
+          padding: const EdgeInsets.symmetric(horizontal: 17),
           margin: EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
             color: AppColors.bg,
@@ -51,7 +51,7 @@ class CountryCodeDropDown extends StatelessWidget {
                   return DropdownMenuItem<String>(
                     value: country.phoneCode,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         children: [
                           SvgPicture.network(
@@ -65,7 +65,7 @@ class CountryCodeDropDown extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text('${country.phoneCode}'),
                         ],
                       ),

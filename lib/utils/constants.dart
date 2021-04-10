@@ -8,7 +8,7 @@ const double scrollableHorizontalTabBarHeight = 50;
 const double sliverAppBarSearchBarHeight = 70;
 
 //Height of restaurant page header when expanded
-const double restaurantPageExpandedHeaderHeight = 460;
+const double restaurantPageExpandedHeaderHeight = 500;
 
 //Height of restaurant page header when collapsed
 const double restaurantPageCollapsedHeaderHeight = sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight;
@@ -18,3 +18,6 @@ const double marketProductUnitTitleHeight = 12;
 
 //Height of restaurant categories
 const double restaurantCategoriesHeight = 70;
+
+//Height of home page carousel
+const double homeSliderHeight = 212;

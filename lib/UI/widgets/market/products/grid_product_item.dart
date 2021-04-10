@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/product_page.dart';
 import 'package:tiptop_v2/models/product.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -15,47 +13,24 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../UI/formatted_price.dart';
 
-class GridProductItem extends StatefulWidget {
+class GridProductItem extends StatelessWidget {
   final Product product;
 
   const GridProductItem({@required this.product});
 
-  @override
-  _GridProductItemState createState() => _GridProductItemState();
-}
-
-class _GridProductItemState extends State<GridProductItem> {
-  AppProvider appProvider;
-  HomeProvider homeProvider;
-  CartProvider cartProvider;
-  bool _isInit = true;
-  bool requestedMoreThanAvailableQuantity = false;
-  int productCartQuantity;
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
-      cartProvider = Provider.of<CartProvider>(context);
-      productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
-  void openProductPage() {
+  void openProductPage(BuildContext context) {
     Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
-      "product": widget.product,
+      "product": product,
       "has_controls": true,
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    bool hasUnitTitle = widget.product.unit != null && widget.product.unit.title != null;
-    bool hasDiscountedPrice = widget.product.discountedPrice != null && widget.product.discountedPrice.raw != 0;
+    bool hasUnitTitle = product.unit != null && product.unit.title != null;
+    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0;
     double cartButtonHeight = getCartControlButtonHeight(context);
+    // print('rebuilt grid product item ${product.title}');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,31 +39,33 @@ class _GridProductItemState extends State<GridProductItem> {
           height: getColItemHeight(3, context) + (getCartControlButtonHeight(context) / 2) + (hasUnitTitle ? marketProductUnitTitleHeight : 0),
           child: Stack(
             children: [
-              Consumer<CartProvider>(builder: (c, cartProvider, _) {
-                int productCartQuantity = cartProvider.getProductQuantity(widget.product.id);
+              GestureDetector(
+                onTap: () => openProductPage(context),
+                child: Consumer<CartProvider>(builder: (c, cartProvider, _) {
+                  int productCartQuantity = cartProvider.getProductQuantity(product.id);
 
-                return GestureDetector(
-                  onTap: openProductPage,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    height: getColItemHeight(3, context),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
-                      borderRadius: BorderRadius.circular(14),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(widget.product.media.cover),
+                  return GestureDetector(
+                    onTap: () => openProductPage(context),
+                    child: Container(
+                      height: getColItemHeight(3, context),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
+                        borderRadius: BorderRadius.circular(14),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(product.media.cover),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
               Positioned(
-                bottom: widget.product.unit == null || widget.product.unit.title == null ? 0 : marketProductUnitTitleHeight,
+                bottom: product.unit == null || product.unit.title == null ? 0 : marketProductUnitTitleHeight,
                 left: cartControlsMargin,
                 right: cartControlsMargin,
                 height: cartButtonHeight,
                 child: CartControls(
-                  product: widget.product,
+                  product: product,
                   cartButtonHeight: cartButtonHeight,
                 ),
               ),
@@ -101,7 +78,7 @@ class _GridProductItemState extends State<GridProductItem> {
                   child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Text(
-                      widget.product.unit.title,
+                      product.unit.title,
                       style: AppTextStyles.subtitleXxs50,
                       textAlign: TextAlign.center,
                     ),
@@ -110,27 +87,27 @@ class _GridProductItemState extends State<GridProductItem> {
             ],
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Expanded(
           child: GestureDetector(
-            onTap: openProductPage,
+            onTap: () => openProductPage(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.product.title,
+                  product.title,
                   style: AppTextStyles.subtitle,
                   textAlign: TextAlign.start,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 if (hasDiscountedPrice)
                   FormattedPrice(
-                    price: widget.product.discountedPrice.formatted,
+                    price: product.discountedPrice.formatted,
                   ),
-                FormattedPrice(price: widget.product.price.formatted, isDiscounted: hasDiscountedPrice),
-                if (widget.product.unitText != null) Expanded(child: Text(widget.product.unitText, style: AppTextStyles.subtitleXs50))
+                FormattedPrice(price: product.price.formatted, isDiscounted: hasDiscountedPrice),
+                if (product.unitText != null) Expanded(child: Text(product.unitText, style: AppTextStyles.subtitleXs50))
               ],
             ),
           ),

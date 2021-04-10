@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -37,18 +38,21 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     'city_id': null,
   };
 
-  List<Map<String, dynamic>> regionsDropDownItems;
-  List<Map<String, dynamic>> citiesDropDownItems;
+  List<Map<String, dynamic>> regionsDropDownItems = [];
+  List<Map<String, dynamic>> citiesDropDownItems = [];
 
   Future<void> _createEditProfileRequest() async {
     setState(() => _isLoadingCreateEditProfileRequest = true);
     final responseData = await otpProvider.createEditProfileRequest(appProvider);
-    if(responseData == 401) {
+    if (responseData == 401) {
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       return;
     }
     regionsDropDownItems = otpProvider.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
-    citiesDropDownItems = otpProvider.cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+    if (formData['region_id'] != null) {
+      List<City> cities = otpProvider.cities.where((city) => city.region.id == formData['region_id']).toList();
+      citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+    }
     setState(() => _isLoadingCreateEditProfileRequest = false);
   }
 
@@ -58,7 +62,8 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
       appProvider = Provider.of<AppProvider>(context);
       otpProvider = Provider.of<OTPProvider>(context);
       formData = {
-        'full_name': appProvider.authUser == null || appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
+        'full_name':
+            appProvider.authUser == null || appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
         'email': appProvider.authUser == null ? null : appProvider.authUser.email,
         'region_id': appProvider.authUser == null || appProvider.authUser.region == null ? null : appProvider.authUser.region.id,
         'city_id': appProvider.authUser == null || appProvider.authUser.city == null ? null : appProvider.authUser.city.id,
@@ -72,22 +77,22 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   @override
   Widget build(BuildContext context) {
     AppProvider appProvider = Provider.of<AppProvider>(context);
-
     bool isProfileComplete = !appProvider.authUser.name.contains(appProvider.authUser.phone);
+
     return AppScaffold(
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: EdgeInsets.symmetric(horizontal: 17.0),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: 17.0),
       appBar: AppBar(
         title: Text(Translations.of(context).get('Complete Your Profile')),
       ),
       body: _isLoadingCreateEditProfileRequest
-          ? AppLoader()
+          ? const AppLoader()
           : SingleChildScrollView(
               child: Form(
                 key: _profileFormKey,
                 child: Column(
                   children: [
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Text(
                       isProfileComplete ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
                       style: AppTextStyles.bodyBold,
@@ -97,7 +102,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       Translations.of(context).get('Please fill out your details'),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     AppTextField(
                       keyboardType: TextInputType.name,
                       required: true,
@@ -122,7 +127,11 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       labelText: 'City',
                       defaultValue: formData['region_id'],
                       items: regionsDropDownItems,
-                      onChanged: (id) => setState(() => formData['region_id'] = id),
+                      onChanged: (regionId) {
+                        setState(() => formData['region_id'] = regionId);
+                        List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
+                        citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+                      },
                       hintText: 'Select City',
                     ),
                     AppDropDownButton(
@@ -130,13 +139,13 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       defaultValue: formData['city_id'],
                       items: citiesDropDownItems,
                       hintText: 'Select Neighborhood',
-                      onChanged: (id) => setState(() => formData['city_id'] = id),
+                      onChanged: (cityId) => setState(() => formData['city_id'] = cityId),
                     ),
                     AppButtons.primary(
                       child: Text(Translations.of(context).get('Save')),
                       onPressed: () => _submit(context, appProvider),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
