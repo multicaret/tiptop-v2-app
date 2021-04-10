@@ -147,5 +147,12 @@
   "You Saved": "You Saved",
   "View All": "View All",
   "Closes at": "Closes at",
-  "Add To Cart": "Add To Cart"
+  "Add To Cart": "Add To Cart",
+  "Delivery Type: all": "Delivery Type: All",
+  "Delivery Type: tiptop": "Delivery Type: TipTop",
+  "Delivery Type: restaurant": "Delivery Type: Restaurant",
+  "Minimum Rating": "Minimum Rating",
+  "Minimum Order": "Minimum Order",
+  "Sort by: restaurants_rating": "Sort by: Restaurant Rating",
+  "Sort by: by_distance": "Sort by: Distance"
 }

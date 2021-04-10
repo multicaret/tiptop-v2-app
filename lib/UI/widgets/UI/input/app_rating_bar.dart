@@ -29,7 +29,7 @@ class AppRatingBar extends StatelessWidget {
         RatingBar(
           ignoreGestures: disabled,
           glow: false,
-          initialRating: initialRating,
+          initialRating: initialRating ?? 0.0,
           direction: Axis.horizontal,
           allowHalfRating: hasHalfRating,
           itemCount: 5,

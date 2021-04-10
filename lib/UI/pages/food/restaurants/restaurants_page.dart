@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/food/active_filters.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurants_index.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
@@ -37,7 +38,8 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     return AppScaffold(
       body: Column(
         children: [
-          FilterSortButtons(),
+          FilterSortButtons(shouldPopOnly: true),
+          if (!restaurantsProvider.filtersAreEmpty) ActiveFilters(),
           Expanded(
             child: SingleChildScrollView(
               child: RestaurantsIndex(),

@@ -50,6 +50,12 @@ class RestaurantsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool get filtersAreEmpty =>
+      filterData['delivery_type'] == null &&
+      filterData['min_rating'] == null &&
+      filterData['minimum_order'] == minCartValue &&
+      filterData['categories'].length == 0;
+
   void setActiveListType(ListType value) {
     activeListType = value;
     notifyListeners();
@@ -59,10 +65,19 @@ class RestaurantsProvider with ChangeNotifier {
   double maxCartValue;
   Map<String, dynamic> filterData = {
     'delivery_type': null,
-    'min_cart_value': null,
-    'rating_value': 0.0,
+    'minimum_order': null,
+    'min_rating': null,
     'categories': <int>[],
   };
+
+  String getFoodCategoryTitleFromId(int id) {
+    if (foodCategories != null && foodCategories.length > 0) {
+      final targetCategory = foodCategories.firstWhere((category) => category.id == id);
+      return targetCategory == null ? null : targetCategory.title;
+    } else {
+      return null;
+    }
+  }
 
   Map<int, bool> restaurantsFavoriteStatuses = {};
 
@@ -137,7 +152,7 @@ class RestaurantsProvider with ChangeNotifier {
     foodCategories = List<Category>.from(responseData["data"]["categories"].map((x) => Category.fromJson(x)));
     minCartValue = responseData["data"]["minCart"] == null ? 0.0 : responseData["data"]["minCart"].toDouble();
     maxCartValue = responseData["data"]["maxCart"] == null ? 0.0 : responseData["data"]["maxCart"].toDouble();
-    filterData['min_cart_value'] = minCartValue;
+    filterData['minimum_order'] = minCartValue;
     notifyListeners();
   }
 }

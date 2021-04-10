@@ -32,7 +32,7 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'grocery';
+  String selectedChannel = 'food';
 
   bool get channelIsMarket => selectedChannel == 'grocery';
 
@@ -97,7 +97,7 @@ class HomeProvider with ChangeNotifier {
       } else {
         print('An error happened in food home data request');
         foodHomeDataRequestError = true;
-        throw e;
+        // throw e;
       }
       notifyListeners();
     }
@@ -142,6 +142,8 @@ class HomeProvider with ChangeNotifier {
       if (foodHomeData.restaurants.length == 0) {
         foodNoRestaurantFound = true;
       } else {
+        restaurantsProvider.restaurants = foodHomeData.restaurants;
+        restaurantsProvider.foodCategories = foodHomeData.categories;
         foodHomeData.restaurants.forEach((restaurant) {
           restaurantsProvider.restaurantsFavoriteStatuses[restaurant.id] = restaurant.isFavorited;
         });

@@ -9,16 +9,18 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 class FilterSortButtons extends StatelessWidget {
   final Function onSortButtonPressed;
   final Function onFilterButtonPressed;
+  final bool shouldPopOnly;
 
   FilterSortButtons({
     this.onSortButtonPressed,
     this.onFilterButtonPressed,
+    this.shouldPopOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 30.0),
+      padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 30.0),
       child: Row(
         children: [
           Expanded(
@@ -29,7 +31,7 @@ class FilterSortButtons extends StatelessWidget {
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
                   useRootNavigator: true,
-                  builder: (context) => FilterBottomSheet(),
+                  builder: (context) => FilterBottomSheet(shouldPopOnly: shouldPopOnly),
                 );
               },
               child: Row(
