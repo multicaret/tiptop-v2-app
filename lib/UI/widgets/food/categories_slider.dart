@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/food_category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -35,8 +36,15 @@ class CategoriesSlider extends StatelessWidget {
             index: i,
             count: categories.length,
             isRTL: isRTL,
-            isSelectable: setSelectedCategories != null,
-            onTap: () => setSelectedCategories(categories[i].id),
+            onTap: () {
+              if (setSelectedCategories == null) {
+                Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName, arguments: {
+                  'selected_category_id': categories[i].id,
+                });
+              } else {
+                setSelectedCategories(categories[i].id);
+              }
+            },
             isSelected: isSelected,
           );
         },

@@ -13,7 +13,6 @@ class FoodCategoryItem extends StatelessWidget {
   final int index;
   final int count;
   final bool isRTL;
-  final bool isSelectable;
   final Function onTap;
   final bool isSelected;
 
@@ -22,7 +21,6 @@ class FoodCategoryItem extends StatelessWidget {
     @required this.index,
     @required this.count,
     @required this.isRTL,
-    this.isSelectable = false,
     this.onTap,
     this.isSelected,
   });
@@ -34,11 +32,7 @@ class FoodCategoryItem extends StatelessWidget {
           ? EdgeInsets.only(right: index == 0 ? screenHorizontalPadding : 0, left: index == count - 1 ? screenHorizontalPadding : 0)
           : EdgeInsets.only(left: index == 0 ? screenHorizontalPadding : 0, right: index == count - 1 ? screenHorizontalPadding : 0),
       child: InkWell(
-        onTap: isSelectable
-            ? onTap
-            : () {
-                Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
-              },
+        onTap: onTap,
         child: Stack(
           children: [
             Container(
