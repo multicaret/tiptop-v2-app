@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
@@ -32,6 +33,25 @@ class _SupportPageState extends State<SupportPage> {
     } catch (e) {
       setState(() => _isLoading = false);
       throw e;
+    }
+  }
+
+  Future<void> initLiveChat() async {
+    try {
+      const liveChat = MethodChannel("tiptop/salesIQ");
+      await liveChat.invokeMethod(
+        //name of method to call in native code
+        "initLiveChat",
+        {
+          //arguments passed to native code
+          "userName": appProvider.isAuth ? appProvider.authUser.name : " ",
+          "userEmail": appProvider.isAuth ? appProvider.authUser.email : " ",
+          "languageCode": appProvider.appLocale.languageCode,
+          "isAuth": appProvider.isAuth,
+        },
+      );
+    } on PlatformException catch (e) {
+      print(e);
     }
   }
 
@@ -90,6 +110,7 @@ class _SupportPageState extends State<SupportPage> {
                       Expanded(
                         child: AppButtons.primaryXl(
                           onPressed: () {
+                            initLiveChat();
                             // Navigator.of(context, rootNavigator: true).pushNamed(LiveChatPage.routeName);
                           },
                           child: Column(
