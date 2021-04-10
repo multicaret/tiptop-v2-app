@@ -13,6 +13,30 @@
          
          This Theme is only used starting with V2 of Flutter's Android embedding. -->
     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowBackground">?android:colorBackground</item>\
     </style>
+
+    <!-- SalesIQ theme -->
+    <style name="Theme.SalesIQ.Base" parent="Theme.SalesIQ.Light.DarkActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="siq_statusbar_color">@color/colorDarkSecondary</item>
+        <item name="siq_toolbar_backgroundcolor">@color/colorSecondary</item>
+        <item name="siq_toolbar_title_textcolor">@color/colorPrimary</item>
+        <item name="siq_toolbar_iconcolor">@color/colorPrimary</item>
+
+        <item name="siq_launcher_backgroundcolor">@color/colorPrimary</item>
+
+        <item name="siq_forms_statusbar_color">@color/colorDarkSecondary</item>
+        <item name="siq_forms_toolbar_backgroundcolor">@color/colorSecondary</item>
+        <item name="siq_forms_submitbutton_backgroundcolor">@color/colorPrimary</item>
+        <item name="siq_forms_submitbutton_textcolor">@android:color/white</item>
+
+        <item name="siq_chat_message_backgroundcolor_visitor">@color/colorPrimary</item>
+
+        <item name="siq_emptyview_textcolor">@color/colorPrimary</item>
+        <item name="siq_emptyview_button_backgroundcolor">@color/colorPrimary</item>
+        <item name="siq_emptyview_button_textcolor">@android:color/white</item>
+        <item name="siq_emptyview_button_iconcolor">@android:color/white</item>
+    </style>
+
 </resources>
