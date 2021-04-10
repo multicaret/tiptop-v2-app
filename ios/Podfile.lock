@@ -39,6 +39,10 @@ PODS:
   - mixpanel_flutter (1.1.0):
     - Flutter
     - Mixpanel-swift (= 2.8.3)
+  - OneSignal (2.16.3)
+  - onesignal_flutter (2.6.3):
+    - Flutter
+    - OneSignal (= 2.16.3)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -70,6 +74,7 @@ DEPENDENCIES:
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -87,6 +92,7 @@ SPEC REPOS:
     - GoogleMaps
     - Instabug
     - Mixpanel-swift
+    - OneSignal
     - Toast
 
 EXTERNAL SOURCES:
@@ -108,6 +114,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   mixpanel_flutter:
     :path: ".symlinks/plugins/mixpanel_flutter/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -142,6 +150,8 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Mixpanel-swift: 947354668bf7dcaff5aaf9c64232fb5bea6ff0c7
   mixpanel_flutter: 2b151def495bd86f2a6cbd83e58acf47a70cbb79
+  OneSignal: fd223b247d46e0aa97c7712f3e031c29798d018a
+  onesignal_flutter: 605e4ed3c95a9705db9f5073a66ac6d0045b3fee
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
