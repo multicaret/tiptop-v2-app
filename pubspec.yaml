@@ -66,6 +66,8 @@ dependencies:
   facebook_app_events: ^0.11.2
   mixpanel_flutter: ^1.1.0
   flutter_svg: ^0.20.0-nullsafety.3
+  onesignal_flutter: ^2.0.0
+  rxdart: ^0.26.0
 
 dev_dependencies:
   flutter_test:

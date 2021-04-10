@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -10,9 +13,9 @@ import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
-import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/OneSignalNotifi.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -28,6 +31,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  OneSignalNotifi _oneSignalNotifiService;
+  StreamSubscription<OSNotificationPayload> _listener;
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -103,6 +109,15 @@ class _HomePageState extends State<HomePage> {
       cartProvider = Provider.of<CartProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       fetchAndSetHomeData();
+      _oneSignalNotifiService = Provider.of<OneSignalNotifi>(context);
+      if (_oneSignalNotifiService != null && _oneSignalNotifiService.getPayload != null) {
+        _oneSignalNotifiService.initOneSignal();
+        _listener = _oneSignalNotifiService.getPayload.listen(null);
+        _listener.onData((event) {
+          print("Is opened: ${OneSignalNotifi.notificationHasOpened}");
+          print(event.additionalData.keys.toString());
+        });
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
