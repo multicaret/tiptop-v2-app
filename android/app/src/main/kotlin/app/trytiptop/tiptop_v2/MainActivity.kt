@@ -24,12 +24,8 @@ class MainActivity : FlutterActivity() {
 
                 ZohoLiveChat.Chat.show()
                 ZohoLiveChat.Chat.setVisibility(ChatComponent.prechatForm, !isAuth!!)
+                ZohoLiveChat.Chat.setLanguage(languageCode);
 
-                if (languageCode == "fa") {
-                    ZohoLiveChat.Chat.setLanguage("ar");
-                } else {
-                    ZohoLiveChat.Chat.setLanguage(languageCode);
-                }
                 ZohoSalesIQ.Visitor.setName(userName)
                 ZohoSalesIQ.Visitor.setEmail(userEmail)
             } else {
