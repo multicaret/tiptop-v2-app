@@ -5,10 +5,13 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -33,6 +36,9 @@ class _SearchPageState extends State<SearchPage> {
 
   ProductsProvider productsProvider;
   SearchProvider searchProvider;
+  AppProvider appProvider;
+  HomeProvider homeProvider;
+
   List<Product> _searchedProducts = [];
   List<Term> _terms = [];
 
@@ -53,6 +59,8 @@ class _SearchPageState extends State<SearchPage> {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
+      appProvider = Provider.of<AppProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
 
       fetchAndSetSearchTerms();
     }
@@ -104,7 +112,20 @@ class _SearchPageState extends State<SearchPage> {
                         'Search Results',
                         suffix: ' (${_searchedProducts.length})',
                       )
-                    : SectionTitle('Most Searched Terms'),
+                    : Column(
+                        children: [
+                          homeProvider.selectedChannel == "food"
+                              ? Container(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: CategoriesSlider(
+                                    categories: homeProvider.foodHomeData.categories,
+                                    isRTL: appProvider.isRTL,
+                                  ),
+                                )
+                              : Container(),
+                          SectionTitle('Most Searched Terms'),
+                        ],
+                      ),
                 _searchedProducts.isNotEmpty
                     ? Expanded(
                         child: Container(
@@ -115,10 +136,12 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                       )
-                    : Column(
-                        children: [
-                          ..._getMostSearchedTermsList(),
-                        ],
+                    : Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [..._getMostSearchedTermsList()],
+                          ),
+                        ),
                       ),
               ],
             ),
@@ -170,7 +193,7 @@ class _SearchPageState extends State<SearchPage> {
         var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
       }
-
+      fetchAndSetSearchTerms();
       setState(() {
         _isLoading = false;
       });
