@@ -13,6 +13,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
+import '../checkout_page.dart';
+
 class MarketCartPage extends StatelessWidget {
   static const routeName = '/market-cart';
 
@@ -64,6 +66,16 @@ class MarketCartPage extends StatelessWidget {
               cartProvider: cartProvider,
               total: cartProvider.marketCart.total.formatted,
               isRTL: appProvider.isRTL,
+              buttonText: 'Continue',
+              onTap: () {
+                if (cartProvider.marketCart == null ||
+                    cartProvider.marketCart.total.raw == 0 ||
+                    cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
+                  showToast(msg: 'Order total should be greater than: ${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}');
+                } else {
+                  Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
+                }
+              },
             ),
           ],
         ),

@@ -10,28 +10,22 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class OrderButton extends StatelessWidget {
   final CartProvider cartProvider;
   final bool isRTL;
-  final Function submitAction;
+  final Function onTap;
   final String total;
+  final String buttonText;
 
   OrderButton({
     @required this.cartProvider,
     @required this.isRTL,
-    this.submitAction,
+    this.onTap,
     this.total,
+    this.buttonText,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: cartProvider.noMarketCart
-          ? null
-          : () {
-              if (submitAction != null) {
-                submitAction();
-              } else {
-                Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
-              }
-            },
+      onTap: onTap,
       child: Container(
         color: AppColors.primary,
         padding: const EdgeInsets.only(
@@ -46,7 +40,7 @@ class OrderButton extends StatelessWidget {
             Expanded(
               child: Container(
                 height: buttonHeightSm,
-                child: Text(Translations.of(context).get(submitAction == null ? 'Continue' : 'Order Now')),
+                child: Text(Translations.of(context).get(buttonText)),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: AppColors.secondary,

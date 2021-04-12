@@ -239,7 +239,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         cartProvider: cartProvider,
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isRTL: appProvider.isRTL,
-                        submitAction: _submitOrder,
+                        buttonText: 'Order Now',
+                        onTap: _submitOrder,
                       );
                     },
                   ),
