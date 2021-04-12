@@ -107,7 +107,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: LabeledIcon(
-                              icon: FontAwesomeIcons.shoppingBasket,
+                              icon: LineAwesomeIcons.shopping_basket,
                               text: restaurant.restaurantDelivery.minimumOrder.formatted,
                             ),
                           ),
