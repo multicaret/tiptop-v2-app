@@ -10,6 +10,7 @@ class RestaurantSearchField extends StatelessWidget {
   final Function onChanged;
   final Function onClear;
   final FocusNode focusNode;
+  final bool showClearIcon;
 
   RestaurantSearchField({
     this.onTap,
@@ -17,6 +18,7 @@ class RestaurantSearchField extends StatelessWidget {
     this.onClear,
     this.controller,
     this.focusNode,
+    this.showClearIcon,
   });
 
   final TextEditingController controller;
@@ -35,10 +37,12 @@ class RestaurantSearchField extends StatelessWidget {
           hintStyle: AppTextStyles.body50,
           filled: true,
           prefixIcon: AppIcons.icon(FontAwesomeIcons.search),
-          suffix: GestureDetector(
-            child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
-            onTap: onClear,
-          ),
+          suffix: showClearIcon
+              ? GestureDetector(
+                  child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
+                  onTap: onClear,
+                )
+              : null,
           fillColor: AppColors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 0),
           border: OutlineInputBorder(
