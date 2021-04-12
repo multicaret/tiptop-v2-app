@@ -7,8 +7,19 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class RestaurantSearchField extends StatelessWidget {
   final Function onTap;
+  final Function onChanged;
+  final Function onClear;
+  final FocusNode focusNode;
 
-  RestaurantSearchField({this.onTap});
+  RestaurantSearchField({
+    this.onTap,
+    this.onChanged,
+    this.onClear,
+    this.controller,
+    this.focusNode,
+  });
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +35,10 @@ class RestaurantSearchField extends StatelessWidget {
           hintStyle: AppTextStyles.body50,
           filled: true,
           prefixIcon: AppIcons.icon(FontAwesomeIcons.search),
+          suffix: GestureDetector(
+            child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
+            onTap: onClear,
+          ),
           fillColor: AppColors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 0),
           border: OutlineInputBorder(
@@ -39,6 +54,9 @@ class RestaurantSearchField extends StatelessWidget {
             borderSide: BorderSide(width: 0, color: Colors.transparent),
           ),
         ),
+        controller: controller,
+        focusNode: focusNode,
+        onChanged: onChanged,
       ),
     );
   }

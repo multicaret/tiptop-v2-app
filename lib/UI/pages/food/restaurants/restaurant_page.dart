@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +11,14 @@ import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
@@ -32,13 +37,21 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   int restaurantId;
   Branch restaurant;
+
+  TextEditingController searchFieldController = TextEditingController();
+  FocusNode searchFieldFocusNode = FocusNode();
+
   List<Category> menuCategories;
-  double expandedHeaderHeight;
+  List<Product> searchProductsResult = [];
+  String searchQuery = '';
+  Timer debounceTimer;
 
   AppProvider appProvider;
   RestaurantsProvider restaurantsProvider;
 
   final selectedCategoryIdNotifier = ValueNotifier<int>(null);
+
+  double expandedHeaderHeight;
   List<Map<String, dynamic>> categoriesHeights;
 
   final _collapsedNotifier = ValueNotifier<bool>(false);
@@ -106,6 +119,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
   void dispose() {
     productsScrollController.removeListener(scrollListener);
     productsScrollController.dispose();
+    searchFieldController.dispose();
+    searchFieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -123,6 +138,57 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 
+  void filterProductsSearchResults(String query) {
+    List<Category> categories = [];
+    categories.addAll(menuCategories);
+    if (query.isNotEmpty) {
+      List<Product> searchedProducts = [];
+      categories.forEach((category) {
+        category.products.forEach((product) {
+          if (product.title.toLowerCase().contains(query)) {
+            searchedProducts.add(product);
+          }
+        });
+      });
+      setState(() {
+        searchQuery = query;
+        searchProductsResult.clear();
+        searchProductsResult.addAll(searchedProducts);
+      });
+      if (searchedProducts.isEmpty) {
+        showToast(msg: Translations.of(context).get('No results match your search'));
+      }
+      return;
+    } else {
+      setState(() {
+        searchProductsResult.clear();
+      });
+    }
+  }
+
+  void _clearSearchResults() {
+    searchFieldController.clear();
+    searchFieldFocusNode.unfocus();
+    setState(() {
+      searchProductsResult = [];
+      searchQuery = '';
+    });
+  }
+
+  _onSearchFieldChange(value) {
+    const duration = Duration(milliseconds: 400);
+    if (debounceTimer != null) {
+      setState(() => debounceTimer.cancel());
+    }
+    setState(
+      () => debounceTimer = Timer(duration, () {
+        if (this.mounted && value.length != 0) {
+          filterProductsSearchResults(value);
+        }
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -136,7 +202,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   expandedHeight: expandedHeaderHeight,
-                  collapsedHeight: restaurantPageCollapsedHeaderHeight,
+                  collapsedHeight:
+                      searchQuery.isNotEmpty ? sliverAppBarSearchBarHeight : sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight,
                   backgroundColor: AppColors.bg,
                   pinned: true,
                   bottom: PreferredSize(
@@ -147,28 +214,30 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         offset: Offset(0, _isCollapsed ? -1 : 0),
                         child: Column(
                           children: [
-                            AnimatedOpacity(
-                              duration: const Duration(milliseconds: 200),
-                              opacity: _isCollapsed ? 1 : 0,
-                              child: IgnorePointer(
-                                ignoring: !_isCollapsed,
-                                child: ValueListenableBuilder(
-                                  valueListenable: selectedCategoryIdNotifier,
-                                  builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
-                                    isInverted: true,
-                                    children: menuCategories,
-                                    itemScrollController: categoriesScrollController,
-                                    selectedChildCategoryId: _selectedChildCategoryId,
-                                    //Fired when a child category is clicked
-                                    action: (i) {
-                                      selectedCategoryIdNotifier.value = menuCategories[i].id;
-                                      scrollToCategory(i);
-                                      scrollToProducts(i);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
+                            searchQuery.isEmpty
+                                ? AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 200),
+                                    opacity: _isCollapsed ? 1 : 0,
+                                    child: IgnorePointer(
+                                      ignoring: !_isCollapsed,
+                                      child: ValueListenableBuilder(
+                                        valueListenable: selectedCategoryIdNotifier,
+                                        builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
+                                          isInverted: true,
+                                          children: menuCategories,
+                                          itemScrollController: categoriesScrollController,
+                                          selectedChildCategoryId: _selectedChildCategoryId,
+                                          //Fired when a child category is clicked
+                                          action: (i) {
+                                            selectedCategoryIdNotifier.value = menuCategories[i].id;
+                                            scrollToCategory(i);
+                                            scrollToProducts(i);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
@@ -186,6 +255,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                   scrollToCategory(0);
                                   scrollToProducts(0);
                                 },
+                                focusNode: searchFieldFocusNode,
+                                controller: searchFieldController,
+                                onChanged: (query) => _onSearchFieldChange(query),
+                                onClear: () => _clearSearchResults(),
                               ),
                             ),
                           ],
@@ -204,30 +277,35 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
-                    List.generate(
-                      menuCategories.length,
-                      (i) {
-                        return ScrollableVerticalContent(
-                          child: menuCategories[i],
-                          index: i,
-                          count: menuCategories.length,
-                          scrollController: productsScrollController,
-                          scrollSpyAction: (i) {
-                            selectedCategoryIdNotifier.value = menuCategories[i].id;
-                            scrollToCategory(i);
-                          },
-                          firstItemHasTitle: true,
-                          categoriesHeights: categoriesHeights,
-                          singleTabContent: Column(
-                            children: List.generate(
-                              menuCategories[i].products.length,
-                              (j) => FoodProductListItem(product: menuCategories[i].products[j]),
-                            ),
+                    searchProductsResult.isNotEmpty
+                        ? List.generate(
+                            searchProductsResult.length,
+                            (i) => FoodProductListItem(product: searchProductsResult[i]),
+                          )
+                        : List.generate(
+                            menuCategories.length,
+                            (i) {
+                              return ScrollableVerticalContent(
+                                child: menuCategories[i],
+                                index: i,
+                                count: menuCategories.length,
+                                scrollController: productsScrollController,
+                                scrollSpyAction: (i) {
+                                  selectedCategoryIdNotifier.value = menuCategories[i].id;
+                                  scrollToCategory(i);
+                                },
+                                firstItemHasTitle: true,
+                                categoriesHeights: categoriesHeights,
+                                singleTabContent: Column(
+                                  children: List.generate(
+                                    menuCategories[i].products.length,
+                                    (j) => FoodProductListItem(product: menuCategories[i].products[j]),
+                                  ),
+                                ),
+                                pageTopOffset: expandedHeaderHeight,
+                              );
+                            },
                           ),
-                          pageTopOffset: expandedHeaderHeight,
-                        );
-                      },
-                    ),
                   ),
                 )
               ],

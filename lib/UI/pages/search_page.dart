@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
 
   String searchQuery = '';
   TextEditingController searchFieldController = new TextEditingController();
-  FocusNode searchFieldFocusNote = new FocusNode();
+  FocusNode searchFieldFocusNode = new FocusNode();
 
   ProductsProvider productsProvider;
   SearchProvider searchProvider;
@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     searchFieldController.dispose();
-    searchFieldFocusNote.dispose();
+    searchFieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -77,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
 
   void _clearSearchResults() {
     searchFieldController.clear();
-    searchFieldFocusNote.unfocus();
+    searchFieldFocusNode.unfocus();
     setState(() {
       _searchedProducts = [];
       searchQuery = '';
@@ -105,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
                 AppSearchField(
                   submitAction: (String searchQuery) => _submitSearch(searchQuery),
                   controller: searchFieldController,
-                  focusNode: searchFieldFocusNote,
+                  focusNode: searchFieldFocusNode,
                 ),
                 _searchedProducts.isNotEmpty
                     ? SectionTitle(
@@ -156,7 +156,7 @@ class _SearchPageState extends State<SearchPage> {
         child: InkWell(
           onTap: () {
             searchFieldController.text = _terms[i].term;
-            searchFieldFocusNote.requestFocus();
+            searchFieldFocusNode.requestFocus();
             _submitSearch(_terms[i].term);
           },
           child: Container(
