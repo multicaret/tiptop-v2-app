@@ -12,12 +12,15 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class RestaurantsIndex extends StatelessWidget {
+  final bool isFiltered;
+
+  RestaurantsIndex({this.isFiltered = false});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<RestaurantsProvider>(
       builder: (c, restaurantProvider, _) {
-        List<Branch> restaurants = restaurantProvider.restaurants;
+        List<Branch> restaurants = isFiltered ? restaurantProvider.filteredRestaurants : restaurantProvider.restaurants;
         List<Map<String, dynamic>> listTypes = restaurantProvider.listTypes;
 
         return Column(

@@ -142,12 +142,7 @@ class HomeProvider with ChangeNotifier {
       if (foodHomeData.restaurants.length == 0) {
         foodNoRestaurantFound = true;
       } else {
-        restaurantsProvider.restaurants = foodHomeData.restaurants;
-        restaurantsProvider.foodCategories = foodHomeData.categories;
-        foodHomeData.restaurants.forEach((restaurant) {
-          restaurantsProvider.restaurantsFavoriteStatuses[restaurant.id] = restaurant.isFavorited;
-        });
-        print(restaurantsProvider.restaurantsFavoriteStatuses);
+        restaurantsProvider.setRestaurantData(foodHomeData);
       }
 
       if (foodHomeData.cart != null) {

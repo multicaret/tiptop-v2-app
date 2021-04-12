@@ -10,6 +10,7 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -72,11 +73,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       screenHeightFraction: 0.8,
       title: 'Filters',
       clearAction: filtersAreEmpty ? null : _clearFilters,
-      applyAction: () => filtersAreEmpty
-          ? {}
-          : widget.shouldPopOnly
-              ? Navigator.of(context).pop()
-              : Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName),
+      applyAction: () => filtersAreEmpty ? {} : _submitFilters(),
       isLoading: isLoadingFilterData,
       children: isLoadingFilterData
           ? []
@@ -179,5 +176,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       'minimum_order': minCartValue,
       'categories': <int>[],
     });
+  }
+
+  Future<void> _submitFilters() async {
+    try {
+      if (widget.shouldPopOnly) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
+      }
+      await restaurantsProvider.submitFiltersAndSort();
+      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} result(s) match your search');
+    } catch (e) {
+      throw e;
+    }
   }
 }

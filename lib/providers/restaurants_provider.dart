@@ -12,7 +12,19 @@ class RestaurantsProvider with ChangeNotifier {
   List<Category> foodCategories;
   List<Branch> favoriteRestaurants = [];
   List<Branch> restaurants = [];
+  List<Branch> filteredRestaurants = [];
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
+
+  double minCartValue;
+  double maxCartValue;
+  Map<String, dynamic> filterData = {
+    'delivery_type': null,
+    'minimum_order': null,
+    'min_rating': null,
+    'categories': <int>[],
+  };
+  bool isLoadingSubmitFilterAndSort = false;
+  String sortValue = 'smart_sorting';
 
   List<Map<String, dynamic>> listTypes = [
     {
@@ -40,6 +52,15 @@ class RestaurantsProvider with ChangeNotifier {
     },
   ];
 
+  void setRestaurantData(HomeData foodHomeData) {
+    restaurants = foodHomeData.restaurants;
+    filteredRestaurants = foodHomeData.restaurants;
+    foodCategories = foodHomeData.categories;
+    foodHomeData.restaurants.forEach((restaurant) {
+      restaurantsFavoriteStatuses[restaurant.id] = restaurant.isFavorited;
+    });
+  }
+
   void setFilterData({Map<String, dynamic> data, String key, dynamic value}) {
     if (key != null && value != null) {
       filterData[key] = value;
@@ -60,15 +81,6 @@ class RestaurantsProvider with ChangeNotifier {
     activeListType = value;
     notifyListeners();
   }
-
-  double minCartValue;
-  double maxCartValue;
-  Map<String, dynamic> filterData = {
-    'delivery_type': null,
-    'minimum_order': null,
-    'min_rating': null,
-    'categories': <int>[],
-  };
 
   String getFoodCategoryTitleFromId(int id) {
     if (foodCategories != null && foodCategories.length > 0) {
@@ -153,6 +165,19 @@ class RestaurantsProvider with ChangeNotifier {
     minCartValue = responseData["data"]["minCart"] == null ? 0.0 : responseData["data"]["minCart"].toDouble();
     maxCartValue = responseData["data"]["maxCart"] == null ? 0.0 : responseData["data"]["maxCart"].toDouble();
     filterData['minimum_order'] = minCartValue;
+    notifyListeners();
+  }
+
+  Future<void> submitFiltersAndSort() async {
+    isLoadingSubmitFilterAndSort = true;
+    notifyListeners();
+    final endpoint = 'restaurants';
+    Map<String, dynamic> body = filterData;
+    body['sort'] = sortValue;
+    print(body);
+    final responseData = await AppProvider().post(endpoint: endpoint, body: body);
+    filteredRestaurants = List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
+    isLoadingSubmitFilterAndSort = false;
     notifyListeners();
   }
 }
