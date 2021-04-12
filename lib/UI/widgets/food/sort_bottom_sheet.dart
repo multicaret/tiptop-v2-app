@@ -48,7 +48,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     return Consumer3<AppProvider, RestaurantsProvider, AddressesProvider>(
       builder: (c, appProvider, restaurantsProvider, addressesProvider, _) {
         return AppBottomSheet(
-          hasOverlayLoading: restaurantsProvider.isLoadingSubmitFilterAndSort,
+          // hasOverlayLoading: restaurantsProvider.isLoadingSubmitFilterAndSort,
           screenHeightFraction: 0.45,
           applyAction: () => _submitSort(restaurantsProvider, addressesProvider),
           title: 'Sort',

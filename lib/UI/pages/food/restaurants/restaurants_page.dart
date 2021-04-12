@@ -38,6 +38,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      hasOverlayLoader: restaurantsProvider.isLoadingSubmitFilterAndSort,
       body: Column(
         children: [
           FilterSortButtons(shouldPopOnly: true),

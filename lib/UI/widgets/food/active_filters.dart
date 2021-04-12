@@ -14,7 +14,7 @@ class ActiveFilters extends StatelessWidget {
         Map<String, dynamic> filterData = restaurantsProvider.filterData;
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
+          padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, bottom: 10),
           child: Wrap(
             spacing: 5,
             runSpacing: 5,
@@ -23,17 +23,18 @@ class ActiveFilters extends StatelessWidget {
             children: [
               if (filterData['delivery_type'] != null)
                 ActiveFilterItem(
-                  closeAction: () {},
+                  closeAction:
+                      filterData['delivery_type'] == 'all' ? null : () => removeFilterItem(restaurantsProvider, 'delivery_type', value: 'all'),
                   title: Translations.of(context).get('Delivery Type: ${filterData['delivery_type']}'),
                 ),
               if (filterData['min_rating'] != null)
                 ActiveFilterItem(
-                  closeAction: () {},
+                  closeAction: () => removeFilterItem(restaurantsProvider, 'min_rating'),
                   title: '${Translations.of(context).get('Minimum Rating')} ${filterData['min_rating']}',
                 ),
               if (restaurantsProvider.minCartValue != null && filterData['minimum_order'] != restaurantsProvider.minCartValue)
                 ActiveFilterItem(
-                  closeAction: () {},
+                  closeAction: () => removeFilterItem(restaurantsProvider, 'minimum_order', value: restaurantsProvider.minCartValue),
                   title: '${Translations.of(context).get('Minimum Order')} ${filterData['minimum_order']} IQD',
                 ),
               if (filterData['categories'].length > 0)
@@ -42,12 +43,15 @@ class ActiveFilters extends StatelessWidget {
                   return categoryTitle == null
                       ? Container()
                       : ActiveFilterItem(
-                          closeAction: () {},
+                          closeAction: () {
+                            final _newFilterData = filterData['categories'].where((categoryId) => categoryId != filterData['categories'][i]).toList();
+                            removeFilterItem(restaurantsProvider, 'categories', value: _newFilterData);
+                          },
                           title: categoryTitle,
                         );
                 }),
               ActiveFilterItem(
-                closeAction: () {},
+                closeAction: restaurantsProvider.sortType == RestaurantSortType.SMART ? null : () => removeFilterItem(restaurantsProvider, 'sort'),
                 title: Translations.of(context).get('Sort by: ${getRestaurantSortTypeString(restaurantsProvider.sortType)}'),
               ),
             ],
@@ -55,5 +59,15 @@ class ActiveFilters extends StatelessWidget {
         );
       },
     );
+  }
+
+  void removeFilterItem(RestaurantsProvider restaurantsProvider, String key, {dynamic value}) {
+    if (key == 'sort') {
+      restaurantsProvider.setSortType(RestaurantSortType.SMART);
+    } else {
+      restaurantsProvider.setFilterData(key: key, value: value);
+    }
+    restaurantsProvider.submitFiltersAndSort();
+    // showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
   }
 }

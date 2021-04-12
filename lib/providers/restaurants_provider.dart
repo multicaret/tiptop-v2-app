@@ -70,7 +70,7 @@ class RestaurantsProvider with ChangeNotifier {
   }
 
   void setFilterData({Map<String, dynamic> data, String key, dynamic value}) {
-    if (key != null && value != null) {
+    if (key != null) {
       filterData[key] = value;
     } else {
       filterData = data;
@@ -201,6 +201,7 @@ class RestaurantsProvider with ChangeNotifier {
     if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
       body.addAll(sortData);
     }
+    print('submitFiltersAndSort body');
     print(body);
     final responseData = await AppProvider().post(endpoint: endpoint, body: body);
     filteredRestaurants = List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
