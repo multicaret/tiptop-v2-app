@@ -72,7 +72,7 @@ class RestaurantsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortValue(RestaurantSortType _sortValue) {
+  void setSortType(RestaurantSortType _sortValue) {
     sortType = _sortValue;
     notifyListeners();
   }
@@ -191,11 +191,7 @@ class RestaurantsProvider with ChangeNotifier {
     final endpoint = 'restaurants';
     Map<String, dynamic> body = filterData;
     body['sort'] = getRestaurantSortTypeString(sortType);
-    if (sortType == RestaurantSortType.DISTANCE) {
-      if (sortData == null) {
-        print('Sort data for distance sorting is empty!!! 😱');
-        return;
-      }
+    if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
       body.addAll(sortData);
     }
     print(body);

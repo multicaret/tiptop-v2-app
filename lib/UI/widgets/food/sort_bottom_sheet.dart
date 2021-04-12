@@ -40,8 +40,6 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     },
   ];
 
-  RestaurantSortType _sortValue = RestaurantSortType.SMART;
-
   @override
   Widget build(BuildContext context) {
     return Consumer3<AppProvider, RestaurantsProvider, AddressesProvider>(
@@ -55,13 +53,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
               children: [
                 RadioSelectItems(
                   items: sortItems,
-                  selectedId: _sortValue,
-                  action: (value) {
-                    setState(() {
-                      _sortValue = value;
-                    });
-                    restaurantsProvider.setSortValue(value);
-                  },
+                  selectedId: restaurantsProvider.sortType,
+                  action: (value) => restaurantsProvider.setSortType(value),
                   hasBorder: false,
                   isRTL: appProvider.isRTL,
                 ),

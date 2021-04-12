@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/food/active_filter_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 
@@ -45,6 +46,10 @@ class ActiveFilters extends StatelessWidget {
                           title: categoryTitle,
                         );
                 }),
+              ActiveFilterItem(
+                closeAction: () {},
+                title: Translations.of(context).get('Sort by: ${getRestaurantSortTypeString(restaurantsProvider.sortType)}'),
+              ),
             ],
           ),
         );
