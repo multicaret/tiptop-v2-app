@@ -93,7 +93,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   'id': menuCategories[i].id,
                   'height': foodProductListItemHeight * menuCategories[i].products.length,
                 });
-        selectedCategoryIdNotifier.value = menuCategories[0].id;
+        if (menuCategories.length > 0) {
+          selectedCategoryIdNotifier.value = menuCategories[0].id;
+        }
       });
     }
     _isInit = false;
