@@ -52,7 +52,7 @@ class FilterSortButtons extends StatelessWidget {
                   context: context,
                   useRootNavigator: true,
                   backgroundColor: Colors.transparent,
-                  builder: (context) => SortBottomSheet(),
+                  builder: (context) => SortBottomSheet(shouldPopOnly: shouldPopOnly),
                 );
               },
               child: Row(

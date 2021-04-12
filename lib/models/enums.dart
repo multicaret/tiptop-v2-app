@@ -74,3 +74,22 @@ String getRestaurantDeliveryTypeString(RestaurantDeliveryType _type) {
       break;
   }
 }
+
+enum RestaurantSortType {SMART, RATING, DISTANCE}
+
+String getRestaurantSortTypeString(RestaurantSortType _type) {
+  switch(_type) {
+    case RestaurantSortType.SMART:
+      return "smart_sorting";
+      break;
+    case RestaurantSortType.RATING:
+      return "restaurant_rating";
+      break;
+    case RestaurantSortType.DISTANCE:
+      return "by_distance";
+      break;
+    default:
+      return "";
+      break;
+  }
+}

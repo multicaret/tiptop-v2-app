@@ -24,7 +24,7 @@ class RestaurantsProvider with ChangeNotifier {
     'categories': <int>[],
   };
   bool isLoadingSubmitFilterAndSort = false;
-  String sortValue = 'smart_sorting';
+  RestaurantSortType sortType = RestaurantSortType.SMART;
 
   List<Map<String, dynamic>> listTypes = [
     {
@@ -68,6 +68,11 @@ class RestaurantsProvider with ChangeNotifier {
       filterData = data;
     }
     print(filterData);
+    notifyListeners();
+  }
+
+  void setSortValue(RestaurantSortType _sortValue) {
+    sortType = _sortValue;
     notifyListeners();
   }
 
@@ -168,12 +173,19 @@ class RestaurantsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submitFiltersAndSort() async {
+  Future<void> submitFiltersAndSort({Map<String, dynamic> sortData}) async {
     isLoadingSubmitFilterAndSort = true;
     notifyListeners();
     final endpoint = 'restaurants';
     Map<String, dynamic> body = filterData;
-    body['sort'] = sortValue;
+    body['sort'] = getRestaurantSortTypeString(sortType);
+    if (sortType == RestaurantSortType.DISTANCE) {
+      if(sortData == null) {
+        print('Sort data for distance sorting is empty!!! 😱');
+        return;
+      }
+      body.addAll(sortData);
+    }
     print(body);
     final responseData = await AppProvider().post(endpoint: endpoint, body: body);
     filteredRestaurants = List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
