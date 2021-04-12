@@ -25,13 +25,14 @@ import 'package:tiptop_v2/UI/pages/profile/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
-import 'package:tiptop_v2/UI/pages/search_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
 import 'UI/pages/faq_page.dart';
+import 'UI/pages/food/food_search_page.dart';
 import 'UI/pages/food/restaurants/restaurants_page.dart';
 import 'UI/pages/market/product_page.dart';
 
@@ -53,7 +54,8 @@ final routes = <String, WidgetBuilder>{
   OTPCompleteProfile.routeName: (BuildContext context) => OTPCompleteProfile(),
   LocationPermissionPage.routeName: (BuildContext context) => LocationPermissionPage(),
   AppWrapper.routeName: (BuildContext context) => AppWrapper(),
-  SearchPage.routeName: (BuildContext context) => SearchPage(),
+  MarketSearchPage.routeName: (BuildContext context) => MarketSearchPage(),
+  FoodSearchPage.routeName: (BuildContext context) => FoodSearchPage(),
   ProfilePage.routeName: (BuildContext context) => ProfilePage(),
   MarketCartPage.routeName: (BuildContext context) => MarketCartPage(),
   CheckoutPage.routeName: (BuildContext context) => CheckoutPage(),

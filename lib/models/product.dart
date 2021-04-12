@@ -155,36 +155,3 @@ class Unit {
         "step": step,
       };
 }
-
-// Search Related
-ProductsResponse productsResponseFromJson(String str) => ProductsResponse.fromJson(json.decode(str));
-
-String productsResponseToJson(ProductsResponse data) => json.encode(data.toJson());
-
-class ProductsResponse {
-  ProductsResponse({
-    this.data,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  List<Product> data;
-  String errors;
-  String message;
-  int status;
-
-  factory ProductsResponse.fromJson(Map<String, dynamic> json) => ProductsResponse(
-        data: json["data"] == null ? null : List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
-        errors: json["errors"] == null ? null : json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}

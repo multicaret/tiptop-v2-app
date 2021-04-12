@@ -6,27 +6,26 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/product.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/search.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
-import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-class SearchPage extends StatefulWidget {
-  static const routeName = '/search';
+class FoodSearchPage extends StatefulWidget {
+  static const routeName = '/food-search';
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  _FoodSearchPageState createState() => _FoodSearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _FoodSearchPageState extends State<FoodSearchPage> {
   bool _isInit = true;
   bool _isLoading = false;
 
@@ -34,12 +33,12 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController searchFieldController = new TextEditingController();
   FocusNode searchFieldFocusNode = new FocusNode();
 
-  ProductsProvider productsProvider;
+  RestaurantsProvider restaurantsProvider;
   SearchProvider searchProvider;
   AppProvider appProvider;
   HomeProvider homeProvider;
 
-  List<Product> _searchedProducts = [];
+  List<Branch> _searchedRestaurants = [];
   List<Term> _terms = [];
 
   @override
@@ -57,10 +56,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      productsProvider = Provider.of<ProductsProvider>(context, listen: false);
-      searchProvider = Provider.of<SearchProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
+      searchProvider = Provider.of<SearchProvider>(context);
 
       fetchAndSetSearchTerms();
     }
@@ -70,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
-    await searchProvider.fetchAndSetSearchTerms();
+    await searchProvider.fetchAndSetSearchTerms(selectedChannel: homeProvider.selectedChannel);
     _terms = searchProvider.terms;
     setState(() => _isLoading = false);
   }
@@ -79,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
     searchFieldController.clear();
     searchFieldFocusNode.unfocus();
     setState(() {
-      _searchedProducts = [];
+      _searchedRestaurants = [];
       searchQuery = '';
     });
   }
@@ -91,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: Text(Translations.of(context).get('Search')),
         actions: [
-          if (_searchedProducts.isNotEmpty)
+          if (_searchedRestaurants.isNotEmpty)
             IconButton(
               onPressed: _clearSearchResults,
               icon: AppIcons.icon(FontAwesomeIcons.eraser),
@@ -103,36 +102,32 @@ class _SearchPageState extends State<SearchPage> {
           : Column(
               children: [
                 AppSearchField(
-                  submitAction: (String searchQuery) => _submitSearch(searchQuery),
+                  submitAction: (String searchQuery) => submitFoodSearch(searchQuery),
                   controller: searchFieldController,
                   focusNode: searchFieldFocusNode,
                 ),
-                _searchedProducts.isNotEmpty
+                _searchedRestaurants.isNotEmpty
                     ? SectionTitle(
                         'Search Results',
-                        suffix: ' (${_searchedProducts.length})',
+                        suffix: ' (${_searchedRestaurants.length})',
                       )
                     : Column(
                         children: [
-                          homeProvider.selectedChannel == "food"
-                              ? Container(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: CategoriesSlider(
-                                    categories: homeProvider.foodHomeData.categories,
-                                    isRTL: appProvider.isRTL,
-                                  ),
-                                )
-                              : Container(),
+                          SectionTitle('Categories'),
+                          CategoriesSlider(
+                            categories: restaurantsProvider.foodCategories,
+                            isRTL: appProvider.isRTL,
+                          ),
                           SectionTitle('Most Searched Terms'),
                         ],
                       ),
-                _searchedProducts.isNotEmpty
+                _searchedRestaurants.isNotEmpty
                     ? Expanded(
                         child: Container(
                           color: AppColors.white,
-                          child: MarketProductsGridView(
-                            products: _searchedProducts,
-                            physics: AlwaysScrollableScrollPhysics(),
+                          child: ListView.builder(
+                            itemCount: _searchedRestaurants.length,
+                            itemBuilder: (c, i) => Text(_searchedRestaurants[i].title),
                           ),
                         ),
                       )
@@ -157,7 +152,7 @@ class _SearchPageState extends State<SearchPage> {
           onTap: () {
             searchFieldController.text = _terms[i].term;
             searchFieldFocusNode.requestFocus();
-            _submitSearch(_terms[i].term);
+            submitFoodSearch(_terms[i].term);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -177,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Future<void> _submitSearch(String _searchQuery) async {
+  Future<void> submitFoodSearch(String _searchQuery) async {
     print("_searchQuery");
     print(_searchQuery);
     if (searchQuery != _searchQuery) {
@@ -185,13 +180,13 @@ class _SearchPageState extends State<SearchPage> {
         searchQuery = _searchQuery;
         _isLoading = true;
       });
-      await productsProvider.fetchSearchedProducts(_searchQuery);
-      _searchedProducts = productsProvider.searchedProducts;
-      if (_searchedProducts.isEmpty) {
+      await restaurantsProvider.fetchSearchedRestaurants(_searchQuery);
+      _searchedRestaurants = restaurantsProvider.searchedRestaurants;
+      if (_searchedRestaurants.isEmpty) {
         showToast(msg: Translations.of(context).get('No results match your search'));
       } else {
-        var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
-        showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
+        var key = 'result${_searchedRestaurants.length > 1 ? "s" : ""} match your search';
+        showToast(msg: '${_searchedRestaurants.length} ${Translations.of(context).get(key)}');
       }
       fetchAndSetSearchTerms();
       setState(() {

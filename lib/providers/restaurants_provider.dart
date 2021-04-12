@@ -13,6 +13,7 @@ class RestaurantsProvider with ChangeNotifier {
   List<Branch> favoriteRestaurants = [];
   List<Branch> restaurants = [];
   List<Branch> filteredRestaurants = [];
+  List<Branch> searchedRestaurants = [];
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
   double minCartValue;
@@ -110,6 +111,17 @@ class RestaurantsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchSearchedRestaurants(searchQuery) async {
+    final endpoint = 'search/restaurants?q=$searchQuery';
+    try {
+      final responseData = await AppProvider().get(endpoint: endpoint);
+      searchedRestaurants = responseData["data"] == null ? <Branch>[] : List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
+    } catch (e) {
+      print('@e Error');
+      throw e;
+    }
+  }
+
   Future<void> interactWithRestaurant(AppProvider appProvider, int restaurantId, Interaction interaction) async {
     bool _oldIsFavorite = restaurantsFavoriteStatuses[restaurantId];
     restaurantsFavoriteStatuses[restaurantId] = interaction == Interaction.FAVORITE;
@@ -180,7 +192,7 @@ class RestaurantsProvider with ChangeNotifier {
     Map<String, dynamic> body = filterData;
     body['sort'] = getRestaurantSortTypeString(sortType);
     if (sortType == RestaurantSortType.DISTANCE) {
-      if(sortData == null) {
+      if (sortData == null) {
         print('Sort data for distance sorting is empty!!! 😱');
         return;
       }

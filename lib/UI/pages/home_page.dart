@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   )
-                            : homeProvider.selectedChannel == 'food'
+                            : !homeProvider.channelIsMarket
                                 ? hideFoodContent
                                     ? NoContentView(
                                         text: homeProvider.foodNoRestaurantFound
