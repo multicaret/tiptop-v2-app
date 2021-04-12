@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
+import 'overlay_loader.dart';
 
 class AppScaffold extends StatelessWidget {
   final Widget body;
@@ -93,24 +94,7 @@ class AppScaffold extends StatelessWidget {
                 ),
               ),
             ),
-          if (hasOverlayLoader)
-            Positioned.fill(
-              child: Container(
-                color: AppColors.primary.withOpacity(0.8),
-                child: Center(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    padding: const EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: AppColors.white.withOpacity(0.9),
-                    ),
-                    child: const AppLoader(),
-                  ),
-                ),
-              ),
-            ),
+          if (hasOverlayLoader) OverlayLoader(),
         ],
       ),
     );

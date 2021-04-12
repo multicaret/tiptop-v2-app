@@ -48,6 +48,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     return Consumer3<AppProvider, RestaurantsProvider, AddressesProvider>(
       builder: (c, appProvider, restaurantsProvider, addressesProvider, _) {
         return AppBottomSheet(
+          hasOverlayLoading: restaurantsProvider.isLoadingSubmitFilterAndSort,
           screenHeightFraction: 0.45,
           applyAction: () => _submitSort(restaurantsProvider, addressesProvider),
           title: 'Sort',
@@ -71,11 +72,6 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
 
   Future<void> _submitSort(RestaurantsProvider restaurantsProvider, AddressesProvider addressesProvider) async {
     try {
-      if (widget.shouldPopOnly) {
-        Navigator.of(context).pop();
-      } else {
-        Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
-      }
       Map<String, dynamic> sortData;
       if (restaurantsProvider.sortType == RestaurantSortType.DISTANCE) {
         if (AppProvider.latitude == null || AppProvider.longitude == null) {
@@ -97,6 +93,11 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
       }
       await restaurantsProvider.submitFiltersAndSort(sortData: sortData);
       showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
+      if (widget.shouldPopOnly) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
+      }
     } catch (e) {
       throw e;
     }
