@@ -7,7 +7,6 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
-  ProductsResponse searchedProductsDataResponse;
   CategoryParentsData categoryParentsData;
   Category selectedParent;
   List<Category> parents = [];
@@ -36,11 +35,7 @@ class ProductsProvider with ChangeNotifier {
         'chain_id': HomeProvider.chainId.toString(),
       };
       final responseData = await AppProvider().get(endpoint: endpoint, body: body);
-      searchedProductsDataResponse = ProductsResponse.fromJson(responseData);
-      searchedProducts = searchedProductsDataResponse.data == null ? [] : searchedProductsDataResponse.data;
-      if (searchedProductsDataResponse.status != 200) {
-        throw HttpException(title: 'Http Exception Error', message: searchedProductsDataResponse.message);
-      }
+      searchedProducts = responseData["data"] == null ? <Product>[] : List<Product>.from(responseData["data"].map((x) => Product.fromJson(x)));
     } catch (e) {
       print('@e Error');
       print(e);
