@@ -110,7 +110,7 @@
   "Restaurants": "Restaurants",
   "Categories": "Categories",
   "Restaurant Delivery": "Restaurant Delivery",
-  "TipTop Delivery": "TipTop Delivery",
+  "TipTop Delivery": "توصيل تيب توب",
   "Filter": "Filter",
   "Sort": "Sort",
   "Live Chat" : "Live Chat",
@@ -156,5 +156,7 @@
   "Sort by: smart_sorting": "Smart Sorting",
   "Sort by: restaurant_rating": "Sort by: Restaurant Rating",
   "Sort by: by_distance": "Sort by: Distance",
-  "By Distance": "By Distance"
+  "By Distance": "By Distance",
+  "No Results Match Your Search": "No Results Match Your Search",
+  "result(s) match your search": "result(s) match your search"
 }

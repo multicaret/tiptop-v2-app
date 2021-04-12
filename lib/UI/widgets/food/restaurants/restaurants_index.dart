@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_i
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -18,15 +19,19 @@ class RestaurantsIndex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RestaurantsProvider>(
-      builder: (c, restaurantProvider, _) {
+    return Consumer2<RestaurantsProvider, AppProvider>(
+      builder: (c, restaurantProvider, appProvider, _) {
         List<Branch> restaurants = isFiltered ? restaurantProvider.filteredRestaurants : restaurantProvider.restaurants;
         List<Map<String, dynamic>> listTypes = restaurantProvider.listTypes;
 
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: screenHorizontalPadding, bottom: 5.0),
+              padding: EdgeInsets.only(
+                left: appProvider.isRTL ? 0 : screenHorizontalPadding,
+                right: appProvider.isRTL ? screenHorizontalPadding : 0,
+                bottom: 5.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

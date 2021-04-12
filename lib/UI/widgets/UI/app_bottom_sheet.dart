@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/UI/overlay_loader.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
@@ -15,6 +16,7 @@ class AppBottomSheet extends StatelessWidget {
   final Function clearAction;
   final Function applyAction;
   final bool isLoading;
+  final bool hasOverlayLoading;
 
   AppBottomSheet({
     @required this.screenHeightFraction,
@@ -23,71 +25,78 @@ class AppBottomSheet extends StatelessWidget {
     this.clearAction,
     this.applyAction,
     this.isLoading = false,
+    this.hasOverlayLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * screenHeightFraction,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        borderRadius: new BorderRadius.only(
-          topLeft: const Radius.circular(8.0),
-          topRight: const Radius.circular(8.0),
-        ),
-      ),
-      child: Column(
-        children: [
-          BottomSheetIndicator(),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(bottom: clearAction == null ? 10 : 0),
-            margin: EdgeInsets.only(top: 10, left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 20),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColors.border)),
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Stack(
+      children: [
+        Container(
+          height: screenHeight * screenHeightFraction,
+          decoration: new BoxDecoration(
+            color: Colors.white,
+            borderRadius: new BorderRadius.only(
+              topLeft: const Radius.circular(8.0),
+              topRight: const Radius.circular(8.0),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Translations.of(context).get(title),
-                  style: AppTextStyles.h2Secondary,
+          ),
+          child: Column(
+            children: [
+              BottomSheetIndicator(),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(bottom: clearAction == null ? 10 : 0),
+                margin: EdgeInsets.only(top: 10, left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 20),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: AppColors.border)),
                 ),
-                if (clearAction != null)
-                  TextButton(
-                    onPressed: clearAction,
-                    child: Center(child: Text(Translations.of(context).get('Clear'))),
-                  ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: isLoading
-                ? const Center(
-                    child: const AppLoader(),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: children,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      Translations.of(context).get(title),
+                      style: AppTextStyles.h2Secondary,
                     ),
+                    if (clearAction != null)
+                      TextButton(
+                        onPressed: clearAction,
+                        child: Center(child: Text(Translations.of(context).get('Clear'))),
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: isLoading
+                    ? const Center(
+                        child: const AppLoader(),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: children,
+                        ),
+                      ),
+              ),
+              if (applyAction != null)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: screenHorizontalPadding,
+                    right: screenHorizontalPadding,
+                    top: listItemVerticalPadding,
+                    bottom: actionButtonBottomPadding,
                   ),
+                  child: AppButtons.secondary(
+                    child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+                    onPressed: applyAction,
+                  ),
+                ),
+            ],
           ),
-          if (applyAction != null)
-            Padding(
-              padding: const EdgeInsets.only(
-                left: screenHorizontalPadding,
-                right: screenHorizontalPadding,
-                top: listItemVerticalPadding,
-                bottom: actionButtonBottomPadding,
-              ),
-              child: AppButtons.secondary(
-                child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
-                onPressed: applyAction,
-              ),
-            ),
-        ],
-      ),
+        ),
+        if (hasOverlayLoading) OverlayLoader(height: screenHeight),
+      ],
     );
   }
 }

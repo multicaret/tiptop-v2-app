@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/food/active_filters.dart';
 import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurants_index.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 
 class RestaurantsPage extends StatefulWidget {
@@ -43,9 +44,13 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
           FilterSortButtons(shouldPopOnly: true),
           if (!restaurantsProvider.filtersAreEmpty) ActiveFilters(),
           Expanded(
-            child: SingleChildScrollView(
-              child: RestaurantsIndex(isFiltered: true),
-            ),
+            child: restaurantsProvider.filteredRestaurants.length == 0
+                ? Center(
+                    child: Text(Translations.of(context).get('No Results Match Your Search')),
+                  )
+                : SingleChildScrollView(
+                    child: RestaurantsIndex(isFiltered: true),
+                  ),
           ),
         ],
       ),

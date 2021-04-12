@@ -110,7 +110,7 @@
   "Restaurants": "المطاعم",
   "Categories" : "التصنيفات",
   "Restaurant Delivery": "توصيل المطعم",
-  "TipTop Delivery": "TipTop توصيل",
+  "TipTop Delivery": "توصيل تيب توب",
   "Filter": "تصفية",
   "Sort": "ترتيب",
   "Live Chat" : "محادثة فورية",
@@ -151,9 +151,12 @@
   "Delivery Type: all": "طريقة التوصيل: الكل",
   "Delivery Type: tiptop": "طريقة التوصيل: تيب توب",
   "Delivery Type: restaurant": "طريقة التوصيل: مطعم",
-  "Minimum Rating": "الحد الأدني للتقييم",
+  "Minimum Rating": "الحد الأدنى للتقييم",
   "Minimum Order": "الحد الأدنى للطلب",
+  "Sort by: smart_sorting": "ترتيب ذكي",
   "Sort by: restaurant_rating": "الترتيب: حسب تقييم المطعم",
   "Sort by: by_distance": "الترتيب: حسب المسافة",
-  "By Distance": "حسب المسافة"
+  "By Distance": "حسب المسافة",
+  "No Results Match Your Search": "لا يوجد نتائج تطابق بحثك",
+  "result(s) match your search": "نتائج تطابق بحثك"
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -19,7 +20,7 @@ class RestaurantsProvider with ChangeNotifier {
   double minCartValue;
   double maxCartValue;
   Map<String, dynamic> filterData = {
-    'delivery_type': null,
+    'delivery_type': 'all',
     'minimum_order': null,
     'min_rating': null,
     'categories': <int>[],
@@ -38,20 +39,26 @@ class RestaurantsProvider with ChangeNotifier {
     },
   ];
 
-  List<Map<String, dynamic>> restaurantDeliveryTypes = [
-    {
-      'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.TIPTOP),
-      'title': 'TipTop Delivery',
-      'type': RestaurantDeliveryType.TIPTOP,
-      'icon': CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
-    },
-    {
-      'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.RESTAURANT),
-      'title': 'Restaurant Delivery',
-      'type': RestaurantDeliveryType.RESTAURANT,
-      'icon': CircleIcon(iconText: 'R'),
-    },
-  ];
+  List<Map<String, dynamic>> getRestaurantDeliveryTypes(BuildContext context) {
+    return [
+      {
+        'id': 'all',
+        'title': Translations.of(context).get('All'),
+      },
+      {
+        'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.TIPTOP),
+        'title': Translations.of(context).get('TipTop Delivery'),
+        'type': RestaurantDeliveryType.TIPTOP,
+        'icon': CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
+      },
+      {
+        'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.RESTAURANT),
+        'title': Translations.of(context).get('Restaurant Delivery'),
+        'type': RestaurantDeliveryType.RESTAURANT,
+        'icon': CircleIcon(iconText: 'R'),
+      },
+    ];
+  }
 
   void setRestaurantData(HomeData foodHomeData) {
     restaurants = foodHomeData.restaurants;
@@ -63,7 +70,7 @@ class RestaurantsProvider with ChangeNotifier {
   }
 
   void setFilterData({Map<String, dynamic> data, String key, dynamic value}) {
-    if (key != null && value != null) {
+    if (key != null) {
       filterData[key] = value;
     } else {
       filterData = data;
@@ -194,6 +201,7 @@ class RestaurantsProvider with ChangeNotifier {
     if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
       body.addAll(sortData);
     }
+    print('submitFiltersAndSort body');
     print(body);
     final responseData = await AppProvider().post(endpoint: endpoint, body: body);
     filteredRestaurants = List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
