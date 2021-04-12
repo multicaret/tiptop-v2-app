@@ -117,6 +117,11 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                           CategoriesSlider(
                             categories: restaurantsProvider.foodCategories,
                             isRTL: appProvider.isRTL,
+                            onCategoryTap: (String categoryTitle) {
+                              searchFieldController.text = categoryTitle;
+                              searchFieldFocusNode.requestFocus();
+                              submitFoodSearch(categoryTitle);
+                            },
                           ),
                           SectionTitle('Most Searched Terms'),
                         ],
