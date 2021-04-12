@@ -9,12 +9,14 @@ class CategoriesSlider extends StatelessWidget {
   final bool isRTL;
   final Function setSelectedCategories;
   final List<int> selectedCategories;
+  final Function onCategoryTap;
 
   CategoriesSlider({
     @required this.categories,
     @required this.isRTL,
     this.setSelectedCategories,
     this.selectedCategories,
+    this.onCategoryTap,
   });
 
   @override
@@ -37,7 +39,9 @@ class CategoriesSlider extends StatelessWidget {
             count: categories.length,
             isRTL: isRTL,
             onTap: () {
-              if (setSelectedCategories == null) {
+              if (onCategoryTap != null) {
+                onCategoryTap(categories[i].title);
+              } else if (setSelectedCategories == null) {
                 Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName, arguments: {
                   'selected_category_id': categories[i].id,
                 });

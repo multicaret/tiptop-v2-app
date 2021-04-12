@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
-class OneSignalNotifi with ChangeNotifier {
+class OneSignalNotificationsProvider with ChangeNotifier {
   static const String ONE_SIGNAL_APP_ID = "a8feae53-9db1-4b5d-8e9c-b4a8e309bb82";
   static const bool REQUIRE_CONSENT = false;
   static bool notificationHasOpened = false;
@@ -17,7 +17,7 @@ class OneSignalNotifi with ChangeNotifier {
 
   Stream<OSNotificationPayload> get getPayload => _payloadSubject.asBroadcastStream();
 
-  OneSignalNotifi();
+  OneSignalNotificationsProvider();
 
   @override
   void dispose() {
@@ -31,7 +31,7 @@ class OneSignalNotifi with ChangeNotifier {
 
   void initOneSignal() async {
     print('=========> init-one-signal');
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
     OneSignal.shared.setRequiresUserPrivacyConsent(REQUIRE_CONSENT); // Todo: set true if important
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
@@ -45,7 +45,7 @@ class OneSignalNotifi with ChangeNotifier {
     }
 
     OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
-      OneSignalNotifi.notificationHasOpened = false;
+      OneSignalNotificationsProvider.notificationHasOpened = false;
       _payloadSubject.add(notification.payload);
       print('=========> NOTIFICATION_RECEIVED');
       // print(notification.jsonRepresentation().replaceAll("\\n", "\n"));
@@ -57,7 +57,7 @@ class OneSignalNotifi with ChangeNotifier {
 
     OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       print('=========> NOTIFICATION_OPENED');
-      OneSignalNotifi.notificationHasOpened = true;
+      OneSignalNotificationsProvider.notificationHasOpened = true;
       _payloadSubject.add(result.notification.payload);
     });
 
@@ -95,7 +95,7 @@ class OneSignalNotifi with ChangeNotifier {
       print("EMAIL SUBSCRIPTION STATE CHANGED TO ${emailChanges.to.subscribed}");
     });
   }
-  
+
   void _handleInAppMessage() {
     OneSignal.shared.setInAppMessageClickedHandler((OSInAppMessageAction action) {
       print(action.jsonRepresentation().replaceAll("\\n", "\n"));
