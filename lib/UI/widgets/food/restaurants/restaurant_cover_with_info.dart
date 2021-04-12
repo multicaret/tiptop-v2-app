@@ -28,6 +28,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
         border: hasBorderRadius ? Border.all(color: AppColors.border, width: 0.5) : null,
         image: DecorationImage(
           fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(AppColors.primary.withOpacity(0.15), BlendMode.darken),
           image: CachedNetworkImageProvider(restaurant.chain.media.cover),
         ),
       ),
