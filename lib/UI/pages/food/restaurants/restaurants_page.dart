@@ -26,6 +26,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       if (initiallySelectedCategoryId != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           restaurantsProvider.setFilterData(key: 'categories', value: [initiallySelectedCategoryId]);
+          restaurantsProvider.submitFiltersAndSort();
         });
       }
     }
