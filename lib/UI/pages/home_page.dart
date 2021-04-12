@@ -15,7 +15,7 @@ import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
-import 'package:tiptop_v2/providers/OneSignalNotifi.dart';
+import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -32,7 +32,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  OneSignalNotifi _oneSignalNotifiService;
+  OneSignalNotificationsProvider _oneSignalNotificationsProvider;
   StreamSubscription<OSNotificationPayload> _listener;
 
   @override
@@ -112,12 +112,12 @@ class _HomePageState extends State<HomePage> {
       addressesProvider = Provider.of<AddressesProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
       fetchAndSetHomeData();
-      _oneSignalNotifiService = Provider.of<OneSignalNotifi>(context);
-      if (_oneSignalNotifiService != null && _oneSignalNotifiService.getPayload != null) {
-        _oneSignalNotifiService.initOneSignal();
-        _listener = _oneSignalNotifiService.getPayload.listen(null);
+      _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
+      if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
+        _oneSignalNotificationsProvider.initOneSignal();
+        _listener = _oneSignalNotificationsProvider.getPayload.listen(null);
         _listener.onData((event) {
-          print("Is opened: ${OneSignalNotifi.notificationHasOpened}");
+          print("Is opened: ${OneSignalNotificationsProvider.notificationHasOpened}");
           print(event.additionalData.keys.toString());
         });
       }
