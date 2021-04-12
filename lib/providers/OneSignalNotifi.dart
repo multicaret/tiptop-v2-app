@@ -31,7 +31,7 @@ class OneSignalNotifi with ChangeNotifier {
 
   void initOneSignal() async {
     print('=========> init-one-signal');
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
     OneSignal.shared.setRequiresUserPrivacyConsent(REQUIRE_CONSENT); // Todo: set true if important
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
@@ -95,7 +95,7 @@ class OneSignalNotifi with ChangeNotifier {
       print("EMAIL SUBSCRIPTION STATE CHANGED TO ${emailChanges.to.subscribed}");
     });
   }
-  
+
   void _handleInAppMessage() {
     OneSignal.shared.setInAppMessageClickedHandler((OSInAppMessageAction action) {
       print(action.jsonRepresentation().replaceAll("\\n", "\n"));
