@@ -61,13 +61,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     filterData = restaurantsProvider.filterData;
     bool filtersAreEmpty = restaurantsProvider.filtersAreEmpty;
-    final deliveryTypesRadioItems = [
-      {
-        'id': 'all',
-        'title': 'All',
-      },
-      ...restaurantsProvider.restaurantDeliveryTypes
-    ];
+    final deliveryTypesRadioItems = restaurantsProvider.getRestaurantDeliveryTypes(context);
 
     return AppBottomSheet(
       screenHeightFraction: 0.8,
@@ -138,7 +132,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(Translations.of(context).get("Rating"), style: AppTextStyles.body50),
+                    Text(Translations.of(context).get("Minimum Rating"), style: AppTextStyles.body50),
                     const SizedBox(height: 5),
                     AppRatingBar(
                       initialRating: filterData['min_rating'],
@@ -171,7 +165,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   void _clearFilters() {
     restaurantsProvider.setFilterData(data: {
-      'delivery_type': null,
+      'delivery_type': 'all',
       'min_rating': null,
       'minimum_order': minCartValue,
       'categories': <int>[],
