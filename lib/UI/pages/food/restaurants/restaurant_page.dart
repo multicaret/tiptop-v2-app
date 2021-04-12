@@ -34,6 +34,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   AutoScrollController productsScrollController;
   bool _isInit = true;
   bool _isLoadingRestaurantShowRequest = false;
+  bool _showSearchFieldClearIcon = false;
 
   int restaurantId;
   Branch restaurant;
@@ -172,6 +173,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     setState(() {
       searchProductsResult = [];
       searchQuery = '';
+      _showSearchFieldClearIcon = false;
     });
   }
 
@@ -183,6 +185,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
     setState(
       () => debounceTimer = Timer(duration, () {
         if (this.mounted && value.length != 0) {
+          setState(() {
+            _showSearchFieldClearIcon = true;
+          });
           filterProductsSearchResults(value);
         }
       }),
@@ -259,6 +264,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 controller: searchFieldController,
                                 onChanged: (query) => _onSearchFieldChange(query),
                                 onClear: () => _clearSearchResults(),
+                                showClearIcon: _showSearchFieldClearIcon,
                               ),
                             ),
                           ],
