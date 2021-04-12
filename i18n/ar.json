@@ -153,7 +153,7 @@
   "Delivery Type: restaurant": "طريقة التوصيل: مطعم",
   "Minimum Rating": "الحد الأدني للتقييم",
   "Minimum Order": "الحد الأدنى للطلب",
-  "Sort by: restaurants_rating": "الترتيب: حسب تقييم المطعم",
+  "Sort by: restaurant_rating": "الترتيب: حسب تقييم المطعم",
   "Sort by: by_distance": "الترتيب: حسب المسافة",
   "By Distance": "حسب المسافة"
 }
