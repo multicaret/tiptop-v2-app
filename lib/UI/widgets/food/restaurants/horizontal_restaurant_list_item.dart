@@ -11,15 +11,16 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HorizontalRestaurantListItem extends StatelessWidget {
   final Branch restaurant;
+  final bool isMini;
 
-  HorizontalRestaurantListItem({@required this.restaurant});
+  HorizontalRestaurantListItem({@required this.restaurant, this.isMini = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 130,
-      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10.0),
+      height: isMini ? listItemHeightSm : listItemHeight,
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.primary50)),
       ),
@@ -28,7 +29,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: 116,
+                width: isMini ? listItemThumbnailSizeSm : listItemThumbnailSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: AppColors.border, width: 0.5),

@@ -105,7 +105,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
             menuCategories.length,
             (i) => {
                   'id': menuCategories[i].id,
-                  'height': foodProductListItemHeight * menuCategories[i].products.length,
+                  'height': listItemHeight * menuCategories[i].products.length,
                 });
         if (menuCategories.length > 0) {
           selectedCategoryIdNotifier.value = menuCategories[0].id;

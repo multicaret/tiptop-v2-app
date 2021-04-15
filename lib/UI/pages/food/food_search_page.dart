@@ -132,72 +132,74 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                       ),
                 _searchedRestaurants.isNotEmpty
                     ? Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          color: AppColors.white,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _searchedRestaurants.length,
-                              itemBuilder: (c, i) {
-                                return Container(
-                                  child: Column(
-                                    children: [
-                                      InkWell(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _searchedRestaurants.length,
+                            itemBuilder: (c, i) {
+                              return Container(
+                                child: Column(
+                                  children: [
+                                    Material(
+                                      color: AppColors.white,
+                                      child: InkWell(
                                         onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
                                           RestaurantPage.routeName,
                                           arguments: _searchedRestaurants[i].id,
                                         ),
-                                        child: HorizontalRestaurantListItem(restaurant: _searchedRestaurants[i]),
+                                        child: HorizontalRestaurantListItem(
+                                          restaurant: _searchedRestaurants[i],
+                                          isMini: true,
+                                        ),
                                       ),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          itemCount: _searchedRestaurants[i].searchProducts.length,
-                                          itemBuilder: (c, j) {
-                                            var product = _searchedRestaurants[i].searchProducts[j];
-                                            return Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                              decoration: BoxDecoration(
-                                                border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                    ),
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: _searchedRestaurants[i].searchProducts.length,
+                                        itemBuilder: (c, j) {
+                                          var product = _searchedRestaurants[i].searchProducts[j];
+                                          return Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                            decoration: BoxDecoration(
+                                              border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                            ),
+                                            child: InkWell(
+                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                                                ProductPage.routeName,
+                                                arguments: {
+                                                  "product": product,
+                                                  "has_controls": true,
+                                                },
                                               ),
-                                              child: InkWell(
-                                                onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                                                  ProductPage.routeName,
-                                                  arguments: {
-                                                    "product": product,
-                                                    "has_controls": true,
-                                                  },
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                        child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                      children: [
-                                                        Text(product.title),
-                                                        Text(
-                                                          product.excerpt.raw,
-                                                          style: AppTextStyles.subtitle50,
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow.ellipsis,
-                                                        ),
-                                                      ],
-                                                    )),
-                                                    Text(
-                                                      product.price.formatted,
-                                                      style: AppTextStyles.subtitleSecondary,
-                                                    ),
-                                                  ],
-                                                ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                      child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                    children: [
+                                                      Text(product.title),
+                                                      Text(
+                                                        product.excerpt.raw,
+                                                        style: AppTextStyles.subtitle50,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ],
+                                                  )),
+                                                  Text(
+                                                    product.price.formatted,
+                                                    style: AppTextStyles.subtitleSecondary,
+                                                  ),
+                                                ],
                                               ),
-                                            );
-                                          }),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
+                                            ),
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              );
+                            }),
                       )
                     : Expanded(
                         child: SingleChildScrollView(

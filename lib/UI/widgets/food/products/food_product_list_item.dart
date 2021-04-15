@@ -22,7 +22,7 @@ class FoodProductListItem extends StatelessWidget {
           Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: product);
         },
         child: Container(
-          height: foodProductListItemHeight,
+          height: listItemHeight,
           padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
           decoration: BoxDecoration(
             border: Border(
@@ -67,8 +67,8 @@ class FoodProductListItem extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: product.media.coverThumbnail,
                     fit: BoxFit.cover,
-                    width: foodProductThumbnailSize,
-                    height: foodProductThumbnailSize,
+                    width: listItemThumbnailSize,
+                    height: listItemThumbnailSize,
                     placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary),
                   ),
                 ),

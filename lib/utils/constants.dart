@@ -22,11 +22,17 @@ const double restaurantLogoSize = 100;
 //Height of delivery info container of restaurant (tiptop and/or restaurant)
 const double restaurantSingleDeliveryInfoHeight = 60;
 
-//Height of product list item in Food channel
-const double foodProductListItemHeight = 130;
+//Height of a regular list item
+const double listItemHeight = 130;
 
-//Food product thumbnail size (height & width) (e.g. in food product list item widget)
-const double foodProductThumbnailSize = foodProductListItemHeight - (listItemVerticalPaddingSm * 2);
+//Height of a mini list item
+const double listItemHeightSm = 110;
+
+//Thumbnail size (height & width) of regular list item (e.g. in food product list item widget)
+const double listItemThumbnailSize = listItemHeight - (listItemVerticalPaddingSm * 2);
+
+//Thumbnail size (height & width) of regular list item (e.g. in food product list item widget)
+const double listItemThumbnailSizeSm = listItemHeightSm - (listItemVerticalPaddingSm * 2);
 
 //Height of unit title below cart controls in market products
 const double marketProductUnitTitleHeight = 12;
