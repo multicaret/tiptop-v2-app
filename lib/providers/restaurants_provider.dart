@@ -9,12 +9,12 @@ import 'package:tiptop_v2/utils/helper.dart';
 
 class RestaurantsProvider with ChangeNotifier {
   Branch restaurant;
-  List<Category> menuCategories;
-  List<Category> foodCategories;
-  List<Branch> favoriteRestaurants = [];
-  List<Branch> restaurants = [];
-  List<Branch> filteredRestaurants = [];
-  List<Branch> searchedRestaurants = [];
+  List<Category> menuCategories = <Category>[];
+  List<Category> foodCategories = <Category>[];
+  List<Branch> favoriteRestaurants = <Branch>[];
+  List<Branch> restaurants = <Branch>[];
+  List<Branch> filteredRestaurants = <Branch>[];
+  List<Branch> searchedRestaurants = <Branch>[];
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
 
   double minCartValue;
