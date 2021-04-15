@@ -41,7 +41,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              if (restaurant.rating.averageRaw > 0 || restaurant.rating.countRaw > 0)
+              if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
                 Positioned(
                   bottom: 0,
                   right: 0,
