@@ -10,12 +10,14 @@ class RestaurantCoverWithInfo extends StatelessWidget {
   final Function favoriteAction;
   final double height;
   final bool hasBorderRadius;
+  final bool hasRating;
 
   const RestaurantCoverWithInfo({
     @required this.restaurant,
     this.favoriteAction,
     this.height = 180,
     this.hasBorderRadius = true,
+    this.hasRating = true,
   });
 
   @override
@@ -45,7 +47,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
               RestaurantFavoriteButton(restaurantId: restaurant.id),
             ],
           ),
-          if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
+          if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0 && hasRating)
             Row(
               children: [
                 Container(

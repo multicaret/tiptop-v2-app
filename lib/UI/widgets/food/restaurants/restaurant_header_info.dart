@@ -13,8 +13,9 @@ import '../delivery_info.dart';
 
 class RestaurantHeaderInfo extends StatelessWidget {
   final Branch restaurant;
+  final bool coverHasRating;
 
-  RestaurantHeaderInfo({this.restaurant});
+  RestaurantHeaderInfo({this.restaurant, this.coverHasRating = true});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
               restaurant: restaurant,
               hasBorderRadius: false,
               height: restaurantCoverHeight,
+              hasRating: coverHasRating,
             ),
             Positioned(
               bottom: 0,
