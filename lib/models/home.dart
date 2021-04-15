@@ -79,7 +79,7 @@ class Branch {
     this.chain,
     this.isFavorited,
     this.categories,
-    this.searchedProducts,
+    this.searchProducts,
   });
 
   int id;
@@ -98,7 +98,7 @@ class Branch {
   Chain chain;
   bool isFavorited;
   List<Category> categories;
-  List<Product> searchedProducts;
+  List<Product> searchProducts;
 
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
         id: json["id"],
@@ -117,8 +117,7 @@ class Branch {
         isFavorited: json["isFavorited"],
         chain: json["chain"] == null ? null : Chain.fromJson(json["chain"]),
         categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
-        searchedProducts:
-            json["searchedProducts"] == null ? <Product>[] : List<Product>.from(json["searchedProducts"].map((x) => Product.fromJson(x))),
+        searchProducts: json["searchProducts"] == null ? <Product>[] : List<Product>.from(json["searchProducts"].map((x) => Product.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

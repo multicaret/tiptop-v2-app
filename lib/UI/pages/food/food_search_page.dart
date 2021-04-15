@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
+import 'package:tiptop_v2/UI/pages/market/product_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/search.dart';
@@ -17,6 +20,7 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FoodSearchPage extends StatefulWidget {
   static const routeName = '/food-search';
@@ -129,11 +133,70 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                 _searchedRestaurants.isNotEmpty
                     ? Expanded(
                         child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           color: AppColors.white,
                           child: ListView.builder(
-                            itemCount: _searchedRestaurants.length,
-                            itemBuilder: (c, i) => Text(_searchedRestaurants[i].title),
-                          ),
+                              shrinkWrap: true,
+                              itemCount: _searchedRestaurants.length,
+                              itemBuilder: (c, i) {
+                                return Container(
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                                          RestaurantPage.routeName,
+                                          arguments: _searchedRestaurants[i].id,
+                                        ),
+                                        child: HorizontalRestaurantListItem(restaurant: _searchedRestaurants[i]),
+                                      ),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: _searchedRestaurants[i].searchProducts.length,
+                                          itemBuilder: (c, j) {
+                                            var product = _searchedRestaurants[i].searchProducts[j];
+                                            return Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                              ),
+                                              child: InkWell(
+                                                onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                                                  ProductPage.routeName,
+                                                  arguments: {
+                                                    "product": product,
+                                                    "has_controls": true,
+                                                  },
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                        child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                      children: [
+                                                        Text(product.title),
+                                                        Text(
+                                                          product.excerpt.raw,
+                                                          style: AppTextStyles.subtitle50,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                    Text(
+                                                      product.price.formatted,
+                                                      style: AppTextStyles.subtitleSecondary,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                );
+                              }),
                         ),
                       )
                     : Expanded(
@@ -178,8 +241,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   }
 
   Future<void> submitFoodSearch(String _searchQuery) async {
-    print("_searchQuery");
-    print(_searchQuery);
     if (searchQuery != _searchQuery) {
       setState(() {
         searchQuery = _searchQuery;
