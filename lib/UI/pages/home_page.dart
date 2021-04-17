@@ -15,11 +15,11 @@ import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
-import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
 
   void _setHomeData() {
     if (homeProvider.channelIsMarket) {
-      hideMarketContent = homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
+      hideMarketContent = homeProvider.marketHomeData == null || homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
       if (!hideMarketContent) {
         marketHomeData = homeProvider.marketHomeData;
         marketSlides = marketHomeData.slides;
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
         activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
       }
     } else {
-      hideFoodContent = homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
+      hideFoodContent = homeProvider.foodHomeData == null || homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
       if (!hideFoodContent) {
         print('Setting food data in home page!');
         foodHomeData = homeProvider.foodHomeData;
@@ -161,54 +161,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: (value) => isLoadingHomeData ? {} : channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
-                    isLoadingHomeData
-                        ? Container()
-                        : homeProvider.channelIsMarket
-                            ? hideMarketContent
-                                ? NoContentView(
-                                    text: homeProvider.marketNoBranchFound
-                                        ? 'No Branch Found'
-                                        : homeProvider.marketHomeDataRequestError
-                                            ? 'An error occurred! Please try again later'
-                                            : '')
-                                : Column(
-                                    children: [
-                                      if (hasActiveMarketOrders)
-                                        HomeLiveTracking(
-                                          isRTL: appProvider.isRTL,
-                                          activeOrders: homeProvider.marketHomeData.activeOrders,
-                                          totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
-                                        ),
-                                      MarketHomeCategoriesGrid(
-                                        categories: homeProvider.marketCategories,
-                                        fetchAndSetHomeData: fetchAndSetHomeData,
-                                        isLoadingHomeData: isLoadingHomeData,
-                                      ),
-                                    ],
-                                  )
-                            : !homeProvider.channelIsMarket
-                                ? hideFoodContent
-                                    ? NoContentView(
-                                        text: homeProvider.foodNoRestaurantFound
-                                            ? 'No Branch Found'
-                                            : homeProvider.foodHomeDataRequestError
-                                                ? 'An error occurred! Please try again later'
-                                                : '')
-                                    : Column(
-                                        children: [
-                                          if (hasActiveFoodOrders)
-                                            HomeLiveTracking(
-                                              isRTL: appProvider.isRTL,
-                                              activeOrders: homeProvider.foodHomeData.activeOrders,
-                                              totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
-                                            ),
-                                          FoodHomeContent(
-                                            foodHomeData: foodHomeData,
-                                            isRTL: appProvider.isRTL,
-                                          ),
-                                        ],
-                                      )
-                                : Container(),
+                    _homeContent(),
                   ],
                 ),
               ),
@@ -217,5 +170,67 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Widget _homeContent() {
+    if (isLoadingHomeData) {
+      //Display nothing when data is loading
+      return Container();
+    } else if (homeProvider.selectedChannel == 'grocery') {
+      if (hideMarketContent) {
+        //No Content View for market channel
+        return NoContentView(
+            text: homeProvider.marketNoBranchFound
+                ? 'No Branch Found'
+                : homeProvider.marketHomeDataRequestError
+                    ? 'An error occurred! Please try again later'
+                    : '');
+      } else {
+        //Market/Grocery channel home content
+        return Column(
+          children: [
+            if (hasActiveMarketOrders)
+              HomeLiveTracking(
+                isRTL: appProvider.isRTL,
+                activeOrders: homeProvider.marketHomeData.activeOrders,
+                totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
+              ),
+            MarketHomeCategoriesGrid(
+              categories: homeProvider.marketCategories,
+              fetchAndSetHomeData: fetchAndSetHomeData,
+              isLoadingHomeData: isLoadingHomeData,
+            ),
+          ],
+        );
+      }
+    } else if (homeProvider.selectedChannel == 'food') {
+      if (hideMarketContent) {
+        //No Content View for food channel
+        return NoContentView(
+            text: homeProvider.foodNoRestaurantFound
+                ? 'No Open Restaurant Found!'
+                : homeProvider.foodHomeDataRequestError
+                    ? 'An error occurred! Please try again later'
+                    : '');
+      } else {
+        //Food channel home content
+        return Column(
+          children: [
+            if (hasActiveFoodOrders)
+              HomeLiveTracking(
+                isRTL: appProvider.isRTL,
+                activeOrders: homeProvider.foodHomeData.activeOrders,
+                totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
+              ),
+            FoodHomeContent(
+              foodHomeData: foodHomeData,
+              isRTL: appProvider.isRTL,
+            ),
+          ],
+        );
+      }
+    } else {
+      return Container();
+    }
   }
 }
