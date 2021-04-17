@@ -8,12 +8,14 @@ class LabeledIcon extends StatelessWidget {
   final Color color;
   final String text;
   final bool isLast;
+  final bool isIconLarge;
 
   LabeledIcon({
     @required this.icon,
     this.color = AppColors.primary50,
     this.text,
     this.isLast = false,
+    this.isIconLarge = false,
   });
 
   @override
@@ -21,12 +23,12 @@ class LabeledIcon extends StatelessWidget {
     return Row(
       mainAxisAlignment: isLast ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        AppIcons.iconXs50(icon),
+        isIconLarge ? AppIcons.icon50(icon) : AppIcons.iconXs50(icon),
         const SizedBox(width: 5),
         Expanded(
           child: Text(
             text,
-            style: AppTextStyles.subtitle50,
+            style: isIconLarge ? AppTextStyles.body50 : AppTextStyles.subtitle50,
           ),
         ),
       ],

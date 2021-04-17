@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
@@ -9,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/text_field_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
@@ -20,6 +22,7 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -42,6 +45,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   AddressesProvider addressesProvider;
+  HomeProvider homeProvider;
   CouponValidationResponseData couponValidationResponseData;
 
   final couponCodeNotifier = ValueNotifier<String>(null);
@@ -131,6 +135,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       _createOrderAndGetCheckoutData();
     }
     _isInit = false;
@@ -167,6 +172,70 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               onSaved: (value) {
                                 notes = value;
                               },
+                            ),
+                          ),
+                          SectionTitle('Delivery Options'),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(color: AppColors.border)),
+                              color: AppColors.white,
+                            ),
+                            padding: appProvider.isRTL ? EdgeInsets.only(left: 17) : EdgeInsets.only(right: 17),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Radio(
+                                  value: 1,
+                                  groupValue: 1,
+                                  onChanged: (_) {},
+                                  activeColor: AppColors.secondary,
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 12, bottom: 17),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image(
+                                              image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                                              width: 60,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(Translations.of(context).get('Delivery')),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            const SizedBox(height: 10),
+                                            DeliveryOptionsDetails(
+                                              homeProvider: homeProvider,
+                                              icon: LineAwesomeIcons.hourglass,
+                                              iconTitle: 'Time',
+                                              branchInfo: '${homeProvider.marketHomeData.branch.tiptopDelivery.minDeliveryMinutes}'
+                                                  '-${homeProvider.marketHomeData.branch.tiptopDelivery.maxDeliveryMinutes} min',
+                                            ),
+                                            const SizedBox(height: 10),
+                                            DeliveryOptionsDetails(
+                                              homeProvider: homeProvider,
+                                              icon: LineAwesomeIcons.truck_moving,
+                                              iconTitle: 'Delivery Fee',
+                                              branchInfo: homeProvider.marketHomeData.branch.tiptopDelivery.fixedDeliveryFee.formatted,
+                                            ),
+                                            const SizedBox(height: 10),
+                                            DeliveryOptionsDetails(
+                                              homeProvider: homeProvider,
+                                              icon: LineAwesomeIcons.shopping_basket,
+                                              iconTitle: 'Min. Cart',
+                                              branchInfo: homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           SectionTitle('Payment Methods'),
@@ -277,5 +346,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
       showToast(msg: 'An error occurred while submitting your order!');
       throw e;
     }
+  }
+}
+
+class DeliveryOptionsDetails extends StatelessWidget {
+  final HomeProvider homeProvider;
+  final IconData icon;
+  final String iconTitle;
+  final String branchInfo;
+
+  DeliveryOptionsDetails({
+    this.homeProvider,
+    this.icon,
+    this.iconTitle,
+    this.branchInfo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+            flex: 2,
+            child: LabeledIcon(
+              isIconLarge: true,
+              icon: icon,
+              text: Translations.of(context).get(iconTitle),
+            )),
+        Expanded(
+          child: Text(
+            branchInfo,
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
+    );
   }
 }
