@@ -88,7 +88,7 @@
   "Add Address": "اضف عنوان",
   "Add": "اضف",
   "Track Order": "تتبع الطلب",
-  "Live Order(s)" : "الطلب الفعال",
+  "Live Order(s)": "الطلب الفعال",
   "Track your order": "تابع طلبك",
   "Preparing": "قيد التحضير",
   "On the way": "على الطريق",
@@ -103,12 +103,12 @@
   "Are you sure you want to delete this address?": "هل أنت متأكد من أنك تريد حذف هذا العنوان؟",
   "All Restaurants": "جميع المطاعم",
   "Restaurants": "المطاعم",
-  "Categories" : "التصنيفات",
+  "Categories": "التصنيفات",
   "Restaurant Delivery": "توصيل المطعم",
   "TipTop Delivery": "TipTop توصيل",
   "Filter": "تصفية",
   "Sort": "ترتيب",
-  "Live Chat" : "محادثة فورية",
+  "Live Chat": "محادثة فورية",
   "Thanks for your rating": "شكرا لارسالك لتقييمك",
   "Skip": "تخطي",
   "Send": "ارسال",
@@ -153,5 +153,6 @@
   "Sort by: by_distance": "الترتيب: حسب المسافة",
   "By Distance": "حسب المسافة",
   "No Results Match Your Search": "لا يوجد نتائج تطابق بحثك",
-  "result(s) match your search": "نتائج تطابق بحثك"
+  "result(s) match your search": "نتائج تطابق بحثك",
+  "Free": "مجاناً"
 }
