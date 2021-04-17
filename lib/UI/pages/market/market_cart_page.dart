@@ -21,65 +21,73 @@ class MarketCartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer3<AppProvider, HomeProvider, CartProvider>(
-      builder: (c, appProvider, homeProvider, cartProvider, _) => AppScaffold(
-        hasCurve: false,
-        hasOverlayLoader: cartProvider.isLoadingClearCartRequest,
-        appBar: AppBar(
-          title: Text(Translations.of(context).get('Cart')),
-          actions: [
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => ConfirmAlertDialog(
-                    title: 'Are you sure you want to empty your cart?',
-                  ),
-                ).then((response) {
-                  if (response != null && response) {
-                    cartProvider.clearCart(appProvider).then((_) {
-                      showToast(msg: 'Cart Cleared Successfully!');
-                      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-                    }).catchError((e) {
-                      showToast(msg: 'Error clearing cart!');
-                    });
-                  }
-                });
-              },
-              icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-            )
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                physics: AlwaysScrollableScrollPhysics(),
-                children: cartProvider.marketCart.products
-                    .map((cartProduct) => MarketListProductItem(
-                          product: cartProduct.product,
-                          quantity: cartProduct.quantity,
-                        ))
-                    .toList(),
+      builder: (c, appProvider, homeProvider, cartProvider, _) {
+        if (cartProvider.noMarketCart && !cartProvider.isLoadingAdjustCartQuantityRequest) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            Navigator.of(context).pop();
+          });
+        }
+
+        return AppScaffold(
+          hasCurve: false,
+          hasOverlayLoader: cartProvider.isLoadingClearCartRequest,
+          appBar: AppBar(
+            title: Text(Translations.of(context).get('Cart')),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ConfirmAlertDialog(
+                      title: 'Are you sure you want to empty your cart?',
+                    ),
+                  ).then((response) {
+                    if (response != null && response) {
+                      cartProvider.clearCart(appProvider).then((_) {
+                        showToast(msg: 'Cart Cleared Successfully!');
+                        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+                      }).catchError((e) {
+                        showToast(msg: 'Error clearing cart!');
+                      });
+                    }
+                  });
+                },
+                icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
+              )
+            ],
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  children: cartProvider.marketCart.products
+                      .map((cartProduct) => MarketListProductItem(
+                            product: cartProduct.product,
+                            quantity: cartProduct.quantity,
+                          ))
+                      .toList(),
+                ),
               ),
-            ),
-            OrderButton(
-              cartProvider: cartProvider,
-              total: cartProvider.marketCart.total.formatted,
-              isRTL: appProvider.isRTL,
-              buttonText: 'Continue',
-              onTap: () {
-                if (cartProvider.marketCart == null ||
-                    cartProvider.marketCart.total.raw == 0 ||
-                    cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
-                  showToast(msg: 'Order total should be greater than: ${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}');
-                } else {
-                  Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+              OrderButton(
+                cartProvider: cartProvider,
+                total: cartProvider.marketCart.total.formatted,
+                isRTL: appProvider.isRTL,
+                buttonText: 'Continue',
+                onTap: () {
+                  if (cartProvider.marketCart == null ||
+                      cartProvider.marketCart.total.raw == 0 ||
+                      cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
+                    showToast(msg: 'Order total should be greater than: ${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}');
+                  } else {
+                    Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
