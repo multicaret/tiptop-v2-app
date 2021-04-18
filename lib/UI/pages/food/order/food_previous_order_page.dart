@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_order_rating_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_list_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/order_rating_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -127,29 +128,15 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SectionTitle(order.orderRating.branchHasBeenRated ? 'Thanks for your rating' : 'Please Rate Your Experience'),
-                      Material(
-                        color: AppColors.white,
-                        child: InkWell(
+                      if (order.status == OrderStatus.DELIVERED)
+                        OrderRatingButton(
+                          order: order,
                           onTap: order.orderRating.branchHasBeenRated
                               ? null
-                              : () => Navigator.of(context, rootNavigator: true).pushNamed(FoodOrderRatingPage.routeName, arguments: {'order': order}),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                AppRatingBar(
-                                  disabled: true,
-                                  initialRating: order.orderRating.branchRatingValue ?? 0,
-                                ),
-                                if (!order.orderRating.branchHasBeenRated)
-                                  AppIcons.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
-                              ],
-                            ),
-                          ),
+                              : () =>
+                                  Navigator.of(context, rootNavigator: true).pushNamed(FoodOrderRatingPage.routeName, arguments: {'order': order}),
+                          isRTL: appProvider.isRTL,
                         ),
-                      ),
                       SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
                       ...List.generate(
                         order.cart.products.length,

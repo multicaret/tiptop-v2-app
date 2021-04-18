@@ -1,5 +1,6 @@
 import 'address.dart';
 import 'cart.dart';
+import 'enums.dart';
 import 'models.dart';
 
 class CreateCheckoutResponse {
@@ -157,6 +158,7 @@ class Order {
     this.deliveryFee,
     this.grandTotal,
     this.orderRating,
+    this.status,
     this.cart,
     this.paymentMethod,
   });
@@ -170,6 +172,7 @@ class Order {
   DoubleRawIntFormatted deliveryFee;
   DoubleRawIntFormatted grandTotal;
   OrderRating orderRating;
+  OrderStatus status;
   Cart cart;
   PaymentMethod paymentMethod;
 
@@ -183,6 +186,7 @@ class Order {
         deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
+        status: json["status"] == null ? null : getOrderStatus(json["status"]),
         cart: Cart.fromJson(json["cart"]),
         paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
       );
