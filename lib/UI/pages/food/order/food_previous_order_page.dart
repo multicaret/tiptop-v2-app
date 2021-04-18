@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_order_rating_page.dart';
@@ -176,6 +178,26 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                             ],
                           ),
                         ),
+                      SectionTitle('Payment Method'),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
+                        color: AppColors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(order.paymentMethod.title),
+                            CachedNetworkImage(
+                              imageUrl: order.paymentMethod.logo,
+                              width: 30,
+                              fit: BoxFit.cover,
+                              placeholder: (_, __) => SpinKitDoubleBounce(
+                                color: AppColors.secondary,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       SectionTitle('Payment Summary'),
                       PaymentSummary(
                         totals: totals,
