@@ -93,8 +93,6 @@ class _MarketProductPageState extends State<MarketProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    productGallery = [product.media.cover, ...product.media.gallery.map((galleryItem) => galleryItem.file)];
-
     return AppScaffold(
       bgColor: AppColors.white,
       appBar: AppBar(
@@ -121,7 +119,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
                 children: [
                   AppCarousel(
                     height: MediaQuery.of(context).size.width * 0.8,
-                    images: productGallery,
+                    images: product.media.gallery.map((galleryItem) => galleryItem.file).toList(),
                     hasIndicator: true,
                     infinite: false,
                   ),
