@@ -25,6 +25,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
   OTPProvider otpProvider;
   AppProvider appProvider;
   bool _isInit = true;
+  bool _isLoadingSubmitSMSCode = false;
   String reference;
   DateTime validationDate;
 
@@ -49,11 +50,21 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     super.didChangeDependencies();
   }
 
+  Future<void> _resendSMSCode() async {
+    showToast(msg: 'Sending SMS code again...');
+    await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
+    if (otpProvider.reference == null) {
+      showToast(msg: 'Unable to send SMS code, please try another method!');
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
+      hasOverlayLoader: _isLoadingSubmitSMSCode,
       body: Column(
         children: [
           const SizedBox(height: 40),
@@ -72,7 +83,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
             padding: const EdgeInsets.symmetric(horizontal: 70),
             child: AppPinCodeTextField(
               length: 6,
-              onComplete: (code) => _submitCode(code),
+              onComplete: (code) => _submitSMSCode(code),
             ),
           ),
           const SizedBox(height: 20),
@@ -81,7 +92,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
             to: Duration(minutes: 0),
             onBuildAction: CustomTimerAction.auto_start,
             onFinish: () {
-              //Todo: implement duration end action
+              Navigator.of(context).pop();
             },
             builder: (CustomTimerRemainingTime remaining) {
               return Text(
@@ -99,9 +110,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
               ),
               const SizedBox(width: 5),
               GestureDetector(
-                onTap: () {
-                  //Todo: implement sending code again
-                },
+                onTap: _resendSMSCode,
                 child: Text(
                   Translations.of(context).get('Send again'),
                   style: AppTextStyles.bodySecondaryDark,
@@ -109,12 +118,20 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+            },
+            child: Text(Translations.of(context).get('Continue Without Login')),
+          ),
         ],
       ),
     );
   }
 
-  Future<void> _submitCode(String code) async {
+  Future<void> _submitSMSCode(String code) async {
+    setState(() => _isLoadingSubmitSMSCode = true);
     final mobileAppDetails = await appProvider.loadMobileAppDetails();
     smsOTPData = {
       'phone_country_code': phoneCountryCode, // i.e: 90, 964
@@ -125,7 +142,12 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     };
 
     // try {
-    await otpProvider.checkOTPSMSValidation(appProvider, smsOTPData);
+    final responseData = await otpProvider.checkOTPSMSValidation(appProvider, smsOTPData);
+    if (responseData == 403) {
+      showToast(msg: 'Invalid Pin!');
+      setState(() => _isLoadingSubmitSMSCode = false);
+      return;
+    }
     isValid = otpProvider.validationStatus;
     isNewUser = otpProvider.isNewUser;
     if (isValid == true) {
@@ -139,6 +161,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     } else {
       showToast(msg: 'OTP Validation Failed');
     }
+    setState(() => _isLoadingSubmitSMSCode = false);
 /*    } catch (error) {
       showToast(msg: '${error.message != null ? error.message : 'Unknown error'}');
       throw error;

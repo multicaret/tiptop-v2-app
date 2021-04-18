@@ -53,7 +53,7 @@ class OTPProvider with ChangeNotifier {
     print(responseData);
 
     if (responseData["status"] == 403) {
-     throw 'Validation Failed!';
+      throw 'Validation Failed!';
     }
 
     if (responseData["status"] != 200) {
@@ -86,11 +86,23 @@ class OTPProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkOTPSMSValidation(AppProvider appProvider, Map<String, dynamic> smsOTPData) async {
+  Future<dynamic> checkOTPSMSValidation(AppProvider appProvider, Map<String, dynamic> smsOTPData) async {
     final endpoint = 'otp/sms-validate';
-    final responseData = await AppProvider().post(endpoint: endpoint, body: smsOTPData);
+    final responseData = await AppProvider().post(
+      endpoint: endpoint,
+      body: smsOTPData,
+      overrideStatusCheck: true,
+    );
     print('checkOTPSMSValidation responseData');
     print(responseData);
+
+    if (responseData["status"] == 403) {
+      return 403;
+    }
+
+    if (responseData["status"] != 200) {
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+    }
 
     OTPValidationData otpValidationData = OTPValidationData.fromJson(responseData["data"]);
     validationStatus = otpValidationData.validationStatus;
