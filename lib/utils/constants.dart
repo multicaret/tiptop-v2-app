@@ -60,3 +60,6 @@ const double actionButtonBottomPadding = 40;
 
 //Action button container height (e.g. order button height, add to cart button height in product page)
 const double actionButtonContainerHeight = actionButtonBottomPadding + buttonHeightSm + listItemVerticalPadding;
+
+//Space between stars that fill screen width
+const double fullWidthStarsGutter = 30;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/labeled_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -32,7 +32,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
   AppProvider appProvider;
   OrdersProvider ordersProvider;
 
-  double ratingStarsGutter = 30;
   double _ratingValue;
   String _ratingComments = '';
   int _selectedIssueId;
@@ -55,14 +54,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
     _isInit = false;
     super.didChangeDependencies();
   }
-
-  List<String> _ratingStarsLabels = [
-    "Very Bad",
-    "Bad",
-    "Okay",
-    "Good",
-    "Very Good",
-  ];
 
   Future<void> _submitRating() async {
     _ratingFormKey.currentState.save();
@@ -93,8 +84,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-
     return AppScaffold(
         hasOverlayLoader: _isLoadingStoreRatingRequest,
         body: _isLoadingCreateRatingRequest
@@ -111,38 +100,7 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
                             isDisabled: true,
                           ),
                           SectionTitle('Please Rate Your Experience'),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              border: Border(bottom: BorderSide(color: AppColors.border)),
-                            ),
-                            child: Column(
-                              children: [
-                                AppRatingBar(
-                                  starsGutter: ratingStarsGutter,
-                                  starSize: (screenSize.width - (ratingStarsGutter * 5) - (screenHorizontalPadding * 2)) / 5,
-                                  onRatingUpdate: (value) {
-                                    setState(() {
-                                      _ratingValue = value;
-                                    });
-                                  },
-                                ),
-                                const SizedBox(height: 15),
-                                Row(
-                                  children: List.generate(
-                                    _ratingStarsLabels.length,
-                                    (i) => Expanded(
-                                      child: Text(
-                                        Translations.of(context).get(_ratingStarsLabels[i]),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          LabeledRatingBar(setRatingValue: (value) => setState(() => _ratingValue = value)),
                           //Todo: Add food rating issues
                           Form(
                             key: _ratingFormKey,
