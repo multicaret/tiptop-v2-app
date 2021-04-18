@@ -82,7 +82,7 @@ String getRestaurantSortTypeString(RestaurantSortType _type) {
       return "smart_sorting";
       break;
     case RestaurantSortType.RATING:
-      return "restaurant_rating";
+      return "restaurants_rating";
       break;
     case RestaurantSortType.DISTANCE:
       return "by_distance";
