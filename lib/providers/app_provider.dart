@@ -168,6 +168,7 @@ class AppProvider with ChangeNotifier {
     @required String endpoint,
     Map<String, String> body,
     bool withToken = false,
+    bool overrideStatusCheck = false,
   }) async {
     try {
       final root = await this.endpointRoot();
@@ -188,7 +189,7 @@ class AppProvider with ChangeNotifier {
       }
 
       final responseData = json.decode(response.body);
-      if (responseData["status"] != 200) {
+      if (responseData["status"] != 200 && !overrideStatusCheck) {
         throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }
       return responseData;

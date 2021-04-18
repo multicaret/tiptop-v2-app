@@ -52,6 +52,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   bool isNewUser;
   List<Country> countries = [];
   List<Map<String, dynamic>> countriesDropDownItems = [];
+  bool resumedFirstTime = true;
 
   Future<void> _fetchAndSetCountries() async {
     setState(() => _isLoadingFetchCountriesRequest = true);
@@ -87,7 +88,10 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
 
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed && pickedSMSMethod != null && !pickedSMSMethod) {
+    if (state == AppLifecycleState.resumed && resumedFirstTime && pickedSMSMethod != null && !pickedSMSMethod) {
+      //To prevent app from running this code everytime the user leaves and returns to the app
+      //even if they didn't initiate otp method
+      resumedFirstTime = false;
       try {
         setState(() => _isLoadingCheckOTPValidation = true);
         await otpProvider.checkOTPValidation(appProvider, reference);
@@ -107,11 +111,9 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
           showToast(msg: 'OTP Validation Failed');
           return;
         }
-      } on HttpException catch (error) {
-        appAlert(context: context, title: error.title, description: error.getErrorsAsString()).show();
-        setState(() => _isLoadingCheckOTPValidation = false);
       } catch (error) {
         setState(() => _isLoadingCheckOTPValidation = false);
+        showToast(msg: 'Validation Failed!');
         print("@error checkOTPValidation");
         print(error.toString());
       }
@@ -137,6 +139,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             const SizedBox(height: 40),
             OTPMethodsButtons(
               initOTPAction: (String method) {
+                resumedFirstTime = true;
                 if (method == 'sms') {
                   setState(() => pickedSMSMethod = true);
                   _fetchAndSetCountries();

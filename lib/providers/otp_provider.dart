@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/otp.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 
 class OTPProvider with ChangeNotifier {
   String reference;
@@ -49,6 +51,14 @@ class OTPProvider with ChangeNotifier {
     );
     print('responseData');
     print(responseData);
+
+    if (responseData["status"] == 403) {
+     throw 'Validation Failed!';
+    }
+
+    if (responseData["status"] != 200) {
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+    }
 
     OTPValidationData otpValidationData = OTPValidationData.fromJson(responseData["data"]);
     validationStatus = otpValidationData.validationStatus;
