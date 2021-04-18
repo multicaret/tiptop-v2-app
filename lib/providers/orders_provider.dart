@@ -21,7 +21,7 @@ class OrdersProvider with ChangeNotifier {
   CouponValidationResponseData couponValidationResponseData;
 
   List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
-  List<FoodOrderRatingAvailableIssue> foodOrderRatingAvailableIssues = [];
+  List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
 
   Future<void> createOrderAndGetCheckoutData(AppProvider appProvider) async {
     final endpoint = 'orders/create';
@@ -174,8 +174,8 @@ class OrdersProvider with ChangeNotifier {
       marketOrderRatingAvailableIssues =
           List<MarketOrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => MarketOrderRatingAvailableIssue.fromJson(x)));
     } else {
-      foodOrderRatingAvailableIssues =
-          List<FoodOrderRatingAvailableIssue>.from(responseData["data"].map((x) => FoodOrderRatingAvailableIssue.fromJson(x)));
+      foodOrderRatingFactors =
+          List<FoodOrderRatingFactors>.from(responseData["data"].map((x) => FoodOrderRatingFactors.fromJson(x)));
     }
     notifyListeners();
   }

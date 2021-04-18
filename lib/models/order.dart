@@ -268,8 +268,8 @@ class MarketOrderRatingAvailableIssue {
 }
 
 
-class FoodOrderRatingAvailableIssue {
-  FoodOrderRatingAvailableIssue({
+class FoodOrderRatingFactors {
+  FoodOrderRatingFactors({
     this.key,
     this.label,
   });
@@ -277,7 +277,7 @@ class FoodOrderRatingAvailableIssue {
   String key;
   String label;
 
-  factory FoodOrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => FoodOrderRatingAvailableIssue(
+  factory FoodOrderRatingFactors.fromJson(Map<String, dynamic> json) => FoodOrderRatingFactors(
         key: json["key"],
         label: json["label"],
       );

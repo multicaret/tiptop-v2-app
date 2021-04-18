@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_logo_header.dart';
 import 'package:tiptop_v2/UI/widgets/labeled_rating_bar.dart';
+import 'package:tiptop_v2/UI/widgets/like_dislike_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -33,12 +34,19 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
   OrdersProvider ordersProvider;
 
   double _ratingValue;
+  Map<String, bool> _foodRatingFactors = {};
   String _ratingComments = '';
   int _selectedIssueId;
+
+  List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
 
   Future<void> _createOrderRating() async {
     setState(() => _isLoadingCreateRatingRequest = true);
     await ordersProvider.createOrderRating(appProvider, order.id, isMarketOrder: false);
+    foodOrderRatingFactors = ordersProvider.foodOrderRatingFactors;
+    foodOrderRatingFactors.forEach((factor) {
+      _foodRatingFactors[factor.key] = null;
+    });
     setState(() => _isLoadingCreateRatingRequest = false);
   }
 
@@ -65,8 +73,10 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
       setState(() => _isLoadingStoreRatingRequest = true);
       Map<String, dynamic> ratingData = {
         'branch_rating_value': _ratingValue,
-        'grocery_issue_id': _selectedIssueId,
         'comment': _ratingComments,
+        //Todo: implement driver rating
+        'driver_rating_value': null,
+        'food_rating_factors': _foodRatingFactors,
       };
       print('ratingData');
       print(ratingData);
@@ -85,71 +95,93 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-        hasOverlayLoader: _isLoadingStoreRatingRequest,
-        body: _isLoadingCreateRatingRequest
-            ? const AppLoader()
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          OrderItem(
-                            isRTL: appProvider.isRTL,
-                            order: order,
-                            isDisabled: true,
-                          ),
-                          SectionTitle('Please Rate Your Experience'),
-                          LabeledRatingBar(setRatingValue: (value) => setState(() => _ratingValue = value)),
-                          //Todo: Add food rating issues
-                          Form(
-                            key: _ratingFormKey,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20),
-                              color: AppColors.white,
-                              child: AppTextField(
-                                labelText: 'Your comment',
-                                maxLines: 3,
-                                onSaved: (value) {
-                                  _ratingComments = value;
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: screenHorizontalPadding,
-                      right: screenHorizontalPadding,
-                      top: listItemVerticalPadding,
-                      bottom: actionButtonBottomPadding,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.bg,
-                      boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
-                    ),
-                    child: Row(
+      hasOverlayLoader: _isLoadingStoreRatingRequest,
+      body: _isLoadingCreateRatingRequest
+          ? const AppLoader()
+          : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: AppButtons.secondary(
-                            child: Text(Translations.of(context).get('Send')),
-                            onPressed: _submitRating,
-                          ),
+                        OrderItem(
+                          isRTL: appProvider.isRTL,
+                          order: order,
+                          isDisabled: true,
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: AppButtons.primary(
-                            child: Text(Translations.of(context).get('Skip')),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
+                        //Todo: Add dynamic restaurant data
+                        RestaurantLogoHeader(),
+                        LabeledRatingBar(setRatingValue: (value) => setState(() => _ratingValue = value)),
+                        Column(
+                          children: List.generate(foodOrderRatingFactors.length, (i) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                border: Border(bottom: BorderSide(color: AppColors.border)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(foodOrderRatingFactors[i].label),
+                                  LikeDislikeButtons(
+                                    value: _foodRatingFactors[foodOrderRatingFactors[i].key],
+                                    setValue: (value) => setState(() => _foodRatingFactors[foodOrderRatingFactors[i].key] = value),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
                         ),
+                        Form(
+                          key: _ratingFormKey,
+                          child: Container(
+                            padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20),
+                            color: AppColors.white,
+                            child: AppTextField(
+                              labelText: 'Your comment',
+                              maxLines: 3,
+                              onSaved: (value) {
+                                _ratingComments = value;
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ));
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: screenHorizontalPadding,
+                    right: screenHorizontalPadding,
+                    top: listItemVerticalPadding,
+                    bottom: actionButtonBottomPadding,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.bg,
+                    boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AppButtons.secondary(
+                          child: Text(Translations.of(context).get('Send')),
+                          onPressed: _submitRating,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: AppButtons.primary(
+                          child: Text(Translations.of(context).get('Skip')),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+    );
   }
 }
