@@ -81,26 +81,29 @@ class _AppCarouselState extends State<AppCarousel> {
           ),
         ),
         if (widget.hasIndicator && widget.images.length > 1)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(widget.images.length, (index) {
-              return AnimatedContainer(
-                margin: EdgeInsets.symmetric(horizontal: 3),
-                duration: const Duration(milliseconds: 300),
-                height: _currentSlide == index ? 10 : 8,
-                width: _currentSlide == index ? 10 : 8,
-                child: AnimatedOpacity(
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(widget.images.length, (index) {
+                return AnimatedContainer(
+                  margin: EdgeInsets.symmetric(horizontal: 3),
                   duration: const Duration(milliseconds: 300),
-                  opacity: _currentSlide == index ? 1 : 0.5,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.secondary,
+                  height: _currentSlide == index ? 10 : 8,
+                  width: _currentSlide == index ? 10 : 8,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: _currentSlide == index ? 1 : 0.5,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.secondary,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
       ],
     );
