@@ -8,6 +8,7 @@ class AppCarousel extends StatefulWidget {
   final double height;
   final double width;
   final List<String> images;
+  final bool autoPlay;
   final Duration autoplayDuration;
   final Duration autoPlayInterval;
   final Widget mapWidget;
@@ -18,6 +19,7 @@ class AppCarousel extends StatefulWidget {
     this.height = 212,
     this.width,
     @required this.images,
+    this.autoPlay = false,
     this.autoplayDuration,
     this.autoPlayInterval,
     this.mapWidget,
@@ -71,7 +73,7 @@ class _AppCarouselState extends State<AppCarousel> {
             // items: widget.mapWidget != null ? [widget.mapWidget, ..._getImagesList()] : _getImagesList(),
             options: CarouselOptions(
               viewportFraction: 1,
-              autoPlay: widget.autoplayDuration != null && widget.autoPlayInterval != null,
+              autoPlay: widget.autoPlay,
               height: widget.height,
               autoPlayInterval: widget.autoPlayInterval,
               autoPlayAnimationDuration: widget.autoplayDuration,

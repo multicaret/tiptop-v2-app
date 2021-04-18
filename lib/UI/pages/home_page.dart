@@ -142,6 +142,8 @@ class _HomePageState extends State<HomePage> {
                             images: homeProvider.channelIsMarket
                                 ? marketSlides.map((slide) => slide.image).toList()
                                 : foodSlides.map((slide) => slide.image).toList(),
+                            infinite: homeProvider.channelIsMarket ? marketSlides.length > 1 : foodSlides.length > 1,
+                            autoPlay: homeProvider.channelIsMarket ? marketSlides.length > 1 : foodSlides.length > 1,
                             autoplayDuration: const Duration(milliseconds: 300),
                             autoPlayInterval: const Duration(seconds: 7),
                           ),
