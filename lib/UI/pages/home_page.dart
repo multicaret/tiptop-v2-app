@@ -15,12 +15,9 @@ import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
-import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
-import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -42,14 +39,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  bool isLoadingHomeData = false;
   bool _isInit = true;
 
   AppProvider appProvider;
   HomeProvider homeProvider;
-  CartProvider cartProvider;
-  AddressesProvider addressesProvider;
-  RestaurantsProvider restaurantsProvider;
 
   HomeData marketHomeData;
   HomeData foodHomeData;
@@ -66,11 +59,8 @@ class _HomePageState extends State<HomePage> {
   bool hideFoodContent = false;
 
   Future<void> fetchAndSetHomeData() async {
-    setState(() => isLoadingHomeData = true);
-    await addressesProvider.fetchSelectedAddress();
-    await homeProvider.fetchAndSetHomeData(context, appProvider, cartProvider, addressesProvider, restaurantsProvider);
+    await homeProvider.fetchAndSetHomeData(context, appProvider);
     _setHomeData();
-    setState(() => isLoadingHomeData = false);
   }
 
   void _setHomeData() {
@@ -108,10 +98,9 @@ class _HomePageState extends State<HomePage> {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
-      cartProvider = Provider.of<CartProvider>(context);
-      addressesProvider = Provider.of<AddressesProvider>(context);
-      restaurantsProvider = Provider.of<RestaurantsProvider>(context);
-      fetchAndSetHomeData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        fetchAndSetHomeData();
+      });
       _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
       if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
         _oneSignalNotificationsProvider.initOneSignal();
@@ -129,12 +118,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBarActions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: isLoadingHomeData)] : null,
+      appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       bodyPadding: const EdgeInsets.all(0),
-      hasOverlayLoader: isLoadingHomeData,
+      hasOverlayLoader: homeProvider.isLoadingHomeData,
       body: Column(
         children: [
-          AddressSelectButton(isLoadingHomeData: isLoadingHomeData),
+          AddressSelectButton(),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => fetchAndSetHomeData(),
@@ -144,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    hideMarketContent || isLoadingHomeData
+                    hideMarketContent || homeProvider.isLoadingHomeData
                         ? Container(
                             height: homeSliderHeight,
                             color: AppColors.bg,
@@ -158,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                     ChannelsButtons(
                       currentView: homeProvider.selectedChannel,
-                      onPressed: (value) => isLoadingHomeData ? {} : channelButtonAction(value),
+                      onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
                     _homeContent(),
@@ -173,7 +162,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _homeContent() {
-    if (isLoadingHomeData) {
+    if (homeProvider.isLoadingHomeData) {
       //Display nothing when data is loading
       return Container();
     } else if (homeProvider.selectedChannel == 'grocery') {
@@ -198,7 +187,6 @@ class _HomePageState extends State<HomePage> {
             MarketHomeCategoriesGrid(
               categories: homeProvider.marketCategories,
               fetchAndSetHomeData: fetchAndSetHomeData,
-              isLoadingHomeData: isLoadingHomeData,
             ),
           ],
         );

@@ -17,7 +17,6 @@ import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressSelectButton extends StatelessWidget {
-  final bool isLoadingHomeData;
   final bool isDisabled;
   final bool hasETA;
   final String addressKindIcon;
@@ -26,7 +25,6 @@ class AddressSelectButton extends StatelessWidget {
   final bool forceAddressView;
 
   AddressSelectButton({
-    this.isLoadingHomeData = false,
     this.isDisabled = false,
     this.hasETA = true,
     this.addressKindIcon,
@@ -37,12 +35,10 @@ class AddressSelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-    String appDir = appProvider.dir;
     Size screenSize = MediaQuery.of(context).size;
 
-    return Consumer2<HomeProvider, AddressesProvider>(
-      builder: (c, homeProvider, addressesProvider, _) {
+    return Consumer3<AppProvider, HomeProvider, AddressesProvider>(
+      builder: (c, appProvider, homeProvider, addressesProvider, _) {
         bool tempShowSelectAddress = !addressesProvider.addressIsSelected || addressesProvider.selectedAddress == null || !appProvider.isAuth;
         bool showSelectAddress = tempShowSelectAddress;
         if (homeProvider.channelIsMarket) {
@@ -67,10 +63,10 @@ class AddressSelectButton extends StatelessWidget {
                   child: Container(
                     width: screenSize.width * 0.2,
                     color: AppColors.primary,
-                    alignment: appDir == 'ltr' ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: !appProvider.isRTL ? Alignment.centerRight : Alignment.centerLeft,
                     padding: EdgeInsets.only(
-                      right: appDir == 'ltr' ? screenHorizontalPadding : 0,
-                      left: appDir == 'ltr' ? 0 : screenHorizontalPadding,
+                      right: !appProvider.isRTL ? screenHorizontalPadding : 0,
+                      left: !appProvider.isRTL ? 0 : screenHorizontalPadding,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -101,12 +97,12 @@ class AddressSelectButton extends StatelessWidget {
                   ),
                 ),
               Positioned(
-                left: appDir == 'ltr' ? 0 : null,
-                right: appDir == 'ltr' ? null : 0,
+                left: !appProvider.isRTL ? 0 : null,
+                right: !appProvider.isRTL ? null : 0,
                 child: AnimatedContainer(
                   padding: EdgeInsets.only(
-                    left: appDir == 'ltr' ? screenHorizontalPadding : 0,
-                    right: appDir == 'ltr' ? 0 : screenHorizontalPadding,
+                    left: !appProvider.isRTL ? screenHorizontalPadding : 0,
+                    right: !appProvider.isRTL ? 0 : screenHorizontalPadding,
                     top: 10,
                     bottom: 10,
                   ),
@@ -114,7 +110,7 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: isLoadingHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
+                  width: homeProvider.isLoadingHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null
@@ -126,13 +122,13 @@ class AddressSelectButton extends StatelessWidget {
                               Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                             }
                           },
-                    child: isLoadingHomeData || (showSelectAddress && !forceAddressView)
+                    child: homeProvider.isLoadingHomeData || (showSelectAddress && !forceAddressView)
                         ? Container(
                             child: Text(
                               Translations.of(context).get('Select Address'),
                               style: AppTextStyles.bodyBold,
                             ),
-                            alignment: appDir == 'ltr' ? Alignment.centerLeft : Alignment.centerRight,
+                            alignment: !appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
                           )
                         : Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,7 +170,7 @@ class AddressSelectButton extends StatelessWidget {
                               if (!isDisabled)
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                                  child: AppIcons.icon(appDir == 'ltr' ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
+                                  child: AppIcons.icon(!appProvider.isRTL ? FontAwesomeIcons.angleRight : FontAwesomeIcons.angleLeft),
                                 ),
                             ],
                           ),

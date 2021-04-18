@@ -76,6 +76,7 @@ class MarketCartPage extends StatelessWidget {
                 buttonText: 'Continue',
                 onTap: () {
                   if (cartProvider.marketCart == null ||
+                      cartProvider.marketCart.total == null ||
                       cartProvider.marketCart.total.raw == 0 ||
                       cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
                     showToast(msg: 'Order total should be greater than: ${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}');

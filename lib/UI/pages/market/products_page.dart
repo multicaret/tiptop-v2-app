@@ -14,13 +14,11 @@ class ProductsPage extends StatefulWidget {
   final List<Category> parents;
   final int selectedParentCategoryId;
   final Function refreshHomeData;
-  final bool isLoadingHomeData;
 
   ProductsPage({
     @required this.parents,
     @required this.selectedParentCategoryId,
     @required this.refreshHomeData,
-    @required this.isLoadingHomeData,
   });
 
   @override
@@ -58,7 +56,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
       hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get('Products')),
-        actions: appProvider.isAuth ? [AppBarCartTotal(isLoadingHomeData: widget.isLoadingHomeData)] : null,
+        actions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       ),
       body: Column(
         children: [

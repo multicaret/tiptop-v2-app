@@ -9,12 +9,10 @@ import 'package:tiptop_v2/utils/ui_helper.dart';
 class MarketHomeCategoriesGrid extends StatelessWidget {
   final List<Category> categories;
   final Function fetchAndSetHomeData;
-  final bool isLoadingHomeData;
 
   MarketHomeCategoriesGrid({
     @required this.categories,
     @required this.fetchAndSetHomeData,
-    @required this.isLoadingHomeData,
   });
 
   @override
@@ -39,7 +37,6 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
                         selectedParentCategoryId: category.id,
                         parents: categories,
                         refreshHomeData: fetchAndSetHomeData,
-                        isLoadingHomeData: isLoadingHomeData,
                       ),
                     ),
                   );

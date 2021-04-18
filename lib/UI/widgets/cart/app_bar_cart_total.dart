@@ -9,16 +9,13 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 
 class AppBarCartTotal extends StatelessWidget {
-  final bool isLoadingHomeData;
-
-  AppBarCartTotal({@required this.isLoadingHomeData});
 
   @override
   Widget build(BuildContext context) {
     return Consumer3<CartProvider, HomeProvider, AppProvider>(
       builder: (c, cartProvider, homeProvider, appProvider, _) {
-        bool hideMarketCart = isLoadingHomeData || cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError;
-        bool hideFoodCart = isLoadingHomeData || cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError;
+        bool hideMarketCart = homeProvider.isLoadingHomeData || cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError;
+        bool hideFoodCart = homeProvider.isLoadingHomeData || cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError;
 
         return homeProvider.channelIsMarket
             ? AnimatedCartTotal(

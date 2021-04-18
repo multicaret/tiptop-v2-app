@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -21,6 +22,8 @@ class HomeProvider with ChangeNotifier {
   bool categorySelected = false;
   int selectedParentCategoryId;
 
+  bool isLoadingHomeData = false;
+
   bool marketHomeDataRequestError = false;
   bool foodHomeDataRequestError = false;
   bool marketNoBranchFound = false;
@@ -32,13 +35,18 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'food';
+  String selectedChannel = 'grocery';
 
   bool get channelIsMarket => selectedChannel == 'grocery';
 
   void setSelectedChannel(String _channel) {
     selectedChannel = _channel;
     print('Selected channel: $selectedChannel');
+    notifyListeners();
+  }
+
+  void setIsLoadingHomeData(bool _value) {
+    isLoadingHomeData = _value;
     notifyListeners();
   }
 
@@ -53,11 +61,13 @@ class HomeProvider with ChangeNotifier {
   Future<void> fetchAndSetHomeData(
     BuildContext context,
     AppProvider appProvider,
-    CartProvider cartProvider,
-    AddressesProvider addressesProvider,
-    RestaurantsProvider restaurantsProvider,
   ) async {
     final endpoint = 'home';
+    isLoadingHomeData = true;
+    notifyListeners();
+    CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
+    AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
+    RestaurantsProvider restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
       print('Lat/Long not found!');
@@ -81,6 +91,7 @@ class HomeProvider with ChangeNotifier {
     marketNoBranchFound = false;
     foodNoRestaurantFound = false;
     try {
+      await addressesProvider.fetchSelectedAddress();
       final responseData = await appProvider.get(
         endpoint: endpoint,
         body: body,
@@ -88,6 +99,7 @@ class HomeProvider with ChangeNotifier {
       );
 
       setHomeData(cartProvider, restaurantsProvider, responseData["data"]);
+      isLoadingHomeData = false;
       notifyListeners();
     } catch (e) {
       if (selectedChannel == 'grocery') {
@@ -99,6 +111,7 @@ class HomeProvider with ChangeNotifier {
         foodHomeDataRequestError = true;
         // throw e;
       }
+      isLoadingHomeData = false;
       notifyListeners();
     }
   }

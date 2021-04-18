@@ -6,7 +6,6 @@ import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -148,7 +147,7 @@ class _CartControlsState extends State<CartControls> {
                 child: quantity == 0 && isLoadingQuantity
                     ? SpinKitThreeBounce(
                         color: AppColors.white,
-                        size:  20,
+                        size: 20,
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,

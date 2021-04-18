@@ -14,27 +14,28 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'cart_items_count_badge.dart';
 
 class CartFAB extends StatelessWidget {
-  Function getCartTabFunction(BuildContext context, bool _hideMarketCart, bool _hideFoodCart, bool _channelIsMarket) {
-    if (_channelIsMarket) {
-      return _hideMarketCart ? null : () => Navigator.of(context, rootNavigator: true).pushNamed(MarketCartPage.routeName);
-    } else {
-      return _hideFoodCart ? null : () => Navigator.of(context, rootNavigator: true).pushNamed(MarketCartPage.routeName);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer3<AppProvider, CartProvider, HomeProvider>(
       builder: (c, appProvider, cartProvider, homeProvider, _) {
-        bool hideMarketCart = cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError || !appProvider.isAuth;
-        bool hideFoodCart = cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError || !appProvider.isAuth;
+        bool hideMarketCart =
+            homeProvider.isLoadingHomeData || cartProvider.noMarketCart || homeProvider.marketHomeDataRequestError || !appProvider.isAuth;
+        bool hideFoodCart = homeProvider.isLoadingHomeData || cartProvider.noFoodCart || homeProvider.foodHomeDataRequestError || !appProvider.isAuth;
+
+        Function getCartTabFunction() {
+          if (homeProvider.channelIsMarket) {
+            return hideMarketCart ? null : () => Navigator.of(context, rootNavigator: true).pushNamed(MarketCartPage.routeName);
+          } else {
+            return hideFoodCart ? null : () => Navigator.of(context, rootNavigator: true).pushNamed(MarketCartPage.routeName);
+          }
+        }
 
         return Positioned(
           bottom: 0,
           right: 0,
           left: 0,
           child: GestureDetector(
-            onTap: getCartTabFunction(context, hideMarketCart, hideFoodCart, homeProvider.channelIsMarket),
+            onTap: getCartTabFunction(),
             child: Container(
               alignment: Alignment.center,
               child: Stack(
