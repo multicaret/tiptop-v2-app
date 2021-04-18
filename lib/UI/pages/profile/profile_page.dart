@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/faq_page.dart';
+import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/about_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/favorite_products_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
-import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -16,12 +22,6 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-
-import '../faq_page.dart';
-import 'about_page.dart';
-import 'addresses_page.dart';
-import 'blog_page.dart';
-import 'favorite_products_page.dart';
 
 class ProfilePage extends StatelessWidget {
   static const routeName = '/profile';
@@ -40,8 +40,8 @@ class ProfilePage extends StatelessWidget {
       },
       {
         'title': "Previous Orders",
-        'icon': FontAwesomeIcons.shoppingBag,
-        'route': PreviousOrdersPage.routeName,
+        'icon': _channelIsMarket ? FontAwesomeIcons.shoppingBag : FontAwesomeIcons.utensils,
+        'route': _channelIsMarket ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName,
       },
     ];
   }

@@ -12,14 +12,16 @@ class OrdersProvider with ChangeNotifier {
   SubmitOrderResponse submitOrderResponse;
   Order submittedOrder;
   PreviousOrdersResponseData previousOrdersResponseData;
-  List<Order> previousOrders = [];
+  List<Order> marketPreviousOrders = [];
+  List<Order> foodPreviousOrders = [];
 
   CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
   CouponValidationResponseData couponValidationResponseData;
 
-  List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
+  List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
+  List<FoodOrderRatingAvailableIssue> foodOrderRatingAvailableIssues = [];
 
   Future<void> createOrderAndGetCheckoutData(AppProvider appProvider) async {
     final endpoint = 'orders/create';
@@ -40,7 +42,8 @@ class OrdersProvider with ChangeNotifier {
     createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
 
     if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(title: 'Http Exception Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+      throw HttpException(
+          title: 'Http Exception Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     checkoutData = createCheckoutResponse.checkoutData;
@@ -89,15 +92,16 @@ class OrdersProvider with ChangeNotifier {
 
     submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
     if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(title: 'Http Exception Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+      throw HttpException(
+          title: 'Http Exception Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
     }
 
     submittedOrder = submitOrderResponse.submittedOrder;
     notifyListeners();
   }
 
-  Future<dynamic> fetchAndSetPreviousOrders(AppProvider appProvider) async {
-    final endpoint = 'orders';
+  Future<dynamic> fetchAndSetMarketPreviousOrders(AppProvider appProvider) async {
+    final endpoint = 'orders/grocery';
     final Map<String, String> body = {
       'chain_id': '${HomeProvider.chainId}',
     };
@@ -118,7 +122,29 @@ class OrdersProvider with ChangeNotifier {
       throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
     }
 
-    previousOrders = previousOrdersResponseData.previousOrders;
+    marketPreviousOrders = previousOrdersResponseData.previousOrders;
+    notifyListeners();
+  }
+
+  Future<dynamic> fetchAndSetFoodPreviousOrders(AppProvider appProvider) async {
+    final endpoint = 'orders/food';
+
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      withToken: true,
+    );
+    // print(responseData);
+    if (responseData == 401) {
+      return 401;
+    }
+
+    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
+
+    if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
+      throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
+    }
+
+    foodPreviousOrders = previousOrdersResponseData.previousOrders;
     notifyListeners();
   }
 
@@ -136,15 +162,21 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createOrderRating(AppProvider appProvider, int orderId) async {
+  Future<void> createOrderRating(AppProvider appProvider, int orderId, {bool isMarketOrder = true}) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: true);
     if (responseData == 401) {
       print('Unauthenticated');
       return 401;
     }
-    final availableIssuesArray = responseData["data"]["availableIssues"];
-    orderRatingAvailableIssues = List<OrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => OrderRatingAvailableIssue.fromJson(x)));
+    if (isMarketOrder) {
+      final availableIssuesArray = responseData["data"]["availableIssues"];
+      marketOrderRatingAvailableIssues =
+          List<MarketOrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => MarketOrderRatingAvailableIssue.fromJson(x)));
+    } else {
+      foodOrderRatingAvailableIssues =
+          List<FoodOrderRatingAvailableIssue>.from(responseData["data"].map((x) => FoodOrderRatingAvailableIssue.fromJson(x)));
+    }
     notifyListeners();
   }
 
@@ -158,7 +190,7 @@ class OrdersProvider with ChangeNotifier {
     if (responseData["status"] != 200) {
       throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
-    await fetchAndSetPreviousOrders(appProvider);
+    await fetchAndSetMarketPreviousOrders(appProvider);
     notifyListeners();
   }
 

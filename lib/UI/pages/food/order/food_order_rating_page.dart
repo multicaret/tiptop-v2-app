@@ -4,7 +4,6 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -16,14 +15,14 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class OrderRatingPage extends StatefulWidget {
-  static const routeName = '/order-rating';
+class FoodOrderRatingPage extends StatefulWidget {
+  static const routeName = '/food-order-rating';
 
   @override
-  _OrderRatingPageState createState() => _OrderRatingPageState();
+  _FoodOrderRatingPageState createState() => _FoodOrderRatingPageState();
 }
 
-class _OrderRatingPageState extends State<OrderRatingPage> {
+class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
   final GlobalKey<FormState> _ratingFormKey = GlobalKey();
 
   bool _isInit = true;
@@ -32,7 +31,6 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
   Order order;
   AppProvider appProvider;
   OrdersProvider ordersProvider;
-  List<OrderRatingAvailableIssue> orderRatingAvailableIssues = [];
 
   double ratingStarsGutter = 30;
   double _ratingValue;
@@ -41,8 +39,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
 
   Future<void> _createOrderRating() async {
     setState(() => _isLoadingCreateRatingRequest = true);
-    await ordersProvider.createOrderRating(appProvider, order.id);
-    orderRatingAvailableIssues = ordersProvider.orderRatingAvailableIssues;
+    await ordersProvider.createOrderRating(appProvider, order.id, isMarketOrder: false);
     setState(() => _isLoadingCreateRatingRequest = false);
   }
 
@@ -146,17 +143,7 @@ class _OrderRatingPageState extends State<OrderRatingPage> {
                               ],
                             ),
                           ),
-                          if (_ratingValue != null && _ratingValue <= 2)
-                            RadioSelectItems(
-                              items: orderRatingAvailableIssues.map((issue) => {'id': issue.id, 'title': issue.title}).toList(),
-                              selectedId: _selectedIssueId,
-                              action: (int id) {
-                                setState(() {
-                                  _selectedIssueId = id;
-                                });
-                              },
-                              isRTL: appProvider.isRTL,
-                            ),
+                          //Todo: Add food rating issues
                           Form(
                             key: _ratingFormKey,
                             child: Container(

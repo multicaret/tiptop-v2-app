@@ -220,7 +220,7 @@ class OrderRating {
   bool hasGoodFoodQualityRating;
   bool hasGoodPackagingQualityRating;
   bool hasGoodOrderAccuracyRating;
-  OrderRatingAvailableIssue ratingIssue;
+  MarketOrderRatingAvailableIssue ratingIssue;
 
   factory OrderRating.fromJson(Map<String, dynamic> json) => OrderRating(
         branchHasBeenRated: json["branchHasBeenRated"],
@@ -231,7 +231,7 @@ class OrderRating {
         hasGoodFoodQualityRating: json["hasGoodFoodQualityRating"],
         hasGoodPackagingQualityRating: json["hasGoodPackagingQualityRating"],
         hasGoodOrderAccuracyRating: json["hasGoodOrderAccuracyRating"],
-        ratingIssue: OrderRatingAvailableIssue.fromJson(json["ratingIssue"]),
+        ratingIssue: MarketOrderRatingAvailableIssue.fromJson(json["ratingIssue"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -247,8 +247,8 @@ class OrderRating {
       };
 }
 
-class OrderRatingAvailableIssue {
-  OrderRatingAvailableIssue({
+class MarketOrderRatingAvailableIssue {
+  MarketOrderRatingAvailableIssue({
     this.id,
     this.title,
   });
@@ -256,7 +256,7 @@ class OrderRatingAvailableIssue {
   int id;
   String title;
 
-  factory OrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => OrderRatingAvailableIssue(
+  factory MarketOrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => MarketOrderRatingAvailableIssue(
         id: json["id"],
         title: json["title"],
       );
@@ -264,6 +264,27 @@ class OrderRatingAvailableIssue {
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
+      };
+}
+
+
+class FoodOrderRatingAvailableIssue {
+  FoodOrderRatingAvailableIssue({
+    this.key,
+    this.label,
+  });
+
+  String key;
+  String label;
+
+  factory FoodOrderRatingAvailableIssue.fromJson(Map<String, dynamic> json) => FoodOrderRatingAvailableIssue(
+        key: json["key"],
+        label: json["label"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "key": key,
+        "label": label,
       };
 }
 

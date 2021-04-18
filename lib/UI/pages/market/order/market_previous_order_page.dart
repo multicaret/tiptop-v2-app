@@ -19,16 +19,16 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import '../order_rating_page.dart';
+import 'market_order_rating_page.dart';
 
-class PreviousOrderPage extends StatefulWidget {
-  static const routeName = '/previous-order';
+class MarketPreviousOrderPage extends StatefulWidget {
+  static const routeName = '/market-previous-order';
 
   @override
-  _PreviousOrderPageState createState() => _PreviousOrderPageState();
+  _MarketPreviousOrderPageState createState() => _MarketPreviousOrderPageState();
 }
 
-class _PreviousOrderPageState extends State<PreviousOrderPage> {
+class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
   bool _isInit = true;
   int orderId;
   List<PaymentSummaryTotal> totals = [];
@@ -65,7 +65,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, OrdersProvider>(
       builder: (c, appProvider, ordersProvider, _) {
-        Order order = ordersProvider.previousOrders.firstWhere((order) => order.id == orderId);
+        Order order = ordersProvider.marketPreviousOrders.firstWhere((order) => order.id == orderId);
         bool hasCoupon = order.couponDiscountAmount != null && order.couponDiscountAmount.raw != 0;
         totals = [
           PaymentSummaryTotal(
@@ -132,7 +132,7 @@ class _PreviousOrderPageState extends State<PreviousOrderPage> {
                         child: InkWell(
                           onTap: order.orderRating.branchHasBeenRated
                               ? null
-                              : () => Navigator.of(context, rootNavigator: true).pushNamed(OrderRatingPage.routeName, arguments: {'order': order}),
+                              : () => Navigator.of(context, rootNavigator: true).pushNamed(MarketOrderRatingPage.routeName, arguments: {'order': order}),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                             child: Row(

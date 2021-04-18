@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tiptop_v2/UI/pages/profile/previous_orders_page.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -118,18 +121,21 @@ class HomeLiveTracking extends StatelessWidget {
                   );
                 }),
                 if (totalActiveOrders > 4)
-                  TextButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(PreviousOrdersPage.routeName),
-                    style: TextButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${Translations.of(context).get('View All')} ($totalActiveOrders)'),
-                        const SizedBox(width: 5),
-                        AppIcons.iconSm(isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
-                      ],
+                  Consumer<HomeProvider>(
+                    builder: (c, homeProvider, _) => TextButton(
+                      onPressed: () => Navigator.of(context, rootNavigator: true)
+                          .pushNamed(homeProvider.channelIsMarket ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName),
+                      style: TextButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${Translations.of(context).get('View All')} ($totalActiveOrders)'),
+                          const SizedBox(width: 5),
+                          AppIcons.iconSm(isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
+                        ],
+                      ),
                     ),
                   )
               ],
