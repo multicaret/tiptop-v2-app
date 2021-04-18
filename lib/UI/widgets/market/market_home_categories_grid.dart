@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/market/products_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_products_page.dart';
 import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -33,7 +33,7 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     CupertinoPageRoute<void>(
-                      builder: (BuildContext context) => ProductsPage(
+                      builder: (BuildContext context) => MarketProductsPage(
                         selectedParentCategoryId: category.id,
                         parents: categories,
                         refreshHomeData: fetchAndSetHomeData,

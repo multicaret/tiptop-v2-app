@@ -15,13 +15,13 @@ class CartProvider with ChangeNotifier {
 
   void setMarketCart(Cart _marketCart) {
     print(
-        'setting market cart${_marketCart == null ? ' (null)' : ', market cart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
+        'setting market cart${_marketCart == null ? ' (null)' : ', Market cart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
     marketCart = _marketCart;
     clearRequestedMoreThanAvailableQuantity();
   }
 
   void setFoodCart(Cart _foodCart) {
-    print('setting cart${_foodCart == null ? ' (null)' : ', marketCart id: ${_foodCart.id}'}, products count: ${_foodCart.products.length}');
+    print('setting food cart${_foodCart == null ? ' (null)' : ', Food Cart id: ${_foodCart.id}'}, products count: ${_foodCart.products.length}');
     foodCart = _foodCart;
     clearRequestedMoreThanAvailableQuantity();
   }

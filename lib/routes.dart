@@ -34,7 +34,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'UI/pages/faq_page.dart';
 import 'UI/pages/food/food_search_page.dart';
 import 'UI/pages/food/restaurants/restaurants_page.dart';
-import 'UI/pages/market/product_page.dart';
+import 'UI/pages/market/market_product_page.dart';
 
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
@@ -43,7 +43,7 @@ final routes = <String, WidgetBuilder>{
   FaqPage.routeName: (BuildContext context) => FaqPage(),
   AddressesPage.routeName: (BuildContext context) => AddressesPage(),
   BlogPage.routeName: (BuildContext context) => BlogPage(),
-  FavoriteProductsPage.routeName: (BuildContext context) => FavoriteProductsPage(),
+  FavoriteMarketProductsPage.routeName: (BuildContext context) => FavoriteMarketProductsPage(),
   PaymentMethodsPage.routeName: (BuildContext context) => PaymentMethodsPage(),
   PreviousOrdersPage.routeName: (BuildContext context) => PreviousOrdersPage(),
   LiveChatPage.routeName: (BuildContext context) => LiveChatPage(),
@@ -62,12 +62,12 @@ final routes = <String, WidgetBuilder>{
   PreviousOrderPage.routeName: (BuildContext context) => PreviousOrderPage(),
   AddAddressPage.routeName: (BuildContext context) => AddAddressPage(),
   TrackOrderPage.routeName: (BuildContext context) => TrackOrderPage(),
-  ProductPage.routeName: (BuildContext context) => ProductPage(),
+  MarketProductPage.routeName: (BuildContext context) => MarketProductPage(),
   OrderRatingPage.routeName: (BuildContext context) => OrderRatingPage(),
   SupportPage.routeName: (BuildContext context) => SupportPage(),
   ArticlePage.routeName: (BuildContext context) => ArticlePage(),
   RestaurantPage.routeName: (BuildContext context) => RestaurantPage(),
-  FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
+  FoodMarketProductPage.routeName: (BuildContext context) => FoodMarketProductPage(),
   FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
   RestaurantsPage.routeName: (BuildContext context) => RestaurantsPage(),
   FavoriteRestaurantsPage.routeName: (BuildContext context) => FavoriteRestaurantsPage(),

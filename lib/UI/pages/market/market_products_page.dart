@@ -8,24 +8,24 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
-class ProductsPage extends StatefulWidget {
+class MarketProductsPage extends StatefulWidget {
   static const routeName = '/products';
 
   final List<Category> parents;
   final int selectedParentCategoryId;
   final Function refreshHomeData;
 
-  ProductsPage({
+  MarketProductsPage({
     @required this.parents,
     @required this.selectedParentCategoryId,
     @required this.refreshHomeData,
   });
 
   @override
-  _ProductsPageState createState() => _ProductsPageState();
+  _MarketProductsPageState createState() => _MarketProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class _MarketProductsPageState extends State<MarketProductsPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   AppProvider appProvider;
   TabController tabController;
   int currentTabIndex = 0;

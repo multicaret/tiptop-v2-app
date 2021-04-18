@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/market/product_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -19,8 +19,8 @@ class MarketGridProductItem extends StatelessWidget {
 
   const MarketGridProductItem({@required this.product});
 
-  void openProductPage(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
+  void openMarketProductPage(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
       "product": product,
       "has_controls": true,
     });
@@ -39,12 +39,12 @@ class MarketGridProductItem extends StatelessWidget {
           child: Stack(
             children: [
               GestureDetector(
-                onTap: () => openProductPage(context),
+                onTap: () => openMarketProductPage(context),
                 child: Consumer<CartProvider>(builder: (c, cartProvider, _) {
                   int productCartQuantity = cartProvider.getProductQuantity(product.id);
 
                   return GestureDetector(
-                    onTap: () => openProductPage(context),
+                    onTap: () => openMarketProductPage(context),
                     child: Container(
                       height: getColItemHeight(3, context),
                       decoration: BoxDecoration(
@@ -86,7 +86,7 @@ class MarketGridProductItem extends StatelessWidget {
         const SizedBox(height: 10),
         Expanded(
           child: GestureDetector(
-            onTap: () => openProductPage(context),
+            onTap: () => openMarketProductPage(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

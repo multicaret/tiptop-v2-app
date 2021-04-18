@@ -19,7 +19,7 @@ class FoodProductListItem extends StatelessWidget {
       color: AppColors.white,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: product);
+          Navigator.of(context, rootNavigator: true).pushNamed(FoodMarketProductPage.routeName, arguments: product);
         },
         child: Container(
           height: listItemHeight,

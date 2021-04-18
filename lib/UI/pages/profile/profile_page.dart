@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
       {
         'title': _channelIsMarket ? "Favorite Products" : "Favorite Restaurants",
         'icon': FontAwesomeIcons.solidHeart,
-        'route': _channelIsMarket ? FavoriteProductsPage.routeName : FavoriteRestaurantsPage.routeName,
+        'route': _channelIsMarket ? FavoriteMarketProductsPage.routeName : FavoriteRestaurantsPage.routeName,
       },
       {
         'title': "Previous Orders",

@@ -19,14 +19,14 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import '../../widgets/UI/app_carousel.dart';
 import '../../widgets/UI/app_scaffold.dart';
 
-class ProductPage extends StatefulWidget {
+class MarketProductPage extends StatefulWidget {
   static const routeName = '/product';
 
   @override
-  _ProductPageState createState() => _ProductPageState();
+  _MarketProductPageState createState() => _MarketProductPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _MarketProductPageState extends State<MarketProductPage> {
   @override
   void setState(fn) {
     if (mounted) {

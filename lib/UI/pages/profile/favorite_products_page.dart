@@ -8,14 +8,14 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 
-class FavoriteProductsPage extends StatefulWidget {
+class FavoriteMarketProductsPage extends StatefulWidget {
   static const routeName = '/favorites';
 
   @override
-  _FavoriteProductsPageState createState() => _FavoriteProductsPageState();
+  _FavoriteMarketProductsPageState createState() => _FavoriteMarketProductsPageState();
 }
 
-class _FavoriteProductsPageState extends State<FavoriteProductsPage> {
+class _FavoriteMarketProductsPageState extends State<FavoriteMarketProductsPage> {
   bool _isInit = true;
   bool _isLoadingFavoriteProducts = false;
 

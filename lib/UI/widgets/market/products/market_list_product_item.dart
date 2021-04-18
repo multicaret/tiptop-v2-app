@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/market/product_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -22,8 +22,8 @@ class MarketListProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void openProductPage() {
-      Navigator.of(context, rootNavigator: true).pushNamed(ProductPage.routeName, arguments: {
+    void openMarketProductPage() {
+      Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
         "product": product,
         "has_controls": hasControls,
       });
@@ -42,7 +42,7 @@ class MarketListProductItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: openProductPage,
+            onTap: openMarketProductPage,
             child: Container(
               width: 80,
               height: 80,
@@ -57,7 +57,7 @@ class MarketListProductItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: openProductPage,
+              onTap: openMarketProductPage,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
