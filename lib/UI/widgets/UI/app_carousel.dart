@@ -77,7 +77,7 @@ class _AppCarouselState extends State<AppCarousel> {
               height: widget.height,
               autoPlayInterval: widget.autoPlayInterval,
               autoPlayAnimationDuration: widget.autoplayDuration,
-              onPageChanged: (index, reason) => setState(() => _currentSlide = index),
+              // onPageChanged: (index, reason) => setState(() => _currentSlide = index),
               enableInfiniteScroll: widget.infinite,
             ),
           ),

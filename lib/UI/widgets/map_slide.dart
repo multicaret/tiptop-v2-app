@@ -28,7 +28,7 @@ class MapSlide extends StatefulWidget {
   _MapSlideState createState() => _MapSlideState();
 }
 
-class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin {
+class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<MapSlide> {
   bool _isInit = true;
   AppProvider appProvider;
   double centerLat;
