@@ -46,13 +46,13 @@ class RestaurantsProvider with ChangeNotifier {
         'title': Translations.of(context).get('All'),
       },
       {
-        'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.TIPTOP),
+        'id': restaurantDeliveryTypeValues.reverse[RestaurantDeliveryType.TIPTOP],
         'title': Translations.of(context).get('TipTop Delivery'),
         'type': RestaurantDeliveryType.TIPTOP,
         'icon': CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
       },
       {
-        'id': getRestaurantDeliveryTypeString(RestaurantDeliveryType.RESTAURANT),
+        'id': restaurantDeliveryTypeValues.reverse[RestaurantDeliveryType.RESTAURANT],
         'title': Translations.of(context).get('Restaurant Delivery'),
         'type': RestaurantDeliveryType.RESTAURANT,
         'icon': CircleIcon(iconText: 'R'),
@@ -136,11 +136,11 @@ class RestaurantsProvider with ChangeNotifier {
 
     final endpoint = 'restaurants/$restaurantId/interact';
     final body = {
-      "action": getInteractionValue(interaction),
+      "action": interactionValues.reverse[interaction],
     };
     print(body);
     print('productId $restaurantId');
-    print('action: ${getInteractionValue(interaction)}');
+    print('action: ${interactionValues.reverse[interaction]}');
     try {
       final responseData = await appProvider.post(
         endpoint: endpoint,
@@ -197,7 +197,7 @@ class RestaurantsProvider with ChangeNotifier {
     notifyListeners();
     final endpoint = 'restaurants';
     Map<String, dynamic> body = filterData;
-    body['sort'] = getRestaurantSortTypeString(sortType);
+    body['sort'] = restaurantSortTypeValues.reverse[sortType];
     if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
       body.addAll(sortData);
     }

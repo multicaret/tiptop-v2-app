@@ -4,7 +4,6 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
-import 'package:tiptop_v2/utils/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
   CategoryParentsData categoryParentsData;
@@ -52,11 +51,11 @@ class ProductsProvider with ChangeNotifier {
   Future<dynamic> interactWithProduct(AppProvider appProvider, int productId, Interaction interaction) async {
     final endpoint = 'products/$productId/interact';
     final body = {
-      "action": getInteractionValue(interaction),
+      "action": interactionValues.reverse[interaction],
     };
     print(body);
     print('productId $productId');
-    print('action: ${getInteractionValue(interaction)}');
+    print('action: ${interactionValues.reverse[interaction]}');
     final responseData = await appProvider.post(
       endpoint: endpoint,
       body: body,

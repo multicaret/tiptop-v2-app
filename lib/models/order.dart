@@ -186,7 +186,7 @@ class Order {
         deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
-        status: json["status"] == null ? null : getOrderStatus(json["status"]),
+        status: json["status"] == null ? null : orderStatusValues.map[json["status"]],
         cart: Cart.fromJson(json["cart"]),
         paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
       );

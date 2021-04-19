@@ -44,54 +44,25 @@ enum CartAction { ADD, REMOVE }
 
 enum Interaction { FAVORITE, UN_FAVORITE }
 
-String getInteractionValue(Interaction _interaction) {
-  switch (_interaction) {
-    case Interaction.FAVORITE:
-      return "favorite";
-      break;
-    case Interaction.UN_FAVORITE:
-      return "unfavorite";
-      break;
-    default:
-      return "";
-      break;
-  }
-}
+final interactionValues = EnumValues({
+  "favorite": Interaction.FAVORITE,
+  "unfavorite": Interaction.UN_FAVORITE,
+});
 
 enum RestaurantDeliveryType { TIPTOP, RESTAURANT }
 
-String getRestaurantDeliveryTypeString(RestaurantDeliveryType _type) {
-  switch (_type) {
-    case RestaurantDeliveryType.TIPTOP:
-      return "tiptop";
-      break;
-    case RestaurantDeliveryType.RESTAURANT:
-      return "restaurant";
-      break;
-    default:
-      return "";
-      break;
-  }
-}
+final restaurantDeliveryTypeValues = EnumValues({
+  "tiptop": RestaurantDeliveryType.TIPTOP,
+  "restaurant": RestaurantDeliveryType.RESTAURANT,
+});
 
 enum RestaurantSortType { SMART, RATING, DISTANCE }
 
-String getRestaurantSortTypeString(RestaurantSortType _type) {
-  switch (_type) {
-    case RestaurantSortType.SMART:
-      return "smart_sorting";
-      break;
-    case RestaurantSortType.RATING:
-      return "restaurants_rating";
-      break;
-    case RestaurantSortType.DISTANCE:
-      return "by_distance";
-      break;
-    default:
-      return "";
-      break;
-  }
-}
+final restaurantSortTypeValues = EnumValues({
+  "smart_sorting": RestaurantSortType.SMART,
+  "restaurants_rating": RestaurantSortType.RATING,
+  "by_distance": RestaurantSortType.DISTANCE,
+});
 
 //Order Statuses
 
@@ -117,37 +88,14 @@ enum OrderStatus {
   SCHEDULED,
 }
 
-OrderStatus getOrderStatus(int value) {
-  switch (value) {
-    case 0:
-      return OrderStatus.CANCELLED;
-      break;
-    case 1:
-      return OrderStatus.DRAFT;
-      break;
-    case 2:
-      return OrderStatus.NEW;
-      break;
-    case 10:
-      return OrderStatus.PREPARING;
-      break;
-    case 12:
-      return OrderStatus.WAITING_COURIER;
-      break;
-    case 16:
-      return OrderStatus.ON_THE_WAY;
-      break;
-    case 18:
-      return OrderStatus.AT_THE_ADDRESS;
-      break;
-    case 20:
-      return OrderStatus.DELIVERED;
-      break;
-    case 25:
-      return OrderStatus.SCHEDULED;
-      break;
-    default:
-      return OrderStatus.DRAFT;
-      break;
-  }
-}
+final orderStatusValues = EnumValues({
+  "0": OrderStatus.CANCELLED,
+  "1": OrderStatus.DRAFT,
+  "2": OrderStatus.NEW,
+  "10": OrderStatus.PREPARING,
+  "12": OrderStatus.WAITING_COURIER,
+  "16": OrderStatus.ON_THE_WAY,
+  "18": OrderStatus.AT_THE_ADDRESS,
+  "20": OrderStatus.DELIVERED,
+  "25": OrderStatus.SCHEDULED,
+});

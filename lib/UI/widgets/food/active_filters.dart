@@ -52,7 +52,7 @@ class ActiveFilters extends StatelessWidget {
                 }),
               ActiveFilterItem(
                 closeAction: restaurantsProvider.sortType == RestaurantSortType.SMART ? null : () => removeFilterItem(restaurantsProvider, 'sort'),
-                title: Translations.of(context).get('Sort by: ${getRestaurantSortTypeString(restaurantsProvider.sortType)}'),
+                title: Translations.of(context).get('Sort by: ${restaurantSortTypeValues.reverse[restaurantsProvider.sortType]}'),
               ),
             ],
           ),
