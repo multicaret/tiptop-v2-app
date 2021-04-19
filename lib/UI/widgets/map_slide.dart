@@ -29,6 +29,13 @@ class MapSlide extends StatefulWidget {
 }
 
 class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<MapSlide> {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   bool _isInit = true;
   AppProvider appProvider;
   double centerLat;
