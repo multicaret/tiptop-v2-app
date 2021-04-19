@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -19,10 +21,12 @@ class AddressIconDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
     return Container(
       width: 100,
       height: 72,
-      margin: EdgeInsets.only(right: 10, bottom: 20),
+      margin: EdgeInsets.only(right: appProvider.isRTL ? 0 : 10, left: appProvider.isRTL ? 10 : 0, bottom: 20),
       padding: const EdgeInsets.only(left: screenHorizontalPadding, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
