@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'category.dart';
+import 'enums.dart';
 import 'models.dart';
 
 class CategoryParentsData {
@@ -46,6 +47,7 @@ class Product {
     this.depth,
     this.weight,
     this.isFavorited,
+    this.options,
     this.unit,
   });
 
@@ -73,6 +75,7 @@ class Product {
   double depth;
   double weight;
   bool isFavorited;
+  List<ProductOption> options;
   Unit unit;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -100,6 +103,7 @@ class Product {
         depth: json["depth"] == null ? null : json["depth"].toDouble(),
         weight: json["weight"] == null ? null : json["weight"].toDouble(),
         isFavorited: json["isFavorited"],
+        options: json["options"] == null ? <ProductOption>[] : List<ProductOption>.from(json["options"].map((x) => ProductOption.fromJson(x))),
         unit: json["unit"] == null ? null : Unit.fromJson(json["unit"]),
       );
 
@@ -130,6 +134,68 @@ class Product {
         "isFavorited": isFavorited,
         "unit": unit.toJson(),
       };
+}
+
+class ProductOption {
+  ProductOption({
+    this.id,
+    this.isBasedOnIngredients,
+    this.isRequired,
+    this.type,
+    this.title,
+    this.maxNumberOfSelection,
+    this.minNumberOfSelection,
+    this.inputType,
+    this.selectionType,
+    this.selections,
+    this.ingredients,
+  });
+
+  int id;
+  bool isBasedOnIngredients;
+  bool isRequired;
+  ProductOptionType type;
+  String title;
+  int maxNumberOfSelection;
+  int minNumberOfSelection;
+  ProductOptionInputType inputType;
+  ProductOptionSelectionType selectionType;
+  List<ProductOptionSelection> selections;
+  List<ProductOptionSelection> ingredients;
+
+  factory ProductOption.fromJson(Map<String, dynamic> json) => ProductOption(
+        id: json["id"],
+        isBasedOnIngredients: json["isBasedOnIngredients"],
+        isRequired: json["isRequired"],
+        type: productOptionTypeValues.map[json["type"]],
+        title: json["title"],
+        maxNumberOfSelection: json["maxNumberOfSelection"],
+        minNumberOfSelection: json["minNumberOfSelection"],
+        inputType: productOptionInputTypeValues.map[json["inputType"]],
+        selectionType: productOptionSelectionTypeValues.map[json["selectionType"]],
+        selections: json["selections"] == null
+            ? <ProductOptionSelection>[]
+            : List<ProductOptionSelection>.from(json["selections"].map((x) => ProductOptionSelection.fromJson(x))),
+        ingredients: json["ingredients"] == null ? <ProductOptionSelection>[] : List<ProductOptionSelection>.from(json["selections"].map((x) => ProductOptionSelection.fromJson(x))),
+      );
+}
+
+class ProductOptionSelection {
+  ProductOptionSelection({
+    this.id,
+    this.title,
+    this.price,
+  });
+
+  int id;
+  String title;
+  DoubleRawStringFormatted price;
+
+  factory ProductOptionSelection.fromJson(Map<String, dynamic> json) => ProductOptionSelection(
+        id: json["id"],
+        title: json["title"],
+        price: DoubleRawStringFormatted.fromJson(json["price"]),
+      );
 }
 
 class Unit {

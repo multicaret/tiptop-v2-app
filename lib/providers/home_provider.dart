@@ -35,7 +35,7 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'grocery';
+  String selectedChannel = 'food';
 
   bool get channelIsMarket => selectedChannel == 'grocery';
 

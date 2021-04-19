@@ -99,3 +99,33 @@ final orderStatusValues = EnumValues({
   "20": OrderStatus.DELIVERED,
   "25": OrderStatus.SCHEDULED,
 });
+
+enum ProductOptionType {
+  EXCLUDING,
+  INCLUDING,
+}
+
+final productOptionTypeValues = EnumValues({
+  "excluding": ProductOptionType.EXCLUDING,
+  "including": ProductOptionType.INCLUDING,
+});
+
+enum ProductOptionInputType {
+  PILL,
+  RADIO,
+}
+
+final productOptionInputTypeValues = EnumValues({
+  "pill": ProductOptionInputType.PILL,
+  "radio": ProductOptionInputType.RADIO,
+});
+
+enum ProductOptionSelectionType {
+  SINGLE,
+  MULTIPLE,
+}
+
+final productOptionSelectionTypeValues = EnumValues({
+  "single": ProductOptionSelectionType.SINGLE,
+  "multiple": ProductOptionSelectionType.MULTIPLE,
+});

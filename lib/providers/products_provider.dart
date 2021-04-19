@@ -13,6 +13,36 @@ class ProductsProvider with ChangeNotifier {
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
   Product product;
+  List<Map<String, dynamic>> productsWithOptions = [];
+
+  Map<String, dynamic> getProductWithOptions(int productId) {
+    return productsWithOptions.firstWhere((productWithOptions) => productWithOptions["product_id"] == productId, orElse: () => null);
+  }
+
+  void setProductSelectedOption(int productId, Map<String, dynamic> optionData) {
+    productsWithOptions = productsWithOptions.map((productWithOptions) {
+      if (productWithOptions["product_id"] == productId) {
+        List<Map<String, dynamic>> productSelectedOptions = productWithOptions["selected_options"] as List<Map<String, dynamic>>;
+        List<Map<String, dynamic>> newSelectedOptions;
+        if (productSelectedOptions.length == 0) {
+          newSelectedOptions = [optionData];
+        } else {
+          newSelectedOptions = productSelectedOptions
+              .map((Map<String, dynamic> selectedOption) => selectedOption["id"] == optionData["id"] ? optionData : selectedOption)
+              .toList();
+        }
+        return {
+          'product_id': productId,
+          'selected_options': newSelectedOptions,
+        };
+      } else {
+        return productWithOptions;
+      }
+    }).toList();
+    print('productsWithOptions array:');
+    print(productsWithOptions);
+    notifyListeners();
+  }
 
   Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {
     final endpoint = 'categories/$selectedParentCategoryId/products';
@@ -45,6 +75,29 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
+    if (getProductWithOptions(product.id) == null) {
+      List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
+        List<ProductOptionSelection> ingredientOrSelection = option.isBasedOnIngredients ? option.ingredients : option.selections;
+        List<int> selectedIds = ingredientOrSelection.map((ingredientOrSelection) => ingredientOrSelection.id).toList();
+        return {
+          'id': option.id,
+          'selected_ids': option.isRequired
+              ? option.selectionType == ProductOptionSelectionType.SINGLE
+                  ? [selectedIds[0]]
+                  : selectedIds
+              : <int>[],
+        };
+      }).toList();
+      productsWithOptions = [
+        ...productsWithOptions,
+        {
+          'product_id': product.id,
+          'selected_options': selectedOptions,
+        },
+      ];
+    }
+    print('productsWithOptions on fetching product:');
+    print(productsWithOptions);
     notifyListeners();
   }
 

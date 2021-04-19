@@ -19,7 +19,7 @@ class FoodProductListItem extends StatelessWidget {
       color: AppColors.white,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true).pushNamed(FoodMarketProductPage.routeName, arguments: product);
+          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {'product_id': product.id});
         },
         child: Container(
           height: listItemHeight,
@@ -37,7 +37,7 @@ class FoodProductListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(product.title),
+                    Text(product.title, style: AppTextStyles.bodyBold),
                     const SizedBox(height: 10),
                     if (product.excerpt != null && product.excerpt.formatted != null)
                       Expanded(

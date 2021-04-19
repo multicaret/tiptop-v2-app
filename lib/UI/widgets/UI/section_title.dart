@@ -7,8 +7,9 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class SectionTitle extends StatelessWidget {
   final String text;
   final String suffix;
+  final bool translate;
 
-  SectionTitle(this.text, {this.suffix});
+  SectionTitle(this.text, {this.suffix, this.translate = true});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 30, bottom: 5),
       color: AppColors.bg,
       child: Text(
-        '${Translations.of(context).get(text)}${suffix ?? ''}',
+        '${translate ? Translations.of(context).get(text) : text}${suffix ?? ''}',
         style: AppTextStyles.body50,
       ),
     );

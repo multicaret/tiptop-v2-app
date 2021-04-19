@@ -222,10 +222,11 @@ class _HomePageState extends State<HomePage> {
                 activeOrders: homeProvider.foodHomeData.activeOrders,
                 totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
               ),
-            FoodHomeContent(
-              foodHomeData: homeProvider.foodHomeData,
-              isRTL: appProvider.isRTL,
-            ),
+            if (homeProvider.foodHomeData != null)
+              FoodHomeContent(
+                foodHomeData: homeProvider.foodHomeData,
+                isRTL: appProvider.isRTL,
+              ),
           ],
         );
       }

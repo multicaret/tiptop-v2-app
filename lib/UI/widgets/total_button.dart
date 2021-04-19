@@ -16,8 +16,8 @@ class TotalButton extends StatelessWidget {
   TotalButton({
     @required this.isRTL,
     this.onTap,
-    this.total,
-    this.child,
+    @required this.total,
+    @required this.child,
     this.isLoading = false,
   });
 
