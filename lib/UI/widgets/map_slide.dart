@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -15,8 +17,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class MapSlide extends StatefulWidget {
   final Address selectedAddress;
+  final BranchDelivery delivery;
 
-  MapSlide({this.selectedAddress});
+  MapSlide({
+    @required this.selectedAddress,
+    @required this.delivery,
+  });
 
   @override
   _MapSlideState createState() => _MapSlideState();
@@ -24,7 +30,6 @@ class MapSlide extends StatefulWidget {
 
 class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin {
   bool _isInit = true;
-  HomeProvider homeProvider;
   AppProvider appProvider;
   double centerLat;
   double centerLong;
@@ -37,7 +42,6 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       centerLat = (HomeProvider.marketBranchLat + AppProvider.latitude) / 2;
       centerLong = (HomeProvider.marketBranchLong + AppProvider.longitude) / 2;
@@ -93,7 +97,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                             Text('Minimum ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             Expanded(
                               child: Html(
-                                data: """${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}""",
+                                data: """${widget.delivery.minimumOrder.formatted}""",
                                 style: {"body": AppTextStyles.htmlXsBold},
                               ),
                             ),
@@ -104,14 +108,20 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin 
                       Expanded(
                         flex: 1,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
-                            Expanded(
-                              child: Html(
-                                data: """${homeProvider.marketHomeData.branch.tiptopDelivery.fixedDeliveryFee.formatted}""",
-                                style: {"body": AppTextStyles.htmlXsBold},
-                              ),
-                            ),
+                            widget.delivery.fixedDeliveryFee.raw == 0
+                                ? Text(
+                                    Translations.of(context).get('Free'),
+                                    style: AppTextStyles.subtitleXsBold,
+                                  )
+                                : Expanded(
+                                    child: Html(
+                                      data: """${widget.delivery.fixedDeliveryFee.formatted}""",
+                                      style: {"body": AppTextStyles.htmlXsBold},
+                                    ),
+                                  ),
                           ],
                         ),
                       ),

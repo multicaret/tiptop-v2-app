@@ -12,9 +12,11 @@ import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
+import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   AppProvider appProvider;
   HomeProvider homeProvider;
+  AddressesProvider addressesProvider;
 
   HomeData marketHomeData;
   HomeData foodHomeData;
@@ -98,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      addressesProvider = Provider.of<AddressesProvider>(context);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetchAndSetHomeData();
       });
@@ -133,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    hideMarketContent || homeProvider.isLoadingHomeData
+                    homeProvider.isLoadingHomeData || hideMarketContent
                         ? Container(
                             height: homeSliderHeight,
                             color: AppColors.bg,
@@ -142,10 +146,16 @@ class _HomePageState extends State<HomePage> {
                             images: homeProvider.channelIsMarket
                                 ? marketSlides.map((slide) => slide.image).toList()
                                 : foodSlides.map((slide) => slide.image).toList(),
-                            infinite: homeProvider.channelIsMarket ? marketSlides.length > 1 : foodSlides.length > 1,
-                            autoPlay: homeProvider.channelIsMarket ? marketSlides.length > 1 : foodSlides.length > 1,
+                            infinite: homeProvider.channelIsMarket ? marketSlides.length > 0 : foodSlides.length > 1,
+                            autoPlay: homeProvider.channelIsMarket ? marketSlides.length > 0 : foodSlides.length > 1,
                             autoplayDuration: const Duration(milliseconds: 300),
                             autoPlayInterval: const Duration(seconds: 7),
+                            mapWidget: homeProvider.channelIsMarket && homeProvider.marketHomeData != null
+                                ? MapSlide(
+                                    selectedAddress: addressesProvider.selectedAddress,
+                                    delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
+                                  )
+                                : null,
                           ),
                     ChannelsButtons(
                       currentView: homeProvider.selectedChannel,
