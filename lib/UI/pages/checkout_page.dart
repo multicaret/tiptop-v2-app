@@ -13,8 +13,8 @@ import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
-import 'package:tiptop_v2/UI/widgets/order_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
+import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -240,11 +240,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     valueListenable: paymentSummaryTotalsNotifier,
                     builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
                       PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
-                      return OrderButton(
-                        cartProvider: cartProvider,
+                      return TotalButton(
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
+                        isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                         isRTL: appProvider.isRTL,
-                        buttonText: 'Order Now',
+                        child: Text(Translations.of(context).get('Order Now')),
                         onTap: _submitOrder,
                       );
                     },

@@ -5,7 +5,7 @@ import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_list_product_item.dart';
-import 'package:tiptop_v2/UI/widgets/order_button.dart';
+import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -69,11 +69,11 @@ class MarketCartPage extends StatelessWidget {
                       .toList(),
                 ),
               ),
-              OrderButton(
-                cartProvider: cartProvider,
+              TotalButton(
                 total: cartProvider.marketCart.total.formatted,
+                isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                 isRTL: appProvider.isRTL,
-                buttonText: 'Continue',
+                child: Text(Translations.of(context).get('Continue')),
                 onTap: () {
                   if (cartProvider.marketCart == null ||
                       cartProvider.marketCart.total == null ||

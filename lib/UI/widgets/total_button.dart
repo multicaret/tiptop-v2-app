@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:tiptop_v2/UI/pages/checkout_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class OrderButton extends StatelessWidget {
-  final CartProvider cartProvider;
+class TotalButton extends StatelessWidget {
   final bool isRTL;
   final Function onTap;
   final String total;
-  final String buttonText;
+  final Widget child;
+  final bool isLoading;
 
-  OrderButton({
-    @required this.cartProvider,
+  TotalButton({
     @required this.isRTL,
     this.onTap,
     this.total,
-    this.buttonText,
+    this.child,
+    this.isLoading = false,
   });
 
   @override
@@ -40,7 +39,7 @@ class OrderButton extends StatelessWidget {
             Expanded(
               child: Container(
                 height: buttonHeightSm,
-                child: Text(Translations.of(context).get(buttonText)),
+                child: child,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: AppColors.secondary,
@@ -72,7 +71,7 @@ class OrderButton extends StatelessWidget {
                   const BoxShadow(color: AppColors.shadowDark, blurRadius: 6),
                 ],
               ),
-              child: cartProvider.isLoadingAdjustCartQuantityRequest
+              child: isLoading
                   ? SpinKitThreeBounce(
                       color: AppColors.primary,
                       size: 20,
