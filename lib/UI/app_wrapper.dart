@@ -6,11 +6,11 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/food_search_page.dart';
 import 'package:tiptop_v2/UI/pages/home_page.dart';
-import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_search_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -40,13 +40,29 @@ class _AppWrapperState extends State<AppWrapper> {
     _cupertinoTabController.index = index;
   }
 
-  List<BottomNavigationBarItem> _getCupertinoTabBarItems(HomeProvider homeProvider) {
+  List<BottomNavigationBarItem> _getCupertinoTabBarItems(HomeProvider homeProvider, bool isRTL) {
     List<Map<String, dynamic>> _cupertinoTabsList = _getCupertinoTabsList(homeProvider);
+    double tabWidth = MediaQuery.of(context).size.width / _cupertinoTabsList.length;
+    print('_cupertinoTabsList.length % 2');
+    print(_cupertinoTabsList.length % 2);
     return List.generate(_cupertinoTabsList.length, (i) {
+      int tabWithEndPaddingIndex = (_cupertinoTabsList.length / 2).ceil() - 1;
+      int tabWithStartPaddingIndex = (_cupertinoTabsList.length / 2).ceil() + 1 - 1;
       return BottomNavigationBarItem(
         backgroundColor: AppColors.primary,
-        icon: Icon(
-          _cupertinoTabsList[i]['icon'],
+        icon: Padding(
+          padding: i == tabWithEndPaddingIndex
+              ? isRTL
+                  ? EdgeInsets.only(left: tabWidth / 2)
+                  : EdgeInsets.only(right: tabWidth / 2)
+              : i == tabWithStartPaddingIndex
+                  ? isRTL
+                      ? EdgeInsets.only(right: tabWidth / 2)
+                      : EdgeInsets.only(left: tabWidth / 2)
+                  : EdgeInsets.all(0),
+          child: Icon(
+            _cupertinoTabsList[i]['icon'],
+          ),
         ),
       );
     });
@@ -65,11 +81,6 @@ class _AppWrapperState extends State<AppWrapper> {
         'icon': LineAwesomeIcons.search,
       },
       {
-        'title': 'Cart',
-        'page': AppScaffold(body: Container()),
-        'icon': LineAwesomeIcons.shopping_cart,
-      },
-      {
         'title': 'Support',
         'page': SupportPage(),
         'icon': LineAwesomeIcons.headset,
@@ -85,9 +96,10 @@ class _AppWrapperState extends State<AppWrapper> {
   @override
   Widget build(BuildContext context) {
     // print('Rebuilt app wrapper');
-    return Consumer<HomeProvider>(
+
+    return Consumer2<HomeProvider, AppProvider>(
       child: CartFAB(),
-      builder: (c, homeProvider, child) => WillPopScope(
+      builder: (c, homeProvider, appProvider, child) => WillPopScope(
         onWillPop: () async {
           return Platform.isAndroid ? !await currentNavigatorKey(homeProvider).currentState.maybePop() : null;
         },
@@ -101,7 +113,7 @@ class _AppWrapperState extends State<AppWrapper> {
                 backgroundColor: AppColors.primary,
                 activeColor: AppColors.secondary,
                 inactiveColor: AppColors.white.withOpacity(0.5),
-                items: _getCupertinoTabBarItems(homeProvider),
+                items: _getCupertinoTabBarItems(homeProvider, appProvider.isRTL),
               ),
               tabBuilder: (BuildContext context, int index) {
                 return CupertinoTabView(
