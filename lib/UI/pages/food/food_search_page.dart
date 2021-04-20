@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
-import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/search.dart';
@@ -21,6 +21,8 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import 'food_product_page.dart';
 
 class FoodSearchPage extends StatefulWidget {
   static const routeName = '/food-search';
@@ -123,7 +125,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                             isRTL: appProvider.isRTL,
                             onCategoryTap: (String categoryTitle) {
                               searchFieldController.text = categoryTitle;
-                              searchFieldFocusNode.requestFocus();
                               submitFoodSearch(categoryTitle);
                             },
                           ),
@@ -158,40 +159,49 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                         itemCount: _searchedRestaurants[i].searchProducts.length,
                                         itemBuilder: (c, j) {
                                           var product = _searchedRestaurants[i].searchProducts[j];
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                            decoration: BoxDecoration(
-                                              border: Border(bottom: BorderSide(color: AppColors.primary50)),
-                                            ),
+                                          return Material(
+                                            color: AppColors.white,
                                             child: InkWell(
-                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                                                MarketProductPage.routeName,
-                                                arguments: {
-                                                  "product": product,
-                                                  "has_controls": true,
-                                                },
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
+                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName),
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
+                                                decoration: BoxDecoration(
+                                                  border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 2,
                                                       child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                    children: [
-                                                      Text(product.title),
-                                                      Text(
-                                                        product.excerpt.raw,
-                                                        style: AppTextStyles.subtitle50,
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
+                                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Text(product.title),
+                                                          if (product.excerpt.raw != null && product.excerpt.raw.isNotEmpty)
+                                                            Text(
+                                                              product.excerpt.raw,
+                                                              style: AppTextStyles.subtitle50,
+                                                              maxLines: 2,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  )),
-                                                  Text(
-                                                    product.price.formatted,
-                                                    style: AppTextStyles.subtitleSecondary,
-                                                  ),
-                                                ],
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: FormattedPrices(
+                                                        price: product.price,
+                                                        discountedPrice: product.discountedPrice,
+                                                        isEndAligned: true,
+                                                      ),
+                                                    ),
+                                                    // Text(
+                                                    //   product.price.formatted,
+                                                    //   style: AppTextStyles.subtitleSecondary,
+                                                    // ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
@@ -221,7 +231,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
         child: InkWell(
           onTap: () {
             searchFieldController.text = _terms[i].term;
-            searchFieldFocusNode.requestFocus();
             submitFoodSearch(_terms[i].term);
           },
           child: Container(

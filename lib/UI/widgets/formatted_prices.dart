@@ -7,11 +7,13 @@ class FormattedPrices extends StatelessWidget {
   final DoubleRawIntFormatted price;
   final DoubleRawIntFormatted discountedPrice;
   final bool isLarge;
+  final bool isEndAligned;
 
   FormattedPrices({
     this.price,
     this.discountedPrice,
     this.isLarge = false,
+    this.isEndAligned = false,
   });
 
   @override
@@ -25,6 +27,7 @@ class FormattedPrices extends StatelessWidget {
       hasDiscountedPrice ? 2 : 1,
       (i) => FormattedPrice(
         isLarge: isLarge,
+        isEndAligned: isEndAligned,
         price: hasDiscountedPrice && i == 0 ? discountedPrice.formatted : price.formatted,
         isDiscounted: i != 0 && hasDiscountedPrice,
       ),

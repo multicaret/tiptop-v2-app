@@ -10,11 +10,13 @@ class FormattedPrice extends StatelessWidget {
   final String price;
   final bool isDiscounted;
   final bool isLarge;
+  final bool isEndAligned;
 
   FormattedPrice({
     @required this.price,
     this.isDiscounted = false,
     this.isLarge = false,
+    this.isEndAligned = false,
   });
 
   @override
@@ -23,18 +25,26 @@ class FormattedPrice extends StatelessWidget {
 
     return Transform.translate(
       //Todo: Find a better way to remove the extra padding
-      offset: Offset(isLarge ? 0 : appProvider.isRTL ? 8 : -8, 0),
+      offset: isLarge
+          ? Offset(0, 0)
+          : isEndAligned
+              ? Offset(appProvider.isRTL ? -8 : 8, 0)
+              : Offset(appProvider.isRTL ? 8 : -8, 0),
       child: Html(
         shrinkWrap: !isLarge,
         data: """$price""",
         style: {
           "html": Style(
-            textAlign: isLarge ? TextAlign.center : TextAlign.start,
+            textAlign: isLarge
+                ? TextAlign.center
+                : isEndAligned
+                    ? TextAlign.end
+                    : TextAlign.start,
           ),
           "body": Style.fromTextStyle(
             AppTextStyles.dynamicValues(
               color: isDiscounted ? AppColors.text50 : AppColors.secondary,
-              height: isLarge ? 1 : 0.3,
+              height: isLarge || isEndAligned ? 1 : 0.3,
               fontSize: isDiscounted
                   ? isLarge
                       ? 18
