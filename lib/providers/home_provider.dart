@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
@@ -15,6 +16,8 @@ class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
   List<Category> marketCategories = [];
   HomeData foodHomeData;
+  Currency marketCurrency;
+  Currency foodCurrency;
 
   static int branchId;
   static int chainId;
@@ -120,6 +123,7 @@ class HomeProvider with ChangeNotifier {
     if (selectedChannel == 'grocery') {
       print('Setting market home data...');
       marketHomeData = HomeData.fromJson(data);
+      marketCurrency = marketHomeData.currentCurrency;
       if (marketHomeData.branch == null) {
         marketNoBranchFound = true;
       } else {
@@ -152,6 +156,7 @@ class HomeProvider with ChangeNotifier {
     } else {
       print('Setting food home data...');
       foodHomeData = HomeData.fromJson(data);
+      foodCurrency = foodHomeData.currentCurrency;
       if (foodHomeData.restaurants.length == 0) {
         foodNoRestaurantFound = true;
       } else {

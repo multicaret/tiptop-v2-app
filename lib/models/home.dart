@@ -16,6 +16,7 @@ class HomeData {
     this.distance,
     this.categories,
     this.restaurants,
+    this.currentCurrency,
   });
 
   List<Slide> slides;
@@ -27,6 +28,7 @@ class HomeData {
   double distance;
   List<Category> categories;
   List<Branch> restaurants;
+  Currency currentCurrency;
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
         slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
@@ -38,6 +40,7 @@ class HomeData {
         distance: json["distance"] == null ? 0.0 : json["distance"].toDouble(),
         categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
         restaurants: json["restaurants"] == null ? <Branch>[] : List<Branch>.from(json["restaurants"].map((x) => Branch.fromJson(x))),
+        currentCurrency: Currency.fromJson(json["currentCurrency"]),
       );
 }
 
