@@ -5,6 +5,7 @@ class AppColors {
   static const Color primary50 = const Color(0xffC9CBD3);
   static const Color primaryLight = const Color(0xFF45547e);
   static const Color border = const Color(0xffC9CBD3);
+  static const Color danger = const Color(0xffe85b5b);
   static const Color disabled = const Color(0xff999da9);
   static const Color secondaryLight = const Color(0xffFEC63B);
   static const Color secondary = const Color(0xffffb200);
