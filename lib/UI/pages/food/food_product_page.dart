@@ -6,14 +6,17 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
+import 'package:tiptop_v2/UI/widgets/food/product_option_pill.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -37,6 +40,8 @@ class _FoodProductPageState extends State<FoodProductPage> {
   bool _isInit = true;
   bool _isLoadingProduct = false;
 
+  final productPriceNotifier = ValueNotifier<double>(0.0);
+
   ProductsProvider productsProvider;
   AppProvider appProvider;
   int productId;
@@ -52,13 +57,19 @@ class _FoodProductPageState extends State<FoodProductPage> {
     await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
     selectedProductOptions = productsProvider.getProductWithOptions(product.id)['selected_options'] as List<Map<String, dynamic>>;
+    productPriceNotifier.value = product.discountedPrice != null && product.discountedPrice.raw == 0
+        ? product.discountedPrice.raw
+        : product.price.raw;
     setState(() => _isLoadingProduct = false);
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      Map<String, dynamic> data = ModalRoute
+          .of(context)
+          .settings
+          .arguments as Map<String, dynamic>;
       productId = data["product_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
@@ -79,82 +90,85 @@ class _FoodProductPageState extends State<FoodProductPage> {
       appBar: _isLoadingProduct
           ? null
           : AppBar(
-              title: Text(product.title),
-            ),
+        title: Text(product.title),
+      ),
       body: _isLoadingProduct
           ? AppLoader()
           : Column(
-              children: [
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: _fetchAndSetProduct,
-                    child: ListView(
-                      physics: AlwaysScrollableScrollPhysics(),
+        children: [
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _fetchAndSetProduct,
+              child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
+                children: [
+                  Container(
+                    height: 400,
+                    child: CachedNetworkImage(
+                      imageUrl: product.media.cover,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                    child: Column(
                       children: [
-                        Container(
-                          height: 400,
-                          child: CachedNetworkImage(
-                            imageUrl: product.media.cover,
-                            fit: BoxFit.cover,
-                          ),
+                        Text(
+                          product.title,
+                          style: AppTextStyles.h2,
+                          textAlign: TextAlign.center,
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                product.title,
-                                style: AppTextStyles.h2,
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 20),
-                              if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Text(
-                                    product.description.raw,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              FormattedPrices(
-                                price: product.price,
-                                discountedPrice: product.discountedPrice,
-                                isLarge: true,
-                              ),
-                            ],
+                        const SizedBox(height: 20),
+                        if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Text(
+                              product.description.raw,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
+                        FormattedPrices(
+                          price: product.price,
+                          discountedPrice: product.discountedPrice,
+                          isLarge: true,
                         ),
-                        ..._getProductOptionsItems(),
                       ],
                     ),
                   ),
-                ),
-                TotalButton(
-                  isRTL: appProvider.isRTL,
-                  total: product.discountedPrice != null && product.discountedPrice.raw == 0
-                      ? product.discountedPrice.formatted
-                      : product.price.formatted,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        LineAwesomeIcons.shopping_cart,
-                        color: AppColors.white,
-                        size: 20,
-                      ),
-                      SizedBox(width: 5),
-                      Flexible(
-                        child: Text(
-                          Translations.of(context).get('Add To Cart'),
-                          maxLines: 1,
-                          style: AppTextStyles.button,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                  ..._getProductOptionsItems(),
+                ],
+              ),
             ),
+          ),
+          Consumer<HomeProvider>(
+            builder: (c, homeProvider, _) => ValueListenableBuilder(
+              valueListenable: productPriceNotifier,
+              builder: (c, price, _) => TotalButton(
+                isRTL: appProvider.isRTL,
+                total: priceAndCurrency(price, homeProvider.foodCurrency),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      LineAwesomeIcons.shopping_cart,
+                      color: AppColors.white,
+                      size: 20,
+                    ),
+                    SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        Translations.of(context).get('Add To Cart'),
+                        maxLines: 1,
+                        style: AppTextStyles.button,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -163,17 +177,16 @@ class _FoodProductPageState extends State<FoodProductPage> {
       ProductOption option = product.options[i];
       Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
             (selectedProductOption) => selectedProductOption["id"] == option.id,
-            orElse: () => null,
-          ) ??
+        orElse: () => null,
+      ) ??
           {
             'id': option.id,
             'selected_ids': [],
           };
+      List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
 
       List<dynamic> getRadioItems() {
-        List<ProductOptionSelection> selectionsOrIngredients = option.isBasedOnIngredients ? option.ingredients : option.selections;
-
-        return selectionsOrIngredients.map((item) {
+        return option.selections.map((item) {
           String itemTitle = item.price == null || item.price.raw == 0 ? item.title : '${item.title} [+${item.price.formatted}]';
           return {
             'id': item.id,
@@ -182,23 +195,53 @@ class _FoodProductPageState extends State<FoodProductPage> {
         }).toList();
       }
 
+      void updateOption(int _id) {
+        List<int> newSelectedIds = option.selectionType == ProductOptionSelectionType.SINGLE
+            ? [_id]
+            : addOrRemoveIdsFromArray(
+          array: selectedIds,
+          id: _id,
+          maxLength: option.maxNumberOfSelection,
+        );
+
+        productsProvider.setProductSelectedOption(
+          product.id,
+          {
+            'id': option.id,
+            'selected_ids': newSelectedIds,
+          },
+        );
+      }
+
       Widget getOptionContent() {
         switch (option.inputType) {
           case ProductOptionInputType.RADIO:
             return RadioSelectItems(
               items: getRadioItems(),
-              selectedId: selectedProductOption['selected_ids'] != null && selectedProductOption['selected_ids'].length > 0
-                  ? selectedProductOption['selected_ids'][0]
-                  : null,
-              action: (id) => productsProvider.setProductSelectedOption(
-                product.id,
-                {
-                  'id': option.id,
-                  'selected_ids': [id],
-                },
-              ),
+              selectedId: selectedIds.length > 0 ? selectedIds[0] : null,
+              action: (id) => updateOption(id),
               isRTL: appProvider.isRTL,
               hasBorder: false,
+            );
+            break;
+          case ProductOptionInputType.PILL:
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                alignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                children: List.generate(option.ingredients.length, (j) {
+                  return ProductOptionPill(
+                    text: option.ingredients[j].title,
+                    price: option.ingredients[j].price,
+                    onTap: () => updateOption(option.ingredients[j].id),
+                    isExcluding: option.type == ProductOptionType.EXCLUDING,
+                    isActive: selectedIds.contains(option.ingredients[j].id),
+                  );
+                }),
+              ),
             );
             break;
           default:
@@ -210,9 +253,11 @@ class _FoodProductPageState extends State<FoodProductPage> {
         children: [
           SectionTitle(
             option.title,
+            suffix: option.isRequired ? ' *' : '',
             translate: false,
           ),
           Container(
+            width: double.infinity,
             color: AppColors.white,
             child: getOptionContent(),
           ),

@@ -57,7 +57,6 @@ class _MarketProductPageState extends State<MarketProductPage> {
   void didChangeDependencies() {
     if (_isInit) {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      product = data["product"];
       hasControls = data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);

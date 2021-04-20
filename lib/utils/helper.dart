@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -62,6 +63,16 @@ String formatTime(BuildContext context, dynamic dateTime) {
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
   String formattedTime = DateFormat('hh:mm a', appProvider.appLocale.languageCode).format(_dateTime);
   return formattedTime;
+}
+
+String priceAndCurrency(dynamic price, Currency currency) {
+  String formattedPrice = NumberFormat.decimalPattern('en').format(price);
+  String priceAndCurrency = currency.isSymbolAfter ? '$formattedPrice ${currency.code}' : '${currency.code} $formattedPrice';
+  return priceAndCurrency;
+}
+
+String currencySymbol(Currency currency) {
+  return NumberFormat.simpleCurrency().simpleCurrencySymbol(currency.code);
 }
 
 bool isCallable(v) => v is Function;
@@ -156,4 +167,19 @@ String getHttpExceptionMessage(responseData) {
     exceptionMessage += '\nTrace: ${responseData["trace"]}';
   }
   return exceptionMessage.isNotEmpty ? exceptionMessage : 'Unknown Error';
+}
+
+List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength}) {
+  if(array != null && array.contains(id)) {
+    //Remove Item
+    return array.where((_id) => _id != id).toList();
+  } else {
+    //Check if array length is maximum
+    if(maxLength != null && array.length == maxLength) {
+      showToast(msg: 'You can only add up to $maxLength items');
+      return array;
+    }
+    //Add Item
+    return <int>[...array, id];
+  }
 }

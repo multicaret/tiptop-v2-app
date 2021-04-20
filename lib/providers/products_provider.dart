@@ -75,10 +75,10 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
+    //Todo: update existing options when they've changed in the database
     if (getProductWithOptions(product.id) == null) {
       List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
-        List<ProductOptionSelection> ingredientOrSelection = option.isBasedOnIngredients ? option.ingredients : option.selections;
-        List<int> selectedIds = ingredientOrSelection.map((ingredientOrSelection) => ingredientOrSelection.id).toList();
+        List<int> selectedIds = option.selections.map((ingredientOrSelection) => ingredientOrSelection.id).toList();
         return {
           'id': option.id,
           'selected_ids': option.isRequired

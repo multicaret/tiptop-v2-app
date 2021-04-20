@@ -176,7 +176,7 @@ class ProductOption {
         selections: json["selections"] == null
             ? <ProductOptionSelection>[]
             : List<ProductOptionSelection>.from(json["selections"].map((x) => ProductOptionSelection.fromJson(x))),
-        ingredients: json["ingredients"] == null ? <ProductOptionSelection>[] : List<ProductOptionSelection>.from(json["selections"].map((x) => ProductOptionSelection.fromJson(x))),
+        ingredients: json["ingredients"] == null ? <ProductOptionSelection>[] : List<ProductOptionSelection>.from(json["ingredients"].map((x) => ProductOptionSelection.fromJson(x))),
       );
 }
 
