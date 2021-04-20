@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
-import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
-import 'package:tiptop_v2/UI/widgets/food/product_option_pill.dart';
+import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -55,7 +52,6 @@ class _FoodProductPageState extends State<FoodProductPage> {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
-    selectedProductOptions = productsProvider.getProductCartData(product.id)['selected_options'] as List<Map<String, dynamic>>;
     productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
     setState(() => _isLoadingProduct = false);
   }
@@ -77,7 +73,6 @@ class _FoodProductPageState extends State<FoodProductPage> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoadingProduct) {
-      selectedProductOptions = productsProvider.getProductCartData(product.id)['selected_options'] as List<Map<String, dynamic>>;
       productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
     }
     return AppScaffold(
@@ -130,7 +125,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                             ],
                           ),
                         ),
-                        ..._getProductOptionsItems(),
+                        FoodProductOptions(product: product),
                       ],
                     ),
                   ),
@@ -163,99 +158,5 @@ class _FoodProductPageState extends State<FoodProductPage> {
               ],
             ),
     );
-  }
-
-  List<Widget> _getProductOptionsItems() {
-    return List.generate(product.options.length, (i) {
-      ProductOption option = product.options[i];
-      Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
-            (selectedProductOption) => selectedProductOption["id"] == option.id,
-            orElse: () => null,
-          ) ??
-          {
-            'id': option.id,
-            'selected_ids': [],
-          };
-      List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
-
-      List<dynamic> getRadioItems() {
-        return option.selections.map((item) {
-          String itemTitle = item.price == null || item.price.raw == 0 ? item.title : '${item.title} [+${item.price.formatted}]';
-          return {
-            'id': item.id,
-            'title': itemTitle,
-          };
-        }).toList();
-      }
-
-      void updateOption(int _id) {
-        List<int> newSelectedIds = option.selectionType == ProductOptionSelectionType.SINGLE
-            ? [_id]
-            : addOrRemoveIdsFromArray(
-                array: selectedIds,
-                id: _id,
-                maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
-              );
-
-        productsProvider.setProductSelectedOption(
-          productId: product.id,
-          optionData: {
-            'id': option.id,
-            'selected_ids': newSelectedIds,
-          },
-          // productTotalPrice:
-        );
-      }
-
-      Widget getOptionContent() {
-        switch (option.inputType) {
-          case ProductOptionInputType.RADIO:
-            return RadioSelectItems(
-              items: getRadioItems(),
-              selectedId: selectedIds.length > 0 ? selectedIds[0] : null,
-              action: (id) => updateOption(id),
-              hasBorder: false,
-            );
-            break;
-          case ProductOptionInputType.PILL:
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                children: List.generate(option.ingredients.length, (j) {
-                  return ProductOptionPill(
-                    text: option.ingredients[j].title,
-                    price: option.ingredients[j].price,
-                    onTap: () => updateOption(option.ingredients[j].id),
-                    isExcluding: option.type == ProductOptionType.EXCLUDING,
-                    isActive: selectedIds.contains(option.ingredients[j].id),
-                  );
-                }),
-              ),
-            );
-            break;
-          default:
-            return Container();
-        }
-      }
-
-      return Column(
-        children: [
-          SectionTitle(
-            option.title,
-            suffix: option.isRequired ? ' *' : '',
-            translate: false,
-          ),
-          Container(
-            width: double.infinity,
-            color: AppColors.white,
-            child: getOptionContent(),
-          ),
-        ],
-      );
-    });
   }
 }

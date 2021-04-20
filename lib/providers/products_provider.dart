@@ -4,6 +4,7 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 
 class ProductsProvider with ChangeNotifier {
   CategoryParentsData categoryParentsData;
@@ -19,30 +20,72 @@ class ProductsProvider with ChangeNotifier {
     return productsCartData.firstWhere((productCartData) => productCartData["product_id"] == productId, orElse: () => null);
   }
 
-  void setProductSelectedOption({int productId, Map<String, dynamic> optionData, double productTotalPrice}) {
+  void setProductSelectedOption({int productId, ProductOption option, int selectionOrIngredientId}) {
     productsCartData = productsCartData.map((productCartData) {
       if (productCartData["product_id"] == productId) {
+        //Edit target product cart data only
         List<Map<String, dynamic>> productSelectedOptions = productCartData["selected_options"] as List<Map<String, dynamic>>;
         List<Map<String, dynamic>> newSelectedOptions;
-        if (productSelectedOptions.length == 0) {
-          newSelectedOptions = [optionData];
-        } else {
-          newSelectedOptions = productSelectedOptions
-              .map((Map<String, dynamic> selectedOption) => selectedOption["id"] == optionData["id"] ? optionData : selectedOption)
-              .toList();
-        }
+        newSelectedOptions = productSelectedOptions.map((Map<String, dynamic> selectedProductOption) {
+          if (selectedProductOption["id"] == option.id) {
+            //Edit target option
+            List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+            List<int> newSelectedIds = option.selectionType == ProductOptionSelectionType.SINGLE
+                ? [selectionOrIngredientId]
+                : addOrRemoveIdsFromArray(
+                    array: selectedIds,
+                    id: selectionOrIngredientId,
+                    maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
+                  );
+
+            return {
+              'id': option.id,
+              'selected_ids': newSelectedIds,
+            };
+          } else {
+            //Return non-target option as is
+            return selectedProductOption;
+          }
+        }).toList();
         return {
           'product_id': productId,
           'selected_options': newSelectedOptions,
-          'product_total_price': productTotalPrice,
+          'product_total_price': productCartData['product_total_price'],
+          'quantity': productCartData['quantity'],
         };
       } else {
+        //Return non-targeted product cart data as is
         return productCartData;
       }
     }).toList();
     print('productsCartData array:');
     print(productsCartData);
     notifyListeners();
+  }
+
+  void initProductOptions(Product product) {
+    List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
+      List<int> optionSelectionsIds = option.selections.map((selection) => selection.id).toList();
+      return {
+        'id': option.id,
+        'selected_ids': option.isRequired
+            ? option.selectionType == ProductOptionSelectionType.SINGLE
+                ? [optionSelectionsIds[0]]
+                : optionSelectionsIds
+            : <int>[],
+      };
+    }).toList();
+    productsCartData = [
+      ...productsCartData,
+      {
+        'product_id': product.id,
+        'selected_options': selectedOptions,
+        'product_total_price': product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
+        'quantity': 0,
+      },
+    ];
+    print('productsCartData on fetching product:');
+    print(productsCartData);
   }
 
   Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {
@@ -78,30 +121,8 @@ class ProductsProvider with ChangeNotifier {
     product = Product.fromJson(responseData["data"]);
     //Todo: update existing options when they've changed in the database
     if (getProductCartData(product.id) == null) {
-      List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
-        List<int> selectedIds = option.selections.map((ingredientOrSelection) => ingredientOrSelection.id).toList();
-        return {
-          'id': option.id,
-          'selected_ids': option.isRequired
-              ? option.selectionType == ProductOptionSelectionType.SINGLE
-                  ? [selectedIds[0]]
-                  : selectedIds
-              : <int>[],
-        };
-      }).toList();
-      productsCartData = [
-        ...productsCartData,
-        {
-          'product_id': product.id,
-          'selected_options': selectedOptions,
-          'product_total_price':
-              product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
-          'quantity': 0,
-        },
-      ];
+      initProductOptions(product);
     }
-    print('productsCartData on fetching product:');
-    print(productsCartData);
     notifyListeners();
   }
 
