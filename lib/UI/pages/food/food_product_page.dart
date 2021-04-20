@@ -40,8 +40,6 @@ class _FoodProductPageState extends State<FoodProductPage> {
   bool _isInit = true;
   bool _isLoadingProduct = false;
 
-  final productPriceNotifier = ValueNotifier<double>(0.0);
-
   ProductsProvider productsProvider;
   AppProvider appProvider;
   int productId;
@@ -51,25 +49,21 @@ class _FoodProductPageState extends State<FoodProductPage> {
   bool hasControls = true;
 
   List<Map<String, dynamic>> selectedProductOptions = [];
+  double productTotalPrice = 0.0;
 
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
-    selectedProductOptions = productsProvider.getProductWithOptions(product.id)['selected_options'] as List<Map<String, dynamic>>;
-    productPriceNotifier.value = product.discountedPrice != null && product.discountedPrice.raw == 0
-        ? product.discountedPrice.raw
-        : product.price.raw;
+    selectedProductOptions = productsProvider.getProductCartData(product.id)['selected_options'] as List<Map<String, dynamic>>;
+    productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
     setState(() => _isLoadingProduct = false);
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Map<String, dynamic> data = ModalRoute
-          .of(context)
-          .settings
-          .arguments as Map<String, dynamic>;
+      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       productId = data["product_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
@@ -83,92 +77,91 @@ class _FoodProductPageState extends State<FoodProductPage> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoadingProduct) {
-      selectedProductOptions = productsProvider.getProductWithOptions(product.id)['selected_options'] as List<Map<String, dynamic>>;
+      selectedProductOptions = productsProvider.getProductCartData(product.id)['selected_options'] as List<Map<String, dynamic>>;
+      productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
     }
     return AppScaffold(
       bgColor: AppColors.white,
       appBar: _isLoadingProduct
           ? null
           : AppBar(
-        title: Text(product.title),
-      ),
+              title: Text(product.title),
+            ),
       body: _isLoadingProduct
           ? AppLoader()
           : Column(
-        children: [
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _fetchAndSetProduct,
-              child: ListView(
-                physics: AlwaysScrollableScrollPhysics(),
-                children: [
-                  Container(
-                    height: 400,
-                    child: CachedNetworkImage(
-                      imageUrl: product.media.cover,
-                      fit: BoxFit.cover,
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _fetchAndSetProduct,
+                    child: ListView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      children: [
+                        Container(
+                          height: 400,
+                          child: CachedNetworkImage(
+                            imageUrl: product.media.cover,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                product.title,
+                                style: AppTextStyles.h2,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 20),
+                              if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: Text(
+                                    product.description.raw,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              FormattedPrices(
+                                price: product.price,
+                                discountedPrice: product.discountedPrice,
+                                isLarge: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                        ..._getProductOptionsItems(),
+                      ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                    child: Column(
+                ),
+                Consumer<HomeProvider>(
+                  builder: (c, homeProvider, _) => TotalButton(
+                    isRTL: appProvider.isRTL,
+                    total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          product.title,
-                          style: AppTextStyles.h2,
-                          textAlign: TextAlign.center,
+                        Icon(
+                          LineAwesomeIcons.shopping_cart,
+                          color: AppColors.white,
+                          size: 20,
                         ),
-                        const SizedBox(height: 20),
-                        if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              product.description.raw,
-                              textAlign: TextAlign.center,
-                            ),
+                        SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            //Todo: text becomes "Update Cart" after being added to cart
+                            Translations.of(context).get('Add To Cart'),
+                            maxLines: 1,
+                            style: AppTextStyles.button,
                           ),
-                        FormattedPrices(
-                          price: product.price,
-                          discountedPrice: product.discountedPrice,
-                          isLarge: true,
                         ),
                       ],
                     ),
                   ),
-                  ..._getProductOptionsItems(),
-                ],
-              ),
-            ),
-          ),
-          Consumer<HomeProvider>(
-            builder: (c, homeProvider, _) => ValueListenableBuilder(
-              valueListenable: productPriceNotifier,
-              builder: (c, price, _) => TotalButton(
-                isRTL: appProvider.isRTL,
-                total: priceAndCurrency(price, homeProvider.foodCurrency),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      LineAwesomeIcons.shopping_cart,
-                      color: AppColors.white,
-                      size: 20,
-                    ),
-                    SizedBox(width: 5),
-                    Flexible(
-                      child: Text(
-                        Translations.of(context).get('Add To Cart'),
-                        maxLines: 1,
-                        style: AppTextStyles.button,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -177,8 +170,8 @@ class _FoodProductPageState extends State<FoodProductPage> {
       ProductOption option = product.options[i];
       Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
             (selectedProductOption) => selectedProductOption["id"] == option.id,
-        orElse: () => null,
-      ) ??
+            orElse: () => null,
+          ) ??
           {
             'id': option.id,
             'selected_ids': [],
@@ -199,17 +192,18 @@ class _FoodProductPageState extends State<FoodProductPage> {
         List<int> newSelectedIds = option.selectionType == ProductOptionSelectionType.SINGLE
             ? [_id]
             : addOrRemoveIdsFromArray(
-          array: selectedIds,
-          id: _id,
-          maxLength: option.maxNumberOfSelection,
-        );
+                array: selectedIds,
+                id: _id,
+                maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
+              );
 
         productsProvider.setProductSelectedOption(
-          product.id,
-          {
+          productId: product.id,
+          optionData: {
             'id': option.id,
             'selected_ids': newSelectedIds,
           },
+          // productTotalPrice:
         );
       }
 

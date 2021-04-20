@@ -13,16 +13,16 @@ class ProductsProvider with ChangeNotifier {
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
   Product product;
-  List<Map<String, dynamic>> productsWithOptions = [];
+  List<Map<String, dynamic>> productsCartData = [];
 
-  Map<String, dynamic> getProductWithOptions(int productId) {
-    return productsWithOptions.firstWhere((productWithOptions) => productWithOptions["product_id"] == productId, orElse: () => null);
+  Map<String, dynamic> getProductCartData(int productId) {
+    return productsCartData.firstWhere((productCartData) => productCartData["product_id"] == productId, orElse: () => null);
   }
 
-  void setProductSelectedOption(int productId, Map<String, dynamic> optionData) {
-    productsWithOptions = productsWithOptions.map((productWithOptions) {
-      if (productWithOptions["product_id"] == productId) {
-        List<Map<String, dynamic>> productSelectedOptions = productWithOptions["selected_options"] as List<Map<String, dynamic>>;
+  void setProductSelectedOption({int productId, Map<String, dynamic> optionData, double productTotalPrice}) {
+    productsCartData = productsCartData.map((productCartData) {
+      if (productCartData["product_id"] == productId) {
+        List<Map<String, dynamic>> productSelectedOptions = productCartData["selected_options"] as List<Map<String, dynamic>>;
         List<Map<String, dynamic>> newSelectedOptions;
         if (productSelectedOptions.length == 0) {
           newSelectedOptions = [optionData];
@@ -34,13 +34,14 @@ class ProductsProvider with ChangeNotifier {
         return {
           'product_id': productId,
           'selected_options': newSelectedOptions,
+          'product_total_price': productTotalPrice,
         };
       } else {
-        return productWithOptions;
+        return productCartData;
       }
     }).toList();
-    print('productsWithOptions array:');
-    print(productsWithOptions);
+    print('productsCartData array:');
+    print(productsCartData);
     notifyListeners();
   }
 
@@ -76,7 +77,7 @@ class ProductsProvider with ChangeNotifier {
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
     //Todo: update existing options when they've changed in the database
-    if (getProductWithOptions(product.id) == null) {
+    if (getProductCartData(product.id) == null) {
       List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
         List<int> selectedIds = option.selections.map((ingredientOrSelection) => ingredientOrSelection.id).toList();
         return {
@@ -88,16 +89,19 @@ class ProductsProvider with ChangeNotifier {
               : <int>[],
         };
       }).toList();
-      productsWithOptions = [
-        ...productsWithOptions,
+      productsCartData = [
+        ...productsCartData,
         {
           'product_id': product.id,
           'selected_options': selectedOptions,
+          'product_total_price':
+              product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
+          'quantity': 0,
         },
       ];
     }
-    print('productsWithOptions on fetching product:');
-    print(productsWithOptions);
+    print('productsCartData on fetching product:');
+    print(productsCartData);
     notifyListeners();
   }
 
