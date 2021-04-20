@@ -158,7 +158,6 @@ class _AddressesPageState extends State<AddressesPage> {
                   child: Row(
                     children: [
                       AddressIcon(
-                        isRTL: appProvider.isRTL,
                         icon: addresses[i].kind.icon,
                         isAsset: false,
                       ),
@@ -216,7 +215,6 @@ class _AddressesPageState extends State<AddressesPage> {
                   child: Row(
                     children: [
                       AddressIcon(
-                        isRTL: appProvider.isRTL,
                         icon: kinds[i].icon,
                         isAsset: false,
                       ),

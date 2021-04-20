@@ -24,7 +24,6 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  AppProvider appProvider;
   RestaurantsProvider restaurantsProvider;
 
   double minCartValue;
@@ -49,7 +48,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
       _createFilters();
     }
@@ -82,7 +80,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 hasBorder: false,
                 selectedId: filterData['delivery_type'],
                 action: (deliveryType) => restaurantsProvider.setFilterData(key: 'delivery_type', value: deliveryType),
-                isRTL: appProvider.isRTL,
               ),
               Container(
                 padding: const EdgeInsets.only(
@@ -149,7 +146,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
               CategoriesSlider(
                 categories: foodCategories,
-                isRTL: appProvider.isRTL,
                 selectedCategories: filterData['categories'],
                 setSelectedCategories: (_selectedCategoryId) {
                   restaurantsProvider.setFilterData(

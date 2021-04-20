@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -12,7 +13,6 @@ class FoodCategoryItem extends StatelessWidget {
   final Category category;
   final int index;
   final int count;
-  final bool isRTL;
   final Function onTap;
   final bool isSelected;
 
@@ -20,17 +20,13 @@ class FoodCategoryItem extends StatelessWidget {
     @required this.category,
     @required this.index,
     @required this.count,
-    @required this.isRTL,
     this.onTap,
     this.isSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: isRTL
-          ? EdgeInsets.only(right: index == 0 ? screenHorizontalPadding : 0, left: index == count - 1 ? screenHorizontalPadding : 0)
-          : EdgeInsets.only(left: index == 0 ? screenHorizontalPadding : 0, right: index == count - 1 ? screenHorizontalPadding : 0),
+    return Consumer<AppProvider>(
       child: InkWell(
         onTap: onTap,
         child: Stack(
@@ -82,6 +78,12 @@ class FoodCategoryItem extends StatelessWidget {
                 : Container()
           ],
         ),
+      ),
+      builder: (c, appProvider, child) => Padding(
+        padding: appProvider.isRTL
+            ? EdgeInsets.only(right: index == 0 ? screenHorizontalPadding : 0, left: index == count - 1 ? screenHorizontalPadding : 0)
+            : EdgeInsets.only(left: index == 0 ? screenHorizontalPadding : 0, right: index == count - 1 ? screenHorizontalPadding : 0),
+        child: child,
       ),
     );
   }

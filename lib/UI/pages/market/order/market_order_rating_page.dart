@@ -87,8 +87,6 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-
     return AppScaffold(
         hasOverlayLoader: _isLoadingStoreRatingRequest,
         body: _isLoadingCreateRatingRequest
@@ -100,7 +98,6 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
                       child: Column(
                         children: [
                           OrderItem(
-                            isRTL: appProvider.isRTL,
                             order: order,
                             isDisabled: true,
                           ),
@@ -115,7 +112,6 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
                                   _selectedIssueId = id;
                                 });
                               },
-                              isRTL: appProvider.isRTL,
                             ),
                           Form(
                             key: _ratingFormKey,

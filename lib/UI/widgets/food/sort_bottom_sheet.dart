@@ -45,8 +45,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<AppProvider, RestaurantsProvider, AddressesProvider>(
-      builder: (c, appProvider, restaurantsProvider, addressesProvider, _) {
+    return Consumer2<RestaurantsProvider, AddressesProvider>(
+      builder: (c, restaurantsProvider, addressesProvider, _) {
         return AppBottomSheet(
           // hasOverlayLoading: restaurantsProvider.isLoadingSubmitFilterAndSort,
           screenHeightFraction: 0.45,
@@ -60,7 +60,6 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                   selectedId: restaurantsProvider.sortType,
                   action: (value) => restaurantsProvider.setSortType(value),
                   hasBorder: false,
-                  isRTL: appProvider.isRTL,
                 ),
               ],
             ),

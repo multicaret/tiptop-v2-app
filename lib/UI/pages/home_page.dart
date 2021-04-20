@@ -196,7 +196,6 @@ class _HomePageState extends State<HomePage> {
           children: [
             if (hasActiveMarketOrders)
               HomeLiveTracking(
-                isRTL: appProvider.isRTL,
                 activeOrders: homeProvider.marketHomeData.activeOrders,
                 totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
               ),
@@ -222,14 +221,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             if (hasActiveFoodOrders)
               HomeLiveTracking(
-                isRTL: appProvider.isRTL,
                 activeOrders: homeProvider.foodHomeData.activeOrders,
                 totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
               ),
             if (homeProvider.foodHomeData != null)
               FoodHomeContent(
                 foodHomeData: homeProvider.foodHomeData,
-                isRTL: appProvider.isRTL,
               ),
           ],
         );

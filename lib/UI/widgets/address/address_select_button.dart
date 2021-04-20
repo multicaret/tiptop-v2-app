@@ -134,7 +134,6 @@ class AddressSelectButton extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               AddressIcon(
-                                isRTL: appProvider.isRTL,
                                 icon: addressKindIcon ?? addressesProvider.selectedAddress.kind.icon,
                                 isAsset: false,
                               ),

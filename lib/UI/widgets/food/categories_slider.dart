@@ -6,14 +6,12 @@ import 'package:tiptop_v2/utils/constants.dart';
 
 class CategoriesSlider extends StatelessWidget {
   final List<Category> categories;
-  final bool isRTL;
   final Function setSelectedCategories;
   final List<int> selectedCategories;
   final Function onCategoryTap;
 
   CategoriesSlider({
     @required this.categories,
-    @required this.isRTL,
     this.setSelectedCategories,
     this.selectedCategories,
     this.onCategoryTap,
@@ -37,7 +35,6 @@ class CategoriesSlider extends StatelessWidget {
             category: categories[i],
             index: i,
             count: categories.length,
-            isRTL: isRTL,
             onTap: () {
               if (onCategoryTap != null) {
                 onCategoryTap(categories[i].title);

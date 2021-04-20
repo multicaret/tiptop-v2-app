@@ -41,7 +41,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
 
   RestaurantsProvider restaurantsProvider;
   SearchProvider searchProvider;
-  AppProvider appProvider;
   HomeProvider homeProvider;
 
   List<Branch> _searchedRestaurants = [];
@@ -62,7 +61,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
@@ -122,7 +120,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                           SectionTitle('Categories'),
                           CategoriesSlider(
                             categories: restaurantsProvider.foodCategories,
-                            isRTL: appProvider.isRTL,
                             onCategoryTap: (String categoryTitle) {
                               searchFieldController.text = categoryTitle;
                               submitFoodSearch(categoryTitle);

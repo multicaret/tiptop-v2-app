@@ -214,7 +214,6 @@ class _FoodProductPageState extends State<FoodProductPage> {
               items: getRadioItems(),
               selectedId: selectedIds.length > 0 ? selectedIds[0] : null,
               action: (id) => updateOption(id),
-              isRTL: appProvider.isRTL,
               hasBorder: false,
             );
             break;

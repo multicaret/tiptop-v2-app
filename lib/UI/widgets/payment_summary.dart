@@ -1,34 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class PaymentSummary extends StatelessWidget {
   final List<PaymentSummaryTotal> totals;
-  final bool isRTL;
 
-  PaymentSummary({this.totals, this.isRTL});
+  PaymentSummary({this.totals});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(totals.length, (i) {
-        return Container(
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            top: 10,
-            bottom: 10,
-            right: isRTL ? screenHorizontalPadding : 7,
-            left: isRTL ? 7 : screenHorizontalPadding,
-          ),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: AppColors.border)),
-            color: AppColors.white,
-          ),
+        return Consumer<AppProvider>(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -37,8 +27,8 @@ class PaymentSummary extends StatelessWidget {
                 style: totals[i].isGrandTotal
                     ? AppTextStyles.bodyBoldSecondaryDark
                     : totals[i].isSavedAmount
-                        ? AppTextStyles.bodyBold.copyWith(color: Colors.green)
-                        : AppTextStyles.body,
+                    ? AppTextStyles.bodyBold.copyWith(color: Colors.green)
+                    : AppTextStyles.body,
               ),
               Expanded(
                 child: Html(
@@ -54,6 +44,20 @@ class PaymentSummary extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          builder: (c, appProvider, child) => Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: 10,
+              right: appProvider.isRTL ? screenHorizontalPadding : 7,
+              left: appProvider.isRTL ? 7 : screenHorizontalPadding,
+            ),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: AppColors.border)),
+              color: AppColors.white,
+            ),
+            child: child,
           ),
         );
       }),

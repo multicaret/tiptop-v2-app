@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
@@ -16,12 +17,10 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'address/address_icon.dart';
 
 class HomeLiveTracking extends StatelessWidget {
-  final bool isRTL;
   final List<Order> activeOrders;
   final int totalActiveOrders;
 
   HomeLiveTracking({
-    @required this.isRTL,
     @required this.activeOrders,
     @required this.totalActiveOrders,
   });
@@ -73,7 +72,6 @@ class HomeLiveTracking extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         AddressIcon(
-                          isRTL: isRTL,
                           isAsset: false,
                           icon: activeOrders[i].address.kind.icon,
                         ),
@@ -121,8 +119,8 @@ class HomeLiveTracking extends StatelessWidget {
                   );
                 }),
                 if (totalActiveOrders > 4)
-                  Consumer<HomeProvider>(
-                    builder: (c, homeProvider, _) => TextButton(
+                  Consumer2<HomeProvider, AppProvider>(
+                    builder: (c, homeProvider, appProvider, _) => TextButton(
                       onPressed: () => Navigator.of(context, rootNavigator: true)
                           .pushNamed(homeProvider.channelIsMarket ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName),
                       style: TextButton.styleFrom(
@@ -133,7 +131,7 @@ class HomeLiveTracking extends StatelessWidget {
                         children: [
                           Text('${Translations.of(context).get('View All')} ($totalActiveOrders)'),
                           const SizedBox(width: 5),
-                          AppIcons.iconSm(isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
+                          AppIcons.iconSm(appProvider.isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
                         ],
                       ),
                     ),

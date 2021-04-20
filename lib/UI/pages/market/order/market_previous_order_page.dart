@@ -187,10 +187,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                         ),
                       ),
                       SectionTitle('Payment Summary'),
-                      PaymentSummary(
-                        totals: totals,
-                        isRTL: appProvider.isRTL,
-                      ),
+                      PaymentSummary(totals: totals),
                       const SizedBox(height: 30),
                     ],
                   ),

@@ -9,11 +9,9 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class FoodHomeContent extends StatelessWidget {
   final HomeData foodHomeData;
-  final bool isRTL;
 
   FoodHomeContent({
     @required this.foodHomeData,
-    @required this.isRTL,
   });
 
   @override
@@ -26,7 +24,7 @@ class FoodHomeContent extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
           color: AppColors.white,
-          child: CategoriesSlider(categories: foodHomeData.categories, isRTL: isRTL),
+          child: CategoriesSlider(categories: foodHomeData.categories),
         ),
         FilterSortButtons(),
         RestaurantsIndex(),

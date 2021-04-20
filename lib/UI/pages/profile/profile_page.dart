@@ -106,7 +106,6 @@ class ProfilePage extends StatelessWidget {
                     Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
                     appProvider.changeLanguage(selectedLanguage.locale);
                   },
-                  isRTL: appProvider.isRTL,
                   isAssetLogo: true,
                 ),
                 const SizedBox(height: 30),

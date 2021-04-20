@@ -10,7 +10,6 @@ import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.d
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
@@ -36,7 +35,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
 
   ProductsProvider productsProvider;
   SearchProvider searchProvider;
-  AppProvider appProvider;
   HomeProvider homeProvider;
 
   List<Product> _searchedProducts = [];
@@ -59,7 +57,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
-      appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
 
       fetchAndSetSearchTerms();
@@ -117,10 +114,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                           homeProvider.selectedChannel == "food"
                               ? Container(
                                   padding: const EdgeInsets.only(top: 8),
-                                  child: CategoriesSlider(
-                                    categories: homeProvider.foodHomeData.categories,
-                                    isRTL: appProvider.isRTL,
-                                  ),
+                                  child: CategoriesSlider(categories: homeProvider.foodHomeData.categories),
                                 )
                               : Container(),
                           SectionTitle('Most Searched Terms'),

@@ -67,7 +67,6 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
                     itemCount: previousOrders.length,
                     itemBuilder: (context, i) => PreviousOrderItem(
                       order: previousOrders[i],
-                      isRTL: appProvider.isRTL,
                       action: () {
                         Navigator.of(context, rootNavigator: true)
                             .pushNamed(MarketPreviousOrderPage.routeName, arguments: previousOrders[i].id)

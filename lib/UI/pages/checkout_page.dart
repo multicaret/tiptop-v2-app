@@ -187,7 +187,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   .toList(),
                               selectedId: selectedPaymentMethodId,
                               action: (value) => selectedPaymentMethodNotifier.value = value,
-                              isRTL: appProvider.isRTL,
                             ),
                           ),
                           SectionTitle('Promotions'),
@@ -229,7 +228,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             valueListenable: paymentSummaryTotalsNotifier,
                             builder: (c, paymentSummaryTotals, _) => PaymentSummary(
                               totals: paymentSummaryTotals,
-                              isRTL: appProvider.isRTL,
                             ),
                           ),
                         ],
@@ -243,7 +241,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       return TotalButton(
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
-                        isRTL: appProvider.isRTL,
                         child: Text(Translations.of(context).get('Order Now')),
                         onTap: _submitOrder,
                       );

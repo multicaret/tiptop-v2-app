@@ -105,7 +105,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
                     child: Column(
                       children: [
                         OrderItem(
-                          isRTL: appProvider.isRTL,
                           order: order,
                           isDisabled: true,
                         ),

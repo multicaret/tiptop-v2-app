@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/models/order.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -10,13 +12,11 @@ import 'UI/dialogs/confirm_alert_dialog.dart';
 
 class PreviousOrderItem extends StatelessWidget {
   final Order order;
-  final bool isRTL;
   final Function action;
   final Function dismissAction;
 
   PreviousOrderItem({
     @required this.order,
-    @required this.isRTL,
     this.action,
     this.dismissAction,
   });
@@ -31,11 +31,13 @@ class PreviousOrderItem extends StatelessWidget {
         child: Dismissible(
           key: Key('${order.id}'),
           direction: DismissDirection.endToStart,
-          background: Container(
-            color: Colors.red,
-            alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-            child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
+          background: Consumer<AppProvider>(
+            builder: (c, appProvider, _) => Container(
+              color: Colors.red,
+              alignment: appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+              child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
+            ),
           ),
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
@@ -54,7 +56,7 @@ class PreviousOrderItem extends StatelessWidget {
               dismissAction();
             }
           },
-          child: OrderItem(isRTL: isRTL, order: order),
+          child: OrderItem(order: order),
         ),
       ),
     );
