@@ -156,7 +156,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
         child: InkWell(
           onTap: () {
             searchFieldController.text = _terms[i].term;
-            searchFieldFocusNode.requestFocus();
             _submitSearch(_terms[i].term);
           },
           child: Container(
