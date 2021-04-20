@@ -43,8 +43,6 @@ class _AppWrapperState extends State<AppWrapper> {
   List<BottomNavigationBarItem> _getCupertinoTabBarItems(HomeProvider homeProvider, bool isRTL) {
     List<Map<String, dynamic>> _cupertinoTabsList = _getCupertinoTabsList(homeProvider);
     double tabWidth = MediaQuery.of(context).size.width / _cupertinoTabsList.length;
-    print('_cupertinoTabsList.length % 2');
-    print(_cupertinoTabsList.length % 2);
     return List.generate(_cupertinoTabsList.length, (i) {
       int tabWithEndPaddingIndex = (_cupertinoTabsList.length / 2).ceil() - 1;
       int tabWithStartPaddingIndex = (_cupertinoTabsList.length / 2).ceil() + 1 - 1;
