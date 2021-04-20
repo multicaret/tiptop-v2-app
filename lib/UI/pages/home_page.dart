@@ -108,6 +108,10 @@ class _HomePageState extends State<HomePage> {
       _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
       if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
         _oneSignalNotificationsProvider.initOneSignal();
+        if (appProvider.isAuth && appProvider.authUser != null) {
+          _oneSignalNotificationsProvider.handleSetExternalUserId(appProvider.authUser.id.toString());
+        }
+
         _listener = _oneSignalNotificationsProvider.getPayload.listen(null);
         _listener.onData((event) {
           print("Is opened: ${OneSignalNotificationsProvider.notificationHasOpened}");
