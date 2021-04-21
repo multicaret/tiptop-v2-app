@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
@@ -89,44 +90,47 @@ class _FoodProductPageState extends State<FoodProductPage> {
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: _fetchAndSetProduct,
-                    child: ListView(
+                    child: SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(),
-                      children: [
-                        Container(
-                          height: 400,
-                          child: CachedNetworkImage(
-                            imageUrl: product.media.cover,
-                            fit: BoxFit.cover,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 400,
+                            child: CachedNetworkImage(
+                              imageUrl: product.media.cover,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                product.title,
-                                style: AppTextStyles.h2,
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 20),
-                              if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Text(
-                                    product.description.raw,
-                                    textAlign: TextAlign.center,
-                                  ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                            child: Column(
+                              children: [
+                                Text(
+                                  product.title,
+                                  style: AppTextStyles.h2,
+                                  textAlign: TextAlign.center,
                                 ),
-                              FormattedPrices(
-                                price: product.price,
-                                discountedPrice: product.discountedPrice,
-                                isLarge: true,
-                              ),
-                            ],
+                                const SizedBox(height: 20),
+                                if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 20),
+                                    child: Text(
+                                      product.description.raw,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                FormattedPrices(
+                                  price: product.price,
+                                  discountedPrice: product.discountedPrice,
+                                  isLarge: true,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        FoodProductOptions(product: product),
-                      ],
+                          FoodProductOptions(product: product),
+                          FoodCartControls(),
+                        ],
+                      ),
                     ),
                   ),
                 ),

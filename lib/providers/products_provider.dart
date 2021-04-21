@@ -16,7 +16,7 @@ class ProductsProvider with ChangeNotifier {
   Product product;
   Map<String, dynamic> productTempCartData = {};
 
-  void setProductSelectedOption({Product product, ProductOption option, int selectionOrIngredientId}) {
+  void setProductTempOption({Product product, ProductOption option, int selectionOrIngredientId}) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     List<Map<String, dynamic>> productSelectedOptions = productTempCartData["options"] as List<Map<String, dynamic>>;
     List<Map<String, dynamic>> newSelectedOptions;
@@ -47,7 +47,6 @@ class ProductsProvider with ChangeNotifier {
           });
         });
 
-        productTotalPrice += optionTotalPrice;
         return {
           'id': option.id,
           'selected_ids': newSelectedIds,
@@ -55,10 +54,12 @@ class ProductsProvider with ChangeNotifier {
         };
       } else {
         //Return non-target option as is
-        productTotalPrice += selectedProductOption['option_total_price'];
         return selectedProductOption;
       }
     }).toList();
+    newSelectedOptions.forEach((selectedProductOption) {
+      productTotalPrice += selectedProductOption['option_total_price'];
+    });
     double newProductTotalPrice = productTotalPrice * productTempCartData['quantity'];
     productTempCartData = {
       'product_id': product.id,
@@ -67,6 +68,26 @@ class ProductsProvider with ChangeNotifier {
       'quantity': productTempCartData['quantity'],
     };
     print('productsCartData array:');
+    print(productTempCartData);
+    notifyListeners();
+  }
+
+  void setProductTempQuantity(CartAction action) {
+    double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
+    if(action == CartAction.ADD) {
+      productTempCartData['quantity']++;
+    } else {
+      if(productTempCartData['quantity'] > 1) {
+        productTempCartData['quantity']--;
+      } else {
+        return;
+      }
+    }
+    productTempCartData['options'].forEach((selectedProductOption) {
+      productTotalPrice += selectedProductOption['option_total_price'];
+    });
+    productTempCartData['product_total_price'] = productTotalPrice *  productTempCartData['quantity'];
+    print('productTempCartData');
     print(productTempCartData);
     notifyListeners();
   }

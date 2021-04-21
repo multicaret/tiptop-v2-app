@@ -31,7 +31,7 @@ class FoodProductOptions extends StatelessWidget {
             List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
 
             void updateOption(int _id) {
-              productsProvider.setProductSelectedOption(
+              productsProvider.setProductTempOption(
                 product: product,
                 option: option,
                 selectionOrIngredientId: _id,
