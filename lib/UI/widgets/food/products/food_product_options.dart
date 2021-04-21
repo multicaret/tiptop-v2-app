@@ -8,7 +8,7 @@ import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-import '../product_option_pill.dart';
+import 'product_option_pill.dart';
 
 class FoodProductOptions extends StatelessWidget {
   final Product product;
