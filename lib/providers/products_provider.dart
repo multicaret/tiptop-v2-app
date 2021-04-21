@@ -20,37 +20,57 @@ class ProductsProvider with ChangeNotifier {
     return productsCartData.firstWhere((productCartData) => productCartData["product_id"] == productId, orElse: () => null);
   }
 
-  void setProductSelectedOption({int productId, ProductOption option, int selectionOrIngredientId}) {
+  void setProductSelectedOption({Product product, ProductOption option, int selectionOrIngredientId}) {
+    double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     productsCartData = productsCartData.map((productCartData) {
-      if (productCartData["product_id"] == productId) {
+      if (productCartData["product_id"] == product.id) {
         //Edit target product cart data only
-        List<Map<String, dynamic>> productSelectedOptions = productCartData["selected_options"] as List<Map<String, dynamic>>;
+        List<Map<String, dynamic>> productSelectedOptions = productCartData["options"] as List<Map<String, dynamic>>;
         List<Map<String, dynamic>> newSelectedOptions;
         newSelectedOptions = productSelectedOptions.map((Map<String, dynamic> selectedProductOption) {
+          List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+          //Edit target option
           if (selectedProductOption["id"] == option.id) {
-            //Edit target option
-            List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
-            List<int> newSelectedIds = option.selectionType == ProductOptionSelectionType.SINGLE
-                ? [selectionOrIngredientId]
-                : addOrRemoveIdsFromArray(
-                    array: selectedIds,
-                    id: selectionOrIngredientId,
-                    maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
-                  );
+            double optionTotalPrice = 0.0;
+            List<int> newSelectedIds = <int>[];
+            //Update selected selections or ingredients ids
+            if (option.selectionType == ProductOptionSelectionType.SINGLE) {
+              newSelectedIds = [selectionOrIngredientId];
+            } else {
+              newSelectedIds = addOrRemoveIdsFromArray(
+                array: selectedIds,
+                id: selectionOrIngredientId,
+                maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
+              );
+            }
 
+            //Update product total price
+            newSelectedIds.forEach((selectedId) {
+              List<ProductOptionSelection> selectionsOrIngredients = option.isBasedOnIngredients ? option.ingredients : option.selections;
+              selectionsOrIngredients.forEach((selectionOrIngredient) {
+                if (selectionOrIngredient.id == selectedId && selectionOrIngredient.price.raw > 0) {
+                  optionTotalPrice += selectionOrIngredient.price.raw;
+                }
+              });
+            });
+
+            productTotalPrice += optionTotalPrice;
             return {
               'id': option.id,
               'selected_ids': newSelectedIds,
+              'option_total_price': optionTotalPrice,
             };
           } else {
             //Return non-target option as is
+            productTotalPrice += selectedProductOption['option_total_price'];
             return selectedProductOption;
           }
         }).toList();
+        double newProductTotalPrice = productTotalPrice * productCartData['quantity'];
         return {
-          'product_id': productId,
-          'selected_options': newSelectedOptions,
-          'product_total_price': productCartData['product_total_price'],
+          'product_id': product.id,
+          'options': newSelectedOptions,
+          'product_total_price': newProductTotalPrice,
           'quantity': productCartData['quantity'],
         };
       } else {
@@ -65,23 +85,19 @@ class ProductsProvider with ChangeNotifier {
 
   void initProductOptions(Product product) {
     List<Map<String, dynamic>> selectedOptions = product.options.map((option) {
-      List<int> optionSelectionsIds = option.selections.map((selection) => selection.id).toList();
       return {
         'id': option.id,
-        'selected_ids': option.isRequired
-            ? option.selectionType == ProductOptionSelectionType.SINGLE
-                ? [optionSelectionsIds[0]]
-                : optionSelectionsIds
-            : <int>[],
+        'selected_ids': <int>[],
+        'option_total_price': 0.0,
       };
     }).toList();
     productsCartData = [
       ...productsCartData,
       {
         'product_id': product.id,
-        'selected_options': selectedOptions,
+        'options': selectedOptions,
         'product_total_price': product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
-        'quantity': 0,
+        'quantity': 1,
       },
     ];
     print('productsCartData on fetching product:');

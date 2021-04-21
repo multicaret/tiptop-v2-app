@@ -20,7 +20,7 @@ class FoodProductOptions extends StatelessWidget {
     return Consumer<ProductsProvider>(
       builder: (c, productsProvider, _) {
         List<Map<String, dynamic>> selectedProductOptions =
-            productsProvider.getProductCartData(product.id)['selected_options'] as List<Map<String, dynamic>>;
+            productsProvider.getProductCartData(product.id)['options'] as List<Map<String, dynamic>>;
 
         return Column(
           children: List.generate(product.options.length, (i) {
@@ -33,7 +33,7 @@ class FoodProductOptions extends StatelessWidget {
 
             void updateOption(int _id) {
               productsProvider.setProductSelectedOption(
-                productId: product.id,
+                product: product,
                 option: option,
                 selectionOrIngredientId: _id,
               );
