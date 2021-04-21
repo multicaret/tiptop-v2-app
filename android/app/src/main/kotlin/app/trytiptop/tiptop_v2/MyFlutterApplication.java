@@ -3,6 +3,7 @@ package app.trytiptop.tiptop_v2;
 import com.instabug.instabugflutter.InstabugFlutterPlugin;
 import com.zoho.commons.Fonts;
 import com.zoho.commons.InitConfig;
+import com.zoho.livechat.android.ZohoLiveChat;
 import com.zoho.salesiqembed.ZohoSalesIQ;
 import java.util.ArrayList;
 import io.flutter.app.FlutterApplication;
@@ -27,5 +28,6 @@ public class MyFlutterApplication extends FlutterApplication {
 
         ZohoSalesIQ.init(this, appKey, accessKey, initConfig, null);
         ZohoSalesIQ.syncThemeWithOS(false);
+        ZohoLiveChat.Conversation.setVisibility(false);
     }
 }
