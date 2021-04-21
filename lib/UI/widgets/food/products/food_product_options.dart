@@ -19,16 +19,15 @@ class FoodProductOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductsProvider>(
       builder: (c, productsProvider, _) {
-        List<Map<String, dynamic>> selectedProductOptions =
-            productsProvider.getProductCartData(product.id)['options'] as List<Map<String, dynamic>>;
+        List<Map<String, dynamic>> selectedProductOptions = productsProvider.productTempCartData['options'] as List<Map<String, dynamic>>;
 
         return Column(
           children: List.generate(product.options.length, (i) {
             ProductOption option = product.options[i];
             Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
-                  (selectedProductOption) => selectedProductOption["id"] == option.id,
-                  orElse: () => null,
-                );
+              (selectedProductOption) => selectedProductOption["id"] == option.id,
+              orElse: () => null,
+            );
             List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
 
             void updateOption(int _id) {

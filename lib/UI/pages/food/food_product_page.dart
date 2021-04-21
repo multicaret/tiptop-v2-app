@@ -52,7 +52,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
-    productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
+    productTotalPrice = productsProvider.productTempCartData['product_total_price'];
     setState(() => _isLoadingProduct = false);
   }
 
@@ -73,7 +73,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoadingProduct) {
-      productTotalPrice = productsProvider.getProductCartData(product.id)['product_total_price'];
+      productTotalPrice = productsProvider.productTempCartData['product_total_price'];
     }
     return AppScaffold(
       bgColor: AppColors.white,
