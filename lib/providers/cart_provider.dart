@@ -96,6 +96,16 @@ class CartProvider with ChangeNotifier {
     if (responseData == 401) {
       return 401;
     }
+
+    if ((responseData["data"] == null || responseData["status"] != 200) && responseData["status"] != 422) {
+      print('adjust market cart product quantity response data');
+      print(responseData);
+      isLoadingAdjustCartQuantityRequest = false;
+      isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
+      notifyListeners();
+      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+    }
+
     CartData cartData = CartData.fromJson(responseData["data"]);
 
     if (responseData["data"] != null && responseData["status"] == 422) {
@@ -107,15 +117,6 @@ class CartProvider with ChangeNotifier {
       isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
       notifyListeners();
       return null;
-    }
-
-    if (responseData["data"] == null || responseData["status"] != 200) {
-      print('adjust market cart product quantity response data');
-      print(responseData);
-      isLoadingAdjustCartQuantityRequest = false;
-      isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
-      notifyListeners();
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
     }
 
     isLoadingAdjustCartQuantityRequest = false;
