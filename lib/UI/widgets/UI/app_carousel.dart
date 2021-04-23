@@ -31,7 +31,7 @@ class AppCarousel extends StatefulWidget {
   _AppCarouselState createState() => _AppCarouselState();
 }
 
-class _AppCarouselState extends State<AppCarousel> {
+class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClientMixin<AppCarousel> {
   final CarouselController _controller = CarouselController();
   int _currentSlide = 0;
 
@@ -52,6 +52,7 @@ class _AppCarouselState extends State<AppCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         SizedBox(
@@ -123,4 +124,7 @@ class _AppCarouselState extends State<AppCarousel> {
               ),
             ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
