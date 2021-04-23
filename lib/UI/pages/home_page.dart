@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   bool hideFoodContent = false;
 
   Future<void> fetchAndSetHomeData() async {
+    await addressesProvider.fetchSelectedAddress();
     await homeProvider.fetchAndSetHomeData(context, appProvider);
     _setHomeData();
   }

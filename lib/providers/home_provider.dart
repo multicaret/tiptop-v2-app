@@ -69,7 +69,6 @@ class HomeProvider with ChangeNotifier {
     isLoadingHomeData = true;
     notifyListeners();
     CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
-    AddressesProvider addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
     RestaurantsProvider restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
@@ -86,7 +85,7 @@ class HomeProvider with ChangeNotifier {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',
       'channel': selectedChannel,
-      'selected_address_id': addressesProvider.selectedAddress == null ? '' : '${addressesProvider.selectedAddress.id}',
+      'selected_address_id': AddressesProvider.selectedAddressId == null ? '' : '${AddressesProvider.selectedAddressId}',
     };
 
     marketHomeDataRequestError = false;
@@ -94,7 +93,6 @@ class HomeProvider with ChangeNotifier {
     marketNoBranchFound = false;
     foodNoRestaurantFound = false;
     try {
-      await addressesProvider.fetchSelectedAddress();
       final responseData = await appProvider.get(
         endpoint: endpoint,
         body: body,

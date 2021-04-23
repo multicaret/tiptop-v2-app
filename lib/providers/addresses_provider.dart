@@ -19,6 +19,7 @@ class AddressesProvider with ChangeNotifier {
 
   bool get addressIsSelected => selectedAddress != null;
   Address selectedAddress;
+  static int selectedAddressId;
 
   Future<void> fetchSelectedAddress() async {
     bool checkSelectedAddressKey = storageActions.checkKey(key: 'selected_address');
@@ -32,6 +33,8 @@ class AddressesProvider with ChangeNotifier {
     String selectedAddressString = await storageActions.getDataOfType(key: 'selected_address', type: String);
     // print(selectedAddressString);
     selectedAddress = Address.fromJson(json.decode(selectedAddressString));
+    selectedAddressId = selectedAddress.id;
+    print('Selected Address ID: ${selectedAddress.id}, Name: ${selectedAddress.alias}');
     notifyListeners();
   }
 
