@@ -33,6 +33,7 @@ class _RestaurantFavoriteButtonState extends State<RestaurantFavoriteButton> {
       appProvider,
       widget.restaurantId,
       restaurantIsFavorited ? Interaction.UN_FAVORITE : Interaction.FAVORITE,
+      context,
     );
     setState(() => _isLoadingInteractRequest = false);
   }
