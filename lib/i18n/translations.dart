@@ -33,9 +33,19 @@ class Translations {
     return true;
   }
 
+  String _translatedKey;
+
   // This method will be called from every widget which needs a localized text
-  String get(String key) {
-    return _localizedStrings[key];
+  // Added for loop to translate arguments as variables in .json files.
+  String get(String key, {List<dynamic> args}) {
+    if (null == _localizedStrings[key]) return "${locale.languageCode}[$key]";
+    _translatedKey = _localizedStrings[key];
+    if (null == args || args.isEmpty)
+      return _translatedKey;
+    else {
+      for (int i = 0; i < args.length; ++i) _translatedKey = _translatedKey.replaceAll("{$i}", args[i]);
+      return _translatedKey;
+    }
   }
 }
 
