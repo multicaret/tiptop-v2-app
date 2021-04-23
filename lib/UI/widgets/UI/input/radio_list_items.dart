@@ -7,14 +7,14 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-class RadioSelectItems extends StatelessWidget {
+class RadioListItems extends StatelessWidget {
   final List<dynamic> items;
   final dynamic selectedId;
   final Function action;
   final bool isAssetLogo;
   final bool hasBorder;
 
-  RadioSelectItems({
+  RadioListItems({
     @required this.items,
     @required this.selectedId,
     @required this.action,
@@ -62,7 +62,7 @@ class RadioSelectItems extends StatelessWidget {
                                   child: AppIcons.icon50(items[i]["icon"]),
                                 ),
                         const SizedBox(width: 10),
-                        Text(items[i]["title"]),
+                        items[i]["title"] is Widget ? items[i]["title"] : Text(items[i]["title"]),
                       ],
                     ),
                     if (items[i]["logo"] != null)

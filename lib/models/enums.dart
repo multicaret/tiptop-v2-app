@@ -113,11 +113,15 @@ final productOptionTypeValues = EnumValues({
 enum ProductOptionInputType {
   PILL,
   RADIO,
+  CHECKBOX,
+  SELECT,
 }
 
 final productOptionInputTypeValues = EnumValues({
   "pill": ProductOptionInputType.PILL,
   "radio": ProductOptionInputType.RADIO,
+  "checkbox": ProductOptionInputType.CHECKBOX,
+  "select": ProductOptionInputType.SELECT,
 });
 
 enum ProductOptionSelectionType {
