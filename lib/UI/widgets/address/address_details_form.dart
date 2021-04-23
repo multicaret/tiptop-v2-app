@@ -82,13 +82,14 @@ class AddressDetailsForm extends StatelessWidget {
                 ),
                 AppDropDownButton(
                   labelText: 'City',
+                  hintText: Translations.of(context).get('Select City'),
                   defaultValue: addressDetailsFormData['region_id'],
                   items: regionsDropDownItems,
                   onChanged: (regionId) => setAddressDetailsFormData('region_id', regionId),
                 ),
                 AppDropDownButton(
                   labelText: 'Neighborhood',
-                  hintText: 'Select Neighborhood',
+                  hintText: Translations.of(context).get('Select Neighborhood'),
                   defaultValue: addressDetailsFormData['city_id'],
                   items: citiesDropDownItems,
                   onChanged: (cityId) => setAddressDetailsFormData('city_id', cityId),

@@ -12,6 +12,7 @@ class AppDropDownButton extends StatelessWidget {
   final Function onChanged;
   final String labelText;
   final String hintText;
+  final bool fit;
 
   AppDropDownButton({
     @required this.defaultValue,
@@ -19,6 +20,7 @@ class AppDropDownButton extends StatelessWidget {
     @required this.onChanged,
     this.labelText,
     this.hintText = '',
+    this.fit = false,
   });
 
   @override
@@ -40,7 +42,7 @@ class AppDropDownButton extends StatelessWidget {
             ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-            margin: EdgeInsets.only(bottom: 20),
+            margin: EdgeInsets.only(bottom: fit ? 0 : 20),
             decoration: BoxDecoration(
               color: AppColors.bg,
               border: Border.all(color: AppColors.border, width: 1.5),
@@ -54,12 +56,12 @@ class AppDropDownButton extends StatelessWidget {
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,
                 isExpanded: true,
-                hint: hintText != null && hintText.isNotEmpty ? Text(Translations.of(context).get(hintText)) : null,
+                hint: hintText != null && hintText.isNotEmpty ? Text(hintText) : null,
                 items: <Map<String, dynamic>>[...items].map<DropdownMenuItem<int>>(
                   (Map<String, dynamic> value) {
                     return DropdownMenuItem<int>(
                       value: value['id'],
-                      child: Text(value['name']),
+                      child: value['title'] is Widget ? value['title'] : Text(value['title']),
                     );
                   },
                 ).toList(),

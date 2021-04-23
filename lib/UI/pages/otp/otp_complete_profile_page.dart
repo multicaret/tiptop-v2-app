@@ -49,10 +49,10 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       return;
     }
-    regionsDropDownItems = otpProvider.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
+    regionsDropDownItems = otpProvider.regions.map((region) => {'id': region.id, 'title': region.name}).toList();
     if (formData['region_id'] != null) {
       List<City> cities = otpProvider.cities.where((city) => city.region.id == formData['region_id']).toList();
-      citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+      citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
     }
     setState(() => _isLoadingCreateEditProfileRequest = false);
   }
@@ -131,15 +131,15 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       onChanged: (regionId) {
                         setState(() => formData['region_id'] = regionId);
                         List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
-                        citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+                        citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
                       },
-                      hintText: 'Select City',
+                      hintText: Translations.of(context).get('Select City'),
                     ),
                     AppDropDownButton(
                       labelText: 'Neighborhood',
                       defaultValue: formData['city_id'],
                       items: citiesDropDownItems,
-                      hintText: 'Select Neighborhood',
+                      hintText: Translations.of(context).get('Select Neighborhood'),
                       onChanged: (cityId) => setState(() => formData['city_id'] = cityId),
                     ),
                     AppButtons.primary(

@@ -85,10 +85,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
       });
       if (createAddressData != null) {
         addressIconsDropDownItems = createAddressData.kinds.map((kind) => {'id': kind.id, 'icon_url': kind.icon}).toList();
-        regionsDropDownItems = createAddressData.regions.map((region) => {'id': region.id, 'name': region.name}).toList();
+        regionsDropDownItems = createAddressData.regions.map((region) => {'id': region.id, 'title': region.name}).toList();
         if (addressDetailsFormData['region_id'] != null) {
           List<City> cities = createAddressData.cities.where((city) => city.region.id == addressDetailsFormData['region_id']).toList();
-          citiesDropDownItems = cities.map((city) => {'id': city.id, 'name': city.name}).toList();
+          citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
         }
       }
       setState(() => _isLoadingCreateAddressRequest = false);
@@ -213,7 +213,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 // print(addressDetailsFormData);
                 if (key == 'region_id') {
                   List<City> selectedRegionCities = createAddressData.cities.where((city) => city.region.id == value).toList();
-                  citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'name': city.name}).toList();
+                  citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'title': city.name}).toList();
                 }
                 if (key == 'kind') {
                   addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == value).title;
