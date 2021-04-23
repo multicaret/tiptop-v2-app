@@ -11,7 +11,6 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
-import '../../UI/formatted_price.dart';
 import '../../formatted_prices.dart';
 
 class MarketGridProductItem extends StatelessWidget {
@@ -52,6 +51,7 @@ class MarketGridProductItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                         image: DecorationImage(
                           image: CachedNetworkImageProvider(product.media.coverThumbnail),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
