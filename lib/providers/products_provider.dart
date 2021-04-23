@@ -16,7 +16,12 @@ class ProductsProvider with ChangeNotifier {
   Product product;
   Map<String, dynamic> productTempCartData = {};
 
-  void setProductTempOption({Product product, ProductOption option, int selectionOrIngredientId, BuildContext context,}) {
+  void setProductTempOption({
+    Product product,
+    ProductOption option,
+    int selectionOrIngredientId,
+    BuildContext context,
+  }) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     List<Map<String, dynamic>> productSelectedOptions = productTempCartData["options"] as List<Map<String, dynamic>>;
     List<Map<String, dynamic>> newSelectedOptions;
