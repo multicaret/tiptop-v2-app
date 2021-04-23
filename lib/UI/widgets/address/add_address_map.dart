@@ -40,8 +40,8 @@ class _AddAddressMapState extends State<AddAddressMap> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      myLocationEnabled: false,
-      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
       initialCameraPosition: CameraPosition(
         target: _defaultMarkerPosition,
         zoom: widget.defaultZoom,

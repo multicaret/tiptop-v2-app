@@ -74,20 +74,24 @@ class Cart {
 }
 
 class CartProduct {
+  int productIdInCart;
   Product product;
   int quantity;
 
   CartProduct({
+    this.productIdInCart,
     this.product,
     this.quantity,
   });
 
   factory CartProduct.fromJson(Map<String, dynamic> json) => CartProduct(
+        productIdInCart: json["productIdInCart"],
         product: Product.fromJson(json["product"]),
         quantity: json["quantity"],
       );
 
   Map<String, dynamic> toJson() => {
+        "productIdInCart": productIdInCart,
         "product": product.toJson(),
         "quantity": quantity,
       };

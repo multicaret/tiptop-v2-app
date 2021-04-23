@@ -114,8 +114,8 @@ class CartProvider with ChangeNotifier {
       print('adjust market cart product quantity response data');
       print(responseData);
       showToast(
-        msg: Translations.of(context).get("There are only ${cartData.availableQuantity} available ${product.title}",
-            args: [cartData.availableQuantity.toString(), product.title]),
+        msg: Translations.of(context).get("There are only ${responseData["data"]["availableQuantity"]} available ${product.title}",
+            args: [responseData["data"]["availableQuantity"].toString(), product.title]),
       );
       requestedMoreThanAvailableQuantity[product.id] = true;
       isLoadingAdjustCartQuantityRequest = false;
