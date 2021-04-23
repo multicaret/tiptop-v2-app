@@ -8,7 +8,7 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/order_confirmed_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/text_field_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
@@ -177,7 +177,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           SectionTitle('Payment Methods'),
                           ValueListenableBuilder(
                             valueListenable: selectedPaymentMethodNotifier,
-                            builder: (c, selectedPaymentMethodId, _) => RadioSelectItems(
+                            builder: (c, selectedPaymentMethodId, _) => RadioListItems(
                               items: checkoutData.paymentMethods
                                   .map((method) => {
                                         'id': method.id,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -41,7 +41,7 @@ class FoodProductOptions extends StatelessWidget {
             Widget getOptionContent() {
               switch (option.inputType) {
                 case ProductOptionInputType.RADIO:
-                  return RadioSelectItems(
+                  return RadioListItems(
                     items: option.selections.map((item) {
                       String itemTitle = item.price == null || item.price.raw == 0 ? item.title : '${item.title} [+${item.price.formatted}]';
                       return {

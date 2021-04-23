@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_bottom_sheet.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -55,7 +55,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           children: [
             Column(
               children: [
-                RadioSelectItems(
+                RadioListItems(
                   items: _getSortItems(context),
                   selectedId: restaurantsProvider.sortType,
                   action: (value) => restaurantsProvider.setSortType(value),

@@ -13,7 +13,7 @@ import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/profile_auth_header.dart';
 import 'package:tiptop_v2/UI/widgets/profile_setting_item.dart';
@@ -99,7 +99,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems(homeProvider.channelIsMarket)),
                 SectionTitle('Languages'),
-                RadioSelectItems(
+                RadioListItems(
                   items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
                   selectedId: selectedLanguageId,
                   action: (languageId) {

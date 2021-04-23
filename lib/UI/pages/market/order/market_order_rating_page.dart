@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/labeled_rating_bar.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
@@ -104,7 +104,7 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
                           SectionTitle('Please Rate Your Experience'),
                           LabeledRatingBar(setRatingValue: (value) => setState(() => _ratingValue = value)),
                           if (_ratingValue != null && _ratingValue <= 2)
-                            RadioSelectItems(
+                            RadioListItems(
                               items: marketOrderRatingAvailableIssues.map((issue) => {'id': issue.id, 'title': issue.title}).toList(),
                               selectedId: _selectedIssueId,
                               action: (int id) {

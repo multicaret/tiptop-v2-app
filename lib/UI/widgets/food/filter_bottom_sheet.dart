@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_bottom_sheet.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_rating_bar.dart';
-import 'package:tiptop_v2/UI/widgets/UI/input/radio_select_items.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
@@ -75,7 +75,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 5),
                 child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
               ),
-              RadioSelectItems(
+              RadioListItems(
                 items: deliveryTypesRadioItems,
                 hasBorder: false,
                 selectedId: filterData['delivery_type'],
