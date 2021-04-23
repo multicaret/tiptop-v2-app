@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/checkbox_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -31,6 +32,24 @@ class FoodProductOptions extends StatelessWidget {
               orElse: () => null,
             );
             List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+            List<Map<String, dynamic>> radioOrCheckboxOrDropdownItems = option.selections
+                .map((selection) => {
+                      'id': selection.id,
+                      'title': RichText(
+                        text: TextSpan(
+                          text: selection.title,
+                          style: AppTextStyles.body,
+                          children: <TextSpan>[
+                            if (selection.price != null && selection.price.raw > 0)
+                              TextSpan(
+                                text: ' [+${selection.price.formatted}]',
+                                style: AppTextStyles.bodySecondary,
+                              ),
+                          ],
+                        ),
+                      ),
+                    })
+                .toList();
 
             void updateOption(int _id) {
               productsProvider.setProductTempOption(
@@ -44,24 +63,7 @@ class FoodProductOptions extends StatelessWidget {
               switch (option.inputType) {
                 case ProductOptionInputType.RADIO:
                   return RadioListItems(
-                    items: option.selections.map((selection) {
-                      return {
-                        'id': selection.id,
-                        'title': RichText(
-                          text: TextSpan(
-                            text: selection.title,
-                            style: AppTextStyles.body,
-                            children: <TextSpan>[
-                              if (selection.price != null && selection.price.raw > 0)
-                                TextSpan(
-                                  text: ' [+${selection.price.formatted}]',
-                                  style: AppTextStyles.bodySecondary,
-                                ),
-                            ],
-                          ),
-                        ),
-                      };
-                    }).toList(),
+                    items: radioOrCheckboxOrDropdownItems,
                     selectedId: selectedIds.length > 0 ? selectedIds[0] : null,
                     action: (id) => updateOption(id),
                     hasBorder: false,
@@ -89,29 +91,23 @@ class FoodProductOptions extends StatelessWidget {
                   break;
                 case ProductOptionInputType.CHECKBOX:
                   return CheckboxListItems(
-                    items: option.selections
-                        .map((selection) => {
-                              'id': selection.id,
-                              'title': RichText(
-                                text: TextSpan(
-                                  text: selection.title,
-                                  style: AppTextStyles.body,
-                                  children: <TextSpan>[
-                                    if (selection.price != null && selection.price.raw > 0)
-                                      TextSpan(
-                                        text: ' [+${selection.price.formatted}]',
-                                        style: AppTextStyles.bodySecondary,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            })
-                        .toList(),
+                    items: radioOrCheckboxOrDropdownItems,
                     selectedIds: selectedIds,
                     action: (id) => updateOption(id),
                     hasBorder: false,
                   );
                   break;
+                case ProductOptionInputType.SELECT:
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                    child: AppDropDownButton(
+                      hintText: option.title,
+                      defaultValue: selectedIds.length > 0 ? selectedIds[0] : null,
+                      fit: true,
+                      items: radioOrCheckboxOrDropdownItems,
+                      onChanged: (id) => updateOption(id),
+                    ),
+                  );
                 default:
                   return Container();
               }
