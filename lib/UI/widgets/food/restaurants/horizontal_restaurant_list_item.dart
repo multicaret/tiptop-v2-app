@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class HorizontalRestaurantListItem extends StatelessWidget {
   final Branch restaurant;
@@ -42,25 +45,45 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                 ),
               ),
               if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(8.0),
-                        bottomLeft: Radius.circular(8.0),
+                restaurant.rating.countRaw < 10
+                    ? Consumer<AppProvider>(
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            Translations.of(context).get('New'),
+                            style: AppTextStyles.subtitleXsWhite,
+                          ),
+                        ),
+                        builder: (c, appProvider, child) => Positioned(
+                          bottom: 5,
+                          left: appProvider.isRTL ? null : 5,
+                          right: appProvider.isRTL ? 5 : null,
+                          child: child,
+                        ),
+                      )
+                    : Positioned(
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                            ),
+                            color: Colors.black.withOpacity(0.8),
+                          ),
+                          height: 29,
+                          child: RatingInfo(
+                            ratingValue: restaurant.rating.averageRaw,
+                            ratingsCount: restaurant.rating.countRaw,
+                          ),
+                        ),
                       ),
-                      color: Colors.black.withOpacity(0.8),
-                    ),
-                    height: 29,
-                    child: RatingInfo(
-                      ratingValue: restaurant.rating.averageRaw,
-                      ratingsCount: restaurant.rating.countRaw,
-                    ),
-                  ),
-                ),
             ],
           ),
           const SizedBox(width: 16),

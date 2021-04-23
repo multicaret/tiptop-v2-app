@@ -74,11 +74,16 @@ class RestaurantHeaderInfo extends StatelessWidget {
                                 ),
                               ),
                               if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
-                                RatingInfo(
-                                  ratingValue: restaurant.rating.averageRaw,
-                                  ratingsCount: restaurant.rating.countRaw,
-                                  hasWhiteBg: true,
-                                ),
+                                restaurant.rating.countRaw < 10
+                                    ? Text(
+                                        Translations.of(context).get('New'),
+                                        style: AppTextStyles.subtitleSecondary,
+                                      )
+                                    : RatingInfo(
+                                        ratingValue: restaurant.rating.averageRaw,
+                                        ratingsCount: restaurant.rating.countRaw,
+                                        hasWhiteBg: true,
+                                      ),
                             ],
                           )
                         ],
