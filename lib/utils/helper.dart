@@ -176,7 +176,7 @@ List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength, Build
   } else {
     //Check if array length is maximum
     if (maxLength != null && array.length == maxLength) {
-      showToast(msg: Translations.of(context).get('You can only add up to $maxLength items', args: [maxLength.toString()]));
+      showToast(msg: Translations.of(context).get('You can only add up to {maxLength} items', args: [maxLength.toString()]));
       return array;
     }
     //Add Item

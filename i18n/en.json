@@ -178,6 +178,8 @@
   "Error deleting order!": "'Error deleting order!",
   "Cart Cleared Successfully!": "Cart Cleared Successfully!",
   "Error clearing cart!": "Error clearing cart!",
+  "Successfully removed restaurant from favorites!": "Successfully removed restaurant from favorites!",
+  "Successfully added restaurant to favorites!": "Successfully added restaurant to favorites!",
   "Successfully removed product from favorites!": "Successfully removed product from favorites!",
   "Successfully added product to favorites!": "Successfully added product to favorites!",
   "An error occurred and we couldn't add this product to your favorites!": "An error occurred and we couldn't add this product to your favorites!",
@@ -193,7 +195,7 @@
   "An error occurred and we couldn't add this restaurant to your favorites!": "An error occurred and we couldn't add this restaurant to your favorites!",
   "Cleared cart and changed address successfully": "Cleared cart and changed address to {0} successfully!",
   "Changed address successfully": "Changed address to {0} successfully!",
-  "There are only ${cartData.availableQuantity} available ${product.title}": "There are only {0} available {1}",
-  "You can only add up to $maxLength items": "You can only add up to {0} items",
+  "There are only {cartAvailableQuantity} available {productTitle}": "There are only {0} available {1}",
+  "You can only add up to {maxLength} items": "You can only add up to {0} items",
   "Order total should be greater than:": "Order total should be greater than: {0}"
 }
