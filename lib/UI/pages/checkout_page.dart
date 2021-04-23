@@ -120,9 +120,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
           isGrandTotal: true,
         ),
       ];
-      showToast(msg: 'Successfully validated coupon code!');
+      showToast(msg: Translations.of(context).get('Successfully validated coupon code!'));
     } catch (e) {
-      showToast(msg: 'Coupon Validation Failed');
+      showToast(msg: Translations.of(context).get('Coupon Validation Failed'));
     }
     setState(() => _isLoadingValidateCoupon = false);
   }
@@ -276,7 +276,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
     } catch (e) {
       setState(() => _isLoadingOrderSubmit = false);
-      showToast(msg: 'An error occurred while submitting your order!');
+      showToast(msg: Translations.of(context).get('An error occurred while submitting your order!'));
       throw e;
     }
   }

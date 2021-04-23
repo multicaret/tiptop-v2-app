@@ -53,10 +53,10 @@ class _CartControlsState extends State<CartControls> {
 
   Future<void> adjustMarketProductQuantity(CartAction action) async {
     if (!appProvider.isAuth) {
-      showToast(msg: 'You Need to Log In First!');
+      showToast(msg: Translations.of(context).get('You Need to Log In First!'));
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     } else if (!addressesProvider.addressIsSelected) {
-      showToast(msg: 'You Need to Select Address First!');
+      showToast(msg: Translations.of(context).get('You Need to Select Address First!'));
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
@@ -64,9 +64,10 @@ class _CartControlsState extends State<CartControls> {
         appProvider: appProvider,
         isAdding: action == CartAction.ADD,
         product: widget.product,
+        context: context,
       );
       if (responseData == 401) {
-        showToast(msg: 'You need to log in first!');
+        showToast(msg: Translations.of(context).get('You Need to Log In First!'));
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }

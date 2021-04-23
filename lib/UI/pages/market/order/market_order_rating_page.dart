@@ -61,9 +61,9 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
   Future<void> _submitRating() async {
     _ratingFormKey.currentState.save();
     if (_ratingValue == null) {
-      showToast(msg: 'Please enter a rating value!');
+      showToast(msg: Translations.of(context).get('Please enter a rating value!'));
     } else if (_ratingValue <= 2 && _selectedIssueId == null) {
-      showToast(msg: 'Please select a reason!');
+      showToast(msg: Translations.of(context).get('Please select a reason!'));
     } else {
       setState(() => _isLoadingStoreRatingRequest = true);
       Map<String, dynamic> ratingData = {
@@ -76,10 +76,10 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
       try {
         await ordersProvider.storeOrderRating(appProvider, order.id, ratingData);
         setState(() => _isLoadingStoreRatingRequest = false);
-        showToast(msg: 'Rating submitted successfully');
+        showToast(msg: Translations.of(context).get('Rating submitted successfully'));
         Navigator.of(context).pop();
       } catch (e) {
-        showToast(msg: 'Error submitting rating!');
+        showToast(msg: Translations.of(context).get('Error submitting rating!'));
         setState(() => _isLoadingStoreRatingRequest = false);
       }
     }

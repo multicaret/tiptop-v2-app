@@ -169,14 +169,14 @@ String getHttpExceptionMessage(responseData) {
   return exceptionMessage.isNotEmpty ? exceptionMessage : 'Unknown Error';
 }
 
-List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength}) {
-  if(array != null && array.contains(id)) {
+List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength, BuildContext context}) {
+  if (array != null && array.contains(id)) {
     //Remove Item
     return array.where((_id) => _id != id).toList();
   } else {
     //Check if array length is maximum
-    if(maxLength != null && array.length == maxLength) {
-      showToast(msg: 'You can only add up to $maxLength items');
+    if (maxLength != null && array.length == maxLength) {
+      showToast(msg: Translations.of(context).get('You can only add up to $maxLength items', args: [maxLength.toString()]));
       return array;
     }
     //Add Item

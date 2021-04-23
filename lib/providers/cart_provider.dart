@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -60,10 +61,11 @@ class CartProvider with ChangeNotifier {
     @required AppProvider appProvider,
     @required bool isAdding,
     @required Product product,
+    BuildContext context,
   }) async {
     if (marketCart == null || marketCart.id == null) {
       print('No marketCart');
-      showToast(msg: 'An Error Occurred! Logging out...');
+      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
       appProvider.logout(clearSelectedAddress: true);
       return 401;
     }
@@ -111,7 +113,10 @@ class CartProvider with ChangeNotifier {
     if (responseData["data"] != null && responseData["status"] == 422) {
       print('adjust market cart product quantity response data');
       print(responseData);
-      showToast(msg: 'There are only ${responseData["data"]["availableQuantity"]} available ${product.title}');
+      showToast(
+        msg: Translations.of(context).get("There are only ${responseData["data"]["availableQuantity"]} available ${product.title}",
+            args: [responseData["data"]["availableQuantity"].toString(), product.title]),
+      );
       requestedMoreThanAvailableQuantity[product.id] = true;
       isLoadingAdjustCartQuantityRequest = false;
       isLoadingAdjustMarketProductQuantityRequest[product.id] = false;

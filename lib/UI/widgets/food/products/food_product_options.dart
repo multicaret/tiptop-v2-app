@@ -56,6 +56,7 @@ class FoodProductOptions extends StatelessWidget {
                 product: product,
                 option: option,
                 selectionOrIngredientId: _id,
+                context: context,
               );
             }
 

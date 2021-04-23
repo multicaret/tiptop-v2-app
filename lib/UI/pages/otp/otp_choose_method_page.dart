@@ -108,12 +108,12 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
           }
         } else {
           setState(() => _isLoadingCheckOTPValidation = false);
-          showToast(msg: 'OTP Validation Failed');
+          showToast(msg: Translations.of(context).get('OTP Validation Failed'));
           return;
         }
       } catch (error) {
         setState(() => _isLoadingCheckOTPValidation = false);
-        showToast(msg: 'Validation Failed!');
+        showToast(msg: Translations.of(context).get('Validation Failed!'));
         print("@error checkOTPValidation");
         print(error.toString());
       }
@@ -216,7 +216,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
     _phoneNumberFormKey.currentState.save();
     await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
     if (otpProvider.reference == null) {
-      showToast(msg: 'Unable to send SMS code, please try another method!');
+      showToast(msg: Translations.of(context).get('Unable to send SMS code, please try another method!'));
       return;
     }
     Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {

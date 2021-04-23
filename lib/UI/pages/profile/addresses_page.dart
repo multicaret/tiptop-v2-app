@@ -65,7 +65,12 @@ class _AddressesPageState extends State<AddressesPage> {
           cartProvider.clearCart(appProvider).then((_) {
             addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
               _changeSelectedAddress(_selectedAddress).then((_) {
-                showToast(msg: 'Cleared cart and changed address to (${_selectedAddress.kind.title}) successfully!');
+                showToast(
+                  msg: Translations.of(context).get(
+                    'Cleared cart and changed address successfully',
+                    args: [_selectedAddress.kind.title],
+                  ),
+                );
               });
             });
           });
@@ -73,7 +78,7 @@ class _AddressesPageState extends State<AddressesPage> {
       });
     } else {
       _changeSelectedAddress(_selectedAddress).then((_) {
-        showToast(msg: 'Changed address to (${_selectedAddress.kind.title}) successfully!');
+        showToast(msg: Translations.of(context).get("Changed address successfully", args: [_selectedAddress.kind.title]));
       });
     }
   }
@@ -99,7 +104,7 @@ class _AddressesPageState extends State<AddressesPage> {
       }
       await addressesProvider.deleteAddress(appProvider, _addressId);
       _fetchAndSetAddresses();
-      showToast(msg: 'Successfully deleted address!');
+      showToast(msg: Translations.of(context).get('Successfully deleted address!'));
     }
   }
 

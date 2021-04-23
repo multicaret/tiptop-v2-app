@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -81,13 +82,16 @@ class _MarketProductPageState extends State<MarketProductPage> {
         _productIsFavorited ? Interaction.UN_FAVORITE : Interaction.FAVORITE,
       );
       setState(() => _isLoadingInteractRequest = false);
-      showToast(msg: _productIsFavorited ? 'Successfully removed product from favorites!' : 'Successfully added product to favorites!');
+      showToast(
+          msg: _productIsFavorited
+              ? Translations.of(context).get('Successfully removed product from favorites!')
+              : Translations.of(context).get('Successfully added product to favorites!'));
     } catch (e) {
       setState(() {
         productIsFavorited = _productIsFavorited;
         _isLoadingInteractRequest = false;
       });
-      showToast(msg: "An error occurred and we couldn't add this product to your favorites!");
+      showToast(msg: Translations.of(context).get("An error occurred and we couldn't add this product to your favorites!"));
       throw e;
     }
   }

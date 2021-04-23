@@ -278,7 +278,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     ],
                     centerTitle: true,
                     titlePadding: const EdgeInsets.all(0),
-                    background: RestaurantHeaderInfo(restaurant: restaurant, coverHasRating: false,),
+                    background: RestaurantHeaderInfo(
+                      restaurant: restaurant,
+                      coverHasRating: false,
+                    ),
                   ),
                 ),
                 SliverList(

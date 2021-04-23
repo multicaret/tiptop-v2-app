@@ -129,7 +129,12 @@ class RestaurantsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> interactWithRestaurant(AppProvider appProvider, int restaurantId, Interaction interaction) async {
+  Future<void> interactWithRestaurant(
+    AppProvider appProvider,
+    int restaurantId,
+    Interaction interaction,
+    BuildContext context,
+  ) async {
     bool _oldIsFavorite = restaurantsFavoriteStatuses[restaurantId];
     restaurantsFavoriteStatuses[restaurantId] = interaction == Interaction.FAVORITE;
     notifyListeners();
@@ -156,13 +161,13 @@ class RestaurantsProvider with ChangeNotifier {
       }
       showToast(
           msg: interaction == Interaction.UN_FAVORITE
-              ? 'Successfully removed restaurant from favorites!'
-              : 'Successfully added restaurant to favorites!');
+              ? Translations.of(context).get('Successfully removed restaurant from favorites!')
+              : Translations.of(context).get('Successfully added restaurant to favorites!'));
       restaurantsFavoriteStatuses[restaurantId] = interaction == Interaction.FAVORITE;
       notifyListeners();
     } catch (e) {
       print('An error occurred!');
-      showToast(msg: "An error occurred and we couldn't add this restaurant to your favorites!");
+      showToast(msg: Translations.of(context).get("An error occurred and we couldn't add this restaurant to your favorites!"));
       restaurantsFavoriteStatuses[restaurantId] = _oldIsFavorite;
       notifyListeners();
     }

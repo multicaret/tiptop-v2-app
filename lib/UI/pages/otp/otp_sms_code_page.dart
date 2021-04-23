@@ -51,10 +51,10 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
   }
 
   Future<void> _resendSMSCode() async {
-    showToast(msg: 'Sending SMS code again...');
+    showToast(msg: Translations.of(context).get('Sending SMS code again'));
     await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
     if (otpProvider.reference == null) {
-      showToast(msg: 'Unable to send SMS code, please try another method!');
+      showToast(msg: Translations.of(context).get('Unable to send SMS code, please try another method!'));
       return;
     }
   }
@@ -144,7 +144,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     // try {
     final responseData = await otpProvider.checkOTPSMSValidation(appProvider, smsOTPData);
     if (responseData == 403) {
-      showToast(msg: 'Invalid Pin!');
+      showToast(msg: Translations.of(context).get('Invalid Pin!'));
       setState(() => _isLoadingSubmitSMSCode = false);
       return;
     }
@@ -159,7 +159,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
         Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
       }
     } else {
-      showToast(msg: 'OTP Validation Failed');
+      showToast(msg: Translations.of(context).get('OTP Validation Failed'));
     }
     setState(() => _isLoadingSubmitSMSCode = false);
 /*    } catch (error) {

@@ -44,10 +44,10 @@ class MarketCartPage extends StatelessWidget {
                   ).then((response) {
                     if (response != null && response) {
                       cartProvider.clearCart(appProvider).then((_) {
-                        showToast(msg: 'Cart Cleared Successfully!');
+                        showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
                         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
                       }).catchError((e) {
-                        showToast(msg: 'Error clearing cart!');
+                        showToast(msg: Translations.of(context).get('Error clearing cart!'));
                       });
                     }
                   });
@@ -79,7 +79,9 @@ class MarketCartPage extends StatelessWidget {
                       cartProvider.marketCart.total == null ||
                       cartProvider.marketCart.total.raw == 0 ||
                       cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
-                    showToast(msg: 'Order total should be greater than: ${homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted}');
+                    showToast(
+                        msg: Translations.of(context).get('Order total should be greater than: ',
+                            args: [homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted]));
                   } else {
                     Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
                   }

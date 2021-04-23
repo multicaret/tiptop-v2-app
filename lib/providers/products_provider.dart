@@ -16,7 +16,12 @@ class ProductsProvider with ChangeNotifier {
   Product product;
   Map<String, dynamic> productTempCartData = {};
 
-  void setProductTempOption({Product product, ProductOption option, int selectionOrIngredientId}) {
+  void setProductTempOption({
+    Product product,
+    ProductOption option,
+    int selectionOrIngredientId,
+    BuildContext context,
+  }) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     List<Map<String, dynamic>> productSelectedOptions = productTempCartData["options"] as List<Map<String, dynamic>>;
     List<Map<String, dynamic>> newSelectedOptions;
@@ -34,6 +39,7 @@ class ProductsProvider with ChangeNotifier {
             array: selectedIds,
             id: selectionOrIngredientId,
             maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
+            context: context,
           );
         }
 
@@ -74,10 +80,10 @@ class ProductsProvider with ChangeNotifier {
 
   void setProductTempQuantity(CartAction action) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
-    if(action == CartAction.ADD) {
+    if (action == CartAction.ADD) {
       productTempCartData['quantity']++;
     } else {
-      if(productTempCartData['quantity'] > 1) {
+      if (productTempCartData['quantity'] > 1) {
         productTempCartData['quantity']--;
       } else {
         return;
@@ -86,7 +92,7 @@ class ProductsProvider with ChangeNotifier {
     productTempCartData['options'].forEach((selectedProductOption) {
       productTotalPrice += selectedProductOption['option_total_price'];
     });
-    productTempCartData['product_total_price'] = productTotalPrice *  productTempCartData['quantity'];
+    productTempCartData['product_total_price'] = productTotalPrice * productTempCartData['quantity'];
     print('productTempCartData');
     print(productTempCartData);
     notifyListeners();
