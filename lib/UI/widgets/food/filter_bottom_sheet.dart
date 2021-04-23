@@ -172,7 +172,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Future<void> _submitFilters() async {
     try {
       await restaurantsProvider.submitFiltersAndSort();
-      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} result(s) match your search');
+      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
       if (widget.shouldPopOnly) {
         Navigator.of(context).pop();
       } else {

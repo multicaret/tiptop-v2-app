@@ -31,7 +31,7 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
     setState(() => _isLoadingPreviousOrders = true);
     final response = await ordersProvider.fetchAndSetFoodPreviousOrders(appProvider);
     if (response == 401) {
-      showToast(msg: 'You need to log in first!');
+      showToast(msg: Translations.of(context).get('You Need to Log In First!'));
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     }
     previousOrders = ordersProvider.foodPreviousOrders;
@@ -85,10 +85,10 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
                           previousOrders.removeAt(i);
                         });
                         ordersProvider.deletePreviousOrder(appProvider, orderIdToRemove).then((_) {
-                          showToast(msg: 'Successfully Deleted Order From History!');
+                          showToast(msg: Translations.of(context).get('Successfully Deleted Order From History!'));
                           return true;
                         }).catchError((e) {
-                          showToast(msg: 'Error deleting order!');
+                          showToast(msg: Translations.of(context).get('Error deleting order!'));
                         });
                       },
                     ),

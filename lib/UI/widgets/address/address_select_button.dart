@@ -118,7 +118,7 @@ class AddressSelectButton extends StatelessWidget {
                             if (appProvider.isAuth) {
                               Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
                             } else {
-                              showToast(msg: 'You need to log in first!');
+                              showToast(msg: Translations.of(context).get('You need to Log In First!'));
                               Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                             }
                           },

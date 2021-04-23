@@ -63,7 +63,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     try {
       final createAddressResponse = await addressesProvider.createAddress(appProvider, pickedPosition);
       if (createAddressResponse == 401) {
-        showToast(msg: 'You need to log in first!');
+        showToast(msg: Translations.of(context).get('You Need to Log In First!'));
         Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
         return false;
       }
@@ -95,7 +95,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       return true;
     } catch (e) {
       // throw e;
-      showToast(msg: 'An error occurred!');
+      showToast(msg: Translations.of(context).get('An error occurred!'));
       setState(() => _isLoadingCreateAddressRequest = false);
       return false;
     }
@@ -262,7 +262,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     setState(() => _isLoadingStoreAddressRequest = true);
     await addressesProvider.storeAddress(appProvider, addressDetailsFormData);
     setState(() => _isLoadingStoreAddressRequest = false);
-    showToast(msg: 'Address stored successfully!');
+    showToast(msg: Translations.of(context).get('Address stored successfully!'));
     Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
   }
 }

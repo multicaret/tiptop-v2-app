@@ -54,10 +54,10 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     if (response != null && response) {
       try {
         await ordersProvider.deletePreviousOrder(appProvider, orderId);
-        showToast(msg: 'Successfully Deleted Order From History!');
+        showToast(msg: Translations.of(context).get('Successfully Deleted Order From History!'));
         Navigator.of(context).pop(true);
       } catch (e) {
-        showToast(msg: 'Error deleting order!');
+        showToast(msg: Translations.of(context).get('Error deleting order!'));
         throw e;
       }
     }
