@@ -118,7 +118,8 @@ class FoodProductOptions extends StatelessWidget {
               children: [
                 SectionTitle(
                   option.title,
-                  suffix: option.isRequired ? ' *' : '',
+                  suffix: option.isRequired ? ' *' : null,
+                  suffixTextStyle: AppTextStyles.bodySecondary,
                   translate: false,
                 ),
                 Container(

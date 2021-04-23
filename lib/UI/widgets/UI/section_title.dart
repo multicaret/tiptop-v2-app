@@ -8,8 +8,9 @@ class SectionTitle extends StatelessWidget {
   final String text;
   final String suffix;
   final bool translate;
+  final TextStyle suffixTextStyle;
 
-  SectionTitle(this.text, {this.suffix, this.translate = true});
+  SectionTitle(this.text, {this.suffix, this.translate = true, this.suffixTextStyle = AppTextStyles.body50});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,14 @@ class SectionTitle extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 30, bottom: 5),
       color: AppColors.bg,
-      child: Text(
-        '${translate ? Translations.of(context).get(text) : text}${suffix ?? ''}',
-        style: AppTextStyles.body50,
+      child: RichText(
+        text: TextSpan(
+          text: translate ? Translations.of(context).get(text) : text,
+          style: AppTextStyles.body50,
+          children: <TextSpan>[
+            if (suffix != null && suffix.isNotEmpty) TextSpan(text: suffix, style: suffixTextStyle),
+          ],
+        ),
       ),
     );
   }
