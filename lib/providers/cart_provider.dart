@@ -111,7 +111,7 @@ class CartProvider with ChangeNotifier {
     if (responseData["data"] != null && responseData["status"] == 422) {
       print('adjust market cart product quantity response data');
       print(responseData);
-      showToast(msg: 'There are only ${cartData.availableQuantity} available ${product.title}');
+      showToast(msg: 'There are only ${responseData["data"]["availableQuantity"]} available ${product.title}');
       requestedMoreThanAvailableQuantity[product.id] = true;
       isLoadingAdjustCartQuantityRequest = false;
       isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
