@@ -13,12 +13,12 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.TOP}) {
+void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.TOP, int timeInSec = 1}) {
   Fluttertoast.showToast(
       msg: msg,
-      toastLength: length,
+      toastLength: timeInSec > 1 ? Toast.LENGTH_LONG : length,
       gravity: gravity,
-      timeInSecForIosWeb: 1,
+      timeInSecForIosWeb: timeInSec,
       backgroundColor: Colors.black.withOpacity(0.8),
       textColor: AppColors.white,
       fontSize: 16.0);
