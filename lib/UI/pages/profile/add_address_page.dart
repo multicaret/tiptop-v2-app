@@ -214,6 +214,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 if (key == 'region_id') {
                   List<City> selectedRegionCities = createAddressData.cities.where((city) => city.region.id == value).toList();
                   citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'title': city.name}).toList();
+                  addressDetailsFormData['city_id'] = null;
                 }
                 if (key == 'kind') {
                   addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == value).title;

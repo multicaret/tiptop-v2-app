@@ -16,9 +16,9 @@ class CreateAddressData {
   City selectedCity;
 
   factory CreateAddressData.fromJson(Map<String, dynamic> json) => CreateAddressData(
-        regions: List<Region>.from(json["regions"].map((x) => Region.fromJson(x))),
-        kinds: List<Kind>.from(json["kinds"].map((x) => Kind.fromJson(x))),
-        cities: List<City>.from(json["cities"].map((x) => City.fromJson(x))),
+        regions: json["regions"] == null ? <Region>[] : List<Region>.from(json["regions"].map((x) => Region.fromJson(x))),
+        kinds: json["kinds"] == null ? <Kind>[] : List<Kind>.from(json["kinds"].map((x) => Kind.fromJson(x))),
+        cities: json["cities"] == null ? <City>[] : List<City>.from(json["cities"].map((x) => City.fromJson(x))),
         selectedRegion: Region.fromJson(json["selectedRegion"]),
         selectedCity: City.fromJson(json["selectedCity"]),
       );
