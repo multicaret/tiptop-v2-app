@@ -132,6 +132,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                         setState(() => formData['region_id'] = regionId);
                         List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
                         citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
+                        formData['city_id'] = null;
                       },
                       hintText: Translations.of(context).get('Select City'),
                     ),
