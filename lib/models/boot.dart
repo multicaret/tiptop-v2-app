@@ -1,46 +1,27 @@
-// To parse this JSON data, do
-//
-//     final bootResponse = bootResponseFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'enums.dart';
-import 'models.dart';
-
-BootResponse bootResponseFromJson(String str) => BootResponse.fromJson(json.decode(str));
-
-String bootResponseToJson(BootResponse data) => json.encode(data.toJson());
-
-class BootResponse {
-  BootResponse({
-    this.data,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  BootData data;
-  String errors;
-  String message;
-  int status;
-
-  factory BootResponse.fromJson(Map<String, dynamic> json) => BootResponse(
-        data: json["data"] == null ? null : BootData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
 
 class BootData {
   BootData({
+    this.bootConfigs,
+    this.defaultChannel,
+  });
+
+  BootConfigs bootConfigs;
+  AppChannel defaultChannel;
+
+  factory BootData.fromJson(Map<String, dynamic> json) => BootData(
+        bootConfigs: BootConfigs.fromJson(json["bootConfigs"]),
+        defaultChannel: appChannelValues.map[json["defaultChannel"]],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": bootConfigs.toJson(),
+        "defaultChannel": appChannelValues.reverse[defaultChannel],
+      };
+}
+
+class BootConfigs {
+  BootConfigs({
     this.buildNumber,
     this.applicationType,
     this.platformType,
@@ -56,7 +37,7 @@ class BootData {
   dynamic data;
   DataTranslated dataTranslated;
 
-  factory BootData.fromJson(Map<String, dynamic> json) => BootData(
+  factory BootConfigs.fromJson(Map<String, dynamic> json) => BootConfigs(
         buildNumber: json["buildNumber"],
         applicationType: json["applicationType"],
         platformType: json["platformType"],

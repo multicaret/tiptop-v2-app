@@ -39,7 +39,7 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  AppChannel selectedChannel = AppChannel.MARKET;
+  AppChannel selectedChannel = AppProvider.appDefaultChannel;
 
   bool get channelIsMarket => selectedChannel == AppChannel.MARKET;
 

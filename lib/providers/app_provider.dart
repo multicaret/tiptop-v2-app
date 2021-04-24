@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/boot.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/user.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -21,7 +22,7 @@ class AppProvider with ChangeNotifier {
   static const String GOOGLE_API_KEY = 'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
   // Boot config related
-  BootData bootConfigs;
+  BootConfigs bootConfigs;
 
   bool _isForceUpdateEnabled = false;
 
@@ -356,6 +357,8 @@ class AppProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> mobileAppDetails;
+  BootData bootData;
+  static AppChannel appDefaultChannel;
 
   Future<void> fetchBootConfigurations() async {
     mobileAppDetails = await loadMobileAppDetails();
@@ -364,8 +367,11 @@ class AppProvider with ChangeNotifier {
       'platform': mobileAppDetails['device']['platform'],
     };
     final responseData = await get(endpoint: 'boot', body: body);
-    BootResponse bootResponse = BootResponse.fromJson(responseData);
-    bootConfigs = bootResponse.data;
+    bootData = BootData.fromJson(responseData["data"]);
+    bootConfigs = bootData.bootConfigs;
+    appDefaultChannel = bootData.defaultChannel ?? AppChannel.MARKET;
+    print('selected channel is:');
+    print(appDefaultChannel);
     print("bootConfigs");
     if (bootConfigs != null) {
       print("bootConfigs.updateMethod");

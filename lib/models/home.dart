@@ -3,6 +3,7 @@ import 'package:tiptop_v2/models/product.dart';
 
 import 'cart.dart';
 import 'category.dart';
+import 'enums.dart';
 import 'order.dart';
 
 class HomeData {
