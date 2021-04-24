@@ -13,6 +13,8 @@ class AppDropDownButton extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool fit;
+  final bool isRequired;
+  final bool isInvalid;
 
   AppDropDownButton({
     @required this.defaultValue,
@@ -21,6 +23,8 @@ class AppDropDownButton extends StatelessWidget {
     this.labelText,
     this.hintText = '',
     this.fit = false,
+    this.isRequired = false,
+    this.isInvalid = false,
   });
 
   @override
@@ -35,17 +39,22 @@ class AppDropDownButton extends StatelessWidget {
           if (labelText != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
-              child: Text(
-                Translations.of(context).get(labelText),
-                style: AppTextStyles.bodyBold,
+              child: RichText(
+                text: TextSpan(
+                  text: Translations.of(context).get(labelText),
+                  style: AppTextStyles.bodyBold,
+                  children: <TextSpan>[
+                    if (isRequired) TextSpan(text: ' *', style: AppTextStyles.bodySecondary),
+                  ],
+                ),
               ),
             ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-            margin: EdgeInsets.only(bottom: fit ? 0 : 20),
+            margin: EdgeInsets.only(bottom: fit || isInvalid ? 0 : 20),
             decoration: BoxDecoration(
               color: AppColors.bg,
-              border: Border.all(color: AppColors.border, width: 1.5),
+              border: Border.all(color: isInvalid ? Colors.red : AppColors.border, width: isInvalid ? 1: 1.5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: DropdownButtonHideUnderline(
@@ -68,6 +77,14 @@ class AppDropDownButton extends StatelessWidget {
               ),
             ),
           ),
+          if (isInvalid)
+            Padding(
+              padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 20),
+              child: Text(
+                Translations.of(context).get('This field is required'),
+                style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
+              ),
+            ),
         ],
       ),
     );
