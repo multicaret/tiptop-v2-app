@@ -127,7 +127,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
                               ],
                             ),
                           ),
-                          FoodProductOptions(product: product),
+                          FoodProductOptions(
+                            product: product,
+                            productOptions: productsProvider.productOptions,
+                          ),
                           FoodCartControls(),
                         ],
                       ),

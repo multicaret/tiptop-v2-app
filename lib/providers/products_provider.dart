@@ -14,6 +14,7 @@ class ProductsProvider with ChangeNotifier {
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
   Product product;
+  List<ProductOption> productOptions = <ProductOption>[];
   Map<String, dynamic> productTempCartData = {};
 
   void setProductTempOption({
@@ -98,10 +99,10 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void initProductOptions(Product product) {
+  void initProductOptions() {
     productTempCartData = {
       'product_id': product.id,
-      'options': product.options.map((option) {
+      'options': productOptions.map((option) {
         return {
           'id': option.id,
           'selected_ids': <int>[],
@@ -146,7 +147,8 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
-    initProductOptions(product);
+    productOptions = product.options.where((option) => option.selections.length != 0 || option.ingredients.length != 0).toList();
+    initProductOptions();
     notifyListeners();
   }
 

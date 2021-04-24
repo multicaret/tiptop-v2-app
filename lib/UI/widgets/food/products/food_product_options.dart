@@ -15,8 +15,12 @@ import 'product_option_pill.dart';
 
 class FoodProductOptions extends StatelessWidget {
   final Product product;
+  final List<ProductOption> productOptions;
 
-  FoodProductOptions({this.product});
+  FoodProductOptions({
+    @required this.product,
+    @required this.productOptions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +29,8 @@ class FoodProductOptions extends StatelessWidget {
         List<Map<String, dynamic>> selectedProductOptions = productsProvider.productTempCartData['options'] as List<Map<String, dynamic>>;
 
         return Column(
-          children: List.generate(product.options.length, (i) {
-            ProductOption option = product.options[i];
+          children: List.generate(productOptions.length, (i) {
+            ProductOption option = productOptions[i];
             Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
               (selectedProductOption) => selectedProductOption["id"] == option.id,
               orElse: () => null,
@@ -114,21 +118,23 @@ class FoodProductOptions extends StatelessWidget {
               }
             }
 
-            return Column(
-              children: [
-                SectionTitle(
-                  option.title,
-                  suffix: option.isRequired ? ' *' : null,
-                  suffixTextStyle: AppTextStyles.bodySecondary,
-                  translate: false,
-                ),
-                Container(
-                  width: double.infinity,
-                  color: AppColors.white,
-                  child: getOptionContent(),
-                ),
-              ],
-            );
+            return option.selections.length == 0 && option.ingredients.length == 0
+                ? Container()
+                : Column(
+                    children: [
+                      SectionTitle(
+                        option.title,
+                        suffix: option.isRequired ? ' *' : null,
+                        suffixTextStyle: AppTextStyles.bodySecondary,
+                        translate: false,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        color: AppColors.white,
+                        child: getOptionContent(),
+                      ),
+                    ],
+                  );
           }),
         );
       },
