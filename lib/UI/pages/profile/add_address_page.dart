@@ -101,6 +101,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
     }
   }
 
+  bool regionsDropdownIsInvalid = false;
+  bool citiesDropdownIsInvalid = false;
+
   Map<String, dynamic> addressDetailsFormData = {
     'kind': null,
     'alias': '',
@@ -205,16 +208,22 @@ class _AddAddressPageState extends State<AddAddressPage> {
               createAddressData: createAddressData,
               addressIconsDropDownItems: addressIconsDropDownItems,
               regionsDropDownItems: regionsDropDownItems,
+              regionsDropdownIsInvalid: regionsDropdownIsInvalid,
               citiesDropDownItems: citiesDropDownItems,
+              citiesDropdownIsInvalid: citiesDropdownIsInvalid,
               setAddressDetailsFormData: (key, value) {
                 setState(() {
                   addressDetailsFormData[key] = value;
                 });
                 // print(addressDetailsFormData);
+                if (key == 'city_id' && citiesDropdownIsInvalid) {
+                  citiesDropdownIsInvalid = false;
+                }
                 if (key == 'region_id') {
                   List<City> selectedRegionCities = createAddressData.cities.where((city) => city.region.id == value).toList();
                   citiesDropDownItems = selectedRegionCities.map((city) => {'id': city.id, 'title': city.name}).toList();
                   addressDetailsFormData['city_id'] = null;
+                  regionsDropdownIsInvalid = false;
                 }
                 if (key == 'kind') {
                   addressDetailsFormData['alias'] = createAddressData.kinds.firstWhere((kind) => kind.id == value).title;
@@ -253,8 +262,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
   }
 
   Future<void> submitAddressDetailsForm() async {
-    if (!addressDetailsFormKey.currentState.validate()) {
+    if (!addressDetailsFormKey.currentState.validate() || addressDetailsFormData['region_id'] == null || addressDetailsFormData['city_id'] == null) {
       showToast(msg: Translations.of(context).get('Invalid Form'));
+      if (addressDetailsFormData['region_id'] == null) {
+        setState(() => regionsDropdownIsInvalid = true);
+      }
+      if (addressDetailsFormData['city_id'] == null) {
+        setState(() => citiesDropdownIsInvalid = true);
+      }
       return;
     }
     addressDetailsFormKey.currentState.save();

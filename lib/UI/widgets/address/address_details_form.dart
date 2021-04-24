@@ -18,7 +18,9 @@ class AddressDetailsForm extends StatelessWidget {
   final Function submitForm;
   final CreateAddressData createAddressData;
   final List<Map<String, dynamic>> regionsDropDownItems;
+  final bool regionsDropdownIsInvalid;
   final List<Map<String, dynamic>> citiesDropDownItems;
+  final bool citiesDropdownIsInvalid;
   final List<Map<String, dynamic>> addressIconsDropDownItems;
   final TextEditingController addressAliasTextFieldController;
 
@@ -30,7 +32,9 @@ class AddressDetailsForm extends StatelessWidget {
     @required this.createAddressData,
     @required this.setAddressDetailsFormData,
     @required this.regionsDropDownItems,
+    this.regionsDropdownIsInvalid = false,
     @required this.citiesDropDownItems,
+    this.citiesDropdownIsInvalid = false,
     @required this.addressIconsDropDownItems,
     @required this.addressAliasTextFieldController,
   });
@@ -82,6 +86,8 @@ class AddressDetailsForm extends StatelessWidget {
                 ),
                 AppDropDownButton(
                   labelText: 'City',
+                  isRequired: true,
+                  isInvalid: regionsDropdownIsInvalid,
                   hintText: Translations.of(context).get('Select City'),
                   defaultValue: addressDetailsFormData['region_id'],
                   items: regionsDropDownItems,
@@ -89,6 +95,8 @@ class AddressDetailsForm extends StatelessWidget {
                 ),
                 AppDropDownButton(
                   labelText: 'Neighborhood',
+                  isRequired: true,
+                  isInvalid: citiesDropdownIsInvalid,
                   hintText: Translations.of(context).get('Select Neighborhood'),
                   defaultValue: addressDetailsFormData['city_id'],
                   items: citiesDropDownItems,
