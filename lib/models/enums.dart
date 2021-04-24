@@ -1,3 +1,6 @@
+//To get the enum use values.map[]
+//To get the string use values.reverse[]
+
 class EnumValues<T> {
   Map<String, T> map;
   Map<T, String> reverseMap;
@@ -132,4 +135,14 @@ enum ProductOptionSelectionType {
 final productOptionSelectionTypeValues = EnumValues({
   "single": ProductOptionSelectionType.SINGLE,
   "multiple": ProductOptionSelectionType.MULTIPLE,
+});
+
+enum AppChannel {
+  FOOD,
+  MARKET,
+}
+
+final appChannelValues = EnumValues({
+  "food": AppChannel.FOOD,
+  "grocery": AppChannel.MARKET,
 });

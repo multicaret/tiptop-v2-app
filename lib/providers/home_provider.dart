@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -38,11 +39,11 @@ class HomeProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  String selectedChannel = 'food';
+  AppChannel selectedChannel = AppChannel.MARKET;
 
-  bool get channelIsMarket => selectedChannel == 'grocery';
+  bool get channelIsMarket => selectedChannel == AppChannel.MARKET;
 
-  void setSelectedChannel(String _channel) {
+  void setSelectedChannel(AppChannel _channel) {
     selectedChannel = _channel;
     print('Selected channel: $selectedChannel');
     notifyListeners();
@@ -54,7 +55,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   EstimatedArrivalTime getEstimateArrivalTime() {
-    if (selectedChannel == 'grocery') {
+    if (channelIsMarket) {
       return marketHomeData == null ? null : marketHomeData.estimatedArrivalTime;
     } else {
       return foodHomeData == null ? null : foodHomeData.estimatedArrivalTime;
@@ -84,7 +85,7 @@ class HomeProvider with ChangeNotifier {
     final body = {
       'latitude': '${AppProvider.latitude}',
       'longitude': '${AppProvider.longitude}',
-      'channel': selectedChannel,
+      'channel': appChannelValues.reverse[selectedChannel],
       'selected_address_id': AddressesProvider.selectedAddressId == null ? '' : '${AddressesProvider.selectedAddressId}',
     };
 
@@ -103,7 +104,7 @@ class HomeProvider with ChangeNotifier {
       isLoadingHomeData = false;
       notifyListeners();
     } catch (e) {
-      if (selectedChannel == 'grocery') {
+      if (channelIsMarket) {
         print('An error happened in market home data request');
         marketHomeDataRequestError = true;
         // throw e;
@@ -118,7 +119,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   void setHomeData(CartProvider cartProvider, RestaurantsProvider restaurantsProvider, data) {
-    if (selectedChannel == 'grocery') {
+    if (channelIsMarket) {
       print('Setting market home data...');
       marketHomeData = HomeData.fromJson(data);
       marketCurrency = marketHomeData.currentCurrency;

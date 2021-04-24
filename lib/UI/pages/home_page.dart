@@ -14,6 +14,7 @@ import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -90,9 +91,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void channelButtonAction(String _channel) {
+  void channelButtonAction(AppChannel _channel) {
     homeProvider.setSelectedChannel(_channel);
-    if ((_channel == 'food' && foodHomeData == null) || (_channel == 'grocery' && marketHomeData == null)) {
+    if ((_channel == AppChannel.FOOD && foodHomeData == null) || (_channel == AppChannel.MARKET && marketHomeData == null)) {
       fetchAndSetHomeData();
     }
   }
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                                 : null,
                           ),
                     ChannelsButtons(
-                      currentView: homeProvider.selectedChannel,
+                      selectedChannel: homeProvider.selectedChannel,
                       onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),
                       isRTL: appProvider.isRTL,
                     ),
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
     if (homeProvider.isLoadingHomeData) {
       //Display nothing when data is loading
       return Container();
-    } else if (homeProvider.selectedChannel == 'grocery') {
+    } else if (homeProvider.selectedChannel == AppChannel.MARKET) {
       if (hideMarketContent) {
         //No Content View for market channel
         return NoContentView(
@@ -207,7 +208,7 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       }
-    } else if (homeProvider.selectedChannel == 'food') {
+    } else if (homeProvider.selectedChannel == AppChannel.FOOD) {
       if (hideMarketContent) {
         //No Content View for food channel
         return NoContentView(
