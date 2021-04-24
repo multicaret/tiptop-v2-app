@@ -75,13 +75,16 @@ class CartProvider with ChangeNotifier {
       return null;
     }
 
-    final endpoint = 'carts/${marketCart.id}/products/adjust-quantity';
+    final endpoint = 'carts/${marketCart.id}/products/grocery/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
       'chain_id': HomeProvider.chainId,
       'branch_id': HomeProvider.branchId,
       'is_adding': isAdding,
     };
+
+    print('body');
+    print(body);
 
     isLoadingAdjustCartQuantityRequest = true;
     isLoadingAdjustMarketProductQuantityRequest[product.id] = true;
