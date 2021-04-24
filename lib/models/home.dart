@@ -3,7 +3,6 @@ import 'package:tiptop_v2/models/product.dart';
 
 import 'cart.dart';
 import 'category.dart';
-import 'enums.dart';
 import 'order.dart';
 
 class HomeData {
@@ -13,6 +12,7 @@ class HomeData {
     this.estimatedArrivalTime,
     this.activeOrders,
     this.totalActiveOrders,
+    this.noAvailabilityMessage,
     this.branch,
     this.distance,
     this.categories,
@@ -25,6 +25,7 @@ class HomeData {
   EstimatedArrivalTime estimatedArrivalTime;
   List<Order> activeOrders;
   int totalActiveOrders;
+  String noAvailabilityMessage;
   Branch branch;
   double distance;
   List<Category> categories;
@@ -37,6 +38,7 @@ class HomeData {
         estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
         activeOrders: json["activeOrders"] == null ? null : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
         totalActiveOrders: json["totalActiveOrders"],
+        noAvailabilityMessage: json["noAvailabilityMessage"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
         distance: json["distance"] == null ? 0.0 : json["distance"].toDouble(),
         categories: json["categories"] == null ? <Category>[] : List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),

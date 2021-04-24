@@ -19,7 +19,7 @@ class NoContentView extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(text),
+            Text(text, textAlign: TextAlign.center),
             const SizedBox(height: 15),
             Image.asset('assets/images/empty_products.png'),
           ],

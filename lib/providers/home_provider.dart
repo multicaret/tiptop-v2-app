@@ -16,8 +16,9 @@ import 'local_storage.dart';
 class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
   List<Category> marketCategories = [];
-  HomeData foodHomeData;
   Currency marketCurrency;
+
+  HomeData foodHomeData;
   Currency foodCurrency;
 
   static int branchId;
@@ -29,9 +30,12 @@ class HomeProvider with ChangeNotifier {
   bool isLoadingHomeData = false;
 
   bool marketHomeDataRequestError = false;
-  bool foodHomeDataRequestError = false;
   bool marketNoBranchFound = false;
+  String marketNoAvailabilityMessage = '';
+
   bool foodNoRestaurantFound = false;
+  bool foodHomeDataRequestError = false;
+  String foodNoAvailabilityMessage = '';
 
   static double marketBranchLat;
   static double marketBranchLong;
@@ -125,6 +129,9 @@ class HomeProvider with ChangeNotifier {
       marketCurrency = marketHomeData.currentCurrency;
       if (marketHomeData.branch == null) {
         marketNoBranchFound = true;
+        marketNoAvailabilityMessage = marketHomeData != null && marketHomeData.noAvailabilityMessage != null ? marketHomeData.noAvailabilityMessage : '';
+        print('marketNoAvailabilityMessage');
+        print(marketNoAvailabilityMessage);
       } else {
         branchId = marketHomeData.branch.id;
         if (marketHomeData.branch.chain != null) {
@@ -158,6 +165,7 @@ class HomeProvider with ChangeNotifier {
       foodCurrency = foodHomeData.currentCurrency;
       if (foodHomeData.restaurants.length == 0) {
         foodNoRestaurantFound = true;
+        foodNoAvailabilityMessage = foodHomeData != null && foodHomeData.noAvailabilityMessage != null ? foodHomeData.noAvailabilityMessage : '';
       } else {
         restaurantsProvider.setRestaurantData(foodHomeData);
       }

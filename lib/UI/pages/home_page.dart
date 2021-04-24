@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
         //No Content View for market channel
         return NoContentView(
             text: homeProvider.marketNoBranchFound
-                ? 'No Branch Found'
+                ? homeProvider.marketNoAvailabilityMessage
                 : homeProvider.marketHomeDataRequestError
                     ? 'An error occurred! Please try again later'
                     : '');
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
         //No Content View for food channel
         return NoContentView(
             text: homeProvider.foodNoRestaurantFound
-                ? 'No Open Restaurant Found!'
+                ? homeProvider.foodNoAvailabilityMessage
                 : homeProvider.foodHomeDataRequestError
                     ? 'An error occurred! Please try again later'
                     : '');
