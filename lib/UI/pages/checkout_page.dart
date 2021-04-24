@@ -239,6 +239,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
                       PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
                       return TotalButton(
+                        isRTL: appProvider.isRTL,
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                         child: Text(Translations.of(context).get('Order Now')),
