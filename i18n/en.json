@@ -197,5 +197,8 @@
   "Changed address successfully": "Changed address to {0} successfully!",
   "There are only {cartAvailableQuantity} available {productTitle}": "There are only {0} available {1}",
   "You can only add up to {maxLength} items": "You can only add up to {0} items",
-  "Order total should be greater than:": "Order total should be greater than: {0}"
+  "Order total should be greater than:": "Order total should be greater than: {0}",
+  "This option is required": "This option is required",
+  "You have to pick at least {targetOptionMinNumberOfSelection} options": "You have to pick at least {0} options",
+  "Invalid options! Please check the error messages and modify your options accordingly": "Invalid options! Please check the error messages and modify your options accordingly"
 }

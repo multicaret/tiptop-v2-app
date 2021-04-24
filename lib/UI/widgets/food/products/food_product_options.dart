@@ -31,6 +31,8 @@ class FoodProductOptions extends StatelessWidget {
         return Column(
           children: List.generate(productOptions.length, (i) {
             ProductOption option = productOptions[i];
+            Map<String, dynamic> optionValidation = productsProvider.getOptionValidation(option.id);
+
             Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
               (selectedProductOption) => selectedProductOption["id"] == option.id,
               orElse: () => null,
@@ -128,6 +130,19 @@ class FoodProductOptions extends StatelessWidget {
                         suffixTextStyle: AppTextStyles.bodySecondary,
                         translate: false,
                       ),
+                      if (optionValidation != null)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.bg,
+                            border: Border(bottom: BorderSide(color: Colors.red)),
+                          ),
+                          child: Text(
+                            optionValidation['message'],
+                            style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
+                          ),
+                        ),
                       Container(
                         width: double.infinity,
                         color: AppColors.white,

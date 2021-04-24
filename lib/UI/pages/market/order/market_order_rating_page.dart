@@ -62,7 +62,7 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
     _ratingFormKey.currentState.save();
     if (_ratingValue == null) {
       showToast(msg: Translations.of(context).get('Please enter a rating value!'));
-    } else if (_ratingValue <= 2 && _selectedIssueId == null) {
+    } else if (_ratingValue <= 2 && marketOrderRatingAvailableIssues.length > 0 && _selectedIssueId == null) {
       showToast(msg: Translations.of(context).get('Please select a reason!'));
     } else {
       setState(() => _isLoadingStoreRatingRequest = true);
@@ -81,6 +81,7 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
       } catch (e) {
         showToast(msg: Translations.of(context).get('Error submitting rating!'));
         setState(() => _isLoadingStoreRatingRequest = false);
+        throw e;
       }
     }
   }

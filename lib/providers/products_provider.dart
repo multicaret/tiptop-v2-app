@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -56,7 +59,7 @@ class ProductsProvider with ChangeNotifier {
 
         return {
           'id': option.id,
-          'selected_ids': newSelectedIds,
+          'selected_ids': newSelectedIds == null ? <int>[] : newSelectedIds,
           'option_total_price': optionTotalPrice,
         };
       } else {
@@ -75,7 +78,7 @@ class ProductsProvider with ChangeNotifier {
       'quantity': productTempCartData['quantity'],
     };
     print('productsCartData array:');
-    print(productTempCartData);
+    print(json.encode(productTempCartData));
     notifyListeners();
   }
 
@@ -95,8 +98,52 @@ class ProductsProvider with ChangeNotifier {
     });
     productTempCartData['product_total_price'] = productTotalPrice * productTempCartData['quantity'];
     print('productTempCartData');
-    print(productTempCartData);
+    print(json.encode(productTempCartData));
     notifyListeners();
+  }
+
+  List<Map<String, dynamic>> invalidOptions = [];
+
+  bool validateProductOptions(BuildContext context) {
+    bool optionsAreValid = true;
+    productTempCartData['options'].forEach((selectedOption) {
+      ProductOption targetOptionData = productOptions.firstWhere((option) => option.id == selectedOption["id"], orElse: () => null);
+      if (targetOptionData == null) {
+        print("target option wasn't found!");
+        return false;
+      }
+      if (targetOptionData.selectionType == ProductOptionSelectionType.SINGLE) {
+        if (targetOptionData.isRequired && selectedOption["selected_ids"].length == 0) {
+          optionsAreValid = false;
+          invalidOptions.add({
+            'id': selectedOption["id"],
+            'message': Translations.of(context).get("This option is required"),
+          });
+        }
+      } else {
+        if (selectedOption["selected_ids"].length < targetOptionData.minNumberOfSelection) {
+          optionsAreValid = false;
+          invalidOptions.add({
+            'id': selectedOption["id"],
+            'message': Translations.of(context).get(
+              "You have to pick at least {targetOptionMinNumberOfSelection} options",
+              args: [targetOptionData.minNumberOfSelection.toString()],
+            ),
+          });
+        }
+      }
+    });
+    if (optionsAreValid) {
+      invalidOptions = [];
+    }
+    print('optionsAreValid : $optionsAreValid');
+    print('invalid options : $invalidOptions');
+    notifyListeners();
+    return optionsAreValid;
+  }
+
+  Map<String, dynamic> getOptionValidation(int optionId) {
+    return invalidOptions.firstWhere((invalidOption) => invalidOption["id"] == optionId, orElse: () => null);
   }
 
   void initProductOptions() {
@@ -112,8 +159,9 @@ class ProductsProvider with ChangeNotifier {
       'product_total_price': product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
       'quantity': 1,
     };
+    invalidOptions = [];
     print('initial productTempCartData:');
-    print(productTempCartData);
+    print(json.encode(productTempCartData));
   }
 
   Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {

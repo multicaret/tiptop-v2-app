@@ -139,6 +139,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                 ),
                 Consumer<HomeProvider>(
                   builder: (c, homeProvider, _) => TotalButton(
+                    onTap: () => submitProductCartData(c),
                     isRTL: appProvider.isRTL,
                     total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
                     child: Row(
@@ -165,5 +166,16 @@ class _FoodProductPageState extends State<FoodProductPage> {
               ],
             ),
     );
+  }
+
+  Future<void> submitProductCartData(BuildContext context) async {
+    bool optionsAreValid = productsProvider.validateProductOptions(context);
+    if (!optionsAreValid) {
+      showToast(
+        msg: "Invalid options! Please check the error messages and modify your options accordingly",
+        timeInSec: 3,
+      );
+      return;
+    }
   }
 }

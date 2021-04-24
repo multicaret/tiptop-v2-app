@@ -196,6 +196,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(restaurant != null ? 'restaurant chain id: ${restaurant.chain.id}' : '');
     return AppScaffold(
       hasCurve: false,
       body: _isLoadingRestaurantShowRequest
