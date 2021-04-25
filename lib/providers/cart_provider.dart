@@ -7,6 +7,8 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 
+import 'local_storage.dart';
+
 class CartProvider with ChangeNotifier {
   Cart marketCart;
   Cart foodCart;
@@ -14,6 +16,8 @@ class CartProvider with ChangeNotifier {
   bool isLoadingAdjustCartQuantityRequest = false;
   bool isLoadingAdjustFoodCartDataRequest = false;
   bool isLoadingClearCartRequest = false;
+
+  LocalStorage storageActions = LocalStorage.getActions();
 
   void setMarketCart(Cart _marketCart) {
     print(
@@ -109,7 +113,10 @@ class CartProvider with ChangeNotifier {
       isLoadingAdjustCartQuantityRequest = false;
       isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
       notifyListeners();
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+      throw HttpException(
+        title: 'Http Exception Error',
+        message: getHttpExceptionMessage(responseData),
+      );
     }
 
     CartData cartData = CartData.fromJson(responseData["data"]);
@@ -181,7 +188,7 @@ class CartProvider with ChangeNotifier {
     print(productCartData);
 
     final endpoint = 'carts/${foodCart.id}/products/food/adjust-cart-data';
-    // try {
+    try {
       final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
       if (responseData == 401) {
         return 401;
@@ -189,13 +196,20 @@ class CartProvider with ChangeNotifier {
       CartData cartData = CartData.fromJson(responseData["data"]);
       isLoadingAdjustFoodCartDataRequest = false;
       foodCart = cartData.cart;
+      if (HomeProvider.selectedFoodBranchId == null && HomeProvider.selectedFoodChainId == null) {
+        HomeProvider.selectedFoodBranchId = foodCart.branchId;
+        HomeProvider.selectedFoodChainId = foodCart.chainId;
+        print('Saving food branch id and chain id to local storage...');
+        await storageActions.save(key: 'selected_food_branch_id', data: foodCart.branchId);
+        await storageActions.save(key: 'selected_food_chain_id', data: foodCart.chainId);
+      }
       notifyListeners();
-/*    } catch (e) {
+    } catch (e) {
       // showToast(msg: Translations.of(context).get('An Error Occurred!'));
       isLoadingAdjustFoodCartDataRequest = false;
       notifyListeners();
       throw e;
-    }*/
+    }
   }
 
   void clearRequestedMoreThanAvailableQuantity() {

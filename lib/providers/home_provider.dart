@@ -23,6 +23,8 @@ class HomeProvider with ChangeNotifier {
 
   static int branchId;
   static int chainId;
+  static int selectedFoodBranchId;
+  static int selectedFoodChainId;
 
   bool categorySelected = false;
   int selectedParentCategoryId;
@@ -46,6 +48,11 @@ class HomeProvider with ChangeNotifier {
   AppChannel selectedChannel = AppProvider.appDefaultChannel;
 
   bool get channelIsMarket => selectedChannel == AppChannel.MARKET;
+
+  void fetchSelectedFoodBranchAndChainIds() {
+    selectedFoodBranchId = storageActions.getData(key: 'selected_food_branch_id');
+    selectedFoodChainId = storageActions.getData(key: 'selected_chain_branch_id');
+  }
 
   void setSelectedChannel(AppChannel _channel) {
     selectedChannel = _channel;
@@ -93,6 +100,14 @@ class HomeProvider with ChangeNotifier {
       'selected_address_id': AddressesProvider.selectedAddressId == null ? '' : '${AddressesProvider.selectedAddressId}',
     };
 
+    if (!channelIsMarket) {
+      fetchSelectedFoodBranchAndChainIds();
+      body.addAll({
+        'selected_food_branch_id': selectedFoodBranchId == null ? null : '$selectedFoodBranchId',
+        'selected_food_chain_id': selectedFoodChainId == null ? null : '$selectedFoodChainId',
+      });
+    }
+
     marketHomeDataRequestError = false;
     foodHomeDataRequestError = false;
     marketNoBranchFound = false;
@@ -115,7 +130,7 @@ class HomeProvider with ChangeNotifier {
       } else {
         print('An error happened in food home data request');
         foodHomeDataRequestError = true;
-        // throw e;
+        throw e;
       }
       isLoadingHomeData = false;
       notifyListeners();
@@ -129,7 +144,8 @@ class HomeProvider with ChangeNotifier {
       marketCurrency = marketHomeData.currentCurrency;
       if (marketHomeData.branch == null) {
         marketNoBranchFound = true;
-        marketNoAvailabilityMessage = marketHomeData != null && marketHomeData.noAvailabilityMessage != null ? marketHomeData.noAvailabilityMessage : '';
+        marketNoAvailabilityMessage =
+            marketHomeData != null && marketHomeData.noAvailabilityMessage != null ? marketHomeData.noAvailabilityMessage : '';
         print('marketNoAvailabilityMessage');
         print(marketNoAvailabilityMessage);
       } else {
