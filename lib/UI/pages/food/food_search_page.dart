@@ -12,7 +12,6 @@ import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/search.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
@@ -159,7 +158,11 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                           return Material(
                                             color: AppColors.white,
                                             child: InkWell(
-                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName),
+                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+                                                'product_id': product.id,
+                                                'restaurant_id': _searchedRestaurants[i].id,
+                                                'chain_id': _searchedRestaurants[i].chain.id,
+                                              }),
                                               child: Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
                                                 decoration: BoxDecoration(

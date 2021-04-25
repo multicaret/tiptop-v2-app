@@ -11,6 +11,7 @@ import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -37,9 +38,12 @@ class _FoodProductPageState extends State<FoodProductPage> {
 
   bool _isInit = true;
   bool _isLoadingProduct = false;
+  bool _isLoadingAdjustCartDataRequest = false;
 
   ProductsProvider productsProvider;
   AppProvider appProvider;
+  int chainId;
+  int restaurantId;
   int productId;
   Product product;
 
@@ -53,7 +57,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
-    productTotalPrice = productsProvider.productTempCartData['product_total_price'];
+    productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
     setState(() => _isLoadingProduct = false);
   }
 
@@ -61,7 +65,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
   void didChangeDependencies() {
     if (_isInit) {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      print('Route data: $data');
       productId = data["product_id"];
+      restaurantId = data["restaurant_id"];
+      chainId = data["chain_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
@@ -74,10 +81,11 @@ class _FoodProductPageState extends State<FoodProductPage> {
   @override
   Widget build(BuildContext context) {
     if (!_isLoadingProduct) {
-      productTotalPrice = productsProvider.productTempCartData['product_total_price'];
+      productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
     }
     return AppScaffold(
       bgColor: AppColors.white,
+      hasOverlayLoader: _isLoadingAdjustCartDataRequest,
       appBar: _isLoadingProduct
           ? null
           : AppBar(
@@ -137,9 +145,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
                     ),
                   ),
                 ),
-                Consumer<HomeProvider>(
-                  builder: (c, homeProvider, _) => TotalButton(
-                    onTap: () => submitProductCartData(c),
+                Consumer3<HomeProvider, CartProvider, AppProvider>(
+                  builder: (c, homeProvider, cartProvider, appProvider, _) => TotalButton(
+                    onTap: () => submitProductCartData(c, cartProvider, appProvider),
                     isRTL: appProvider.isRTL,
                     total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
                     child: Row(
@@ -168,7 +176,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     );
   }
 
-  Future<void> submitProductCartData(BuildContext context) async {
+  Future<void> submitProductCartData(BuildContext context, CartProvider cartProvider, AppProvider appProvider) async {
     bool optionsAreValid = productsProvider.validateProductOptions(context);
     if (!optionsAreValid) {
       showToast(
@@ -176,6 +184,37 @@ class _FoodProductPageState extends State<FoodProductPage> {
         timeInSec: 3,
       );
       return;
+    }
+    if (chainId == null || restaurantId == null) {
+      print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
+      return;
+    }
+    Map<String, dynamic> productCartData = {
+      //Todo: fill first param when editing cart product
+      'product_id_in_cart': null,
+      'product_id': product.id,
+      'chain_id': chainId,
+      'branch_id': restaurantId,
+      'quantity': productsProvider.productTempCartData.quantity,
+      'selected_options': productsProvider.productTempCartData.selectedOptions
+          .where((selectedOption) => selectedOption.selectedIds.length > 0)
+          .map((selectedOption) => {
+                'product_option_id': selectedOption.productOptionId,
+                'selected_ids': selectedOption.selectedIds,
+              })
+          .toList(),
+    };
+    print('productCartData on submitting....');
+    print(productCartData);
+    try {
+      setState(() => _isLoadingAdjustCartDataRequest = true);
+      await cartProvider.adjustFoodProductCart(context, appProvider, productCartData);
+      setState(() => _isLoadingAdjustCartDataRequest = false);
+      showToast(msg: 'Successfully added product to cart!');
+      Navigator.of(context).pop();
+    } catch (e) {
+      setState(() => _isLoadingAdjustCartDataRequest = false);
+      throw e;
     }
   }
 }

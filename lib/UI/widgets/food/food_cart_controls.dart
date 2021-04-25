@@ -16,7 +16,7 @@ class FoodCartControls extends StatelessWidget {
       color: AppColors.bg,
       child: Consumer<ProductsProvider>(
         builder: (c, productsProvider, _) {
-          int quantity = productsProvider.productTempCartData['quantity'];
+          int quantity = productsProvider.productTempCartData.quantity;
 
           return Container(
             height: buttonHeightSm,

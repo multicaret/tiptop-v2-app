@@ -18,7 +18,7 @@ class ProductsProvider with ChangeNotifier {
   List<Product> favoriteProducts = [];
   Product product;
   List<ProductOption> productOptions = <ProductOption>[];
-  Map<String, dynamic> productTempCartData = {};
+  ProductCartData productTempCartData;
 
   void setProductTempOption({
     Product product,
@@ -27,12 +27,11 @@ class ProductsProvider with ChangeNotifier {
     BuildContext context,
   }) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
-    List<Map<String, dynamic>> productSelectedOptions = productTempCartData["options"] as List<Map<String, dynamic>>;
-    List<Map<String, dynamic>> newSelectedOptions;
-    newSelectedOptions = productSelectedOptions.map((Map<String, dynamic> selectedProductOption) {
-      List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+    List<ProductSelectedOption> newSelectedOptions;
+    newSelectedOptions = productTempCartData.selectedOptions.map((selectedProductOption) {
+      List<int> selectedIds = selectedProductOption.selectedIds == null ? <int>[] : selectedProductOption.selectedIds;
       //Edit target option
-      if (selectedProductOption["id"] == option.id) {
+      if (selectedProductOption.productOptionId == option.id) {
         double optionTotalPrice = 0.0;
         List<int> newSelectedIds = <int>[];
         //Update selected selections or ingredients ids
@@ -57,26 +56,26 @@ class ProductsProvider with ChangeNotifier {
           });
         });
 
-        return {
-          'id': option.id,
-          'selected_ids': newSelectedIds == null ? <int>[] : newSelectedIds,
-          'option_total_price': optionTotalPrice,
-        };
+        return ProductSelectedOption(
+          productOptionId: option.id,
+          selectedIds: newSelectedIds == null ? <int>[] : newSelectedIds,
+          optionTotalPrice: optionTotalPrice,
+        );
       } else {
         //Return non-target option as is
         return selectedProductOption;
       }
     }).toList();
     newSelectedOptions.forEach((selectedProductOption) {
-      productTotalPrice += selectedProductOption['option_total_price'];
+      productTotalPrice += selectedProductOption.optionTotalPrice;
     });
-    double newProductTotalPrice = productTotalPrice * productTempCartData['quantity'];
-    productTempCartData = {
-      'product_id': product.id,
-      'options': newSelectedOptions,
-      'product_total_price': newProductTotalPrice,
-      'quantity': productTempCartData['quantity'],
-    };
+    double newProductTotalPrice = productTotalPrice * productTempCartData.quantity;
+    productTempCartData = ProductCartData(
+      productId: product.id,
+      selectedOptions: newSelectedOptions,
+      productTotalPrice: newProductTotalPrice,
+      quantity: productTempCartData.quantity,
+    );
     print('productsCartData array:');
     print(json.encode(productTempCartData));
     notifyListeners();
@@ -85,20 +84,20 @@ class ProductsProvider with ChangeNotifier {
   void setProductTempQuantity(CartAction action) {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     if (action == CartAction.ADD) {
-      productTempCartData['quantity']++;
+      productTempCartData.quantity++;
     } else {
-      if (productTempCartData['quantity'] > 1) {
-        productTempCartData['quantity']--;
+      if (productTempCartData.quantity > 1) {
+        productTempCartData.quantity--;
       } else {
         return;
       }
     }
-    productTempCartData['options'].forEach((selectedProductOption) {
-      productTotalPrice += selectedProductOption['option_total_price'];
+    productTempCartData.selectedOptions.forEach((selectedProductOption) {
+      productTotalPrice += selectedProductOption.optionTotalPrice;
     });
-    productTempCartData['product_total_price'] = productTotalPrice * productTempCartData['quantity'];
+    productTempCartData.productTotalPrice = productTotalPrice * productTempCartData.quantity;
     print('productTempCartData');
-    print(json.encode(productTempCartData));
+    print(productTempCartData.toJson());
     notifyListeners();
   }
 
@@ -106,25 +105,26 @@ class ProductsProvider with ChangeNotifier {
 
   bool validateProductOptions(BuildContext context) {
     bool optionsAreValid = true;
-    productTempCartData['options'].forEach((selectedOption) {
-      ProductOption targetOptionData = productOptions.firstWhere((option) => option.id == selectedOption["id"], orElse: () => null);
+    invalidOptions = [];
+    productTempCartData.selectedOptions.forEach((selectedOption) {
+      ProductOption targetOptionData = productOptions.firstWhere((option) => option.id == selectedOption.productOptionId, orElse: () => null);
       if (targetOptionData == null) {
         print("target option wasn't found!");
         return false;
       }
       if (targetOptionData.selectionType == ProductOptionSelectionType.SINGLE) {
-        if (targetOptionData.isRequired && selectedOption["selected_ids"].length == 0) {
+        if (targetOptionData.isRequired && selectedOption.selectedIds.length == 0) {
           optionsAreValid = false;
           invalidOptions.add({
-            'id': selectedOption["id"],
+            'product_option_id': selectedOption.productOptionId,
             'message': Translations.of(context).get("This option is required"),
           });
         }
       } else {
-        if (selectedOption["selected_ids"].length < targetOptionData.minNumberOfSelection) {
+        if (selectedOption.selectedIds.length < targetOptionData.minNumberOfSelection) {
           optionsAreValid = false;
           invalidOptions.add({
-            'id': selectedOption["id"],
+            'product_option_id': selectedOption.productOptionId,
             'message': Translations.of(context).get(
               "You have to pick at least {targetOptionMinNumberOfSelection} options",
               args: [targetOptionData.minNumberOfSelection.toString()],
@@ -133,9 +133,6 @@ class ProductsProvider with ChangeNotifier {
         }
       }
     });
-    if (optionsAreValid) {
-      invalidOptions = [];
-    }
     print('optionsAreValid : $optionsAreValid');
     print('invalid options : $invalidOptions');
     notifyListeners();
@@ -143,25 +140,25 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> getOptionValidation(int optionId) {
-    return invalidOptions.firstWhere((invalidOption) => invalidOption["id"] == optionId, orElse: () => null);
+    return invalidOptions.firstWhere((invalidOption) => invalidOption["product_option_id"] == optionId, orElse: () => null);
   }
 
   void initProductOptions() {
-    productTempCartData = {
-      'product_id': product.id,
-      'options': productOptions.map((option) {
-        return {
-          'id': option.id,
-          'selected_ids': <int>[],
-          'option_total_price': 0.0,
-        };
+    productTempCartData = ProductCartData(
+      productId: product.id,
+      selectedOptions: productOptions.map((option) {
+        return ProductSelectedOption(
+          productOptionId: option.id,
+          selectedIds: <int>[],
+          optionTotalPrice: 0.0,
+        );
       }).toList(),
-      'product_total_price': product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
-      'quantity': 1,
-    };
+      productTotalPrice: product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
+      quantity: 1,
+    );
     invalidOptions = [];
     print('initial productTempCartData:');
-    print(json.encode(productTempCartData));
+    print(json.encode(productTempCartData.toJson()["selectedOptions"]));
   }
 
   Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {

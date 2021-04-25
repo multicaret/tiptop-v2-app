@@ -26,18 +26,18 @@ class FoodProductOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductsProvider>(
       builder: (c, productsProvider, _) {
-        List<Map<String, dynamic>> selectedProductOptions = productsProvider.productTempCartData['options'] as List<Map<String, dynamic>>;
+        List<ProductSelectedOption> selectedProductOptions = productsProvider.productTempCartData.selectedOptions;
 
         return Column(
           children: List.generate(productOptions.length, (i) {
             ProductOption option = productOptions[i];
             Map<String, dynamic> optionValidation = productsProvider.getOptionValidation(option.id);
 
-            Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
-              (selectedProductOption) => selectedProductOption["id"] == option.id,
+            ProductSelectedOption selectedProductOption = selectedProductOptions.firstWhere(
+              (selectedProductOption) => selectedProductOption.productOptionId == option.id,
               orElse: () => null,
             );
-            List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+            List<int> selectedIds = selectedProductOption.selectedIds == null ? <int>[] : selectedProductOption.selectedIds;
             List<Map<String, dynamic>> radioOrCheckboxOrDropdownItems = option.selections
                 .map((selection) => {
                       'id': selection.id,

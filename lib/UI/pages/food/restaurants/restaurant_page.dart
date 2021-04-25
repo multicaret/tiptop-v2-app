@@ -8,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_horizontal_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
+import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
@@ -199,6 +200,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     print(restaurant != null ? 'restaurant chain id: ${restaurant.chain.id}' : '');
     return AppScaffold(
       hasCurve: false,
+      appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       body: _isLoadingRestaurantShowRequest
           ? AppLoader()
           : CustomScrollView(
@@ -290,7 +292,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     searchProductsResult.isNotEmpty
                         ? List.generate(
                             searchProductsResult.length,
-                            (i) => FoodProductListItem(product: searchProductsResult[i]),
+                            (i) => FoodProductListItem(
+                              product: searchProductsResult[i],
+                              restaurantId: restaurant.id,
+                              chainId: restaurant.chain.id,
+                            ),
                           )
                         : List.generate(
                             menuCategories.length,
@@ -309,7 +315,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 singleTabContent: Column(
                                   children: List.generate(
                                     menuCategories[i].products.length,
-                                    (j) => FoodProductListItem(product: menuCategories[i].products[j]),
+                                    (j) => FoodProductListItem(
+                                      product: menuCategories[i].products[j],
+                                      restaurantId: restaurant.id,
+                                      chainId: restaurant.chain.id,
+                                    ),
                                   ),
                                 ),
                                 pageTopOffset: expandedHeaderHeight,

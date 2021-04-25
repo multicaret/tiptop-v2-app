@@ -10,8 +10,14 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FoodProductListItem extends StatelessWidget {
   final Product product;
+  final int restaurantId;
+  final int chainId;
 
-  FoodProductListItem({@required this.product});
+  FoodProductListItem({
+    @required this.product,
+    @required this.restaurantId,
+    @required this.chainId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,11 @@ class FoodProductListItem extends StatelessWidget {
       color: AppColors.white,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {'product_id': product.id});
+          Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+            'product_id': product.id,
+            'chain_id': chainId,
+            'restaurant_id': restaurantId,
+          });
         },
         child: Container(
           height: listItemHeight,
