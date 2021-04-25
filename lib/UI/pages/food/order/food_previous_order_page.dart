@@ -139,10 +139,10 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                         ),
                       SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
                       ...List.generate(
-                        order.cart.products.length,
+                        order.cart.cartProducts.length,
                         (i) => MarketProductListItem(
-                          quantity: order.cart.products[i].quantity,
-                          product: order.cart.products[i].product,
+                          quantity: order.cart.cartProducts[i].quantity,
+                          product: order.cart.cartProducts[i].product,
                           hasControls: false,
                         ),
                       ),

@@ -34,7 +34,7 @@ class Cart {
     this.userId,
     this.chainId,
     this.branchId,
-    this.products,
+    this.cartProducts,
     this.restaurant,
   });
 
@@ -47,7 +47,7 @@ class Cart {
   int userId;
   int chainId;
   int branchId;
-  List<CartProduct> products;
+  List<CartProduct> cartProducts;
   Branch restaurant;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -60,7 +60,7 @@ class Cart {
         userId: json["userId"],
         chainId: json["chainId"],
         branchId: json["branchId"],
-        products: json["products"] == null ? <CartProduct>[] : List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
+        cartProducts: json["products"] == null ? <CartProduct>[] : List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
         restaurant: json["restaurant"] == null ? null : Branch.fromJson(json["restaurant"]),
       );
 
@@ -73,7 +73,7 @@ class Cart {
         "userId": userId,
         "chainId": chainId,
         "branchId": branchId,
-        "products": List<dynamic>.from(products.map((x) => x.toJson())),
+        "products": List<dynamic>.from(cartProducts.map((x) => x.toJson())),
         "restaurant": restaurant == null ? null : restaurant.toJson(),
       };
 }

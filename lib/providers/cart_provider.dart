@@ -21,13 +21,13 @@ class CartProvider with ChangeNotifier {
 
   void setMarketCart(Cart _marketCart) {
     print(
-        'setting market cart${_marketCart == null ? ' (null)' : ', Market cart id: ${_marketCart.id}'}, products count: ${_marketCart.products.length}');
+        'setting market cart${_marketCart == null ? ' (null)' : ', Market cart id: ${_marketCart.id}'}, products count: ${_marketCart.cartProducts.length}');
     marketCart = _marketCart;
     clearRequestedMoreThanAvailableQuantity();
   }
 
   void setFoodCart(Cart _foodCart) {
-    print('setting food cart${_foodCart == null ? ' (null)' : ', Food Cart id: ${_foodCart.id}'}, products count: ${_foodCart.products.length}');
+    print('setting food cart${_foodCart == null ? ' (null)' : ', Food Cart id: ${_foodCart.id}'}, products count: ${_foodCart.cartProducts.length}');
     foodCart = _foodCart;
     clearRequestedMoreThanAvailableQuantity();
   }
@@ -38,8 +38,8 @@ class CartProvider with ChangeNotifier {
       marketCart.total.raw == null ||
       marketCart.total.raw == 0.0 ||
       marketCart.productsCount == 0 ||
-      marketCart.products == null ||
-      marketCart.products.length == 0;
+      marketCart.cartProducts == null ||
+      marketCart.cartProducts.length == 0;
 
   bool get noFoodCart =>
       foodCart == null ||
@@ -47,12 +47,12 @@ class CartProvider with ChangeNotifier {
       foodCart.total.raw == null ||
       foodCart.total.raw == 0.0 ||
       foodCart.productsCount == 0 ||
-      foodCart.products == null ||
-      foodCart.products.length == 0;
+      foodCart.cartProducts == null ||
+      foodCart.cartProducts.length == 0;
 
   int getProductQuantity(int productId) {
-    if (marketCart != null && marketCart.products.length != 0) {
-      CartProduct cartProduct = marketCart.products.firstWhere((cartProduct) => cartProduct.product.id == productId, orElse: () => null);
+    if (marketCart != null && marketCart.cartProducts.length != 0) {
+      CartProduct cartProduct = marketCart.cartProducts.firstWhere((cartProduct) => cartProduct.product.id == productId, orElse: () => null);
       return cartProduct == null ? 0 : cartProduct.quantity;
     } else {
       return 0;
@@ -139,7 +139,7 @@ class CartProvider with ChangeNotifier {
     isLoadingAdjustMarketProductQuantityRequest[product.id] = false;
     marketCart = cartData.cart;
 
-    CartProduct adjustedProduct = marketCart.products.firstWhere((cartProduct) => cartProduct.product.id == product.id, orElse: () => null);
+    CartProduct adjustedProduct = marketCart.cartProducts.firstWhere((cartProduct) => cartProduct.product.id == product.id, orElse: () => null);
     if (adjustedProduct != null) {
       print('returned quantity: ${adjustedProduct.quantity}');
     } else {
@@ -213,8 +213,8 @@ class CartProvider with ChangeNotifier {
   }
 
   void clearRequestedMoreThanAvailableQuantity() {
-    if (marketCart != null && marketCart.products != null && marketCart.products.length > 0) {
-      marketCart.products.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
+    if (marketCart != null && marketCart.cartProducts != null && marketCart.cartProducts.length > 0) {
+      marketCart.cartProducts.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);
     }
   }
 
