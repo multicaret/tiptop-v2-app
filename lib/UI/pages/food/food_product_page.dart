@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
@@ -38,9 +40,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
 
   bool _isInit = true;
   bool _isLoadingProduct = false;
-  bool _isLoadingAdjustCartDataRequest = false;
 
   ProductsProvider productsProvider;
+  CartProvider cartProvider;
   AppProvider appProvider;
   int chainId;
   int restaurantId;
@@ -72,6 +74,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
       _fetchAndSetProduct();
     }
     _isInit = false;
@@ -85,7 +88,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     }
     return AppScaffold(
       bgColor: AppColors.white,
-      hasOverlayLoader: _isLoadingAdjustCartDataRequest,
+      hasOverlayLoader: cartProvider.isLoadingAdjustFoodCartDataRequest,
       appBar: _isLoadingProduct
           ? null
           : AppBar(
@@ -145,9 +148,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
                     ),
                   ),
                 ),
-                Consumer3<HomeProvider, CartProvider, AppProvider>(
-                  builder: (c, homeProvider, cartProvider, appProvider, _) => TotalButton(
-                    onTap: () => submitProductCartData(c, cartProvider, appProvider),
+                Consumer2<HomeProvider, AppProvider>(
+                  builder: (c, homeProvider, appProvider, _) => TotalButton(
+                    onTap: () => submitProductCartData(context, appProvider),
                     isRTL: appProvider.isRTL,
                     total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
                     child: Row(
@@ -176,7 +179,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     );
   }
 
-  Future<void> submitProductCartData(BuildContext context, CartProvider cartProvider, AppProvider appProvider) async {
+  Future<void> submitProductCartData(BuildContext context, AppProvider appProvider) async {
     bool optionsAreValid = productsProvider.validateProductOptions(context);
     if (!optionsAreValid) {
       showToast(
@@ -189,32 +192,38 @@ class _FoodProductPageState extends State<FoodProductPage> {
       print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
       return;
     }
-    Map<String, dynamic> productCartData = {
-      //Todo: fill first param when editing cart product
-      'product_id_in_cart': null,
-      'product_id': product.id,
-      'chain_id': chainId,
-      'branch_id': restaurantId,
-      'quantity': productsProvider.productTempCartData.quantity,
-      'selected_options': productsProvider.productTempCartData.selectedOptions
-          .where((selectedOption) => selectedOption.selectedIds.length > 0)
-          .map((selectedOption) => {
-                'product_option_id': selectedOption.productOptionId,
-                'selected_ids': selectedOption.selectedIds,
-              })
-          .toList(),
-    };
-    print('productCartData on submitting....');
-    print(productCartData);
-    try {
-      setState(() => _isLoadingAdjustCartDataRequest = true);
-      await cartProvider.adjustFoodProductCart(context, appProvider, productCartData);
-      setState(() => _isLoadingAdjustCartDataRequest = false);
-      showToast(msg: 'Successfully added product to cart!');
-      Navigator.of(context).pop();
-    } catch (e) {
-      setState(() => _isLoadingAdjustCartDataRequest = false);
-      throw e;
+
+    if(cartProvider.foodCart.restaurant != null && (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
+      print('Adding to cart from a different restaurant');
+      final response = await showDialog(
+        context: context,
+        builder: (context) => ConfirmAlertDialog(
+          title: 'This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?',
+        ),
+      );
+      if(response != null && response) {
+        //Todo: delete existing cart
+        await cartProvider.adjustFoodProductCart(
+          context,
+          appProvider,
+          productId: product.id,
+          restaurantId: restaurantId,
+          chainId: chainId,
+          productTempCartData: productsProvider.productTempCartData,
+        );
+      }
+      return;
     }
+
+    await cartProvider.adjustFoodProductCart(
+      context,
+      appProvider,
+      productId: product.id,
+      restaurantId: restaurantId,
+      chainId: chainId,
+      productTempCartData: productsProvider.productTempCartData,
+    );
+    showToast(msg: 'Successfully added product to cart!', gravity: ToastGravity.BOTTOM);
+    Navigator.of(context).pop();
   }
 }

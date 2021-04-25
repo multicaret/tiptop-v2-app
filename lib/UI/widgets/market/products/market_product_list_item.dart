@@ -9,12 +9,12 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class MarketListProductItem extends StatelessWidget {
+class MarketProductListItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
 
-  MarketListProductItem({
+  MarketProductListItem({
     this.quantity,
     @required this.product,
     this.hasControls = true,

@@ -264,14 +264,14 @@ class ProductSelectedOption {
   double optionTotalPrice;
 
   factory ProductSelectedOption.fromJson(Map<String, dynamic> json) => ProductSelectedOption(
-        productOptionId: json["productOptionId"],
-        selectedIds: json["selectedIds"],
-        optionTotalPrice: json["optionTotalPrice"] == null ? 0.0 : json["optionTotalPrice"].toDouble(),
+        productOptionId: json["product_option_id"],
+        selectedIds: List<int>.from(json["selected_ids"].map((x) => x)),
+        optionTotalPrice: json["option_total_price"] == null ? 0.0 : json["optionTotalPrice"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        "productOptionId": productOptionId,
-        "selectedIds": List<int>.from(selectedIds.map((x) => x)),
-        "optionTotalPrice": optionTotalPrice,
+        "product_option_id": productOptionId,
+        "selected_ids": List<int>.from(selectedIds.map((x) => x)),
+        "option_total_price": optionTotalPrice,
       };
 }

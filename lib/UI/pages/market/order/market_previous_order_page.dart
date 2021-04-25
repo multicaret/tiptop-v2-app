@@ -7,7 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/market_list_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/order_rating_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -141,7 +141,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                       SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
                       ...List.generate(
                         order.cart.products.length,
-                        (i) => MarketListProductItem(
+                        (i) => MarketProductListItem(
                           quantity: order.cart.products[i].quantity,
                           product: order.cart.products[i].product,
                           hasControls: false,

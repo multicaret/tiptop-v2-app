@@ -9,7 +9,6 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 
 class AppBarCartTotal extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Consumer3<CartProvider, HomeProvider, AppProvider>(
@@ -22,14 +21,14 @@ class AppBarCartTotal extends StatelessWidget {
                 isRTL: appProvider.isRTL,
                 hideCart: hideMarketCart,
                 route: MarketCartPage.routeName,
-                isLoadingAdjustCartQuantityRequest: cartProvider.isLoadingAdjustCartQuantityRequest,
+                isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                 cartTotal: hideMarketCart ? '' : cartProvider.marketCart.total.formatted,
               )
             : AnimatedCartTotal(
                 isRTL: appProvider.isRTL,
                 hideCart: hideFoodCart,
                 route: FoodCartPage.routeName,
-                isLoadingAdjustCartQuantityRequest: cartProvider.isLoadingAdjustCartQuantityRequest,
+                isLoading: cartProvider.isLoadingAdjustFoodCartDataRequest,
                 cartTotal: hideFoodCart ? '' : cartProvider.foodCart.total.formatted,
               );
       },
