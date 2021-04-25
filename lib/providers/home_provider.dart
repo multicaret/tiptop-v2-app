@@ -51,7 +51,7 @@ class HomeProvider with ChangeNotifier {
 
   void fetchSelectedFoodBranchAndChainIds() {
     selectedFoodBranchId = storageActions.getData(key: 'selected_food_branch_id');
-    selectedFoodChainId = storageActions.getData(key: 'selected_chain_branch_id');
+    selectedFoodChainId = storageActions.getData(key: 'selected_food_chain_id');
   }
 
   void setSelectedChannel(AppChannel _channel) {
