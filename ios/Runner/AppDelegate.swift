@@ -17,13 +17,13 @@ import Mobilisten
         
         let customTheme = ZohoSalesIQ.Theme.baseTheme
         //Customize properties in the customTheme instance as desired
-        customTheme.themeColor = UIColor.blue
-        customTheme.Navigation.backgroundColor = UIColor.white
+        customTheme.themeColor = UIColor(rgb: 0xffb200)
+        //        customTheme.Navigation.backgroundColor = UIColor.white
         //Set the customized theme using ZohoSalesIQ.Theme.setTheme API
         ZohoSalesIQ.Theme.setTheme(theme: customTheme)
         
         ZohoSalesIQ.showLauncher(false);
-
+        ZohoSalesIQ.Chat.setTitle("TipTop")
         
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         
@@ -31,25 +31,52 @@ import Mobilisten
         salesIqChannel.setMethodCallHandler({
             (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             // Note: this method is invoked on the UI thread.
-                    print("===============")
-                    print("call")
-                    print("\(call.method)")
-                    print("===============")
+            print("===============")
+            print("call")
+            print("\(call.method)")
+            print("===============")
             
             if(call.method == "initLiveChat"){
-//                if let args = call.arguments as? Dictionary<String, Any>,
-//                   let passedLocale = args["locale"] as? String {
-//                    result(nil)
-//                } else {
-//                    result(FlutterError.init(code: "errorSetDebug", message: "data or format error", details: nil))
-//                }
+                if let args = call.arguments as? Dictionary<String, Any>{
+                    
+                    print("========= initializing Zoho SalesIQ:")
+                    
+                                            
+                        if let userName = args["userName"] as? String{
+                            ZohoSalesIQ.Visitor.setName(userName)
+                        }
+                        
+                        if let userEmail = args["userEmail"] as? String{
+                            ZohoSalesIQ.Visitor.setEmail(userEmail)
+                        }
+                        
+                        if let userNumber = args["userNumber"] as? String{
+                            ZohoSalesIQ.Visitor.setContactNumber(userNumber)
+                        }
+                        
+                        if var languageCode = args["languageCode"] as? String{
+                            if(languageCode == "fa" || languageCode == "ku"){
+                                languageCode = "en"
+                            }
+                            ZohoSalesIQ.Chat.setLanguageWithCode(languageCode)
+                        }
+                        
+                        if let userId = args["userId"] as? String{
+                            ZohoSalesIQ.registerVisitor(userId)
+                        }
+                    
+                        let isAuth = args["isAuth"] as? Bool;
+                    
+                        ZohoSalesIQ.Chat.show(new: true)
+                        ZohoSalesIQ.Chat.setVisibility(.preChatForm, visible: !isAuth)
+                    
+                    
+                    result(nil)
+                } else {
+                    result(FlutterError.init(code: "errorSetDebug", message: "data or format error", details: nil))
+                }
                 
-                print("========= initializing Zoho SalesIQ:")
-                ZohoSalesIQ.Chat.show(new: true)
-                
-                result(nil)
-                
-//                result(FlutterMethodNotImplemented)
+                //                result(FlutterMethodNotImplemented)
                 
                 return
             }
