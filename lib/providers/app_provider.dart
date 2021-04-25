@@ -19,7 +19,8 @@ import 'package:tiptop_v2/utils/location_helper.dart';
 import 'local_storage.dart';
 
 class AppProvider with ChangeNotifier {
-  static const String GOOGLE_API_KEY = 'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
+  static const String GOOGLE_API_KEY =
+      'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
   // Boot config related
   BootConfigs bootConfigs;
@@ -56,7 +57,8 @@ class AppProvider with ChangeNotifier {
 
   Locale get appLocale => _appLocale ?? Locale(DEFAULT_LOCALE);
 
-  String get dir => _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
+  String get dir =>
+      _appLocale == Locale('ar') || _appLocale == Locale('fa') ? 'rtl' : 'ltr';
 
   bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
 
@@ -90,7 +92,10 @@ class AppProvider with ChangeNotifier {
 
   // Auth Related.
   static const DOMAIN = 'https://titan.trytiptop.app/';
-  final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
+  final Map<String, String> headers = {
+    "accept": "application/json",
+    "content-type": "application/json"
+  };
   User authUser;
   int userId;
   String token;
@@ -177,11 +182,13 @@ class AppProvider with ChangeNotifier {
       uri = uri.replace(queryParameters: body);
       print("uri");
       print(uri);
-      final response = await http.get(uri, headers: withToken && token != null ? authHeader : headers);
+      final response = await http.get(uri,
+          headers: withToken && token != null ? authHeader : headers);
 
       if (response.statusCode == 401) {
         if (token != null) {
-          print('Sending authenticated request with expired token! Logging out...');
+          print(
+              'Sending authenticated request with expired token! Logging out...');
           logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
@@ -191,7 +198,9 @@ class AppProvider with ChangeNotifier {
 
       final responseData = json.decode(response.body);
       if (responseData["status"] != 200 && !overrideStatusCheck) {
-        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+        throw HttpException(
+            title: 'Http Exception Error',
+            message: getHttpExceptionMessage(responseData));
       }
       return responseData;
     } catch (error) {
@@ -205,7 +214,12 @@ class AppProvider with ChangeNotifier {
     Map<String, dynamic> body,
     bool withToken = false,
   }) async {
-    this.post(endpoint: endpoint, body: body, params: params, withToken: withToken, isPut: true);
+    this.post(
+        endpoint: endpoint,
+        body: body,
+        params: params,
+        withToken: withToken,
+        isPut: true);
   }
 
   Future<dynamic> post({
@@ -224,14 +238,20 @@ class AppProvider with ChangeNotifier {
       print(uri);
       http.Response response;
       if (!isPut) {
-        response = await http.post(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
+        response = await http.post(uri,
+            body: json.encode(body),
+            headers: withToken && token != null ? authHeader : headers);
       } else {
-        response = await http.put(uri, body: json.encode(body), headers: withToken && token != null ? authHeader : headers);
+        response = await http.put(uri,
+            body: json.encode(body),
+            headers: withToken && token != null ? authHeader : headers);
       }
-      final dynamic responseData = json.decode(response.body) as Map<dynamic, dynamic>;
+      final dynamic responseData =
+          json.decode(response.body) as Map<dynamic, dynamic>;
       if (response.statusCode == 401) {
         if (token != null) {
-          print('Sending authenticated request with expired token! Logging out...');
+          print(
+              'Sending authenticated request with expired token! Logging out...');
           logout(clearSelectedAddress: true);
         } else {
           print('Sending authenticated request without logging in!');
@@ -239,7 +259,9 @@ class AppProvider with ChangeNotifier {
         return 401;
       }
       if (responseData["status"] != 200 && !overrideStatusCheck) {
-        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+        throw HttpException(
+            title: 'Http Exception Error',
+            message: getHttpExceptionMessage(responseData));
       }
       return responseData;
     } catch (error) {
@@ -276,7 +298,9 @@ class AppProvider with ChangeNotifier {
       if (responseData['data'] == null) {
         throw HttpException(
           title: 'Error',
-          message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
+          message: responseData['message'] != null
+              ? responseData['message']
+              : 'An error occurred',
         );
       }
       User updatedUser = User.fromJson(responseData['data']['user']);
@@ -296,7 +320,8 @@ class AppProvider with ChangeNotifier {
       print('Not logged in! (No local storage key)');
       return;
     }
-    var userDataString = await storageActions.getDataOfType(key: 'userData', type: String);
+    var userDataString =
+        await storageActions.getDataOfType(key: 'userData', type: String);
     final responseData = json.decode(userDataString) as Map<String, dynamic>;
     authUser = User.fromJson(json.decode(responseData['data']));
     userId = LocalStorage.userId = responseData['userId'];
@@ -325,7 +350,8 @@ class AppProvider with ChangeNotifier {
 
   void initInstaBug() {
     if (Platform.isIOS) {
-      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
+      Instabug.start('82b5d29b0a4494bc9258e2562578037e',
+          <InvocationEvent>[InvocationEvent.shake]);
     }
   }
 
@@ -344,7 +370,9 @@ class AppProvider with ChangeNotifier {
         deviceData = readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
     return deviceData;
   }
@@ -358,7 +386,7 @@ class AppProvider with ChangeNotifier {
 
   Map<String, dynamic> mobileAppDetails;
   BootData bootData;
-  static AppChannel appDefaultChannel;
+  static AppChannel appDefaultChannel = AppChannel.MARKET;
 
   Future<void> fetchBootConfigurations() async {
     mobileAppDetails = await loadMobileAppDetails();
@@ -367,9 +395,11 @@ class AppProvider with ChangeNotifier {
       'platform': mobileAppDetails['device']['platform'],
     };
     final responseData = await get(endpoint: 'boot', body: body);
-    bootData = BootData.fromJson(responseData["data"]);
-    bootConfigs = bootData.bootConfigs;
-    appDefaultChannel = bootData.defaultChannel ?? AppChannel.MARKET;
+    if (responseData["data"] != null) {
+      bootData = BootData.fromJson(responseData["data"]);
+      bootConfigs = bootData.bootConfigs;
+      appDefaultChannel = bootData.defaultChannel ?? AppChannel.MARKET;
+    }
     print('selected channel is:');
     print(appDefaultChannel);
     print("bootConfigs");
