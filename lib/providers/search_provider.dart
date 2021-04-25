@@ -11,7 +11,7 @@ class SearchProvider with ChangeNotifier {
   Future<void> fetchAndSetSearchTerms({@required AppChannel selectedChannel}) async {
     final endpoint = 'search';
     final Map<String, String> body = {
-      'channel': appChannelValues.reverse[AppChannel.MARKET],
+      'channel': appChannelValues.reverse[selectedChannel],
     };
     final Map<String, String> grocerySearchBody = {
       'branch_id': HomeProvider.branchId.toString(),
