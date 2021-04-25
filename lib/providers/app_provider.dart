@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
 import 'package:package_info/package_info.dart';
-import 'package:tiptop_v2/models/boot.dart';
+import 'package:tiptop_v2/models/remote_config.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/user.dart';
@@ -23,7 +23,7 @@ class AppProvider with ChangeNotifier {
       'AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw';
 
   // Boot config related
-  BootConfigs bootConfigs;
+  RemoteConfigs remoteConfigs;
 
   bool _isForceUpdateEnabled = false;
 
@@ -385,7 +385,7 @@ class AppProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> mobileAppDetails;
-  BootData bootData;
+  RemoteConfigsData remoteConfigsData;
   static AppChannel appDefaultChannel = AppChannel.MARKET;
 
   Future<void> fetchBootConfigurations() async {
@@ -394,22 +394,22 @@ class AppProvider with ChangeNotifier {
       'build_number': mobileAppDetails['buildNumber'],
       'platform': mobileAppDetails['device']['platform'],
     };
-    final responseData = await get(endpoint: 'boot', body: body);
+    final responseData = await get(endpoint: 'remote-configs', body: body);
     if (responseData["data"] != null) {
-      bootData = BootData.fromJson(responseData["data"]);
-      bootConfigs = bootData.bootConfigs;
-      appDefaultChannel = bootData.defaultChannel ?? AppChannel.MARKET;
+      remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
+      remoteConfigs = remoteConfigsData.configs;
+      appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
     }
     print('selected channel is:');
     print(appDefaultChannel);
     print("bootConfigs");
-    if (bootConfigs != null) {
-      print("bootConfigs.updateMethod");
-      print(bootConfigs.updateMethod);
-      if (bootConfigs.updateMethod == 2) {
+    if (remoteConfigs != null) {
+      print("remoteConfigs.updateMethod");
+      print(remoteConfigs.updateMethod);
+      if (remoteConfigs.updateMethod == 2) {
         print("HARD");
         isForceUpdateEnabled = true;
-      } else if (bootConfigs.updateMethod == 1) {
+      } else if (remoteConfigs.updateMethod == 1) {
         print("SOFT");
         isSoftUpdateEnabled = true;
       }

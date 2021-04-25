@@ -1,27 +1,29 @@
 import 'enums.dart';
 
-class BootData {
-  BootData({
-    this.bootConfigs,
+class RemoteConfigsData {
+  RemoteConfigsData({
+    this.configs,
     this.defaultChannel,
   });
 
-  BootConfigs bootConfigs;
+  RemoteConfigs configs;
   AppChannel defaultChannel;
 
-  factory BootData.fromJson(Map<String, dynamic> json) => BootData(
-        bootConfigs: BootConfigs.fromJson(json["bootConfigs"]),
+  factory RemoteConfigsData.fromJson(Map<String, dynamic> json) => RemoteConfigsData(
+        configs: json["configs"] == null
+            ? null
+            : RemoteConfigs.fromJson(json["configs"]),
         defaultChannel: appChannelValues.map[json["defaultChannel"]],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": bootConfigs.toJson(),
+        "id": configs.toJson(),
         "defaultChannel": appChannelValues.reverse[defaultChannel],
       };
 }
 
-class BootConfigs {
-  BootConfigs({
+class RemoteConfigs {
+  RemoteConfigs({
     this.buildNumber,
     this.applicationType,
     this.platformType,
@@ -37,7 +39,7 @@ class BootConfigs {
   dynamic data;
   DataTranslated dataTranslated;
 
-  factory BootConfigs.fromJson(Map<String, dynamic> json) => BootConfigs(
+  factory RemoteConfigs.fromJson(Map<String, dynamic> json) => RemoteConfigs(
         buildNumber: json["buildNumber"],
         applicationType: json["applicationType"],
         platformType: json["platformType"],
