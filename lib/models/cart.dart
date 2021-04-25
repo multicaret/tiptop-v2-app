@@ -1,5 +1,6 @@
 import 'package:tiptop_v2/models/product.dart';
 
+import 'home.dart';
 import 'models.dart';
 
 class CartData {
@@ -34,6 +35,7 @@ class Cart {
     this.chainId,
     this.branchId,
     this.products,
+    this.restaurant,
   });
 
   int id;
@@ -46,6 +48,7 @@ class Cart {
   int chainId;
   int branchId;
   List<CartProduct> products;
+  Branch restaurant;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
         id: json["id"],
@@ -58,6 +61,7 @@ class Cart {
         chainId: json["chainId"],
         branchId: json["branchId"],
         products: json["products"] == null ? <CartProduct>[] : List<CartProduct>.from(json["products"].map((x) => CartProduct.fromJson(x))),
+        restaurant: json["restaurant"] == null ? null : Branch.fromJson(json["restaurant"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -70,6 +74,7 @@ class Cart {
         "chainId": chainId,
         "branchId": branchId,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
+        "restaurant": restaurant == null ? null : restaurant.toJson(),
       };
 }
 
@@ -77,17 +82,28 @@ class CartProduct {
   int productIdInCart;
   Product product;
   int quantity;
+  DoubleRawStringFormatted price;
+  DoubleRawStringFormatted totalPrice;
+  List<ProductSelectedOption> selectedOptions;
 
   CartProduct({
     this.productIdInCart,
     this.product,
     this.quantity,
+    this.price,
+    this.totalPrice,
+    this.selectedOptions,
   });
 
   factory CartProduct.fromJson(Map<String, dynamic> json) => CartProduct(
         productIdInCart: json["productIdInCart"],
         product: Product.fromJson(json["product"]),
         quantity: json["quantity"],
+        price: json["price"] == null ? null : DoubleRawStringFormatted.fromJson(json["price"]),
+        totalPrice: json["totalPrice"] == null ? null : DoubleRawStringFormatted.fromJson(json["totalPrice"]),
+        selectedOptions: json["selectedOptions"] == null
+            ? <ProductSelectedOption>[]
+            : List<ProductSelectedOption>.from(json["selectedOptions"].map((x) => ProductSelectedOption.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

@@ -181,7 +181,7 @@ class CartProvider with ChangeNotifier {
     print(productCartData);
 
     final endpoint = 'carts/${foodCart.id}/products/food/adjust-cart-data';
-    try {
+    // try {
       final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
       if (responseData == 401) {
         return 401;
@@ -190,11 +190,12 @@ class CartProvider with ChangeNotifier {
       isLoadingAdjustFoodCartDataRequest = false;
       foodCart = cartData.cart;
       notifyListeners();
-    } catch (e) {
+/*    } catch (e) {
+      // showToast(msg: Translations.of(context).get('An Error Occurred!'));
       isLoadingAdjustFoodCartDataRequest = false;
       notifyListeners();
       throw e;
-    }
+    }*/
   }
 
   void clearRequestedMoreThanAvailableQuantity() {

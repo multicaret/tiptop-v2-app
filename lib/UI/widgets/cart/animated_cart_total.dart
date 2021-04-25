@@ -9,14 +9,14 @@ class AnimatedCartTotal extends StatelessWidget {
   final bool isRTL;
   final bool hideCart;
   final String route;
-  final bool isLoadingAdjustCartQuantityRequest;
+  final bool isLoading;
   final String cartTotal;
 
   AnimatedCartTotal({
     @required this.isRTL,
     @required this.hideCart,
     @required this.route,
-    @required this.isLoadingAdjustCartQuantityRequest,
+    @required this.isLoading,
     @required this.cartTotal,
   });
 
@@ -51,7 +51,7 @@ class AnimatedCartTotal extends StatelessWidget {
                   ),
                   child: hideCart
                       ? Text('')
-                      : isLoadingAdjustCartQuantityRequest
+                      : isLoading
                           ? SpinKitThreeBounce(
                               color: AppColors.white,
                               size: 20,
