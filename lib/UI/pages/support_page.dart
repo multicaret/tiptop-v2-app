@@ -44,6 +44,7 @@ class _SupportPageState extends State<SupportPage> {
         "initLiveChat",
         {
           //arguments passed to native code
+          "userId": appProvider.isAuth ? appProvider.authUser.id : " ",
           "userName": appProvider.isAuth ? appProvider.authUser.name : " ",
           "userEmail": appProvider.isAuth ? appProvider.authUser.email : " ",
           "languageCode": appProvider.appLocale.languageCode,
