@@ -12,6 +12,7 @@ class CartProvider with ChangeNotifier {
   Cart foodCart;
 
   bool isLoadingAdjustCartQuantityRequest = false;
+  bool isLoadingAdjustFoodCartDataRequest = false;
   bool isLoadingClearCartRequest = false;
 
   void setMarketCart(Cart _marketCart) {
@@ -143,22 +144,57 @@ class CartProvider with ChangeNotifier {
     return getProductQuantity(product.id);
   }
 
-  Future<dynamic> adjustFoodProductCart(BuildContext context, AppProvider appProvider, Map<String, dynamic> productCartData) async {
+  Future<dynamic> adjustFoodProductCart(
+    BuildContext context,
+    AppProvider appProvider, {
+    @required int productId,
+    @required int chainId,
+    @required int restaurantId,
+    @required ProductCartData productTempCartData,
+  }) async {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
       showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
       appProvider.logout(clearSelectedAddress: true);
       return 401;
     }
+    isLoadingAdjustFoodCartDataRequest = true;
+    notifyListeners();
+
+    Map<String, dynamic> productCartData = {
+      //Todo: fill first param when editing cart product
+      'product_id_in_cart': null,
+      'product_id': productId,
+      'chain_id': chainId,
+      'branch_id': restaurantId,
+      'quantity': productTempCartData.quantity,
+      'selected_options': productTempCartData.selectedOptions
+          .where((selectedOption) => selectedOption.selectedIds.length > 0)
+          .map((selectedOption) => {
+                'product_option_id': selectedOption.productOptionId,
+                'selected_ids': selectedOption.selectedIds,
+              })
+          .toList(),
+    };
+
+    print('productCartData on submitting....');
+    print(productCartData);
 
     final endpoint = 'carts/${foodCart.id}/products/food/adjust-cart-data';
-    final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
-    if(responseData == 401) {
-      return 401;
+    try {
+      final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
+      if (responseData == 401) {
+        return 401;
+      }
+      CartData cartData = CartData.fromJson(responseData["data"]);
+      isLoadingAdjustFoodCartDataRequest = false;
+      foodCart = cartData.cart;
+      notifyListeners();
+    } catch (e) {
+      isLoadingAdjustFoodCartDataRequest = false;
+      notifyListeners();
+      throw e;
     }
-    CartData cartData = CartData.fromJson(responseData["data"]);
-    foodCart = cartData.cart;
-    notifyListeners();
   }
 
   void clearRequestedMoreThanAvailableQuantity() {
