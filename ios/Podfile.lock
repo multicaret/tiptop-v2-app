@@ -39,6 +39,7 @@ PODS:
   - mixpanel_flutter (1.1.0):
     - Flutter
     - Mixpanel-swift (= 2.8.3)
+  - Mobilisten (3.6.4)
   - OneSignal (2.16.3)
   - onesignal_flutter (2.6.3):
     - Flutter
@@ -74,6 +75,7 @@ DEPENDENCIES:
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
+  - Mobilisten
   - OneSignal (< 3.0, >= 2.9.3)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -93,6 +95,7 @@ SPEC REPOS:
     - GoogleMaps
     - Instabug
     - Mixpanel-swift
+    - Mobilisten
     - OneSignal
     - Toast
 
@@ -151,6 +154,7 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Mixpanel-swift: 947354668bf7dcaff5aaf9c64232fb5bea6ff0c7
   mixpanel_flutter: 2b151def495bd86f2a6cbd83e58acf47a70cbb79
+  Mobilisten: e5daf5a4d1f1f9b668ba7160b93f7da11bc26816
   OneSignal: fd223b247d46e0aa97c7712f3e031c29798d018a
   onesignal_flutter: 605e4ed3c95a9705db9f5073a66ac6d0045b3fee
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
@@ -164,6 +168,6 @@ SPEC CHECKSUMS:
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: e7ca51dffe1e8ed3a318c707aca030e833247791
+PODFILE CHECKSUM: 86ce79d650dbfa115e875fb83e390ea8d0da380d
 
 COCOAPODS: 1.10.1
