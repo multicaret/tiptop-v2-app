@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
+import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
@@ -149,7 +150,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                 ),
                 Consumer2<HomeProvider, AppProvider>(
                   builder: (c, homeProvider, appProvider, _) => TotalButton(
-                    onTap: () => submitProductCartData(c, appProvider),
+                    onTap: () => submitProductCartData(context, appProvider),
                     isRTL: appProvider.isRTL,
                     total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
                     child: Row(
@@ -189,6 +190,28 @@ class _FoodProductPageState extends State<FoodProductPage> {
     }
     if (chainId == null || restaurantId == null) {
       print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
+      return;
+    }
+
+    if(cartProvider.foodCart.restaurant != null && (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
+      print('Adding to cart from a different restaurant');
+      final response = await showDialog(
+        context: context,
+        builder: (context) => ConfirmAlertDialog(
+          title: 'This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?',
+        ),
+      );
+      if(response != null && response) {
+        //Todo: delete existing cart
+        await cartProvider.adjustFoodProductCart(
+          context,
+          appProvider,
+          productId: product.id,
+          restaurantId: restaurantId,
+          chainId: chainId,
+          productTempCartData: productsProvider.productTempCartData,
+        );
+      }
       return;
     }
 
