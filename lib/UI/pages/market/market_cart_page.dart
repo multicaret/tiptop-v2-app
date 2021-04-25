@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/market_list_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -62,7 +62,7 @@ class MarketCartPage extends StatelessWidget {
                 child: ListView(
                   physics: AlwaysScrollableScrollPhysics(),
                   children: cartProvider.marketCart.products
-                      .map((cartProduct) => MarketListProductItem(
+                      .map((cartProduct) => MarketProductListItem(
                             product: cartProduct.product,
                             quantity: cartProduct.quantity,
                           ))

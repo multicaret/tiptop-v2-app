@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/market_list_product_item.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -54,7 +54,7 @@ class _FavoriteMarketProductsPageState extends State<FavoriteMarketProductsPage>
               onRefresh: _fetchAndSetFavoriteProducts,
               child: ListView.builder(
                 itemCount: favoriteProducts.length,
-                itemBuilder: (c, i) => MarketListProductItem(product: favoriteProducts[i]),
+                itemBuilder: (c, i) => MarketProductListItem(product: favoriteProducts[i]),
               ),
             ),
     );
