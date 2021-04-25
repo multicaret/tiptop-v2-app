@@ -143,6 +143,24 @@ class CartProvider with ChangeNotifier {
     return getProductQuantity(product.id);
   }
 
+  Future<dynamic> adjustFoodProductCart(BuildContext context, AppProvider appProvider, Map<String, dynamic> productCartData) async {
+    if (foodCart == null || foodCart.id == null) {
+      print('No food cart!');
+      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
+      appProvider.logout(clearSelectedAddress: true);
+      return 401;
+    }
+
+    final endpoint = 'carts/${foodCart.id}/products/food/adjust-cart-data';
+    final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
+    if(responseData == 401) {
+      return 401;
+    }
+    CartData cartData = CartData.fromJson(responseData["data"]);
+    foodCart = cartData.cart;
+    notifyListeners();
+  }
+
   void clearRequestedMoreThanAvailableQuantity() {
     if (marketCart != null && marketCart.products != null && marketCart.products.length > 0) {
       marketCart.products.forEach((cartProduct) => requestedMoreThanAvailableQuantity[cartProduct.product.id] = false);

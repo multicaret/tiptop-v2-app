@@ -26,16 +26,18 @@ class FoodProductOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductsProvider>(
       builder: (c, productsProvider, _) {
-        List<Map<String, dynamic>> selectedProductOptions = productsProvider.productTempCartData['options'] as List<Map<String, dynamic>>;
+        List<ProductSelectedOption> selectedProductOptions = productsProvider.productTempCartData.selectedOptions;
 
         return Column(
           children: List.generate(productOptions.length, (i) {
             ProductOption option = productOptions[i];
-            Map<String, dynamic> selectedProductOption = selectedProductOptions.firstWhere(
-              (selectedProductOption) => selectedProductOption["id"] == option.id,
+            Map<String, dynamic> optionValidation = productsProvider.getOptionValidation(option.id);
+
+            ProductSelectedOption selectedProductOption = selectedProductOptions.firstWhere(
+              (selectedProductOption) => selectedProductOption.productOptionId == option.id,
               orElse: () => null,
             );
-            List<int> selectedIds = selectedProductOption['selected_ids'] == null ? <int>[] : selectedProductOption['selected_ids'];
+            List<int> selectedIds = selectedProductOption.selectedIds == null ? <int>[] : selectedProductOption.selectedIds;
             List<Map<String, dynamic>> radioOrCheckboxOrDropdownItems = option.selections
                 .map((selection) => {
                       'id': selection.id,
@@ -128,6 +130,19 @@ class FoodProductOptions extends StatelessWidget {
                         suffixTextStyle: AppTextStyles.bodySecondary,
                         translate: false,
                       ),
+                      if (optionValidation != null)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.bg,
+                            border: Border(bottom: BorderSide(color: Colors.red)),
+                          ),
+                          child: Text(
+                            optionValidation['message'],
+                            style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
+                          ),
+                        ),
                       Container(
                         width: double.infinity,
                         color: AppColors.white,

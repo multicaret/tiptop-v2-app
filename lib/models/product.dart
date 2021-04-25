@@ -176,7 +176,9 @@ class ProductOption {
         selections: json["selections"] == null
             ? <ProductOptionSelection>[]
             : List<ProductOptionSelection>.from(json["selections"].map((x) => ProductOptionSelection.fromJson(x))),
-        ingredients: json["ingredients"] == null ? <ProductOptionSelection>[] : List<ProductOptionSelection>.from(json["ingredients"].map((x) => ProductOptionSelection.fromJson(x))),
+        ingredients: json["ingredients"] == null
+            ? <ProductOptionSelection>[]
+            : List<ProductOptionSelection>.from(json["ingredients"].map((x) => ProductOptionSelection.fromJson(x))),
       );
 }
 
@@ -219,5 +221,57 @@ class Unit {
         "id": id,
         "title": title,
         "step": step,
+      };
+}
+
+class ProductCartData {
+  ProductCartData({
+    this.productId,
+    this.selectedOptions,
+    this.productTotalPrice,
+    this.quantity,
+  });
+
+  int productId;
+  List<ProductSelectedOption> selectedOptions;
+  double productTotalPrice;
+  int quantity;
+
+  factory ProductCartData.fromJson(Map<String, dynamic> json) => ProductCartData(
+        productId: json["productId"],
+        selectedOptions: List<ProductSelectedOption>.from(json["selectedOptions"].map((x) => ProductSelectedOption.fromJson(x))),
+        productTotalPrice: json["productTotalPrice"],
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "productId": productId,
+        "selectedOptions": List<dynamic>.from(selectedOptions.map((x) => x.toJson())),
+        "productTotalPrice": productTotalPrice,
+        "quantity": quantity,
+      };
+}
+
+class ProductSelectedOption {
+  ProductSelectedOption({
+    this.productOptionId,
+    this.selectedIds,
+    this.optionTotalPrice,
+  });
+
+  int productOptionId;
+  List<int> selectedIds;
+  double optionTotalPrice;
+
+  factory ProductSelectedOption.fromJson(Map<String, dynamic> json) => ProductSelectedOption(
+        productOptionId: json["productOptionId"],
+        selectedIds: json["selectedIds"],
+        optionTotalPrice: json["optionTotalPrice"] == null ? 0.0 : json["optionTotalPrice"].toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "productOptionId": productOptionId,
+        "selectedIds": List<int>.from(selectedIds.map((x) => x)),
+        "optionTotalPrice": optionTotalPrice,
       };
 }

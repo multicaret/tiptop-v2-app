@@ -190,5 +190,8 @@
   "Changed address successfully": "تم تغيير العنوان إلى {0} بنجاح!",
   "There are only {cartAvailableQuantity} available {productTitle}": "يوجد فقط {0} متاح {1}",
   "You can only add up to {maxLength} items": "يمكنك إضافة ما يصل إلى {0} من العناصر فقط",
-  "Order total should be greater than:": "يجب أن يكون إجمالي الطلب أكثر من: {0}"
+  "Order total should be greater than:": "يجب أن يكون إجمالي الطلب أكثر من: {0}",
+  "This option is required": "هذا الخيار اجباري",
+  "You have to pick at least {targetOptionMinNumberOfSelection} options": "يجب عليك ان تختار {0} خيار على الأقل",
+  "Invalid options! Please check the error messages and modify your options accordingly": "الخيارات خاطئة! الرجاء التحقق من رسائل الخطأ وتعديل الخيارات وفقاً لها"
 }
