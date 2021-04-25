@@ -18,7 +18,7 @@ class FormattedPrices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasDiscountedPrice = discountedPrice != null && discountedPrice.raw != 0;
+    bool hasDiscountedPrice = discountedPrice != null && discountedPrice.raw != 0 && discountedPrice.raw < price.raw;
     return Column(children: _formattedPricesList(hasDiscountedPrice));
   }
 
