@@ -27,14 +27,14 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class CheckoutPage extends StatefulWidget {
+class MarketCheckoutPage extends StatefulWidget {
   static const routeName = '/checkout-page';
 
   @override
-  _CheckoutPageState createState() => _CheckoutPageState();
+  _MarketCheckoutPageState createState() => _MarketCheckoutPageState();
 }
 
-class _CheckoutPageState extends State<CheckoutPage> {
+class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   bool _isInit = true;
   bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
