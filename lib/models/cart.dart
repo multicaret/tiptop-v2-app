@@ -79,7 +79,7 @@ class Cart {
 }
 
 class CartProduct {
-  int productIdInCart;
+  int cartProductId;
   Product product;
   int quantity;
   DoubleRawStringFormatted price;
@@ -87,7 +87,7 @@ class CartProduct {
   List<ProductSelectedOption> selectedOptions;
 
   CartProduct({
-    this.productIdInCart,
+    this.cartProductId,
     this.product,
     this.quantity,
     this.price,
@@ -96,7 +96,7 @@ class CartProduct {
   });
 
   factory CartProduct.fromJson(Map<String, dynamic> json) => CartProduct(
-        productIdInCart: json["productIdInCart"],
+        cartProductId: json["cartProductId"],
         product: Product.fromJson(json["product"]),
         quantity: json["quantity"],
         price: json["price"] == null ? null : DoubleRawStringFormatted.fromJson(json["price"]),
@@ -107,7 +107,7 @@ class CartProduct {
       );
 
   Map<String, dynamic> toJson() => {
-        "productIdInCart": productIdInCart,
+        "cartProductId": cartProductId,
         "product": product.toJson(),
         "quantity": quantity,
       };

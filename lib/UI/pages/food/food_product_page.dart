@@ -11,6 +11,7 @@ import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -47,6 +48,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
   int chainId;
   int restaurantId;
   int productId;
+  int cartProductId;
   Product product;
 
   bool hasDiscountedPrice = false;
@@ -69,6 +71,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       print('Route data: $data');
       productId = data["product_id"];
+      cartProductId = data["cart_product_id"];
       restaurantId = data["restaurant_id"];
       chainId = data["chain_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
@@ -142,7 +145,14 @@ class _FoodProductPageState extends State<FoodProductPage> {
                             product: product,
                             productOptions: productsProvider.productOptions,
                           ),
-                          FoodCartControls(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                            color: AppColors.bg,
+                            child: FoodCartControls(
+                              quantity: productsProvider.productTempCartData.quantity,
+                              action: (CartAction cartAction) => productsProvider.setProductTempQuantity(cartAction),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -193,7 +203,8 @@ class _FoodProductPageState extends State<FoodProductPage> {
       return;
     }
 
-    if(cartProvider.foodCart.restaurant != null && (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
+    if (cartProvider.foodCart.restaurant != null &&
+        (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
       print('Adding to cart from a different restaurant');
       final response = await showDialog(
         context: context,
@@ -201,12 +212,13 @@ class _FoodProductPageState extends State<FoodProductPage> {
           title: 'This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?',
         ),
       );
-      if(response != null && response) {
+      if (response != null && response) {
         //Todo: delete existing cart
         await cartProvider.adjustFoodProductCart(
           context,
           appProvider,
           productId: product.id,
+          cartProductId: cartProductId,
           restaurantId: restaurantId,
           chainId: chainId,
           productTempCartData: productsProvider.productTempCartData,
@@ -219,6 +231,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       context,
       appProvider,
       productId: product.id,
+      cartProductId: cartProductId,
       restaurantId: restaurantId,
       chainId: chainId,
       productTempCartData: productsProvider.productTempCartData,

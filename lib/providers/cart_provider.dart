@@ -155,6 +155,7 @@ class CartProvider with ChangeNotifier {
     BuildContext context,
     AppProvider appProvider, {
     @required int productId,
+    int cartProductId,
     @required int chainId,
     @required int restaurantId,
     @required ProductCartData productTempCartData,
@@ -170,7 +171,7 @@ class CartProvider with ChangeNotifier {
 
     Map<String, dynamic> productCartData = {
       //Todo: fill first param when editing cart product
-      'product_id_in_cart': null,
+      'cart_product_id': cartProductId,
       'product_id': productId,
       'chain_id': chainId,
       'branch_id': restaurantId,
