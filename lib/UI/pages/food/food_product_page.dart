@@ -206,6 +206,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
       return;
     }
+    bool shouldDeleteExistingCart = false;
 
     if (cartProvider.foodCart.restaurant != null &&
         (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
@@ -217,18 +218,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
         ),
       );
       if (response != null && response) {
-        await cartProvider.clearFoodCart(context, appProvider);
-        await _adjustFoodProductCart();
+        shouldDeleteExistingCart = true;
       }
-      return;
     }
 
-    await _adjustFoodProductCart();
-    showToast(msg: Translations.of(context).get(cartProduct == null ? 'Successfully added product to cart!' : 'Cart updated successfully!'));
-    Navigator.of(context).pop();
-  }
-
-  Future<void> _adjustFoodProductCart() async {
     await cartProvider.adjustFoodProductCart(
       context,
       appProvider,
@@ -237,6 +230,15 @@ class _FoodProductPageState extends State<FoodProductPage> {
       restaurantId: restaurantId,
       chainId: chainId,
       productTempCartData: productsProvider.productTempCartData,
+      deleteExistingCart: shouldDeleteExistingCart,
     );
+
+    showToast(
+        msg: Translations.of(context).get(cartProduct == null
+            ? shouldDeleteExistingCart
+                ? 'Cleared existing cart and added product to new cart successfully!'
+                : 'Successfully added product to cart!'
+            : 'Cart updated successfully!'));
+    Navigator.of(context).pop();
   }
 }

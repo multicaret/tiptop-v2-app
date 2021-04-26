@@ -200,5 +200,6 @@
   "Your Cart Is Empty, Shop Now!": "سلتك فارغة! قم بالتسوق الآن",
   "Update Cart": "حدث السلة",
   "Cart updated successfully!": "تم تحديث السلة بنجاح",
-  "Successfully added product to cart!": "تم اضافة المنتج الى السلة بنجاح!"
+  "Successfully added product to cart!": "تم اضافة المنتج الى السلة بنجاح!",
+  "Cleared existing cart and added product to new cart successfully!": "تم حذف السلة الموجودة واضافة المنتج الى السلة الجديدة بنجاح!"
 }
