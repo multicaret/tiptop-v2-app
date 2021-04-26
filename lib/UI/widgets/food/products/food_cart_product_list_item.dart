@@ -26,11 +26,11 @@ class FoodCartProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void openMarketProductPage() {
+    void openFoodProductPage() {
       Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
         "product_id": cartProduct.product.id,
         "has_controls": hasControls,
-        "cart_product_id": cartProduct.cartProductId,
+        "cart_product": cartProduct,
         'chain_id': chainId,
         'restaurant_id': restaurantId,
       });
@@ -49,7 +49,7 @@ class FoodCartProductListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: openMarketProductPage,
+            onTap: openFoodProductPage,
             child: Container(
               width: 80,
               height: 80,
@@ -64,7 +64,7 @@ class FoodCartProductListItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: openMarketProductPage,
+              onTap: openFoodProductPage,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

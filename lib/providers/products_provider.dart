@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -143,18 +144,38 @@ class ProductsProvider with ChangeNotifier {
     return invalidOptions.firstWhere((invalidOption) => invalidOption["product_option_id"] == optionId, orElse: () => null);
   }
 
-  void initProductOptions() {
+  void initProductOptions(CartProduct existingCartProduct) {
     productTempCartData = ProductCartData(
       productId: product.id,
       selectedOptions: productOptions.map((option) {
+        ProductSelectedOption _existingSelectedOption = existingCartProduct == null
+            ? null
+            : existingCartProduct.selectedOptions
+                .firstWhere((existingSelectedOption) => existingSelectedOption.productOptionId == option.id, orElse: () => null);
+        List<int> _selectedIds = _existingSelectedOption != null ? _existingSelectedOption.selectedIds : <int>[];
+
+        double _optionTotalPrice = 0.0;
+        _selectedIds.forEach((selectedId) {
+          List<ProductOptionSelection> selectionsOrIngredients = option.isBasedOnIngredients ? option.ingredients : option.selections;
+          selectionsOrIngredients.forEach((selectionOrIngredient) {
+            if (selectionOrIngredient.id == selectedId && selectionOrIngredient.price.raw > 0) {
+              _optionTotalPrice += selectionOrIngredient.price.raw;
+            }
+          });
+        });
+
         return ProductSelectedOption(
           productOptionId: option.id,
-          selectedIds: <int>[],
-          optionTotalPrice: 0.0,
+          selectedIds: _selectedIds,
+          optionTotalPrice: _optionTotalPrice,
         );
       }).toList(),
-      productTotalPrice: product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw,
-      quantity: 1,
+      productTotalPrice: existingCartProduct == null
+          ? product.discountedPrice != null && product.discountedPrice.raw == 0
+              ? product.discountedPrice.raw
+              : product.price.raw
+          : existingCartProduct.totalPrice.raw,
+      quantity: existingCartProduct == null ? 1 : existingCartProduct.quantity,
     );
     invalidOptions = [];
     print('initial productTempCartData:');
@@ -188,12 +209,16 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Future<dynamic> fetchAndSetProduct(AppProvider appProvider, int productId) async {
+  Future<dynamic> fetchAndSetProduct(
+    AppProvider appProvider,
+    int productId, {
+    CartProduct cartProduct,
+  }) async {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
     productOptions = product.options.where((option) => option.selections.length != 0 || option.ingredients.length != 0).toList();
-    initProductOptions();
+    initProductOptions(cartProduct);
     notifyListeners();
   }
 

@@ -11,6 +11,7 @@ import 'package:tiptop_v2/UI/widgets/food/products/food_product_options.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -48,7 +49,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
   int chainId;
   int restaurantId;
   int productId;
-  int cartProductId;
+  CartProduct cartProduct;
   Product product;
 
   bool hasDiscountedPrice = false;
@@ -59,7 +60,11 @@ class _FoodProductPageState extends State<FoodProductPage> {
 
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
-    await productsProvider.fetchAndSetProduct(appProvider, productId);
+    await productsProvider.fetchAndSetProduct(
+      appProvider,
+      productId,
+      cartProduct: cartProduct,
+    );
     product = productsProvider.product;
     productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
     setState(() => _isLoadingProduct = false);
@@ -71,13 +76,14 @@ class _FoodProductPageState extends State<FoodProductPage> {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       print('Route data: $data');
       productId = data["product_id"];
-      cartProductId = data["cart_product_id"];
+      cartProduct = data["cart_product"];
       restaurantId = data["restaurant_id"];
       chainId = data["chain_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
+
       _fetchAndSetProduct();
     }
     _isInit = false;
@@ -174,8 +180,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                         SizedBox(width: 5),
                         Flexible(
                           child: Text(
-                            //Todo: text becomes "Update Cart" after being added to cart
-                            Translations.of(context).get('Add To Cart'),
+                            Translations.of(context).get(cartProduct == null ? 'Add To Cart' : 'Update Cart'),
                             maxLines: 1,
                             style: AppTextStyles.button,
                           ),
@@ -213,30 +218,29 @@ class _FoodProductPageState extends State<FoodProductPage> {
         ),
       );
       if (response != null && response) {
-        //Todo: delete existing cart
-        await cartProvider.adjustFoodProductCart(
-          context,
-          appProvider,
-          productId: product.id,
-          cartProductId: cartProductId,
-          restaurantId: restaurantId,
-          chainId: chainId,
-          productTempCartData: productsProvider.productTempCartData,
-        );
+        await cartProvider.clearFoodCart(context, appProvider);
+        await _adjustFoodProductCart();
       }
       return;
     }
 
+    await _adjustFoodProductCart();
+    showToast(
+      msg: cartProduct == null ? 'Successfully added product to cart!' : 'Cart updated successfully!',
+      gravity: ToastGravity.BOTTOM,
+    );
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _adjustFoodProductCart() async {
     await cartProvider.adjustFoodProductCart(
       context,
       appProvider,
       productId: product.id,
-      cartProductId: cartProductId,
+      cartProductId: cartProduct == null ? null : cartProduct.cartProductId,
       restaurantId: restaurantId,
       chainId: chainId,
       productTempCartData: productsProvider.productTempCartData,
     );
-    showToast(msg: 'Successfully added product to cart!', gravity: ToastGravity.BOTTOM);
-    Navigator.of(context).pop();
   }
 }
