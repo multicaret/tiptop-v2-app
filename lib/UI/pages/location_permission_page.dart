@@ -31,7 +31,7 @@ class LocationPermissionPage extends StatelessWidget {
                 Translations.of(context).get('location permission text'),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 120),
+              const SizedBox(height: 100),
               AppButtons.primary(
                 onPressed: () {
                   handleLocationPermission().then((isGranted) {
@@ -40,7 +40,6 @@ class LocationPermissionPage extends StatelessWidget {
                       appProvider.isLocationPermissionGranted = true;
                       Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
                     } else {
-                      // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
                       openAppSettings();
                     }
                   });
@@ -64,7 +63,8 @@ class LocationPermissionPage extends StatelessWidget {
                 child: Text(
                   Translations.of(context).get("I don’t want to use my location services"),
                 ),
-              )
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
