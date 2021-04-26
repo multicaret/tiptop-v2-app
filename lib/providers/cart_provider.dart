@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -15,7 +16,8 @@ class CartProvider with ChangeNotifier {
 
   bool isLoadingAdjustCartQuantityRequest = false;
   bool isLoadingAdjustFoodCartDataRequest = false;
-  bool isLoadingClearCartRequest = false;
+  bool isLoadingClearMarketCartRequest = false;
+  bool isLoadingClearFoodCartRequest = false;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
@@ -222,7 +224,7 @@ class CartProvider with ChangeNotifier {
   Future<void> clearMarketCart(AppProvider appProvider) async {
     final endpoint = 'carts/${marketCart.id}/delete';
     clearRequestedMoreThanAvailableQuantity();
-    isLoadingClearCartRequest = true;
+    isLoadingClearMarketCartRequest = true;
     notifyListeners();
 
     Map<String, dynamic> body = {
@@ -237,12 +239,54 @@ class CartProvider with ChangeNotifier {
         withToken: true,
       );
 
-      isLoadingClearCartRequest = false;
+      isLoadingClearMarketCartRequest = false;
       notifyListeners();
     } catch (e) {
-      isLoadingClearCartRequest = true;
+      isLoadingClearMarketCartRequest = true;
       notifyListeners();
       throw e;
     }
   }
+
+  Future<void> clearFoodCart(BuildContext context, AppProvider appProvider) async {
+    final endpoint = 'carts/${foodCart.id}/delete';
+
+    if(HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+      return;
+    }
+
+    // clearRequestedMoreThanAvailableQuantity();
+    isLoadingClearFoodCartRequest = true;
+    notifyListeners();
+
+    Map<String, dynamic> body = {
+      'branch_id': HomeProvider.selectedFoodBranchId,
+      'chain_id': HomeProvider.selectedFoodChainId,
+    };
+    print('body: $body');
+
+    try {
+      await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
+
+      print('Deleting chain id and branch id from local storage...');
+      await storageActions.deleteData(key: 'selected_food_branch_id');
+      await storageActions.deleteData(key: 'selected_food_chain_id');
+
+      isLoadingClearFoodCartRequest = false;
+      showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      notifyListeners();
+    } catch (e) {
+      showToast(msg: Translations.of(context).get('Error clearing cart!'));
+      isLoadingClearFoodCartRequest = true;
+      notifyListeners();
+      throw e;
+    }
+  }
+
 }

@@ -26,13 +26,9 @@ class FoodCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, CartProvider>(
       builder: (c, appProvider, cartProvider, _) {
-        if (cartProvider.noFoodCart && !cartProvider.isLoadingAdjustFoodCartDataRequest) {
-          Future.delayed(const Duration(milliseconds: 300), () {
-            Navigator.of(context).pop();
-          });
-        }
 
         return AppScaffold(
+          hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest,
           appBar: AppBar(
             title: Text(Translations.of(context).get('Cart')),
             actions: [
@@ -45,12 +41,7 @@ class FoodCartPage extends StatelessWidget {
                     ),
                   ).then((response) {
                     if (response != null && response) {
-                      cartProvider.clearMarketCart(appProvider).then((_) {
-                        showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
-                        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-                      }).catchError((e) {
-                        showToast(msg: Translations.of(context).get('Error clearing cart!'));
-                      });
+                      cartProvider.clearFoodCart(context, appProvider);
                     }
                   });
                 },

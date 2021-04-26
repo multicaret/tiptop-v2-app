@@ -25,7 +25,7 @@ class MarketCartPage extends StatelessWidget {
 
         return AppScaffold(
           hasCurve: false,
-          hasOverlayLoader: cartProvider.isLoadingClearCartRequest,
+          hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest,
           appBar: AppBar(
             title: Text(Translations.of(context).get('Cart')),
             actions: [
