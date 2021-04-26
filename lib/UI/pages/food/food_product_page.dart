@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
@@ -14,6 +15,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -164,9 +166,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
                     ),
                   ),
                 ),
-                Consumer2<HomeProvider, AppProvider>(
-                  builder: (c, homeProvider, appProvider, _) => TotalButton(
-                    onTap: () => submitProductCartData(context, appProvider),
+                Consumer3<HomeProvider, AppProvider, AddressesProvider>(
+                  builder: (c, homeProvider, appProvider, addressesProvider, _) => TotalButton(
+                    onTap: () => submitProductCartData(context, appProvider, addressesProvider),
                     isRTL: appProvider.isRTL,
                     total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
                     child: Row(
@@ -194,10 +196,15 @@ class _FoodProductPageState extends State<FoodProductPage> {
     );
   }
 
-  Future<void> submitProductCartData(BuildContext context, AppProvider appProvider) async {
-    if(!appProvider.isAuth) {
+  Future<void> submitProductCartData(BuildContext context, AppProvider appProvider, AddressesProvider addressesProvider) async {
+    if (!appProvider.isAuth) {
       showToast(msg: Translations.of(context).get('You Need to Log In First!'));
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      return;
+    }
+    if (!addressesProvider.addressIsSelected) {
+      showToast(msg: Translations.of(context).get('You Need to Select Address First!'));
+      Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
       return;
     }
     bool optionsAreValid = productsProvider.validateProductOptions(context);

@@ -24,6 +24,7 @@ void main() async {
     LocalStorage().isReady().then((_) async {
       // Uncomment when you want to clear local storage on app launch
       // LocalStorage().clear();
+      // LocalStorage().deleteData(key: 'selected_address');
       AppProvider appProvider = AppProvider();
       await appProvider.bootActions();
       runApp(MyApp(
