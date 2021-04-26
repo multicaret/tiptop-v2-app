@@ -45,7 +45,7 @@ class FoodCartPage extends StatelessWidget {
                     ),
                   ).then((response) {
                     if (response != null && response) {
-                      cartProvider.clearCart(appProvider).then((_) {
+                      cartProvider.clearMarketCart(appProvider).then((_) {
                         showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
                         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
                       }).catchError((e) {

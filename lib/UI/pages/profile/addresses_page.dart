@@ -62,7 +62,7 @@ class _AddressesPageState extends State<AddressesPage> {
       ).then((response) {
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
-          cartProvider.clearCart(appProvider).then((_) {
+          cartProvider.clearMarketCart(appProvider).then((_) {
             addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
               _changeSelectedAddress(_selectedAddress).then((_) {
                 showToast(
@@ -99,7 +99,7 @@ class _AddressesPageState extends State<AddressesPage> {
     );
     if (response != null && response) {
       if (!cartProvider.noMarketCart) {
-        await cartProvider.clearCart(appProvider);
+        await cartProvider.clearMarketCart(appProvider);
         print('cart cleared as well :( ');
       }
       await addressesProvider.deleteAddress(appProvider, _addressId);

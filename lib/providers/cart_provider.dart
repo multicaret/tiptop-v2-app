@@ -219,7 +219,7 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<void> clearCart(AppProvider appProvider) async {
+  Future<void> clearMarketCart(AppProvider appProvider) async {
     final endpoint = 'carts/${marketCart.id}/delete';
     clearRequestedMoreThanAvailableQuantity();
     isLoadingClearCartRequest = true;
