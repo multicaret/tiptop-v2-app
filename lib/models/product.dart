@@ -66,8 +66,8 @@ class Product {
   int minimumOrderableQuantity;
   String avgRating;
   int ratingCount;
-  DoubleRawIntFormatted price;
-  DoubleRawIntFormatted discountedPrice;
+  DoubleRawStringFormatted price;
+  DoubleRawStringFormatted discountedPrice;
   List<dynamic> barcodes;
   Media media;
   double width;
@@ -94,8 +94,8 @@ class Product {
         minimumOrderableQuantity: json["minimumOrderableQuantity"],
         avgRating: json["avgRating"],
         ratingCount: json["ratingCount"],
-        price: DoubleRawIntFormatted.fromJson(json["price"]),
-        discountedPrice: json["discountedPrice"] == null ? null : DoubleRawIntFormatted.fromJson(json["discountedPrice"]),
+        price: DoubleRawStringFormatted.fromJson(json["price"]),
+        discountedPrice: json["discountedPrice"] == null ? null : DoubleRawStringFormatted.fromJson(json["discountedPrice"]),
         barcodes: json["barcodes"] == null ? null : List<dynamic>.from(json["barcodes"].map((x) => x)),
         media: Media.fromJson(json["media"]),
         width: json["width"] == null ? null : json["width"].toDouble(),

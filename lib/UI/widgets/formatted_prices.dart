@@ -4,8 +4,8 @@ import 'package:tiptop_v2/models/models.dart';
 import 'UI/formatted_price.dart';
 
 class FormattedPrices extends StatelessWidget {
-  final DoubleRawIntFormatted price;
-  final DoubleRawIntFormatted discountedPrice;
+  final DoubleRawStringFormatted price;
+  final DoubleRawStringFormatted discountedPrice;
   final bool isLarge;
   final bool isEndAligned;
 

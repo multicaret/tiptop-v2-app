@@ -61,26 +61,6 @@ class IntRawStringFormatted {
       };
 }
 
-class DoubleRawIntFormatted {
-  double raw;
-  String formatted;
-
-  DoubleRawIntFormatted({
-    this.raw,
-    this.formatted,
-  });
-
-  factory DoubleRawIntFormatted.fromJson(Map<String, dynamic> json) => DoubleRawIntFormatted(
-        raw: json["raw"] == null ? null : json["raw"].toDouble(),
-        formatted: json["formatted"] == null ? null : json["formatted"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "raw": raw == null ? null : raw,
-        "formatted": formatted == null ? null : formatted,
-      };
-}
-
 class EdAt {
   String formatted;
   String diffForHumans;

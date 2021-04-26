@@ -40,15 +40,15 @@ class CheckoutData {
   });
 
   List<PaymentMethod> paymentMethods;
-  DoubleRawIntFormatted deliveryFee;
-  DoubleRawIntFormatted total;
-  DoubleRawIntFormatted grandTotal;
+  DoubleRawStringFormatted deliveryFee;
+  DoubleRawStringFormatted total;
+  DoubleRawStringFormatted grandTotal;
 
   factory CheckoutData.fromJson(Map<String, dynamic> json) => CheckoutData(
         paymentMethods: List<PaymentMethod>.from(json["paymentMethods"].map((x) => PaymentMethod.fromJson(x))),
-        deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
-        total: DoubleRawIntFormatted.fromJson(json["total"]),
-        grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+        deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
+        total: DoubleRawStringFormatted.fromJson(json["total"]),
+        grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -167,10 +167,10 @@ class Order {
   Address address;
   EdAt completedAt;
   String couponCode;
-  DoubleRawIntFormatted couponDiscountAmount;
-  DoubleRawIntFormatted totalAfterCouponDiscount;
-  DoubleRawIntFormatted deliveryFee;
-  DoubleRawIntFormatted grandTotal;
+  DoubleRawStringFormatted couponDiscountAmount;
+  DoubleRawStringFormatted totalAfterCouponDiscount;
+  DoubleRawStringFormatted deliveryFee;
+  DoubleRawStringFormatted grandTotal;
   OrderRating orderRating;
   OrderStatus status;
   Cart cart;
@@ -181,10 +181,10 @@ class Order {
         address: Address.fromJson(json["address"]),
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
-        couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawIntFormatted.fromJson(json["couponDiscountAmount"]),
-        totalAfterCouponDiscount: json["totalAfterCouponDiscount"] == null ? null : DoubleRawIntFormatted.fromJson(json["totalAfterCouponDiscount"]),
-        deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
-        grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+        couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawStringFormatted.fromJson(json["couponDiscountAmount"]),
+        totalAfterCouponDiscount: json["totalAfterCouponDiscount"] == null ? null : DoubleRawStringFormatted.fromJson(json["totalAfterCouponDiscount"]),
+        deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
+        grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
         status: json["status"] == null ? null : orderStatusValues.map[json["status"].toString()],
         cart: Cart.fromJson(json["cart"]),
@@ -301,17 +301,17 @@ class CouponValidationResponseData {
     this.grandTotal,
   });
 
-  DoubleRawIntFormatted discountedAmount;
-  DoubleRawIntFormatted deliveryFee;
-  DoubleRawIntFormatted totalBefore;
-  DoubleRawIntFormatted totalAfter;
-  DoubleRawIntFormatted grandTotal;
+  DoubleRawStringFormatted discountedAmount;
+  DoubleRawStringFormatted deliveryFee;
+  DoubleRawStringFormatted totalBefore;
+  DoubleRawStringFormatted totalAfter;
+  DoubleRawStringFormatted grandTotal;
 
   factory CouponValidationResponseData.fromJson(Map<String, dynamic> json) => CouponValidationResponseData(
-        discountedAmount: DoubleRawIntFormatted.fromJson(json["discountedAmount"]),
-        deliveryFee: DoubleRawIntFormatted.fromJson(json["deliveryFee"]),
-        totalBefore: DoubleRawIntFormatted.fromJson(json["totalBefore"]),
-        totalAfter: DoubleRawIntFormatted.fromJson(json["totalAfter"]),
-        grandTotal: DoubleRawIntFormatted.fromJson(json["grandTotal"]),
+        discountedAmount: DoubleRawStringFormatted.fromJson(json["discountedAmount"]),
+        deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
+        totalBefore: DoubleRawStringFormatted.fromJson(json["totalBefore"]),
+        totalAfter: DoubleRawStringFormatted.fromJson(json["totalAfter"]),
+        grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
       );
 }

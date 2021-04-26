@@ -154,19 +154,19 @@ class BranchDelivery {
   });
 
   bool isDeliveryEnabled;
-  DoubleRawIntFormatted minimumOrder;
-  DoubleRawIntFormatted underMinimumOrderDeliveryFee;
-  DoubleRawIntFormatted fixedDeliveryFee;
-  DoubleRawIntFormatted freeDeliveryThreshold;
+  DoubleRawStringFormatted minimumOrder;
+  DoubleRawStringFormatted underMinimumOrderDeliveryFee;
+  DoubleRawStringFormatted fixedDeliveryFee;
+  DoubleRawStringFormatted freeDeliveryThreshold;
   int minDeliveryMinutes;
   int maxDeliveryMinutes;
 
   factory BranchDelivery.fromJson(Map<String, dynamic> json) => BranchDelivery(
         isDeliveryEnabled: json["isDeliveryEnabled"],
-        minimumOrder: DoubleRawIntFormatted.fromJson(json["minimumOrder"]),
-        underMinimumOrderDeliveryFee: DoubleRawIntFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
-        fixedDeliveryFee: DoubleRawIntFormatted.fromJson(json["fixedDeliveryFee"]),
-        freeDeliveryThreshold: DoubleRawIntFormatted.fromJson(json["freeDeliveryThreshold"]),
+        minimumOrder: DoubleRawStringFormatted.fromJson(json["minimumOrder"]),
+        underMinimumOrderDeliveryFee: DoubleRawStringFormatted.fromJson(json["underMinimumOrderDeliveryFee"]),
+        fixedDeliveryFee: DoubleRawStringFormatted.fromJson(json["fixedDeliveryFee"]),
+        freeDeliveryThreshold: DoubleRawStringFormatted.fromJson(json["freeDeliveryThreshold"]),
         minDeliveryMinutes: json["minDeliveryMinutes"],
         maxDeliveryMinutes: json["maxDeliveryMinutes"],
       );

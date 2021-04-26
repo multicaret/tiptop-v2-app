@@ -74,8 +74,7 @@ class FoodCartProductListItem extends StatelessWidget {
                     const SizedBox(height: 10),
                     if (cartProduct.product.unitText != null) Text(cartProduct.product.unitText, style: AppTextStyles.subtitleXs50),
                     FormattedPrices(
-                      price: cartProduct.product.price,
-                      discountedPrice: cartProduct.product.discountedPrice,
+                      price: cartProduct.totalPrice,
                     ),
                   ],
                 ),
