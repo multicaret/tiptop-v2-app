@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/food/active_filters.dart';
@@ -6,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/food/filter_sort_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurants_index.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RestaurantsPage extends StatefulWidget {
   static const routeName = '/restaurants';
@@ -39,6 +41,21 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       hasOverlayLoader: restaurantsProvider.isLoadingSubmitFilterAndSort,
+      appBarActions: [
+        if (!restaurantsProvider.filtersAreEmpty)
+          IconButton(
+            onPressed: () {
+              restaurantsProvider.setFilterData(data: {
+                'delivery_type': 'all',
+                'min_rating': null,
+                'minimum_order': restaurantsProvider.minCartValue,
+                'categories': <int>[],
+              });
+              restaurantsProvider.submitFiltersAndSort();
+            },
+            icon: AppIcons.icon(FontAwesomeIcons.eraser),
+          )
+      ],
       body: Column(
         children: [
           FilterSortButtons(shouldPopOnly: true),
