@@ -23,7 +23,7 @@ class AnimatedCartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double totalWidth = cartTotal != null && cartTotal.length > 10 ? appBarCartTotalWidth : appBarCartTotalWidthMin;
+    double expandedWidth = cartTotal != null && cartTotal.length > 10 ? appBarCartTotalWidth : appBarCartTotalWidthMin;
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
@@ -35,13 +35,13 @@ class AnimatedCartTotal extends StatelessWidget {
                 Navigator.of(context, rootNavigator: true).pushNamed(route);
               },
         child: Container(
-          width: totalWidth,
+          width: expandedWidth,
           alignment: Alignment.center,
           margin: EdgeInsets.symmetric(horizontal: 10),
           child: Stack(
             children: [
               Positioned(
-                width: totalWidth,
+                width: expandedWidth,
                 height: buttonHeightXs,
                 bottom: 10,
                 child: Container(
@@ -74,7 +74,7 @@ class AnimatedCartTotal extends StatelessWidget {
                 bottom: 10,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: hideCart ? totalWidth : 30,
+                  width: hideCart ? expandedWidth : 30,
                   decoration: BoxDecoration(
                     borderRadius: hideCart
                         ? BorderRadius.circular(8)
