@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/widgets/UI/overlay_loader.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -17,6 +18,7 @@ class AppBottomSheet extends StatelessWidget {
   final Function applyAction;
   final bool isLoading;
   final bool hasOverlayLoading;
+  final bool hasButtonLoader;
 
   AppBottomSheet({
     @required this.screenHeightFraction,
@@ -26,6 +28,7 @@ class AppBottomSheet extends StatelessWidget {
     this.applyAction,
     this.isLoading = false,
     this.hasOverlayLoading = false,
+    this.hasButtonLoader = false,
   });
 
   @override
@@ -88,7 +91,12 @@ class AppBottomSheet extends StatelessWidget {
                     bottom: actionButtonBottomPadding,
                   ),
                   child: AppButtons.secondary(
-                    child: Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+                    child: hasButtonLoader
+                        ? SpinKitThreeBounce(
+                            color: AppColors.primary,
+                            size: 30,
+                          )
+                        : Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
                     onPressed: applyAction,
                   ),
                 ),
