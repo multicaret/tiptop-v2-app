@@ -173,9 +173,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     try {
       await restaurantsProvider.submitFiltersAndSort();
       showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
-      if (widget.shouldPopOnly) {
-        Navigator.of(context).pop();
-      } else {
+      Navigator.of(context).pop();
+      if (!widget.shouldPopOnly) {
         Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
       }
     } catch (e) {

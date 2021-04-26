@@ -87,14 +87,13 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           'latitude': AppProvider.latitude,
           'longitude': AppProvider.longitude,
           'selected_address_id':
-          addressesProvider.addressIsSelected && addressesProvider.selectedAddress != null ? addressesProvider.selectedAddress.id : null,
+              addressesProvider.addressIsSelected && addressesProvider.selectedAddress != null ? addressesProvider.selectedAddress.id : null,
         };
       }
       await restaurantsProvider.submitFiltersAndSort(sortData: sortData);
       showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
-      if (widget.shouldPopOnly) {
-        Navigator.of(context).pop();
-      } else {
+      Navigator.of(context).pop();
+      if (!widget.shouldPopOnly) {
         Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
       }
     } catch (e) {
