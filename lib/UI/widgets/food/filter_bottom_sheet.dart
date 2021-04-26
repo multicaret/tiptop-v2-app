@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -98,23 +99,25 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   children: [
                     Text(Translations.of(context).get('Min. Cart'), style: AppTextStyles.body50),
                     const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text('${minCartValue.round()} IQD'),
-                        Expanded(
-                          child: Slider(
-                            min: minCartValue,
-                            max: maxCartValue,
-                            value: filterData['minimum_order'].round().toDouble(),
-                            label: '${filterData['minimum_order'].round().toDouble()} IQD',
-                            onChanged: (newValue) => restaurantsProvider.setFilterData(
-                              key: 'minimum_order',
-                              value: newValue.round().toDouble(),
+                    Consumer<HomeProvider>(
+                      builder: (c, homeProvider, _) => Row(
+                        children: [
+                          Text(priceAndCurrency(minCartValue.round(), homeProvider.foodCurrency)),
+                          Expanded(
+                            child: Slider(
+                              min: minCartValue,
+                              max: maxCartValue,
+                              value: filterData['minimum_order'].round().toDouble(),
+                              label: priceAndCurrency(filterData['minimum_order'].round().toDouble(), homeProvider.foodCurrency),
+                              onChanged: (newValue) => restaurantsProvider.setFilterData(
+                                key: 'minimum_order',
+                                value: newValue.round().toDouble(),
+                              ),
                             ),
                           ),
-                        ),
-                        Text(Translations.of(context).get("All")),
-                      ],
+                          Text(Translations.of(context).get("All")),
+                        ],
+                      ),
                     ),
                   ],
                 ),
