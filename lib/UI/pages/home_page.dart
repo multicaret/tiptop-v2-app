@@ -117,7 +117,9 @@ class _HomePageState extends State<HomePage> {
         _listener = _oneSignalNotificationsProvider.getPayload.listen(null);
         _listener.onData((event) {
           print("Is opened: ${OneSignalNotificationsProvider.notificationHasOpened}");
-          print(event.additionalData.keys.toString());
+          if (event.additionalData != null) {
+            print(event.additionalData.keys.toString());
+          }
         });
       }
     }
