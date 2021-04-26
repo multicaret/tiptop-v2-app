@@ -37,7 +37,7 @@ class FoodCartProductListItem extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
@@ -51,8 +51,8 @@ class FoodCartProductListItem extends StatelessWidget {
           InkWell(
             onTap: openFoodProductPage,
             child: Container(
-              width: 80,
-              height: 80,
+              width: productListItemThumbnailSize,
+              height: productListItemThumbnailSize,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: AppColors.border, width: 1.5),
@@ -65,7 +65,9 @@ class FoodCartProductListItem extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: openFoodProductPage,
-              child: Padding(
+              child: Container(
+                constraints: BoxConstraints(minHeight: productListItemThumbnailSize),
+                alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
