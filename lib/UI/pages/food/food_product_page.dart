@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
@@ -194,6 +195,11 @@ class _FoodProductPageState extends State<FoodProductPage> {
   }
 
   Future<void> submitProductCartData(BuildContext context, AppProvider appProvider) async {
+    if(!appProvider.isAuth) {
+      showToast(msg: Translations.of(context).get('You Need to Log In First!'));
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      return;
+    }
     bool optionsAreValid = productsProvider.validateProductOptions(context);
     if (!optionsAreValid) {
       showToast(

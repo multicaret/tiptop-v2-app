@@ -73,6 +73,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     await restaurantsProvider.fetchAndSetRestaurant(appProvider, restaurantId);
     restaurant = restaurantsProvider.restaurant;
     menuCategories = restaurantsProvider.menuCategories;
+    print(restaurant != null ? 'restaurant chain id: ${restaurant.chain.id}' : '');
     setState(() => _isLoadingRestaurantShowRequest = false);
   }
 
@@ -197,7 +198,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(restaurant != null ? 'restaurant chain id: ${restaurant.chain.id}' : '');
     return AppScaffold(
       hasCurve: false,
       appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,

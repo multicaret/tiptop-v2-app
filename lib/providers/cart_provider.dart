@@ -198,6 +198,7 @@ class CartProvider with ChangeNotifier {
       }
       final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
       if (responseData == 401) {
+        appProvider.logout(clearSelectedAddress: true);
         return 401;
       }
       CartData cartData = CartData.fromJson(responseData["data"]);
