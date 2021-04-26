@@ -62,6 +62,8 @@
   "Terms and Conditions": "الشروط و الأحكام",
   "Languages": "اللغات",
   "Cart": "السلة",
+  "Market Cart": "سلة الماركت",
+  "Food Cart": "سلة المطعم",
   "Search": "البحث",
   "Profile": "الملف الشخصي",
   "This field is required": "هذا الحقل مطلوب",
@@ -199,5 +201,6 @@
   "This option is required": "هذا الخيار اجباري",
   "You have to pick at least {targetOptionMinNumberOfSelection} options": "يجب عليك ان تختار {0} خيار على الأقل",
   "Invalid options! Please check the error messages and modify your options accordingly": "الخيارات خاطئة! الرجاء التحقق من رسائل الخطأ وتعديل الخيارات وفقاً لها",
-  "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "سوف يتم حذف منتجاتك المضافة إلى سلة التسوق التابعة لمطعم آخر. هل أنت متأكد من أنك تريد المتابعة؟"
+  "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "سوف يتم حذف منتجاتك المضافة إلى سلة التسوق التابعة لمطعم آخر. هل أنت متأكد من أنك تريد المتابعة؟",
+  "Your Cart Is Empty, Shop Now!": "سلتك فارغة! قم بالتسوق الآن"
 }

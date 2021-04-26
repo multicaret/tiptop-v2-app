@@ -62,6 +62,8 @@
   "Terms and Conditions": "Terms and Conditions",
   "Languages": "Languages",
   "Cart": "Cart",
+  "Market Cart": "Market Cart",
+  "Food Cart": "Food Cart",
   "Search": "Search",
   "Profile": "Profile",
   "This field is required": "This field is required",
@@ -201,5 +203,6 @@
   "This option is required": "This option is required",
   "You have to pick at least {targetOptionMinNumberOfSelection} options": "You have to pick at least {0} options",
   "Invalid options! Please check the error messages and modify your options accordingly": "Invalid options! Please check the error messages and modify your options accordingly",
-  "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?"
+  "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?",
+  "Your Cart Is Empty, Shop Now!": "Your Cart Is Empty, Shop Now!"
 }

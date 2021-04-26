@@ -12,11 +12,9 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-import '../../app_wrapper.dart';
 import '../checkout_page.dart';
 
 class FoodCartPage extends StatelessWidget {
@@ -26,104 +24,115 @@ class FoodCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, CartProvider>(
       builder: (c, appProvider, cartProvider, _) {
-
         return AppScaffold(
           hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Cart')),
+            title: Text(Translations.of(context).get('Food Cart')),
             actions: [
-              IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => ConfirmAlertDialog(
-                      title: 'Are you sure you want to empty your cart?',
-                    ),
-                  ).then((response) {
-                    if (response != null && response) {
-                      cartProvider.clearFoodCart(context, appProvider);
-                    }
-                  });
-                },
-                icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-              )
+              if (!cartProvider.noFoodCart)
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ConfirmAlertDialog(
+                        title: 'Are you sure you want to empty your cart?',
+                      ),
+                    ).then((response) {
+                      if (response != null && response) {
+                        cartProvider.clearFoodCart(context, appProvider);
+                      }
+                    });
+                  },
+                  icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
+                )
             ],
           ),
           body: Column(
             children: [
-              Material(
-                color: AppColors.white,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pushNamed(
-                      RestaurantPage.routeName,
-                      arguments: cartProvider.foodCart.branchId,
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: AppColors.border),
+              if (!cartProvider.noFoodCart)
+                Material(
+                  color: AppColors.white,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pushNamed(
+                        RestaurantPage.routeName,
+                        arguments: cartProvider.foodCart.branchId,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: AppColors.border),
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.border),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              width: 50,
-                              height: 50,
-                              imageUrl: cartProvider.foodCart.restaurant.chain.media.logo,
-                              placeholder: (_, __) => SpinKitDoubleBounce(
-                                color: AppColors.secondary,
-                                size: 25,
+                      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.border),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                width: 50,
+                                height: 50,
+                                imageUrl: cartProvider.foodCart.restaurant.chain.media.logo,
+                                placeholder: (_, __) => SpinKitDoubleBounce(
+                                  color: AppColors.secondary,
+                                  size: 25,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(cartProvider.foodCart.restaurant.title),
-                        ),
-                        AppIcons.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
-                      ],
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(cartProvider.foodCart.restaurant.title),
+                          ),
+                          AppIcons.icon(appProvider.isRTL ? FontAwesomeIcons.angleLeft : FontAwesomeIcons.angleRight),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: cartProvider.foodCart.cartProducts.length,
-                  itemBuilder: (c, i) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        top: i == 0 ? 20 : 0,
-                        bottom: i == cartProvider.foodCart.cartProducts.length - 1 ? 20 : 0,
+                child: cartProvider.noFoodCart
+                    ? Center(
+                        child: TextButton(
+                          child: Text(Translations.of(context).get('Your Cart Is Empty, Shop Now!')),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: cartProvider.foodCart.cartProducts.length,
+                        itemBuilder: (c, i) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              top: i == 0 ? 20 : 0,
+                              bottom: i == cartProvider.foodCart.cartProducts.length - 1 ? 20 : 0,
+                            ),
+                            child: FoodCartProductListItem(
+                              restaurantId: cartProvider.foodCart.restaurant.id,
+                              chainId: cartProvider.foodCart.restaurant.chain.id,
+                              cartProduct: cartProvider.foodCart.cartProducts[i],
+                            ),
+                          );
+                        },
                       ),
-                      child: FoodCartProductListItem(
-                        restaurantId: cartProvider.foodCart.restaurant.id,
-                        chainId: cartProvider.foodCart.restaurant.chain.id,
-                        cartProduct: cartProvider.foodCart.cartProducts[i],
-                      ),
-                    );
+              ),
+              if (!cartProvider.noFoodCart)
+                TotalButton(
+                  total: cartProvider.foodCart.total.formatted,
+                  isLoading: cartProvider.isLoadingAdjustFoodCartDataRequest,
+                  isRTL: appProvider.isRTL,
+                  child: Text(Translations.of(context).get('Continue')),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
                   },
                 ),
-              ),
-              TotalButton(
-                total: cartProvider.foodCart.total.formatted,
-                isLoading: cartProvider.isLoadingAdjustFoodCartDataRequest,
-                isRTL: appProvider.isRTL,
-                child: Text(Translations.of(context).get('Continue')),
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
-                },
-              ),
             ],
           ),
         );

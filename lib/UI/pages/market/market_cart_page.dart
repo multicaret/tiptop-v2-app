@@ -22,14 +22,14 @@ class MarketCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<AppProvider, HomeProvider, CartProvider>(
       builder: (c, appProvider, homeProvider, cartProvider, _) {
-
         return AppScaffold(
           hasCurve: false,
           hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Cart')),
+            title: Text(Translations.of(context).get('Market Cart')),
             actions: [
-              IconButton(
+              if (!cartProvider.noMarketCart)
+                IconButton(
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -54,34 +54,44 @@ class MarketCartPage extends StatelessWidget {
           body: Column(
             children: [
               Expanded(
-                child: ListView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  children: cartProvider.marketCart.cartProducts
-                      .map((cartProduct) => MarketProductListItem(
-                            product: cartProduct.product,
-                            quantity: cartProduct.quantity,
-                          ))
-                      .toList(),
+                child: cartProvider.noMarketCart
+                    ? Center(
+                        child: TextButton(
+                          child: Text(Translations.of(context).get('Your Cart Is Empty, Shop Now!')),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )
+                    : ListView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        children: cartProvider.marketCart.cartProducts
+                            .map((cartProduct) => MarketProductListItem(
+                                  product: cartProduct.product,
+                                  quantity: cartProduct.quantity,
+                                ))
+                            .toList(),
+                      ),
+              ),
+              if (!cartProvider.noMarketCart)
+                TotalButton(
+                  total: cartProvider.marketCart.total.formatted,
+                  isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
+                  isRTL: appProvider.isRTL,
+                  child: Text(Translations.of(context).get('Continue')),
+                  onTap: () {
+                    if (cartProvider.marketCart == null ||
+                        cartProvider.marketCart.total == null ||
+                        cartProvider.marketCart.total.raw == 0 ||
+                        cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
+                      showToast(
+                          msg: Translations.of(context).get('Order total should be greater than: {branchMinimumOrder}',
+                              args: [homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted]));
+                    } else {
+                      Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
+                    }
+                  },
                 ),
-              ),
-              TotalButton(
-                total: cartProvider.marketCart.total.formatted,
-                isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
-                isRTL: appProvider.isRTL,
-                child: Text(Translations.of(context).get('Continue')),
-                onTap: () {
-                  if (cartProvider.marketCart == null ||
-                      cartProvider.marketCart.total == null ||
-                      cartProvider.marketCart.total.raw == 0 ||
-                      cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
-                    showToast(
-                        msg: Translations.of(context).get('Order total should be greater than: {branchMinimumOrder}',
-                            args: [homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted]));
-                  } else {
-                    Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
-                  }
-                },
-              ),
             ],
           ),
         );
