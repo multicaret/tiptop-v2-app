@@ -67,12 +67,12 @@ String formatTime(BuildContext context, dynamic dateTime) {
 
 String priceAndCurrency(dynamic price, Currency currency) {
   String formattedPrice = NumberFormat.decimalPattern('en').format(price);
-  String priceAndCurrency = currency.isSymbolAfter ? '$formattedPrice ${currency.code}' : '${currency.code} $formattedPrice';
+  String priceAndCurrency = currency.isSymbolAfter ? '$formattedPrice ${currency.symbol}' : '${currency.symbol} $formattedPrice';
   return priceAndCurrency;
 }
 
 String currencySymbol(Currency currency) {
-  return NumberFormat.simpleCurrency().simpleCurrencySymbol(currency.code);
+  return NumberFormat.simpleCurrency().simpleCurrencySymbol(currency.symbol);
 }
 
 bool isCallable(v) => v is Function;
