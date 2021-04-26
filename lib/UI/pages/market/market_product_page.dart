@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
-import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_cart_controls.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -172,7 +172,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
                           BoxShadow(color: AppColors.shadow, blurRadius: 6),
                         ],
                       ),
-                      child: CartControls(
+                      child: MarketCartControls(
                         isModalControls: true,
                         product: product,
                       ),

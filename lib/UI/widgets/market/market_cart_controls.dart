@@ -19,22 +19,22 @@ import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import 'cart_animated_button.dart';
 
-class CartControls extends StatefulWidget {
+class MarketCartControls extends StatefulWidget {
   final Product product;
   final bool isModalControls;
   final bool isListItem;
 
-  CartControls({
+  MarketCartControls({
     @required this.product,
     this.isModalControls = false,
     this.isListItem = false,
   });
 
   @override
-  _CartControlsState createState() => _CartControlsState();
+  _MarketCartControlsState createState() => _MarketCartControlsState();
 }
 
-class _CartControlsState extends State<CartControls> {
+class _MarketCartControlsState extends State<MarketCartControls> {
   AppProvider appProvider;
   CartProvider cartProvider;
   AddressesProvider addressesProvider;

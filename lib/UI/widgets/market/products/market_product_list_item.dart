@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
-import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -82,7 +82,7 @@ class MarketProductListItem extends StatelessWidget {
               decoration: BoxDecoration(
                 boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
               ),
-              child: CartControls(product: product, isListItem: true),
+              child: MarketCartControls(product: product, isListItem: true),
             ),
           if (quantity != null && !hasControls)
             Container(

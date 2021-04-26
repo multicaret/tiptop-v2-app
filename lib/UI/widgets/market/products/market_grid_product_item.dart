@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
-import 'package:tiptop_v2/UI/widgets/market/cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -12,6 +11,7 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../../formatted_prices.dart';
+import '../market_cart_controls.dart';
 
 class MarketGridProductItem extends StatelessWidget {
   final Product product;
@@ -63,7 +63,7 @@ class MarketGridProductItem extends StatelessWidget {
                 left: cartControlsMargin,
                 right: cartControlsMargin,
                 height: getCartControlButtonHeight(context),
-                child: CartControls(product: product),
+                child: MarketCartControls(product: product),
               ),
               if (hasUnitTitle)
                 Positioned(
