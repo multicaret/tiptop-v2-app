@@ -204,5 +204,6 @@
   "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "سوف يتم حذف منتجاتك المضافة إلى سلة التسوق التابعة لمطعم آخر. هل أنت متأكد من أنك تريد المتابعة؟",
   "Your Cart Is Empty, Shop Now!": "سلتك فارغة! قم بالتسوق الآن",
   "Update Cart": "حدث السلة",
-  "Cart updated successfully!": "تم تحديث السلة بنجاح"
+  "Cart updated successfully!": "تم تحديث السلة بنجاح",
+  "Successfully added product to cart!": "تم اضافة المنتج الى السلة بنجاح!"
 }

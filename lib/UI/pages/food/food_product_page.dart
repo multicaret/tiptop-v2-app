@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
@@ -225,10 +224,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
     }
 
     await _adjustFoodProductCart();
-    showToast(
-      msg: cartProduct == null ? 'Successfully added product to cart!' : 'Cart updated successfully!',
-      gravity: ToastGravity.BOTTOM,
-    );
+    showToast(msg: Translations.of(context).get(cartProduct == null ? 'Successfully added product to cart!' : 'Cart updated successfully!'));
     Navigator.of(context).pop();
   }
 

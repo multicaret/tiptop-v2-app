@@ -206,5 +206,6 @@
   "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?": "This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?",
   "Your Cart Is Empty, Shop Now!": "Your Cart Is Empty, Shop Now!",
   "Update Cart": "Update Cart",
-  "Cart updated successfully!": "Cart updated successfully!"
+  "Cart updated successfully!": "Cart updated successfully!",
+  "Successfully added product to cart!": "Successfully added product to cart!"
 }
