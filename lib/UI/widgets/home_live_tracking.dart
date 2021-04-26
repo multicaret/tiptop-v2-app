@@ -111,7 +111,10 @@ class HomeLiveTracking extends StatelessWidget {
                           child: AppButtons.primarySm(
                             onPressed: () =>
                                 Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName, arguments: activeOrders[i]),
-                            child: Text(Translations.of(context).get("Track Order")),
+                            child: Text(
+                              Translations.of(context).get("Track Order"),
+                              style: AppTextStyles.subtitleWhite,
+                            ),
                           ),
                         )
                       ],

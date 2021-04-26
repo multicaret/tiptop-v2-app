@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -22,6 +23,8 @@ class AnimatedCartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double totalWidth = cartTotal != null && cartTotal.length > 10 ? appBarCartTotalWidth : appBarCartTotalWidthMin;
+
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
       opacity: hideCart ? 0 : 1,
@@ -32,18 +35,18 @@ class AnimatedCartTotal extends StatelessWidget {
                 Navigator.of(context, rootNavigator: true).pushNamed(route);
               },
         child: Container(
-          width: 130,
+          width: totalWidth,
           alignment: Alignment.center,
           margin: EdgeInsets.symmetric(horizontal: 10),
           child: Stack(
             children: [
               Positioned(
-                height: 33,
-                width: 130,
+                width: totalWidth,
+                height: buttonHeightXs,
                 bottom: 10,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  alignment: Alignment.center,
+                  alignment: isRTL ? Alignment.centerLeft : Alignment.centerRight,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [const BoxShadow(blurRadius: 6, color: AppColors.shadowDark)],
@@ -62,16 +65,16 @@ class AnimatedCartTotal extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.visible,
                               style: cartTotal != null && cartTotal.length > 12 ? AppTextStyles.subtitleXxsWhite : AppTextStyles.subtitleXsWhiteBold,
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.end,
                             ),
                 ),
               ),
               Positioned(
-                height: 33,
+                height: buttonHeightXs,
                 bottom: 10,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: hideCart ? 130 : 30,
+                  width: hideCart ? totalWidth : 30,
                   decoration: BoxDecoration(
                     borderRadius: hideCart
                         ? BorderRadius.circular(8)

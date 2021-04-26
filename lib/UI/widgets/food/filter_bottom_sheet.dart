@@ -7,7 +7,6 @@ import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
-import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -156,6 +155,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   );
                 },
               ),
+              const SizedBox(height: 20),
             ],
     );
   }

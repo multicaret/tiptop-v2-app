@@ -4,6 +4,7 @@ import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_choose_method_page.dart';
 import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_pin_code_text_field.dart';
@@ -65,67 +66,86 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
       hasOverlayLoader: _isLoadingSubmitSMSCode,
-      body: Column(
-        children: [
-          const SizedBox(height: 40),
-          Text(Translations.of(context).get('Check your messages')),
-          const SizedBox(height: 15),
-          Text(Translations.of(context).get('We sent a message to your number')),
-          const SizedBox(height: 7),
-          Text(
-            '+$phoneCountryCode $phoneNumber',
-            style: AppTextStyles.bodyBold,
-            textDirection: TextDirection.ltr,
-          ),
-          Text(Translations.of(context).get('with verification code')),
-          const SizedBox(height: 40),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 70),
-            child: AppPinCodeTextField(
-              length: 6,
-              onComplete: (code) => _submitSMSCode(code),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            Text(Translations.of(context).get('Check your messages')),
+            const SizedBox(height: 15),
+            Text(Translations.of(context).get('We sent a message to your number')),
+            const SizedBox(height: 7),
+            Text(
+              '+$phoneCountryCode $phoneNumber',
+              style: AppTextStyles.bodyBold,
+              textDirection: TextDirection.ltr,
             ),
-          ),
-          const SizedBox(height: 20),
-          CustomTimer(
-            from: Duration(minutes: 3),
-            to: Duration(minutes: 0),
-            onBuildAction: CustomTimerAction.auto_start,
-            onFinish: () {
-              Navigator.of(context).pop();
-            },
-            builder: (CustomTimerRemainingTime remaining) {
-              return Text(
-                "${remaining.minutes}:${remaining.seconds}",
-                style: AppTextStyles.h2,
-              );
-            },
-          ),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                Translations.of(context).get('Has it not arrived yet?'),
+            Text(Translations.of(context).get('with verification code')),
+            const SizedBox(height: 20),
+            Text(
+              Translations.of(context).get('Is the number above correct?'),
+              textAlign: TextAlign.center,
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context, rootNavigator: true).pushReplacementNamed(OTPChooseMethodPage.routeName),
+              child: Text(
+                Translations.of(context).get('No, let me fix it'),
+                style: AppTextStyles.bodySecondary,
               ),
-              const SizedBox(width: 5),
-              GestureDetector(
-                onTap: _resendSMSCode,
-                child: Text(
-                  Translations.of(context).get('Send again'),
-                  style: AppTextStyles.bodySecondaryDark,
+            ),
+            const SizedBox(height: 40),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 70),
+              child: AppPinCodeTextField(
+                length: 6,
+                onComplete: (code) => _submitSMSCode(code),
+              ),
+            ),
+            const SizedBox(height: 20),
+            CustomTimer(
+              from: Duration(minutes: 3),
+              to: Duration(minutes: 0),
+              onBuildAction: CustomTimerAction.auto_start,
+              onFinish: () {
+                Navigator.of(context).pop();
+              },
+              builder: (CustomTimerRemainingTime remaining) {
+                return Text(
+                  "${remaining.minutes}:${remaining.seconds}",
+                  style: AppTextStyles.h2,
+                );
+              },
+            ),
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  Translations.of(context).get('Has it not arrived yet?'),
                 ),
+                const SizedBox(width: 5),
+                GestureDetector(
+                  //Todo: uncomment when resend is fixed
+                  // onTap: _resendSMSCode,
+                  onTap: () => Navigator.of(context, rootNavigator: true).pushReplacementNamed(OTPChooseMethodPage.routeName),
+                  child: Text(
+                    Translations.of(context).get('Send again'),
+                    style: AppTextStyles.bodySecondaryDark,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+              },
+              child: Text(
+                Translations.of(context).get('Continue Without Login'),
+                style: AppTextStyles.bodySecondary,
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
-            },
-            child: Text(Translations.of(context).get('Continue Without Login')),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

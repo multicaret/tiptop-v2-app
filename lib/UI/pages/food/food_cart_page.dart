@@ -130,7 +130,7 @@ class FoodCartPage extends StatelessWidget {
                   isRTL: appProvider.isRTL,
                   child: Text(Translations.of(context).get('Continue')),
                   onTap: () {
-                    Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
+                    // Navigator.of(context, rootNavigator: true).pushNamed(CheckoutPage.routeName);
                   },
                 ),
             ],

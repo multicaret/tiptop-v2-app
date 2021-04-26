@@ -55,6 +55,9 @@ const double buttonHeight = 55;
 //Height of small app button
 const double buttonHeightSm = 45;
 
+//Height of x-small app button
+const double buttonHeightXs = 33;
+
 //Action button bottom padding (to account for dock line) (e.g. order button bottom padding)
 const double actionButtonBottomPadding = 40;
 
@@ -63,3 +66,9 @@ const double actionButtonContainerHeight = actionButtonBottomPadding + buttonHei
 
 //Space between stars that fill screen width
 const double fullWidthStarsGutter = 30;
+
+//Width of cart total in app bar
+const double appBarCartTotalWidth = 130;
+
+//Width of cart total in app bar
+const double appBarCartTotalWidthMin = 110;
