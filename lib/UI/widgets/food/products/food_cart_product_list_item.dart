@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/food/products/selected_options_text.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../food_cart_controls.dart';
 
@@ -74,7 +74,11 @@ class FoodCartProductListItem extends StatelessWidget {
                   children: [
                     Text(cartProduct.product.title),
                     const SizedBox(height: 10),
-                    if (cartProduct.product.unitText != null) Text(cartProduct.product.unitText, style: AppTextStyles.subtitleXs50),
+                    if (cartProduct.selectedOptions.length > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: SelectedOptionsText(cartProduct: cartProduct),
+                      ),
                     FormattedPrices(
                       price: cartProduct.totalPrice,
                     ),

@@ -111,6 +111,14 @@ class AppTextStyles {
     fontStyle: FontStyle.normal,
   );
 
+  static const TextStyle subtitleXsSecondary = const TextStyle(
+    fontFamily: 'NeoSansArabic',
+    color: AppColors.secondary,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
   static const TextStyle subtitleXxsWhite = const TextStyle(
     fontFamily: 'NeoSansArabic',
     color: AppColors.white,
