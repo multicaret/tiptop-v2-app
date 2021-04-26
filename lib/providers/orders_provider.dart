@@ -15,7 +15,6 @@ class OrdersProvider with ChangeNotifier {
   List<Order> marketPreviousOrders = [];
   List<Order> foodPreviousOrders = [];
 
-  CreateCheckoutResponse createCheckoutResponse;
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
   CouponValidationResponseData couponValidationResponseData;
@@ -23,7 +22,7 @@ class OrdersProvider with ChangeNotifier {
   List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
   List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
 
-  Future<void> createOrderAndGetCheckoutData(AppProvider appProvider) async {
+  Future<dynamic> createMarketOrderAndGetCheckoutData(AppProvider appProvider) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
       'chain_id': '${HomeProvider.chainId}',
@@ -36,19 +35,39 @@ class OrdersProvider with ChangeNotifier {
     );
 
     if (responseData == 401) {
+      return 401;
+    }
+
+    checkoutData = CheckoutData.fromJson(responseData["data"]);
+    notifyListeners();
+  }
+
+  Future<dynamic> createFoodOrderAndGetCheckoutData(AppProvider appProvider) async {
+    final endpoint = 'orders/create';
+    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
       return;
     }
 
-    createCheckoutResponse = CreateCheckoutResponse.fromJson(responseData);
+    Map<String, String> body = {
+      'chain_id': '${HomeProvider.selectedFoodChainId}',
+      'branch_id': '${HomeProvider.selectedFoodBranchId}',
+    };
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
 
-    if (createCheckoutResponse.checkoutData == null || createCheckoutResponse.status != 200) {
-      throw HttpException(
-          title: 'Http Exception Error', message: createCheckoutResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+    if (responseData == 401) {
+      return 401;
     }
 
-    checkoutData = createCheckoutResponse.checkoutData;
+    checkoutData = CheckoutData.fromJson(responseData["data"]);
+    print(checkoutData.toJson());
     notifyListeners();
   }
+
 
   Future<void> submitOrder(
     AppProvider appProvider,

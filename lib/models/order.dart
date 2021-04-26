@@ -3,34 +3,6 @@ import 'cart.dart';
 import 'enums.dart';
 import 'models.dart';
 
-class CreateCheckoutResponse {
-  CreateCheckoutResponse({
-    this.checkoutData,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  CheckoutData checkoutData;
-  String errors;
-  String message;
-  int status;
-
-  factory CreateCheckoutResponse.fromJson(Map<String, dynamic> json) => CreateCheckoutResponse(
-        checkoutData: json["data"] == null ? null : CheckoutData.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": checkoutData == null ? null : checkoutData.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
-
 class CheckoutData {
   CheckoutData({
     this.paymentMethods,

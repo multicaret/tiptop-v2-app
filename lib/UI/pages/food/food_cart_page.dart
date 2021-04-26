@@ -15,7 +15,7 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-import '../market/order/market_checkout_page.dart';
+import 'order/food_checkout_page.dart';
 
 class FoodCartPage extends StatelessWidget {
   static const routeName = '/food-cart';
@@ -130,7 +130,12 @@ class FoodCartPage extends StatelessWidget {
                   isRTL: appProvider.isRTL,
                   child: Text(Translations.of(context).get('Continue')),
                   onTap: () {
-                    Navigator.of(context, rootNavigator: true).pushNamed(MarketCheckoutPage.routeName);
+                    Navigator.of(context, rootNavigator: true).pushNamed(
+                      FoodCheckoutPage.routeName,
+                      arguments: {
+                        'restaurant': cartProvider.foodCart.restaurant,
+                      },
+                    );
                   },
                 ),
             ],

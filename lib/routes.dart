@@ -38,6 +38,8 @@ import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
+import 'UI/pages/food/order/food_checkout_page.dart';
+
 final routes = <String, WidgetBuilder>{
   AboutPage.routeName: (BuildContext context) => AboutPage(),
   PrivacyPage.routeName: (BuildContext context) => PrivacyPage(),
@@ -76,4 +78,5 @@ final routes = <String, WidgetBuilder>{
   FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
   RestaurantsPage.routeName: (BuildContext context) => RestaurantsPage(),
   FavoriteRestaurantsPage.routeName: (BuildContext context) => FavoriteRestaurantsPage(),
+  FoodCheckoutPage.routeName: (BuildContext context) => FoodCheckoutPage(),
 };

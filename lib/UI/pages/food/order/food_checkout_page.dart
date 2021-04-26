@@ -16,6 +16,7 @@ import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -27,14 +28,14 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class MarketCheckoutPage extends StatefulWidget {
-  static const routeName = '/checkout-page';
+class FoodCheckoutPage extends StatefulWidget {
+  static const routeName = '/food-checkout-page';
 
   @override
-  _MarketCheckoutPageState createState() => _MarketCheckoutPageState();
+  _FoodCheckoutPageState createState() => _FoodCheckoutPageState();
 }
 
-class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
+class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
   bool _isInit = true;
   bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
@@ -53,6 +54,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
   CheckoutData checkoutData;
   Order submittedOrder;
+  Branch restaurant;
 
   String notes;
 
@@ -60,7 +62,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
   Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoadingCreateOrder = true);
-    await ordersProvider.createMarketOrderAndGetCheckoutData(appProvider);
+    await ordersProvider.createFoodOrderAndGetCheckoutData(appProvider);
     checkoutData = ordersProvider.checkoutData;
     paymentSummaryTotalsNotifier.value = [
       PaymentSummaryTotal(
@@ -130,6 +132,8 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      restaurant = data["restaurant"];
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
@@ -172,6 +176,9 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                                 notes = value;
                               },
                             ),
+                          ),
+                          FoodCheckoutDeliveryOptions(
+                            restaurant: restaurant,
                           ),
                           SectionTitle('Payment Methods'),
                           ValueListenableBuilder(
@@ -242,7 +249,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                         child: Text(Translations.of(context).get('Order Now')),
-                        onTap: _submitOrder,
+                        // onTap: _submitOrder,
                       );
                     },
                   ),
