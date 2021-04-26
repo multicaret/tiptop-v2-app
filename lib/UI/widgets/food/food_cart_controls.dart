@@ -48,7 +48,11 @@ class FoodCartControls extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 '$quantity',
-                style: AppTextStyles.bodyBold,
+                style: isMin
+                    ? quantity.toString().length >= 2
+                        ? AppTextStyles.subtitleXsBold
+                        : AppTextStyles.subtitleBold
+                    : AppTextStyles.bodyBold,
               ),
             ),
           ),
