@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_favorite_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -17,7 +18,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
   const RestaurantCoverWithInfo({
     @required this.restaurant,
     this.favoriteAction,
-    this.height = 180,
+    this.height = restaurantCoverHeightSm,
     this.hasBorderRadius = true,
     this.hasRating = true,
   });

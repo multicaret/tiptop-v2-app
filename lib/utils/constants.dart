@@ -14,6 +14,9 @@ const double sliverAppBarSearchBarHeight = 70;
 //Height of restaurant cover (e.g. in restaurant page)
 const double restaurantCoverHeight = 240;
 
+//Height of min restaurant cover (e.g. in food home page)
+const double restaurantCoverHeightSm = 180;
+
 //Height of restaurant page header when collapsed
 const double restaurantPageCollapsedHeaderHeight = sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight;
 
