@@ -13,8 +13,15 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class WalkthroughPage extends StatelessWidget {
+class WalkthroughPage extends StatefulWidget {
   static const routeName = '/walkthrough';
+
+  @override
+  _WalkthroughPageState createState() => _WalkthroughPageState();
+}
+
+class _WalkthroughPageState extends State<WalkthroughPage> {
+  bool animationLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,51 +41,53 @@ class WalkthroughPage extends StatelessWidget {
                     repeat: false,
                     fit: BoxFit.cover,
                     width: double.infinity,
+                    onLoaded: (_) => setState(() => animationLoaded = true),
                   ),
                 );
               },
             ),
             const SizedBox(height: 20),
-            Container(
-              child: Column(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      getLocationPermissionStatus().then((isGranted) {
-                        Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
-                      });
-                    },
-                    child: Text(
-                      Translations.of(context).get('Continue Without Login'),
+            if (animationLoaded)
+              Container(
+                child: Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        getLocationPermissionStatus().then((isGranted) {
+                          Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
+                        });
+                      },
+                      child: Text(
+                        Translations.of(context).get('Continue Without Login'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  AppButtons.primary(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacementNamed(OTPChooseMethodPage.routeName);
-                    },
-                    child: Text(Translations.of(context).get('Register')),
-                  ),
-                  const SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(OTPChooseMethodPage.routeName);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(Translations.of(context).get('Already have an account?')),
-                        const SizedBox(width: 5),
-                        Text(
-                          Translations.of(context).get('Login'),
-                          style: AppTextStyles.bodySecondaryDark,
-                        ),
-                      ],
+                    const SizedBox(height: 20),
+                    AppButtons.primary(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(OTPChooseMethodPage.routeName);
+                      },
+                      child: Text(Translations.of(context).get('Register')),
                     ),
-                  )
-                ],
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(OTPChooseMethodPage.routeName);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(Translations.of(context).get('Already have an account?')),
+                          const SizedBox(width: 5),
+                          Text(
+                            Translations.of(context).get('Login'),
+                            style: AppTextStyles.bodySecondaryDark,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
