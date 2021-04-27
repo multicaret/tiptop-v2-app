@@ -75,8 +75,9 @@ class HomeProvider with ChangeNotifier {
 
   Future<void> fetchAndSetHomeData(
     BuildContext context,
-    AppProvider appProvider,
-  ) async {
+    AppProvider appProvider, {
+    bool afterLanguageChange = false,
+  }) async {
     final endpoint = 'home';
     isLoadingHomeData = true;
     notifyListeners();
@@ -118,8 +119,11 @@ class HomeProvider with ChangeNotifier {
         body: body,
         withToken: appProvider.isAuth,
       );
-
-      setHomeData(cartProvider, restaurantsProvider, responseData["data"]);
+      setHomeData(
+        cartProvider,
+        restaurantsProvider,
+        responseData["data"],
+      );
       isLoadingHomeData = false;
       notifyListeners();
     } catch (e) {

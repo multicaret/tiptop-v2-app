@@ -3,13 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/faq_page.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/privacy_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/about_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/favorite_products_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
-import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -102,9 +102,10 @@ class ProfilePage extends StatelessWidget {
                 RadioListItems(
                   items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
                   selectedId: selectedLanguageId,
-                  action: (languageId) {
+                  action: (languageId) async {
                     Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
                     appProvider.changeLanguage(selectedLanguage.locale);
+                    await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
                   },
                   isAssetLogo: true,
                 ),
