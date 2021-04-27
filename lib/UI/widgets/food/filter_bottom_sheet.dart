@@ -73,7 +73,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           : [
               Padding(
                 padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, bottom: 5),
-                child: Text(Translations.of(context).get('Delivery Type'), style: AppTextStyles.body50),
+                child: Text(Translations.of(context).get("Delivery Type"), style: AppTextStyles.body50),
               ),
               RadioListItems(
                 items: deliveryTypesRadioItems,
@@ -97,7 +97,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(Translations.of(context).get('Min. Cart'), style: AppTextStyles.body50),
+                    Text(Translations.of(context).get("Min. Cart"), style: AppTextStyles.body50),
                     const SizedBox(height: 5),
                     Consumer<HomeProvider>(
                       builder: (c, homeProvider, _) => Row(
@@ -144,7 +144,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
-                child: Text(Translations.of(context).get('Categories'), style: AppTextStyles.body50),
+                child: Text(Translations.of(context).get("Categories"), style: AppTextStyles.body50),
               ),
               CategoriesSlider(
                 categories: foodCategories,
@@ -175,7 +175,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Future<void> _submitFilters() async {
     try {
       await restaurantsProvider.submitFiltersAndSort();
-      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
+      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
       Navigator.of(context).pop();
       if (!widget.shouldPopOnly) {
         Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);

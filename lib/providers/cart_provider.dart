@@ -73,7 +73,7 @@ class CartProvider with ChangeNotifier {
   }) async {
     if (marketCart == null || marketCart.id == null) {
       print('No marketCart');
-      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
+      showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
       appProvider.logout(clearSelectedAddress: true);
       return 401;
     }
@@ -165,7 +165,7 @@ class CartProvider with ChangeNotifier {
   }) async {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
-      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
+      showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
       appProvider.logout(clearSelectedAddress: true);
       return 401;
     }
@@ -213,7 +213,7 @@ class CartProvider with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      // showToast(msg: Translations.of(context).get('An Error Occurred!'));
+      // showToast(msg: Translations.of(context).get("An Error Occurred!"));
       isLoadingAdjustFoodCartDataRequest = false;
       notifyListeners();
       throw e;
@@ -223,7 +223,7 @@ class CartProvider with ChangeNotifier {
   Future<void> deleteProductFromFoodCart({BuildContext context, AppProvider appProvider, int cartProductId}) async {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
-      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
+      showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
       appProvider.logout(clearSelectedAddress: true);
       return 401;
     }
@@ -253,12 +253,12 @@ class CartProvider with ChangeNotifier {
       );
 
       foodCart = Cart.fromJson(responseData["data"]["cart"]);
-      showToast(msg: Translations.of(context).get('Successfully deleted from cart!'));
+      showToast(msg: Translations.of(context).get("Successfully deleted from cart!"));
       isLoadingDeleteFoodCartProduct = false;
       notifyListeners();
     } catch (e) {
       isLoadingDeleteFoodCartProduct = true;
-      showToast(msg: Translations.of(context).get('Error deleting from cart!'));
+      showToast(msg: Translations.of(context).get("Error deleting from cart!"));
       notifyListeners();
       throw e;
     }
@@ -330,12 +330,12 @@ class CartProvider with ChangeNotifier {
 
       isLoadingClearFoodCartRequest = false;
       if (shouldNavigateToHome) {
-        showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
+        showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
       }
       notifyListeners();
     } catch (e) {
-      showToast(msg: Translations.of(context).get('Error clearing cart!'));
+      showToast(msg: Translations.of(context).get("Error clearing cart!"));
       isLoadingClearFoodCartRequest = true;
       notifyListeners();
       throw e;

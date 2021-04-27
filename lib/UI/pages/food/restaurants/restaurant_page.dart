@@ -159,7 +159,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         searchProductsResult.addAll(searchedProducts);
       });
       if (searchedProducts.isEmpty) {
-        showToast(msg: Translations.of(context).get('No results match your search'));
+        showToast(msg: Translations.of(context).get("No results match your search"));
       }
       return;
     } else {

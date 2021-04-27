@@ -56,7 +56,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${Translations.of(context).get('Closes at')} ${restaurant.workingHours.closesAt}',
+                              '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}',
                               maxLines: 1,
                               style: AppTextStyles.subtitle50,
                             ),
@@ -64,7 +64,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
                           if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
                             restaurant.rating.countRaw < 10
                                 ? Text(
-                              Translations.of(context).get('New'),
+                              Translations.of(context).get("New"),
                               style: AppTextStyles.subtitleSecondary,
                             )
                                 : RatingInfo(

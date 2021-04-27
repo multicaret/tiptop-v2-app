@@ -81,7 +81,7 @@ class AppDropDownButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 20),
               child: Text(
-                Translations.of(context).get('This field is required'),
+                Translations.of(context).get("This field is required"),
                 style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
               ),
             ),

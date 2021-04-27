@@ -54,10 +54,10 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     if (response != null && response) {
       try {
         await ordersProvider.deletePreviousOrder(appProvider, orderId);
-        showToast(msg: Translations.of(context).get('Successfully Deleted Order From History!'));
+        showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
         Navigator.of(context).pop(true);
       } catch (e) {
-        showToast(msg: Translations.of(context).get('Error deleting order!'));
+        showToast(msg: Translations.of(context).get("Error deleting order!"));
         throw e;
       }
     }
@@ -106,7 +106,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
         return AppScaffold(
           hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Order Details')),
+            title: Text(Translations.of(context).get("Order Details")),
             actions: [
               IconButton(
                 onPressed: () => _deleteOrder(appProvider, ordersProvider, order.id),
@@ -157,7 +157,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(Translations.of(context).get('Coupon Code')),
+                              Text(Translations.of(context).get("Coupon Code")),
                               Text(
                                 order.couponCode,
                                 style: AppTextStyles.bodyBold,

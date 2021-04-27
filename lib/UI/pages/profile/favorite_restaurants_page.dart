@@ -53,7 +53,7 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Favorite Restaurants')),
+        title: Text(Translations.of(context).get("Favorite Restaurants")),
       ),
       body: _isLoadingFavoriteRestaurants
           ? const AppLoader()

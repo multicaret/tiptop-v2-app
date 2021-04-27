@@ -36,7 +36,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
         });
       },
       decoration: InputDecoration(
-        hintText: Translations.of(context).get('Quick Search'),
+        hintText: Translations.of(context).get("Quick Search"),
         fillColor: AppColors.white,
         filled: true,
         prefixIcon: AppIcons.iconSecondary(FontAwesomeIcons.search),

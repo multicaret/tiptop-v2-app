@@ -10,7 +10,7 @@ class LiveChatPage extends StatelessWidget {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Live Chat')),
+        title: Text(Translations.of(context).get("Live Chat")),
       ),
     );
   }

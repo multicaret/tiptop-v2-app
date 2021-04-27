@@ -118,14 +118,14 @@ class AddressSelectButton extends StatelessWidget {
                             if (appProvider.isAuth) {
                               Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
                             } else {
-                              showToast(msg: Translations.of(context).get('You need to Log In First!'));
+                              showToast(msg: Translations.of(context).get("You Need to Log In First!"));
                               Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
                             }
                           },
                     child: homeProvider.isLoadingHomeData || (showSelectAddress && !forceAddressView)
                         ? Container(
                             child: Text(
-                              Translations.of(context).get('Select Address'),
+                              Translations.of(context).get("Select Address"),
                               style: AppTextStyles.bodyBold,
                             ),
                             alignment: !appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
@@ -143,7 +143,7 @@ class AddressSelectButton extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      Translations.of(context).get('Address'),
+                                      Translations.of(context).get("Address"),
                                       style: AppTextStyles.subtitleBold,
                                     ),
                                     Row(

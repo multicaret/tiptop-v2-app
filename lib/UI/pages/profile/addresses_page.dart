@@ -109,7 +109,7 @@ class _AddressesPageState extends State<AddressesPage> {
       }
       await addressesProvider.deleteAddress(appProvider, _addressId);
       _fetchAndSetAddresses();
-      showToast(msg: Translations.of(context).get('Successfully deleted address!'));
+      showToast(msg: Translations.of(context).get("Successfully deleted address!"));
     }
   }
 
@@ -248,8 +248,8 @@ class _AddressesPageState extends State<AddressesPage> {
                         isAsset: false,
                       ),
                       appProvider.isRTL
-                          ? Text('${Translations.of(context).get('Add Address')} ${kinds[i].title}')
-                          : Text('${Translations.of(context).get('Add')} ${kinds[i].title} ${Translations.of(context).get('Address')}')
+                          ? Text('${Translations.of(context).get("Add Address")} ${kinds[i].title}')
+                          : Text('${Translations.of(context).get("Add")} ${kinds[i].title} ${Translations.of(context).get("Address")}')
                     ],
                   ),
                 ),

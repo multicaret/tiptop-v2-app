@@ -60,7 +60,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
                     color: AppColors.white,
                   ),
                   child: restaurant.rating.countRaw < 10
-                      ? Text(Translations.of(context).get('New'), style: AppTextStyles.subtitleSecondary)
+                      ? Text(Translations.of(context).get("New"), style: AppTextStyles.subtitleSecondary)
                       : RatingInfo(
                           hasWhiteBg: true,
                           ratingValue: restaurant.rating.averageRaw,

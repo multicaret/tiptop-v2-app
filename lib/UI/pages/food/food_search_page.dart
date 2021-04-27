@@ -91,7 +91,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Search')),
+        title: Text(Translations.of(context).get("Search")),
         actions: [
           if (_searchedRestaurants.isNotEmpty)
             IconButton(
@@ -260,7 +260,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
       await restaurantsProvider.fetchSearchedRestaurants(_searchQuery);
       _searchedRestaurants = restaurantsProvider.searchedRestaurants;
       if (_searchedRestaurants.isEmpty) {
-        showToast(msg: Translations.of(context).get('No results match your search'));
+        showToast(msg: Translations.of(context).get("No results match your search"));
       } else {
         var key = 'result${_searchedRestaurants.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedRestaurants.length} ${Translations.of(context).get(key)}');

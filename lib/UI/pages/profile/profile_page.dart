@@ -85,7 +85,7 @@ class ProfilePage extends StatelessWidget {
         return AppScaffold(
           hasCurve: false,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Profile')),
+            title: Text(Translations.of(context).get("Profile")),
           ),
           body: SingleChildScrollView(
             child: Column(

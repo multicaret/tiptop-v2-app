@@ -108,12 +108,12 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
           }
         } else {
           setState(() => _isLoadingCheckOTPValidation = false);
-          showToast(msg: Translations.of(context).get('OTP Validation Failed'));
+          showToast(msg: Translations.of(context).get("OTP Validation Failed"));
           return;
         }
       } catch (error) {
         setState(() => _isLoadingCheckOTPValidation = false);
-        showToast(msg: Translations.of(context).get('Validation Failed!'));
+        showToast(msg: Translations.of(context).get("Validation Failed!"));
         print("@error checkOTPValidation");
         print(error.toString());
       }
@@ -158,7 +158,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                       child: Column(
                         children: [
                           const SizedBox(height: 40),
-                          Text(Translations.of(context).get('Please Enter Your Phone Number')),
+                          Text(Translations.of(context).get("Please Enter Your Phone Number")),
                           const SizedBox(height: 50),
                           Row(
                             textDirection: TextDirection.ltr,
@@ -190,7 +190,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                           ),
                           AppButtons.primary(
                             onPressed: () => _submitPhoneNumberForm(context),
-                            child: Text(Translations.of(context).get('Continue')),
+                            child: Text(Translations.of(context).get("Continue")),
                           ),
                         ],
                       ),
@@ -200,7 +200,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
               },
-              child: Text(Translations.of(context).get('Continue Without Login')),
+              child: Text(Translations.of(context).get("Continue Without Login")),
             ),
           ],
         ),
@@ -210,13 +210,13 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
 
   Future<void> _submitPhoneNumberForm(BuildContext context) async {
     if (!_phoneNumberFormKey.currentState.validate()) {
-      showToast(msg: Translations.of(context).get('Invalid Form'));
+      showToast(msg: Translations.of(context).get("Invalid Form"));
       return;
     }
     _phoneNumberFormKey.currentState.save();
     await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
     if (otpProvider.reference == null) {
-      showToast(msg: Translations.of(context).get('Unable to send SMS code, please try another method!'));
+      showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
       return;
     }
     Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {

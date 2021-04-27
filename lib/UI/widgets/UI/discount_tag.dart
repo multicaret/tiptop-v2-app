@@ -26,7 +26,7 @@ class DiscountTag extends StatelessWidget {
           const SizedBox(width: 5.0),
           Expanded(
             child: Text(
-              '$value ${Translations.of(context).get('discount')}',
+              '$value ${Translations.of(context).get("discount")}',
               style: AppTextStyles.subtitle,
             ),
           ),

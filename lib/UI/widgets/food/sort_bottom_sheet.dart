@@ -27,17 +27,17 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     return [
       {
         'id': RestaurantSortType.SMART,
-        'title': Translations.of(context).get('Smart Sorting'),
+        'title': Translations.of(context).get("Smart Sorting"),
         'icon': FontAwesomeIcons.listUl,
       },
       {
         'id': RestaurantSortType.RATING,
-        'title': Translations.of(context).get('Restaurant Rating'),
+        'title': Translations.of(context).get("Restaurant Rating"),
         'icon': FontAwesomeIcons.star,
       },
       {
         'id': RestaurantSortType.DISTANCE,
-        'title': Translations.of(context).get('By Distance'),
+        'title': Translations.of(context).get("By Distance"),
         'icon': FontAwesomeIcons.mapMarkerAlt,
       },
     ];
@@ -91,7 +91,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
         };
       }
       await restaurantsProvider.submitFiltersAndSort(sortData: sortData);
-      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
+      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
       Navigator.of(context).pop();
       if (!widget.shouldPopOnly) {
         Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);

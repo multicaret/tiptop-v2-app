@@ -53,10 +53,10 @@ class _MarketCartControlsState extends State<MarketCartControls> {
 
   Future<void> adjustMarketProductQuantity(CartAction action) async {
     if (!appProvider.isAuth) {
-      showToast(msg: Translations.of(context).get('You Need to Log In First!'));
+      showToast(msg: Translations.of(context).get("You Need to Log In First!"));
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     } else if (!addressesProvider.addressIsSelected) {
-      showToast(msg: Translations.of(context).get('You Need to Select Address First!'));
+      showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
@@ -67,7 +67,7 @@ class _MarketCartControlsState extends State<MarketCartControls> {
         context: context,
       );
       if (responseData == 401) {
-        showToast(msg: Translations.of(context).get('You Need to Log In First!'));
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }
@@ -161,7 +161,7 @@ class _MarketCartControlsState extends State<MarketCartControls> {
                           SizedBox(width: widget.isListItem ? 2 : 5),
                           Flexible(
                             child: Text(
-                              Translations.of(context).get('Add To Cart'),
+                              Translations.of(context).get("Add To Cart"),
                               maxLines: 1,
                               style: widget.isListItem ? AppTextStyles.subtitleXxsWhite : AppTextStyles.button,
                             ),

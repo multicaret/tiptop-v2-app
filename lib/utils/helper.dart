@@ -45,7 +45,7 @@ String formatTimeOfDay(TimeOfDay tod) {
 
 String requiredFieldValidator(BuildContext context, String value) {
   if (value.isEmpty) {
-    return Translations.of(context).get('This field is required');
+    return Translations.of(context).get("This field is required");
   }
   return null;
 }

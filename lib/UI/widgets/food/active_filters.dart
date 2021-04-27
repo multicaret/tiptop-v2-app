@@ -25,17 +25,17 @@ class ActiveFilters extends StatelessWidget {
                 ActiveFilterItem(
                   closeAction:
                       filterData['delivery_type'] == 'all' ? null : () => removeFilterItem(restaurantsProvider, 'delivery_type', value: 'all'),
-                  title: Translations.of(context).get('Delivery Type: ${filterData['delivery_type']}'),
+                  title: Translations.of(context).get("Delivery Type: ${filterData['delivery_type']}"),
                 ),
               if (filterData['min_rating'] != null)
                 ActiveFilterItem(
                   closeAction: () => removeFilterItem(restaurantsProvider, 'min_rating'),
-                  title: '${Translations.of(context).get('Minimum Rating')} ${filterData['min_rating']}',
+                  title: '${Translations.of(context).get("Minimum Rating")} ${filterData['min_rating']}',
                 ),
               if (restaurantsProvider.minCartValue != null && filterData['minimum_order'] != restaurantsProvider.minCartValue)
                 ActiveFilterItem(
                   closeAction: () => removeFilterItem(restaurantsProvider, 'minimum_order', value: restaurantsProvider.minCartValue),
-                  title: '${Translations.of(context).get('Minimum Order')} ${filterData['minimum_order']} IQD',
+                  title: '${Translations.of(context).get("Minimum Order")} ${filterData['minimum_order']} IQD',
                 ),
               if (filterData['categories'].length > 0)
                 ...List.generate(filterData['categories'].length, (i) {
@@ -52,7 +52,7 @@ class ActiveFilters extends StatelessWidget {
                 }),
               ActiveFilterItem(
                 closeAction: restaurantsProvider.sortType == RestaurantSortType.SMART ? null : () => removeFilterItem(restaurantsProvider, 'sort'),
-                title: Translations.of(context).get('Sort by: ${restaurantSortTypeValues.reverse[restaurantsProvider.sortType]}'),
+                title: Translations.of(context).get("Sort by: ${restaurantSortTypeValues.reverse[restaurantsProvider.sortType]}"),
               ),
             ],
           ),
@@ -68,6 +68,6 @@ class ActiveFilters extends StatelessWidget {
       restaurantsProvider.setFilterData(key: key, value: value);
     }
     restaurantsProvider.submitFiltersAndSort();
-    // showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get('result(s) match your search')}');
+    // showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search')}");
   }
 }

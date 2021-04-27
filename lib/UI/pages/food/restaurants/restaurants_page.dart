@@ -63,7 +63,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
           Expanded(
             child: restaurantsProvider.filteredRestaurants.length == 0
                 ? Center(
-                    child: Text(Translations.of(context).get('No Results Match Your Search')),
+                    child: Text(Translations.of(context).get("No Results Match Your Search")),
                   )
                 : SingleChildScrollView(
                     child: RestaurantsIndex(isFiltered: true),

@@ -28,7 +28,7 @@ class LocationPermissionPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                Translations.of(context).get('location permission text'),
+                Translations.of(context).get("location permission text"),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 100),
@@ -44,7 +44,7 @@ class LocationPermissionPage extends StatelessWidget {
                     }
                   });
                 },
-                child: Text(Translations.of(context).get('Use my location services')),
+                child: Text(Translations.of(context).get("Use my location services")),
               ),
               const SizedBox(height: 40),
               GestureDetector(

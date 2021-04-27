@@ -55,10 +55,10 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
     if (response != null && response) {
       try {
         await ordersProvider.deletePreviousOrder(appProvider, orderId);
-        showToast(msg: Translations.of(context).get('Successfully Deleted Order From History!'));
+        showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
         Navigator.of(context).pop(true);
       } catch (e) {
-        showToast(msg: Translations.of(context).get('Error deleting order!'));
+        showToast(msg: Translations.of(context).get("Error deleting order!"));
         throw e;
       }
     }
@@ -107,7 +107,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
         return AppScaffold(
           hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Order Details')),
+            title: Text(Translations.of(context).get("Order Details")),
             actions: [
               IconButton(
                 onPressed: () => _deleteOrder(appProvider, ordersProvider, order.id),
@@ -158,7 +158,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(Translations.of(context).get('Coupon Code')),
+                              Text(Translations.of(context).get("Coupon Code")),
                               Text(
                                 order.couponCode,
                                 style: AppTextStyles.bodyBold,

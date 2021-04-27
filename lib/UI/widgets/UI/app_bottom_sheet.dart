@@ -65,7 +65,7 @@ class AppBottomSheet extends StatelessWidget {
                     if (clearAction != null)
                       TextButton(
                         onPressed: clearAction,
-                        child: Center(child: Text(Translations.of(context).get('Clear'))),
+                        child: Center(child: Text(Translations.of(context).get("Clear"))),
                       ),
                   ],
                 ),
@@ -96,7 +96,7 @@ class AppBottomSheet extends StatelessWidget {
                             color: AppColors.primary,
                             size: 30,
                           )
-                        : Text(Translations.of(context).get('Apply'), style: AppTextStyles.body),
+                        : Text(Translations.of(context).get("Apply"), style: AppTextStyles.body),
                     onPressed: applyAction,
                   ),
                 ),

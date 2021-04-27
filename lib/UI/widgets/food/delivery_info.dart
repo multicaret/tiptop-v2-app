@@ -47,7 +47,7 @@ class DeliveryInfo extends StatelessWidget {
                 child: LabeledIcon(
                   icon: LineAwesomeIcons.truck_moving,
                   text: restaurantDelivery.fixedDeliveryFee.raw == 0
-                      ? Translations.of(context).get('Free')
+                      ? Translations.of(context).get("Free")
                       : restaurantDelivery.fixedDeliveryFee.formatted,
                 ),
               ),

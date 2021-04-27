@@ -86,7 +86,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Search')),
+        title: Text(Translations.of(context).get("Search")),
         actions: [
           if (_searchedProducts.isNotEmpty)
             IconButton(
@@ -181,7 +181,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       await productsProvider.fetchSearchedProducts(_searchQuery);
       _searchedProducts = productsProvider.searchedProducts;
       if (_searchedProducts.isEmpty) {
-        showToast(msg: Translations.of(context).get('No results match your search'));
+        showToast(msg: Translations.of(context).get("No results match your search"));
       } else {
         var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');

@@ -28,7 +28,7 @@ class CountryCodeDropDown extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 6),
           child: Text(
-            Translations.of(context).get('Country Code'),
+            Translations.of(context).get("Country Code"),
             style: AppTextStyles.bodyBold,
           ),
         ),

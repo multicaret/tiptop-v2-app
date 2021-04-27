@@ -30,7 +30,7 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
     setState(() => _isLoadingPreviousOrders = true);
     final response = await ordersProvider.fetchAndSetMarketPreviousOrders(appProvider);
     if (response == 401) {
-      showToast(msg: Translations.of(context).get('You Need to Log In First!'));
+      showToast(msg: Translations.of(context).get("You Need to Log In First!"));
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     }
     previousOrders = ordersProvider.marketPreviousOrders;
@@ -53,7 +53,7 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Previous Orders')),
+        title: Text(Translations.of(context).get("Previous Orders")),
       ),
       body: _isLoadingPreviousOrders
           ? Center(child: AppLoader())
@@ -84,10 +84,10 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
                           previousOrders.removeAt(i);
                         });
                         ordersProvider.deletePreviousOrder(appProvider, orderIdToRemove).then((_) {
-                          showToast(msg: Translations.of(context).get('Successfully Deleted Order From History!'));
+                          showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
                           return true;
                         }).catchError((e) {
-                          showToast(msg: Translations.of(context).get('Error deleting order!'));
+                          showToast(msg: Translations.of(context).get("Error deleting order!"));
                         });
                       },
                     ),

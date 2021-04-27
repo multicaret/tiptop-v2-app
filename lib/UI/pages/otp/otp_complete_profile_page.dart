@@ -84,7 +84,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
       bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Complete Your Profile')),
+        title: Text(Translations.of(context).get("Complete Your Profile")),
       ),
       body: _isLoadingCreateEditProfileRequest
           ? const AppLoader()
@@ -100,7 +100,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      Translations.of(context).get('Please fill out your details'),
+                      Translations.of(context).get("Please fill out your details"),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 30),
@@ -134,17 +134,17 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                         citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
                         formData['city_id'] = null;
                       },
-                      hintText: Translations.of(context).get('Select City'),
+                      hintText: Translations.of(context).get("Select City"),
                     ),
                     AppDropDownButton(
                       labelText: 'Neighborhood',
                       defaultValue: formData['city_id'],
                       items: citiesDropDownItems,
-                      hintText: Translations.of(context).get('Select Neighborhood'),
+                      hintText: Translations.of(context).get("Select Neighborhood"),
                       onChanged: (cityId) => setState(() => formData['city_id'] = cityId),
                     ),
                     AppButtons.primary(
-                      child: Text(Translations.of(context).get('Save')),
+                      child: Text(Translations.of(context).get("Save")),
                       onPressed: () => _submit(context, appProvider),
                     ),
                     const SizedBox(height: 20),
@@ -157,7 +157,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
 
   Future<void> _submit(BuildContext context, AppProvider appProvider) async {
     if (!_profileFormKey.currentState.validate()) {
-      showToast(msg: Translations.of(context).get('Invalid Form'));
+      showToast(msg: Translations.of(context).get("Invalid Form"));
       return;
     }
     _profileFormKey.currentState.save();

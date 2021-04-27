@@ -33,7 +33,7 @@ class FoodCartPage extends StatelessWidget {
         return AppScaffold(
           hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest || cartProvider.isLoadingDeleteFoodCartProduct,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Food Cart')),
+            title: Text(Translations.of(context).get("Food Cart")),
             actions: [
               if (!cartProvider.noFoodCart)
                 IconButton(
@@ -106,7 +106,7 @@ class FoodCartPage extends StatelessWidget {
                 child: cartProvider.noFoodCart
                     ? Center(
                         child: TextButton(
-                          child: Text(Translations.of(context).get('Your Cart Is Empty, Shop Now!')),
+                          child: Text(Translations.of(context).get("Your Cart Is Empty, Shop Now!")),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -141,7 +141,7 @@ class FoodCartPage extends StatelessWidget {
                   total: cartProvider.foodCart.total.formatted,
                   isLoading: cartProvider.isLoadingAdjustFoodCartDataRequest,
                   isRTL: appProvider.isRTL,
-                  child: Text(Translations.of(context).get('Continue')),
+                  child: Text(Translations.of(context).get("Continue")),
                   onTap: () {
                     if (restaurantMinimumOrder != null && cartProvider.foodCart.total.raw < restaurantMinimumOrder.raw) {
                       showToast(

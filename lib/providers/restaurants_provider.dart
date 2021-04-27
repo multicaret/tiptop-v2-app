@@ -43,17 +43,17 @@ class RestaurantsProvider with ChangeNotifier {
     return [
       {
         'id': 'all',
-        'title': Translations.of(context).get('All'),
+        'title': Translations.of(context).get("All"),
       },
       {
         'id': restaurantDeliveryTypeValues.reverse[RestaurantDeliveryType.TIPTOP],
-        'title': Translations.of(context).get('TipTop Delivery'),
+        'title': Translations.of(context).get("TipTop Delivery"),
         'type': RestaurantDeliveryType.TIPTOP,
         'icon': CircleIcon(iconImage: 'assets/images/logo-man-only.png'),
       },
       {
         'id': restaurantDeliveryTypeValues.reverse[RestaurantDeliveryType.RESTAURANT],
-        'title': Translations.of(context).get('Restaurant Delivery'),
+        'title': Translations.of(context).get("Restaurant Delivery"),
         'type': RestaurantDeliveryType.RESTAURANT,
         'icon': CircleIcon(iconText: 'R'),
       },
@@ -161,8 +161,8 @@ class RestaurantsProvider with ChangeNotifier {
       }
       showToast(
           msg: interaction == Interaction.UN_FAVORITE
-              ? Translations.of(context).get('Successfully removed restaurant from favorites!')
-              : Translations.of(context).get('Successfully added restaurant to favorites!'));
+              ? Translations.of(context).get("Successfully removed restaurant from favorites!")
+              : Translations.of(context).get("Successfully added restaurant to favorites!"));
       restaurantsFavoriteStatuses[restaurantId] = interaction == Interaction.FAVORITE;
       notifyListeners();
     } catch (e) {

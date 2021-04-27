@@ -120,7 +120,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
                             Text('Delivery ', style: AppTextStyles.subtitleXs, textAlign: TextAlign.end),
                             widget.delivery.fixedDeliveryFee.raw == 0
                                 ? Text(
-                                    Translations.of(context).get('Free'),
+                                    Translations.of(context).get("Free"),
                                     style: AppTextStyles.subtitleXsBold,
                                   )
                                 : Expanded(

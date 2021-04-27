@@ -70,7 +70,7 @@ class _SupportPageState extends State<SupportPage> {
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Support')),
+        title: Text(Translations.of(context).get("Support")),
       ),
       body: _isLoading
           ? const AppLoader()
@@ -79,7 +79,7 @@ class _SupportPageState extends State<SupportPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    Translations.of(context).get('We are at your service 24/7. Please contact us via'),
+                    Translations.of(context).get("We are at your service 24/7. Please contact us via"),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
@@ -100,7 +100,7 @@ class _SupportPageState extends State<SupportPage> {
                               ),
                               const SizedBox(height: 15),
                               Text(
-                                Translations.of(context).get('Direct Call'),
+                                Translations.of(context).get("Direct Call"),
                                 style: AppTextStyles.body,
                               ),
                             ],
@@ -123,7 +123,7 @@ class _SupportPageState extends State<SupportPage> {
                               ),
                               const SizedBox(height: 15),
                               Text(
-                                Translations.of(context).get('Live Chat'),
+                                Translations.of(context).get("Live Chat"),
                                 style: AppTextStyles.bodyWhite,
                               ),
                             ],

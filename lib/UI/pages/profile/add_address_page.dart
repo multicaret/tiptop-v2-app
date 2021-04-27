@@ -63,7 +63,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     try {
       final createAddressResponse = await addressesProvider.createAddress(appProvider, pickedPosition);
       if (createAddressResponse == 401) {
-        showToast(msg: Translations.of(context).get('You Need to Log In First!'));
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
         Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
         return false;
       }
@@ -95,7 +95,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       return true;
     } catch (e) {
       // throw e;
-      showToast(msg: Translations.of(context).get('An error occurred!'));
+      showToast(msg: Translations.of(context).get("An error occurred!"));
       setState(() => _isLoadingCreateAddressRequest = false);
       return false;
     }
@@ -147,7 +147,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return AppScaffold(
       hasOverlayLoader: _isLoadingStoreAddressRequest,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Add New Address')),
+        title: Text(Translations.of(context).get("Add New Address")),
       ),
       body: Stack(
         children: [
@@ -189,7 +189,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                         color: AppColors.primary,
                         size: 30,
                       )
-                    : Text(Translations.of(context).get('Use This Address')),
+                    : Text(Translations.of(context).get("Use This Address")),
               ),
             ),
           ),
@@ -263,7 +263,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   Future<void> submitAddressDetailsForm() async {
     if (!addressDetailsFormKey.currentState.validate() || addressDetailsFormData['region_id'] == null || addressDetailsFormData['city_id'] == null) {
-      showToast(msg: Translations.of(context).get('Invalid Form'));
+      showToast(msg: Translations.of(context).get("Invalid Form"));
       if (addressDetailsFormData['region_id'] == null) {
         setState(() => regionsDropdownIsInvalid = true);
       }
@@ -278,7 +278,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     setState(() => _isLoadingStoreAddressRequest = true);
     await addressesProvider.storeAddress(appProvider, addressDetailsFormData);
     setState(() => _isLoadingStoreAddressRequest = false);
-    showToast(msg: Translations.of(context).get('Address stored successfully!'));
+    showToast(msg: Translations.of(context).get("Address stored successfully!"));
     Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
   }
 }

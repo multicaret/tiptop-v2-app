@@ -84,8 +84,8 @@ class _MarketProductPageState extends State<MarketProductPage> {
       setState(() => _isLoadingInteractRequest = false);
       showToast(
           msg: _productIsFavorited
-              ? Translations.of(context).get('Successfully removed product from favorites!')
-              : Translations.of(context).get('Successfully added product to favorites!'));
+              ? Translations.of(context).get("Successfully removed product from favorites!")
+              : Translations.of(context).get("Successfully added product to favorites!"));
     } catch (e) {
       setState(() {
         productIsFavorited = _productIsFavorited;

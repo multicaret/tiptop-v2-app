@@ -54,7 +54,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            Translations.of(context).get('New'),
+                            Translations.of(context).get("New"),
                             style: AppTextStyles.subtitleXsWhite,
                           ),
                         ),

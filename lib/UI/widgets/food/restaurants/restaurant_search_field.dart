@@ -34,7 +34,7 @@ class RestaurantSearchField extends StatelessWidget {
       child: TextFormField(
         onTap: onTap,
         decoration: InputDecoration(
-          hintText: Translations.of(context).get('What are you looking for?'),
+          hintText: Translations.of(context).get("What are you looking for?"),
           hintStyle: AppTextStyles.body50,
           filled: true,
           prefixIcon: AppIcons.icon(FontAwesomeIcons.search),

@@ -58,7 +58,7 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                         });
                       },
                       child: Text(
-                        Translations.of(context).get('Continue Without Login'),
+                        Translations.of(context).get("Continue Without Login"),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -66,7 +66,7 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                       onPressed: () {
                         Navigator.of(context).pushReplacementNamed(OTPChooseMethodPage.routeName);
                       },
-                      child: Text(Translations.of(context).get('Register')),
+                      child: Text(Translations.of(context).get("Register")),
                     ),
                     const SizedBox(height: 20),
                     TextButton(
@@ -76,10 +76,10 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(Translations.of(context).get('Already have an account?')),
+                          Text(Translations.of(context).get("Already have an account?")),
                           const SizedBox(width: 5),
                           Text(
-                            Translations.of(context).get('Login'),
+                            Translations.of(context).get("Login"),
                             style: AppTextStyles.bodySecondaryDark,
                           ),
                         ],

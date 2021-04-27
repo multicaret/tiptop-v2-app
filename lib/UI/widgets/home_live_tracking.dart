@@ -82,7 +82,7 @@ class HomeLiveTracking extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Translations.of(context).get('Address'),
+                                Translations.of(context).get("Address"),
                                 style: AppTextStyles.subtitleBold,
                               ),
                               Row(
@@ -132,7 +132,7 @@ class HomeLiveTracking extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${Translations.of(context).get('View All')} ($totalActiveOrders)'),
+                          Text('${Translations.of(context).get("View All")} ($totalActiveOrders)'),
                           const SizedBox(width: 5),
                           AppIcons.iconSm(appProvider.isRTL ? FontAwesomeIcons.chevronLeft : FontAwesomeIcons.chevronRight),
                         ],

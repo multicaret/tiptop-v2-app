@@ -122,9 +122,9 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
           isGrandTotal: true,
         ),
       ];
-      showToast(msg: Translations.of(context).get('Successfully validated coupon code!'));
+      showToast(msg: Translations.of(context).get("Successfully validated coupon code!"));
     } catch (e) {
-      showToast(msg: Translations.of(context).get('Coupon Validation Failed'));
+      showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
     setState(() => _isLoadingValidateCoupon = false);
   }
@@ -170,7 +170,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                             child: AppTextField(
                               labelText: 'Notes',
                               maxLines: 3,
-                              hintText: Translations.of(context).get('You can write your order notes here'),
+                              hintText: Translations.of(context).get("You can write your order notes here"),
                               fit: true,
                               onSaved: (value) {
                                 notes = value;
@@ -248,7 +248,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                         isRTL: appProvider.isRTL,
                         total: total != null ? total.value : cartProvider.marketCart.total.formatted,
                         isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
-                        child: Text(Translations.of(context).get('Order Now')),
+                        child: Text(Translations.of(context).get("Order Now")),
                         // onTap: _submitOrder,
                       );
                     },
@@ -283,7 +283,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       });
     } catch (e) {
       setState(() => _isLoadingOrderSubmit = false);
-      showToast(msg: Translations.of(context).get('An error occurred while submitting your order!'));
+      showToast(msg: Translations.of(context).get("An error occurred while submitting your order!"));
       throw e;
     }
   }

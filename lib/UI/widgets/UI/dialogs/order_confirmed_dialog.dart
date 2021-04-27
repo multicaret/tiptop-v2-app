@@ -22,7 +22,7 @@ class OrderConfirmedDialog extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text(
-          Translations.of(context).get('Order Received'),
+          Translations.of(context).get("Order Received"),
           style: AppTextStyles.bodyBold,
           textAlign: TextAlign.center,
         ),
@@ -30,7 +30,7 @@ class OrderConfirmedDialog extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            Translations.of(context).get('You can track your order live on the map'),
+            Translations.of(context).get("You can track your order live on the map"),
             textAlign: TextAlign.center,
           ),
         ),

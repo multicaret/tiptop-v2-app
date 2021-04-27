@@ -40,7 +40,7 @@ class OTPMethodsButtons extends StatelessWidget {
     return Column(
       children: [
         Text(
-          Translations.of(context).get('Please choose preferred method'),
+          Translations.of(context).get("Please choose preferred method"),
           style: AppTextStyles.h2,
           textAlign: TextAlign.center,
         ),
@@ -64,7 +64,7 @@ class OTPMethodsButtons extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: Text(
-                      "${Translations.of(context).get('Continue Via')} ${_verificationMethods[i]['name']}",
+                      "${Translations.of(context).get("Continue Via")} ${_verificationMethods[i]['name']}",
                     ),
                   )
                 ],

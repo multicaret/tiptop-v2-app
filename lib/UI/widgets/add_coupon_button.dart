@@ -41,7 +41,7 @@ class AddCouponButton extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(Translations.of(context).get('Add Coupon')),
+                    Text(Translations.of(context).get("Add Coupon")),
                   ],
                 )
               : Row(

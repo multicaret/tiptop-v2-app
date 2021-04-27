@@ -67,7 +67,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
                             width: 60,
                           ),
                           const SizedBox(width: 5),
-                          Text(Translations.of(context).get('Delivery')),
+                          Text(Translations.of(context).get("Delivery")),
                         ],
                       ),
                       Column(

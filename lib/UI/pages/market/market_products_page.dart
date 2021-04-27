@@ -55,7 +55,7 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Products')),
+        title: Text(Translations.of(context).get("Products")),
         actions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       ),
       body: Column(

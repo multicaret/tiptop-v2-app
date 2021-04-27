@@ -46,7 +46,7 @@ class _FavoriteMarketProductsPageState extends State<FavoriteMarketProductsPage>
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
-        title: Text(Translations.of(context).get('Favorite Products')),
+        title: Text(Translations.of(context).get("Favorite Products")),
       ),
       body: _isLoadingFavoriteProducts
           ? const AppLoader()

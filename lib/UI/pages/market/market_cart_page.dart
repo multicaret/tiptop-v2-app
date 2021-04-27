@@ -26,7 +26,7 @@ class MarketCartPage extends StatelessWidget {
           hasCurve: false,
           hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest,
           appBar: AppBar(
-            title: Text(Translations.of(context).get('Market Cart')),
+            title: Text(Translations.of(context).get("Market Cart")),
             actions: [
               if (!cartProvider.noMarketCart)
                 IconButton(
@@ -39,10 +39,10 @@ class MarketCartPage extends StatelessWidget {
                   ).then((response) {
                     if (response != null && response) {
                       cartProvider.clearMarketCart(appProvider).then((_) {
-                        showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
+                        showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
                         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
                       }).catchError((e) {
-                        showToast(msg: Translations.of(context).get('Error clearing cart!'));
+                        showToast(msg: Translations.of(context).get("Error clearing cart!"));
                       });
                     }
                   });
@@ -57,7 +57,7 @@ class MarketCartPage extends StatelessWidget {
                 child: cartProvider.noMarketCart
                     ? Center(
                         child: TextButton(
-                          child: Text(Translations.of(context).get('Your Cart Is Empty, Shop Now!')),
+                          child: Text(Translations.of(context).get("Your Cart Is Empty, Shop Now!")),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -78,7 +78,7 @@ class MarketCartPage extends StatelessWidget {
                   total: cartProvider.marketCart.total.formatted,
                   isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                   isRTL: appProvider.isRTL,
-                  child: Text(Translations.of(context).get('Continue')),
+                  child: Text(Translations.of(context).get("Continue")),
                   onTap: () {
                     if (cartProvider.marketCart == null ||
                         cartProvider.marketCart.total == null ||
