@@ -161,6 +161,7 @@ class CartProvider with ChangeNotifier {
     @required int chainId,
     @required int restaurantId,
     @required ProductCartData productTempCartData,
+    bool deleteExistingCart = false,
   }) async {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
@@ -192,6 +193,9 @@ class CartProvider with ChangeNotifier {
 
     final endpoint = 'carts/${foodCart.id}/products/food/adjust-cart-data';
     try {
+      if (deleteExistingCart) {
+        await clearFoodCart(context, appProvider, shouldNavigateToHome: false);
+      }
       final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
       if (responseData == 401) {
         return 401;
@@ -248,10 +252,10 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<void> clearFoodCart(BuildContext context, AppProvider appProvider) async {
+  Future<void> clearFoodCart(BuildContext context, AppProvider appProvider, {bool shouldNavigateToHome = true}) async {
     final endpoint = 'carts/${foodCart.id}/delete';
 
-    if(HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
       print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
       return;
     }
@@ -276,10 +280,14 @@ class CartProvider with ChangeNotifier {
       print('Deleting chain id and branch id from local storage...');
       await storageActions.deleteData(key: 'selected_food_branch_id');
       await storageActions.deleteData(key: 'selected_food_chain_id');
+      HomeProvider.selectedFoodBranchId = null;
+      HomeProvider.selectedFoodChainId = null;
 
       isLoadingClearFoodCartRequest = false;
-      showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      if (shouldNavigateToHome) {
+        showToast(msg: Translations.of(context).get('Cart Cleared Successfully!'));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      }
       notifyListeners();
     } catch (e) {
       showToast(msg: Translations.of(context).get('Error clearing cart!'));
@@ -288,5 +296,4 @@ class CartProvider with ChangeNotifier {
       throw e;
     }
   }
-
 }

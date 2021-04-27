@@ -30,7 +30,7 @@ class MarketProductListItem extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
@@ -44,8 +44,8 @@ class MarketProductListItem extends StatelessWidget {
           InkWell(
             onTap: openMarketProductPage,
             child: Container(
-              width: 80,
-              height: 80,
+              width: productListItemThumbnailSize,
+              height: productListItemThumbnailSize,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: AppColors.border, width: 1.5),

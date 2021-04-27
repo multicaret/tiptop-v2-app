@@ -207,5 +207,6 @@
   "Your Cart Is Empty, Shop Now!": "Your Cart Is Empty, Shop Now!",
   "Update Cart": "Update Cart",
   "Cart updated successfully!": "Cart updated successfully!",
-  "Successfully added product to cart!": "Successfully added product to cart!"
+  "Successfully added product to cart!": "Successfully added product to cart!",
+  "Cleared existing cart and added product to new cart successfully!": "Cleared existing cart and added product to new cart successfully!"
 }
