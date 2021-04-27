@@ -253,12 +253,12 @@ class CartProvider with ChangeNotifier {
       );
 
       foodCart = Cart.fromJson(responseData["data"]["cart"]);
-      showToast(msg: 'Successfully deleted from cart!');
+      showToast(msg: Translations.of(context).get('Successfully deleted from cart!'));
       isLoadingDeleteFoodCartProduct = false;
       notifyListeners();
     } catch (e) {
       isLoadingDeleteFoodCartProduct = true;
-      showToast(msg: 'Error deleting from cart!');
+      showToast(msg: Translations.of(context).get('Error deleting from cart!'));
       notifyListeners();
       throw e;
     }
