@@ -135,6 +135,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    if (addresses.length > 0) SectionTitle('Your Addresses'),
                     ..._getAddressesItems(),
                     SectionTitle('Add Address'),
                     ..._getAddressKindsList(),
@@ -147,43 +148,60 @@ class _AddressesPageState extends State<AddressesPage> {
 
   List<Widget> _getAddressesItems() {
     return List.generate(addresses.length, (i) {
+      bool isSelectedAddress = addressesProvider.selectedAddress != null && addressesProvider.selectedAddress.id == addresses[i].id;
       return Material(
         color: AppColors.white,
         child: InkWell(
-          onTap: () => _changeSelectedAddressWithConfirmation(addresses[i]),
+          onTap: isSelectedAddress ? null : () => _changeSelectedAddressWithConfirmation(addresses[i]),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
             width: double.infinity,
+            height: addressListItemHeight,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
             child: Row(
               children: [
                 Expanded(
-                  child: Row(
-                    children: [
-                      AddressIcon(
-                        icon: addresses[i].kind.icon,
-                        isAsset: false,
-                      ),
-                      Text(addresses[i].kind.title),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          addresses[i].address1,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.body50,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPadding),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              AddressIcon(
+                                icon: addresses[i].kind.icon,
+                                isAsset: false,
+                              ),
+                              Text(addresses[i].kind.title),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  addresses[i].address1,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.body50,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        TextButton(
+                          onPressed: () => _deleteAddress(addresses[i].id),
+                          child: AppIcons.icon(FontAwesomeIcons.trashAlt),
+                          style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () => _deleteAddress(addresses[i].id),
-                  child: AppIcons.icon(FontAwesomeIcons.trashAlt),
-                  style: TextButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap, minimumSize: Size(20, 20)),
-                )
+                if (isSelectedAddress)
+                  Container(
+                    color: AppColors.secondary,
+                    width: 30,
+                    height: addressListItemHeight,
+                    child: AppIcons.iconXsWhite(FontAwesomeIcons.check),
+                  ),
               ],
             ),
           ),

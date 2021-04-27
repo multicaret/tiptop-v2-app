@@ -1,5 +1,4 @@
 //Small vertical padding of list items
-import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
 
 const double listItemVerticalPaddingSm = 10;
 
@@ -77,3 +76,9 @@ const double appBarCartTotalWidthMin = 110;
 
 //Product list item thumbnail size (e.g. MarketProductListItem, FoodCartProductListItem, ..)
 const double productListItemThumbnailSize = 80;
+
+//Address icon size
+const double addressIconSize = 37;
+
+//Address list item height
+const double addressListItemHeight = addressIconSize + listItemVerticalPadding * 2;
