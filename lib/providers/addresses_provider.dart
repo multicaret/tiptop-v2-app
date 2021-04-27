@@ -36,7 +36,7 @@ class AddressesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeSelectedAddress(Address _selectedAddress) async {
+  Future<void> changeSelectedAddress(Address _selectedAddress, {bool shouldClearExistingCart = false}) async {
     try {
       String selectedAddressString = json.encode(_selectedAddress.toJson());
       selectedAddress = _selectedAddress;

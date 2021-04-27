@@ -14,6 +14,7 @@ import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -35,6 +36,7 @@ class _AddressesPageState extends State<AddressesPage> {
   AddressesProvider addressesProvider;
   AppProvider appProvider;
   CartProvider cartProvider;
+  HomeProvider homeProvider;
 
   List<Address> addresses = [];
   List<Kind> kinds = [];
@@ -52,40 +54,43 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {
-    if (!cartProvider.noMarketCart) {
-      //User wants to change address while he has filled cart
-      showDialog(
-        context: context,
-        builder: (context) => ConfirmAlertDialog(
-          title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
-        ),
-      ).then((response) {
+    bool shouldClearExistingCart = false;
+    if (homeProvider.channelIsMarket) {
+      if (!cartProvider.noMarketCart) {
+        //User wants to change address while he has filled cart
+        final response = await showDialog(
+          context: context,
+          builder: (context) => ConfirmAlertDialog(
+            title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
+          ),
+        );
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
-          cartProvider.clearMarketCart(appProvider).then((_) {
-            addressesProvider.changeSelectedAddress(_selectedAddress).then((_) {
-              _changeSelectedAddress(_selectedAddress).then((_) {
-                showToast(
-                  msg: Translations.of(context).get(
-                    'Cleared cart and changed address successfully',
-                    args: [_selectedAddress.kind.title],
-                  ),
-                );
-              });
-            });
-          });
+          await cartProvider.clearMarketCart(appProvider);
         }
-      });
+      }
     } else {
-      _changeSelectedAddress(_selectedAddress).then((_) {
-        showToast(msg: Translations.of(context).get("Changed address successfully", args: [_selectedAddress.kind.title]));
-      });
+      if (!cartProvider.noFoodCart) {
+        //User wants to change address while he has filled cart
+        final response = await showDialog(
+          context: context,
+          builder: (context) => ConfirmAlertDialog(
+            title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
+          ),
+        );
+        if (response != null && response) {
+          //User accepted changing address while he has filled cart, change address and clear cart
+          await cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
+        }
+      }
     }
+    await _changeSelectedAddress(_selectedAddress, shouldClearExistingCart: shouldClearExistingCart);
+    showToast(msg: Translations.of(context).get("Changed address successfully", args: [_selectedAddress.kind.title]));
   }
 
-  Future<void> _changeSelectedAddress(Address _selectedAddress) async {
+  Future<void> _changeSelectedAddress(Address _selectedAddress, {bool shouldClearExistingCart = false}) async {
     setState(() => _isLoadingChangingAddress = true);
-    await addressesProvider.changeSelectedAddress(_selectedAddress);
+    await addressesProvider.changeSelectedAddress(_selectedAddress, shouldClearExistingCart: shouldClearExistingCart);
     setState(() => _isLoadingChangingAddress = false);
     Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
   }
@@ -114,6 +119,7 @@ class _AddressesPageState extends State<AddressesPage> {
       appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
+      homeProvider = Provider.of<HomeProvider>(context);
       _fetchAndSetAddresses();
     }
     _isInit = false;
