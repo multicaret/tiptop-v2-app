@@ -50,7 +50,7 @@ class HorizontalRestaurantListItem extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.8),
+                            color: Colors.black.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
