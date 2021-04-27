@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -181,5 +182,19 @@ List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength, Build
     }
     //Add Item
     return <int>[...array, id];
+  }
+}
+
+DoubleRawStringFormatted getRestaurantMinimumOrder(Branch restaurant) {
+  if (restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled) {
+    return restaurant.tiptopDelivery.minimumOrder.raw < restaurant.restaurantDelivery.minimumOrder.raw
+        ? restaurant.tiptopDelivery.minimumOrder
+        : restaurant.restaurantDelivery.minimumOrder;
+  } else if (restaurant.tiptopDelivery.isDeliveryEnabled) {
+    return restaurant.tiptopDelivery.minimumOrder;
+  } else if (restaurant.restaurantDelivery.isDeliveryEnabled) {
+    return restaurant.restaurantDelivery.minimumOrder;
+  } else {
+    return null;
   }
 }

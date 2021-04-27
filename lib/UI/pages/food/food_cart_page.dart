@@ -9,9 +9,11 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -24,6 +26,8 @@ class FoodCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, CartProvider>(
       builder: (c, appProvider, cartProvider, _) {
+        DoubleRawStringFormatted restaurantMinimumOrder = getRestaurantMinimumOrder(cartProvider.foodCart.restaurant);
+        print('restaurantMinimumOrder: ${restaurantMinimumOrder.formatted}');
         return AppScaffold(
           hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest,
           appBar: AppBar(
@@ -118,6 +122,7 @@ class FoodCartPage extends StatelessWidget {
                               restaurantId: cartProvider.foodCart.restaurant.id,
                               chainId: cartProvider.foodCart.restaurant.chain.id,
                               cartProduct: cartProvider.foodCart.cartProducts[i],
+                              hasControls: false,
                             ),
                           );
                         },
@@ -130,6 +135,12 @@ class FoodCartPage extends StatelessWidget {
                   isRTL: appProvider.isRTL,
                   child: Text(Translations.of(context).get('Continue')),
                   onTap: () {
+                    if (restaurantMinimumOrder != null && cartProvider.foodCart.total.raw < restaurantMinimumOrder.raw) {
+                      showToast(
+                          msg: Translations.of(context)
+                              .get('Order total should be greater than: {branchMinimumOrder}', args: [restaurantMinimumOrder.formatted]));
+                      return;
+                    }
                     Navigator.of(context, rootNavigator: true).pushNamed(
                       FoodCheckoutPage.routeName,
                       arguments: {
