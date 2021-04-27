@@ -203,132 +203,135 @@ class _RestaurantPageState extends State<RestaurantPage> {
       appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       body: _isLoadingRestaurantShowRequest
           ? AppLoader()
-          : CustomScrollView(
-              controller: productsScrollController,
-              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              slivers: [
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  expandedHeight: expandedHeaderHeight,
-                  collapsedHeight:
-                      searchQuery.isNotEmpty ? sliverAppBarSearchBarHeight : sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight,
-                  backgroundColor: AppColors.bg,
-                  pinned: true,
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: ValueListenableBuilder(
-                      valueListenable: _collapsedNotifier,
-                      builder: (_, _isCollapsed, __) => Transform.translate(
-                        offset: Offset(0, _isCollapsed ? -1 : 0),
-                        child: Column(
-                          children: [
-                            searchQuery.isEmpty
-                                ? AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 200),
-                                    opacity: _isCollapsed ? 1 : 0,
-                                    child: IgnorePointer(
-                                      ignoring: !_isCollapsed,
-                                      child: ValueListenableBuilder(
-                                        valueListenable: selectedCategoryIdNotifier,
-                                        builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
-                                          isInverted: true,
-                                          children: menuCategories,
-                                          itemScrollController: categoriesScrollController,
-                                          selectedChildCategoryId: _selectedChildCategoryId,
-                                          //Fired when a child category is clicked
-                                          action: (i) {
-                                            selectedCategoryIdNotifier.value = menuCategories[i].id;
-                                            scrollToCategory(i);
-                                            scrollToProducts(i);
-                                          },
+          : RefreshIndicator(
+              onRefresh: _fetchAndSetRestaurant,
+              child: CustomScrollView(
+                controller: productsScrollController,
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                slivers: [
+                  SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    expandedHeight: expandedHeaderHeight,
+                    collapsedHeight:
+                        searchQuery.isNotEmpty ? sliverAppBarSearchBarHeight : sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight,
+                    backgroundColor: AppColors.bg,
+                    pinned: true,
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(0),
+                      child: ValueListenableBuilder(
+                        valueListenable: _collapsedNotifier,
+                        builder: (_, _isCollapsed, __) => Transform.translate(
+                          offset: Offset(0, _isCollapsed ? -1 : 0),
+                          child: Column(
+                            children: [
+                              searchQuery.isEmpty
+                                  ? AnimatedOpacity(
+                                      duration: const Duration(milliseconds: 200),
+                                      opacity: _isCollapsed ? 1 : 0,
+                                      child: IgnorePointer(
+                                        ignoring: !_isCollapsed,
+                                        child: ValueListenableBuilder(
+                                          valueListenable: selectedCategoryIdNotifier,
+                                          builder: (c, _selectedChildCategoryId, _) => ScrollableHorizontalTabs(
+                                            isInverted: true,
+                                            children: menuCategories,
+                                            itemScrollController: categoriesScrollController,
+                                            selectedChildCategoryId: _selectedChildCategoryId,
+                                            //Fired when a child category is clicked
+                                            action: (i) {
+                                              selectedCategoryIdNotifier.value = menuCategories[i].id;
+                                              scrollToCategory(i);
+                                              scrollToProducts(i);
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                : Container(),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
-                              decoration: BoxDecoration(
-                                border: _isCollapsed
-                                    ? const Border(
-                                        bottom: BorderSide(color: AppColors.border),
-                                      )
-                                    : null,
-                                color: AppColors.bg,
+                                    )
+                                  : Container(),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: _isCollapsed
+                                      ? const Border(
+                                          bottom: BorderSide(color: AppColors.border),
+                                        )
+                                      : null,
+                                  color: AppColors.bg,
+                                ),
+                                child: RestaurantSearchField(
+                                  onTap: () {
+                                    selectedCategoryIdNotifier.value = menuCategories[0].id;
+                                    scrollToCategory(0);
+                                    scrollToProducts(0);
+                                  },
+                                  focusNode: searchFieldFocusNode,
+                                  controller: searchFieldController,
+                                  onChanged: (query) => _onSearchFieldChange(query),
+                                  onClear: () => _clearSearchResults(),
+                                  showClearIcon: _showSearchFieldClearIcon,
+                                ),
                               ),
-                              child: RestaurantSearchField(
-                                onTap: () {
-                                  selectedCategoryIdNotifier.value = menuCategories[0].id;
-                                  scrollToCategory(0);
-                                  scrollToProducts(0);
-                                },
-                                focusNode: searchFieldFocusNode,
-                                controller: searchFieldController,
-                                onChanged: (query) => _onSearchFieldChange(query),
-                                onClear: () => _clearSearchResults(),
-                                showClearIcon: _showSearchFieldClearIcon,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    stretchModes: const <StretchMode>[
-                      StretchMode.zoomBackground,
-                    ],
-                    centerTitle: true,
-                    titlePadding: const EdgeInsets.all(0),
-                    background: RestaurantHeaderInfo(
-                      restaurant: restaurant,
-                      coverHasRating: false,
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.zoomBackground,
+                      ],
+                      centerTitle: true,
+                      titlePadding: const EdgeInsets.all(0),
+                      background: RestaurantHeaderInfo(
+                        restaurant: restaurant,
+                        coverHasRating: false,
+                      ),
                     ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    searchProductsResult.isNotEmpty
-                        ? List.generate(
-                            searchProductsResult.length,
-                            (i) => FoodProductListItem(
-                              product: searchProductsResult[i],
-                              restaurantId: restaurant.id,
-                              chainId: restaurant.chain.id,
-                            ),
-                          )
-                        : List.generate(
-                            menuCategories.length,
-                            (i) {
-                              return ScrollableVerticalContent(
-                                child: menuCategories[i],
-                                index: i,
-                                count: menuCategories.length,
-                                scrollController: productsScrollController,
-                                scrollSpyAction: (i) {
-                                  selectedCategoryIdNotifier.value = menuCategories[i].id;
-                                  scrollToCategory(i);
-                                },
-                                firstItemHasTitle: true,
-                                categoriesHeights: categoriesHeights,
-                                singleTabContent: Column(
-                                  children: List.generate(
-                                    menuCategories[i].products.length,
-                                    (j) => FoodProductListItem(
-                                      product: menuCategories[i].products[j],
-                                      restaurantId: restaurant.id,
-                                      chainId: restaurant.chain.id,
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      searchProductsResult.isNotEmpty
+                          ? List.generate(
+                              searchProductsResult.length,
+                              (i) => FoodProductListItem(
+                                product: searchProductsResult[i],
+                                restaurantId: restaurant.id,
+                                chainId: restaurant.chain.id,
+                              ),
+                            )
+                          : List.generate(
+                              menuCategories.length,
+                              (i) {
+                                return ScrollableVerticalContent(
+                                  child: menuCategories[i],
+                                  index: i,
+                                  count: menuCategories.length,
+                                  scrollController: productsScrollController,
+                                  scrollSpyAction: (i) {
+                                    selectedCategoryIdNotifier.value = menuCategories[i].id;
+                                    scrollToCategory(i);
+                                  },
+                                  firstItemHasTitle: true,
+                                  categoriesHeights: categoriesHeights,
+                                  singleTabContent: Column(
+                                    children: List.generate(
+                                      menuCategories[i].products.length,
+                                      (j) => FoodProductListItem(
+                                        product: menuCategories[i].products[j],
+                                        restaurantId: restaurant.id,
+                                        chainId: restaurant.chain.id,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                pageTopOffset: expandedHeaderHeight,
-                              );
-                            },
-                          ),
-                  ),
-                )
-              ],
+                                  pageTopOffset: expandedHeaderHeight,
+                                );
+                              },
+                            ),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
