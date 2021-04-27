@@ -4,6 +4,7 @@ import com.zoho.commons.ChatComponent
 import com.zoho.livechat.android.ZohoLiveChat
 import com.zoho.salesiqembed.ZohoSalesIQ
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
@@ -33,6 +34,8 @@ class MainActivity : FlutterActivity() {
             }
         }
     }
+
+    override fun provideSplashScreen(): SplashScreen? = SplashView()
 
     //setting up Flutter Engine View
     private fun getFlutterView(): BinaryMessenger? {
