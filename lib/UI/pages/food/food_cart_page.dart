@@ -9,6 +9,7 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -27,9 +28,10 @@ class FoodCartPage extends StatelessWidget {
     return Consumer2<AppProvider, CartProvider>(
       builder: (c, appProvider, cartProvider, _) {
         DoubleRawStringFormatted restaurantMinimumOrder = getRestaurantMinimumOrder(cartProvider.foodCart.restaurant);
+        List<CartProduct> cartProducts = cartProvider.foodCart.cartProducts;
         print('restaurantMinimumOrder: ${restaurantMinimumOrder.formatted}');
         return AppScaffold(
-          hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest,
+          hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest || cartProvider.isLoadingDeleteFoodCartProduct,
           appBar: AppBar(
             title: Text(Translations.of(context).get('Food Cart')),
             actions: [
@@ -111,18 +113,24 @@ class FoodCartPage extends StatelessWidget {
                         ),
                       )
                     : ListView.builder(
-                        itemCount: cartProvider.foodCart.cartProducts.length,
+                        itemCount: cartProducts.length,
                         itemBuilder: (c, i) {
                           return Padding(
                             padding: EdgeInsets.only(
                               top: i == 0 ? 20 : 0,
-                              bottom: i == cartProvider.foodCart.cartProducts.length - 1 ? 20 : 0,
+                              bottom: i == cartProducts.length - 1 ? 20 : 0,
                             ),
                             child: FoodCartProductListItem(
                               restaurantId: cartProvider.foodCart.restaurant.id,
                               chainId: cartProvider.foodCart.restaurant.chain.id,
-                              cartProduct: cartProvider.foodCart.cartProducts[i],
+                              cartProduct: cartProducts[i],
                               hasControls: false,
+                              dismissAction: () {
+                                int cartProductIdToDelete = cartProducts[i].cartProductId;
+                                cartProducts.removeAt(i);
+                                cartProvider.deleteProductFromFoodCart(
+                                    context: context, appProvider: appProvider, cartProductId: cartProductIdToDelete);
+                              },
                             ),
                           );
                         },

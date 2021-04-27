@@ -79,6 +79,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
       print('Route data: $data');
       productId = data["product_id"];
       cartProduct = data["cart_product"];
+      if (cartProduct != null) {
+        print('Cart product id: ${cartProduct.cartProductId}');
+      }
       restaurantId = data["restaurant_id"];
       chainId = data["chain_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];

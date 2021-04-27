@@ -18,6 +18,7 @@ class CartProvider with ChangeNotifier {
   bool isLoadingAdjustFoodCartDataRequest = false;
   bool isLoadingClearMarketCartRequest = false;
   bool isLoadingClearFoodCartRequest = false;
+  bool isLoadingDeleteFoodCartProduct = false;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
@@ -149,7 +150,6 @@ class CartProvider with ChangeNotifier {
     }
 
     notifyListeners();
-
     return getProductQuantity(product.id);
   }
 
@@ -215,6 +215,50 @@ class CartProvider with ChangeNotifier {
     } catch (e) {
       // showToast(msg: Translations.of(context).get('An Error Occurred!'));
       isLoadingAdjustFoodCartDataRequest = false;
+      notifyListeners();
+      throw e;
+    }
+  }
+
+  Future<void> deleteProductFromFoodCart({BuildContext context, AppProvider appProvider, int cartProductId}) async {
+    if (foodCart == null || foodCart.id == null) {
+      print('No food cart!');
+      showToast(msg: Translations.of(context).get('An Error Occurred! Logging out...'));
+      appProvider.logout(clearSelectedAddress: true);
+      return 401;
+    }
+
+    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+      return;
+    }
+
+    // clearRequestedMoreThanAvailableQuantity();
+    isLoadingDeleteFoodCartProduct = true;
+    notifyListeners();
+
+    Map<String, dynamic> body = {
+      'branch_id': HomeProvider.selectedFoodBranchId,
+      'chain_id': HomeProvider.selectedFoodChainId,
+    };
+    print('body: $body');
+
+    final endpoint = 'carts/${foodCart.id}/products/food/$cartProductId}/delete';
+
+    try {
+      final responseData = await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
+
+      foodCart = Cart.fromJson(responseData["data"]["cart"]);
+      showToast(msg: 'Successfully deleted from cart!');
+      isLoadingDeleteFoodCartProduct = false;
+      notifyListeners();
+    } catch (e) {
+      isLoadingDeleteFoodCartProduct = true;
+      showToast(msg: 'Error deleting from cart!');
       notifyListeners();
       throw e;
     }

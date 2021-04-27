@@ -209,5 +209,8 @@
   "Successfully added product to cart!": "تم اضافة المنتج الى السلة بنجاح!",
   "Cleared existing cart and added product to new cart successfully!": "تم حذف السلة الموجودة واضافة المنتج الى السلة الجديدة بنجاح!",
   "What are you looking for?": "عن ماذا تبحث؟",
-  "Your Addresses": "عناوينك"
+  "Your Addresses": "عناوينك",
+  "Successfully deleted from cart!": "تم الحذف من السلة بنجاح!",
+  "Error deleting from cart!": "حدث خطأ اثناء الحذف من السلة!",
+  "Are you sure you want to delete this product from your cart?": "هل أنت متأكد من أنك تريد حذف المنتج من السلة؟"
 }
