@@ -38,7 +38,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
           key: _formKey,
           child: AppTextField(
             controller: textFieldController,
-            hintText: Translations.of(context).get(widget.textFieldHint),
+            labelText: Translations.of(context).get(widget.textFieldHint),
             hasInnerLabel: true,
             onSaved: (value) => textFieldValue = value,
             required: true,
