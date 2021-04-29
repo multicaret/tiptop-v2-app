@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../UI/labeled_icon.dart';
@@ -15,17 +18,22 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
   final Branch restaurant;
   final RestaurantDeliveryType selectedDeliveryType;
   final Function selectDeliveryType;
+  final double cartTotal;
 
   FoodCheckoutDeliveryOptions({
     @required this.restaurant,
     @required this.selectedDeliveryType,
     @required this.selectDeliveryType,
+    @required this.cartTotal,
   });
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> getDeliveryOptionInfoItems(BranchDelivery delivery) {
-      return [
+    List<Map<String, dynamic>> getDeliveryOptionInfoItems(BranchDelivery delivery, Currency currency) {
+      double deliveryFee = cartTotal < delivery.minimumOrder.raw
+          ? delivery.fixedDeliveryFee.raw + delivery.underMinimumOrderDeliveryFee.raw
+          : delivery.fixedDeliveryFee.raw;
+      List<Map<String, dynamic>> items = [
         {
           'title': 'Time',
           'icon': LineAwesomeIcons.hourglass,
@@ -34,46 +42,53 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
         {
           'title': 'Delivery Fee',
           'icon': LineAwesomeIcons.truck_moving,
-          'value': delivery.fixedDeliveryFee.formatted,
-        },
-        {
+          'value': priceAndCurrency(deliveryFee, currency),
+        }
+      ];
+      if (delivery.underMinimumOrderDeliveryFee.raw == 0) {
+        items.add({
           'title': 'Min. Cart',
           'icon': LineAwesomeIcons.shopping_basket,
           'value': delivery.minimumOrder.formatted,
-        }
-      ];
+        });
+      }
+      return items;
     }
 
-    List<Map<String, dynamic>> tiptopDeliveryInfoItems = getDeliveryOptionInfoItems(restaurant.tiptopDelivery);
-    List<Map<String, dynamic>> restaurantDeliveryInfoItems = getDeliveryOptionInfoItems(restaurant.restaurantDelivery);
-
-    return Column(
-      children: [
-        SectionTitle('Delivery Options'),
-        //Todo: implement if minimum order applies:
-        deliveryOptionRadioItem(
-          context: context,
-          title: Row(
-            children: [
-              Image(
-                image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
-                width: 60,
+    return Consumer<HomeProvider>(
+      builder: (c, homeProvider, _) => Column(
+        children: [
+          SectionTitle('Delivery Options'),
+          if (restaurant.tiptopDelivery.isDeliveryEnabled)
+            deliveryOptionRadioItem(
+              context: context,
+              title: Row(
+                children: [
+                  Image(
+                    image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                    width: 60,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(Translations.of(context).get("Delivery")),
+                ],
               ),
-              const SizedBox(width: 5),
-              Text(Translations.of(context).get("Delivery")),
-            ],
-          ),
-          deliveryInfoItems: tiptopDeliveryInfoItems,
-          deliveryType: RestaurantDeliveryType.TIPTOP,
-        ),
-        //Todo: implement if minimum order applies:
-        deliveryOptionRadioItem(
-          context: context,
-          title: "Restaurant Delivery",
-          deliveryInfoItems: restaurantDeliveryInfoItems,
-          deliveryType: RestaurantDeliveryType.RESTAURANT,
-        ),
-      ],
+              isDisabled: restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.tiptopDelivery.minimumOrder.raw,
+              delivery: restaurant.tiptopDelivery,
+              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.tiptopDelivery, homeProvider.foodCurrency),
+              deliveryType: RestaurantDeliveryType.TIPTOP,
+            ),
+          if (restaurant.restaurantDelivery.isDeliveryEnabled)
+            deliveryOptionRadioItem(
+              context: context,
+              title: "Restaurant Delivery",
+              isDisabled:
+                  restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.restaurantDelivery.minimumOrder.raw,
+              delivery: restaurant.restaurantDelivery,
+              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.restaurantDelivery, homeProvider.foodCurrency),
+              deliveryType: RestaurantDeliveryType.RESTAURANT,
+            ),
+        ],
+      ),
     );
   }
 
@@ -81,7 +96,9 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
     BuildContext context,
     dynamic title,
     List<Map<String, dynamic>> deliveryInfoItems,
+    BranchDelivery delivery,
     RestaurantDeliveryType deliveryType,
+    bool isDisabled = false,
   }) {
     return Consumer<AppProvider>(
       child: Row(
@@ -91,7 +108,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
             value: deliveryType,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             groupValue: selectedDeliveryType,
-            onChanged: (value) => selectDeliveryType(value),
+            onChanged: isDisabled ? null : (value) => selectDeliveryType(value),
             activeColor: AppColors.secondary,
           ),
           Expanded(
@@ -131,21 +148,35 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
         ],
       ),
       builder: (c, appProvider, child) {
-        return Material(
-          color: AppColors.white,
-          child: InkWell(
-            onTap: () => selectDeliveryType(deliveryType),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: AppColors.border)),
+        return Opacity(
+          opacity: isDisabled ? 0.5 : 1,
+          child: Material(
+            color: AppColors.white,
+            child: InkWell(
+              onTap: () {
+                if (isDisabled) {
+                  showToast(
+                    msg: Translations.of(context).get(
+                      "Your cart total should be greater than: {minimumOrder}",
+                      args: [delivery.minimumOrder.formatted],
+                    ),
+                  );
+                  return;
+                }
+                selectDeliveryType(deliveryType);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                ),
+                padding: EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
+                  left: appProvider.isRTL ? screenHorizontalPadding : 7,
+                  right: appProvider.isRTL ? 7 : screenHorizontalPadding,
+                ),
+                child: child,
               ),
-              padding: EdgeInsets.only(
-                top: 10,
-                bottom: 10,
-                left: appProvider.isRTL ? screenHorizontalPadding : 7,
-                right: appProvider.isRTL ? 7 : screenHorizontalPadding,
-              ),
-              child: child,
             ),
           ),
         );

@@ -27,9 +27,7 @@ class FoodCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AppProvider, CartProvider>(
       builder: (c, appProvider, cartProvider, _) {
-        DoubleRawStringFormatted restaurantMinimumOrder = getRestaurantMinimumOrder(cartProvider.foodCart.restaurant);
         List<CartProduct> cartProducts = cartProvider.foodCart.cartProducts;
-        print('restaurantMinimumOrder: ${restaurantMinimumOrder.formatted}');
         return AppScaffold(
           hasOverlayLoader: cartProvider.isLoadingClearFoodCartRequest || cartProvider.isLoadingDeleteFoodCartProduct,
           appBar: AppBar(
@@ -143,6 +141,7 @@ class FoodCartPage extends StatelessWidget {
                   isRTL: appProvider.isRTL,
                   child: Text(Translations.of(context).get("Continue")),
                   onTap: () {
+                    DoubleRawStringFormatted restaurantMinimumOrder = getRestaurantMinimumOrder(cartProvider.foodCart.restaurant, cartProvider.foodCart.total.raw);
                     if (restaurantMinimumOrder != null && cartProvider.foodCart.total.raw < restaurantMinimumOrder.raw) {
                       showToast(
                           msg: Translations.of(context)

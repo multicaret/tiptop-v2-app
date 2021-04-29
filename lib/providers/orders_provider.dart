@@ -43,7 +43,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> createFoodOrderAndGetCheckoutData(AppProvider appProvider) async {
+  Future<dynamic> createFoodOrderAndGetCheckoutData(AppProvider appProvider, int selectedAddressId) async {
     final endpoint = 'orders/create';
     if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
       print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
@@ -53,19 +53,21 @@ class OrdersProvider with ChangeNotifier {
     Map<String, String> body = {
       'chain_id': '${HomeProvider.selectedFoodChainId}',
       'branch_id': '${HomeProvider.selectedFoodBranchId}',
+      'selected_address_id': '$selectedAddressId',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,
       body: body,
       withToken: true,
     );
+    print('create food order response:');
+    print(responseData);
 
     if (responseData == 401) {
       return 401;
     }
 
     checkoutData = CheckoutData.fromJson(responseData["data"]);
-    print(checkoutData.toJson());
     notifyListeners();
   }
 
@@ -142,7 +144,7 @@ class OrdersProvider with ChangeNotifier {
       'chain_id': HomeProvider.selectedFoodChainId,
       'cart_id': cartProvider.foodCart.id,
       'payment_method_id': paymentMethodId,
-      'address_id': addressesProvider.selectedAddress.id,
+      'selected_address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
       'coupon_redeem_code': couponCode,
       'delivery_type': restaurantDeliveryTypeValues.reverse[deliveryType],
@@ -283,15 +285,17 @@ class OrdersProvider with ChangeNotifier {
 
   Future<dynamic> validateFoodCoupon({
     AppProvider appProvider,
-    CartProvider cartProvider,
+    int cartId,
+    int selectedAddressId,
     String couponCode,
     RestaurantDeliveryType deliveryType,
   }) async {
     final endpoint = 'coupons/$couponCode/validate';
     Map<String, String> body = {
       'branch_id': '${HomeProvider.selectedFoodBranchId}',
-      'cart_id': '${cartProvider.foodCart.id}',
+      'cart_id': '$cartId',
       'delivery_type': restaurantDeliveryTypeValues.reverse[deliveryType],
+      'selected_address_id': '$selectedAddressId',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,

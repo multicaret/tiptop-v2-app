@@ -209,5 +209,6 @@
   "Error deleting from cart!": "حدث خطأ اثناء الحذف من السلة!",
   "Are you sure you want to delete this product from your cart?": "هل أنت متأكد من أنك تريد حذف المنتج من السلة؟",
   "Please select delivery option first!": "الرجاء اختيار طريقة التوصيل اولاً!",
-  "Are you sure you want to change your delivery option? This will delete your coupon": "هل انت متأكد من أنك تريد تغيير طريقة التوصيل؟ سوف يتم الغاء القسيمة!"
+  "Are you sure you want to change your delivery option? This will delete your coupon": "هل انت متأكد من أنك تريد تغيير طريقة التوصيل؟ سوف يتم الغاء القسيمة!",
+  "Your cart total should be greater than: {minimumOrder}": "مجموع السلة يجب ان يكون اعلى من: {0}"
 }

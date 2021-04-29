@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -185,16 +186,79 @@ List<int> addOrRemoveIdsFromArray({List<int> array, int id, int maxLength, Build
   }
 }
 
-DoubleRawStringFormatted getRestaurantMinimumOrder(Branch restaurant) {
+bool getUserCanProceed(BranchDelivery delivery, double cartTotal) {
+  bool userCanProceed = true;
+
+  if (delivery.isDeliveryEnabled) {
+    if (delivery.underMinimumOrderDeliveryFee.raw == 0) {
+      //There is a minimum, check total
+      userCanProceed = cartTotal < delivery.minimumOrder.raw ? false : true;
+    } else {
+      userCanProceed = true;
+    }
+  }
+  return userCanProceed;
+}
+
+DoubleRawStringFormatted getRestaurantMinimumOrder(Branch restaurant, double cartTotal) {
+  bool userCanProceedForTiptop = getUserCanProceed(restaurant.tiptopDelivery, cartTotal);
+  bool userCanProceedForRestaurant = getUserCanProceed(restaurant.restaurantDelivery, cartTotal);
+
+  print('userCanProceedForTiptop: $userCanProceedForTiptop');
+  print('userCanProceedForRestaurant: $userCanProceedForRestaurant');
+
+  //Both delivery options enabled, take the one with the less minimum
   if (restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled) {
     return restaurant.tiptopDelivery.minimumOrder.raw < restaurant.restaurantDelivery.minimumOrder.raw
-        ? restaurant.tiptopDelivery.minimumOrder
-        : restaurant.restaurantDelivery.minimumOrder;
-  } else if (restaurant.tiptopDelivery.isDeliveryEnabled) {
-    return restaurant.tiptopDelivery.minimumOrder;
-  } else if (restaurant.restaurantDelivery.isDeliveryEnabled) {
-    return restaurant.restaurantDelivery.minimumOrder;
+        ? userCanProceedForTiptop
+            ? null
+            : restaurant.tiptopDelivery.minimumOrder
+        : userCanProceedForRestaurant
+            ? null
+            : restaurant.restaurantDelivery.minimumOrder;
+    //Only tiptop delivery
+  } else if (restaurant.tiptopDelivery.isDeliveryEnabled && !restaurant.restaurantDelivery.isDeliveryEnabled) {
+    return userCanProceedForTiptop ? null : restaurant.tiptopDelivery.minimumOrder;
+    //Only restaurant delivery
+  } else if (restaurant.restaurantDelivery.isDeliveryEnabled && !restaurant.tiptopDelivery.isDeliveryEnabled) {
+    return userCanProceedForRestaurant ? null : restaurant.restaurantDelivery.minimumOrder;
   } else {
     return null;
   }
+}
+
+RestaurantDeliveryType initDeliveryTypeSelection(Branch restaurant, double cartTotal) {
+  if (restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled) {
+    if (restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.tiptopDelivery.minimumOrder.raw) {
+      return RestaurantDeliveryType.RESTAURANT;
+    } else if (restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.restaurantDelivery.minimumOrder.raw) {
+      return RestaurantDeliveryType.TIPTOP;
+    } else {
+      return RestaurantDeliveryType.TIPTOP;
+    }
+  } else if (restaurant.tiptopDelivery.isDeliveryEnabled && !restaurant.restaurantDelivery.isDeliveryEnabled) {
+    return RestaurantDeliveryType.TIPTOP;
+  } else if (restaurant.restaurantDelivery.isDeliveryEnabled && !restaurant.tiptopDelivery.isDeliveryEnabled) {
+    return RestaurantDeliveryType.RESTAURANT;
+  }
+  return null;
+}
+
+DoubleRawStringFormatted calculateDeliveryFee({RestaurantDeliveryType selectedDeliveryType, Branch restaurant, double cartTotal, Currency currency}) {
+  double calculatedDeliveryFee = 0.0;
+  if (selectedDeliveryType == RestaurantDeliveryType.TIPTOP) {
+    calculatedDeliveryFee = cartTotal < restaurant.tiptopDelivery.minimumOrder.raw
+        ? restaurant.tiptopDelivery.fixedDeliveryFee.raw + restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw
+        : restaurant.tiptopDelivery.fixedDeliveryFee.raw;
+  } else if (selectedDeliveryType == RestaurantDeliveryType.RESTAURANT) {
+    calculatedDeliveryFee = cartTotal < restaurant.restaurantDelivery.minimumOrder.raw
+        ? restaurant.restaurantDelivery.fixedDeliveryFee.raw + restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw
+        : restaurant.restaurantDelivery.fixedDeliveryFee.raw;
+  } else {
+    calculatedDeliveryFee = 0.0;
+  }
+  return DoubleRawStringFormatted(
+    raw: calculatedDeliveryFee,
+    formatted: priceAndCurrency(calculatedDeliveryFee, currency),
+  );
 }

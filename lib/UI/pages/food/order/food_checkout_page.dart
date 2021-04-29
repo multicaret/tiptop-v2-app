@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
@@ -52,6 +51,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
 
   List<PaymentSummaryTotal> paymentSummaryTotals = [];
   PaymentSummaryTotal grandTotal;
+  DoubleRawStringFormatted deliveryFee;
   final couponCodeNotifier = ValueNotifier<String>(null);
   final selectedPaymentMethodNotifier = ValueNotifier<int>(null);
   final selectedDeliveryTypeNotifier = ValueNotifier<RestaurantDeliveryType>(null);
@@ -66,8 +66,14 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
 
   Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoadingCreateOrder = true);
-    await ordersProvider.createFoodOrderAndGetCheckoutData(appProvider);
+    await ordersProvider.createFoodOrderAndGetCheckoutData(appProvider, addressesProvider.selectedAddress.id);
     checkoutData = ordersProvider.checkoutData;
+    deliveryFee = calculateDeliveryFee(
+      selectedDeliveryType: selectedDeliveryTypeNotifier.value,
+      restaurant: restaurant,
+      cartTotal: cartProvider.foodCart.total.raw,
+      currency: homeProvider.foodCurrency,
+    );
     paymentSummaryTotals = [
       PaymentSummaryTotal(
         title: "Total",
@@ -75,13 +81,11 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       ),
       PaymentSummaryTotal(
         title: "Delivery Fee",
-        value: selectedDeliveryTypeNotifier.value == RestaurantDeliveryType.TIPTOP
-            ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
-            : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
+        value: deliveryFee.formatted,
       ),
       PaymentSummaryTotal(
         title: "Grand Total",
-        value: checkoutData.grandTotal.formatted,
+        value: priceAndCurrency(checkoutData.grandTotal.raw + deliveryFee.raw, homeProvider.foodCurrency),
         isGrandTotal: true,
       ),
     ];
@@ -91,14 +95,15 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
 
   Future<void> _validateFoodCouponCode(String _couponCode) async {
     setState(() => _isLoadingvalidateFoodCoupon = true);
-    if(selectedDeliveryTypeNotifier.value == null) {
+    if (selectedDeliveryTypeNotifier.value == null) {
       showToast(msg: Translations.of(context).get("Please select delivery option first!"));
       return;
     }
     try {
       await ordersProvider.validateFoodCoupon(
         appProvider: appProvider,
-        cartProvider: cartProvider,
+        cartId: cartProvider.foodCart.id,
+        selectedAddressId: addressesProvider.selectedAddress.id,
         couponCode: _couponCode,
         deliveryType: selectedDeliveryTypeNotifier.value,
       );
@@ -148,17 +153,8 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       addressesProvider = Provider.of<AddressesProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
 
-      _createOrderAndGetCheckoutData().then((_) {
-        selectedDeliveryTypeNotifier.value =
-            restaurant.tiptopDelivery.isDeliveryEnabled ? RestaurantDeliveryType.TIPTOP : RestaurantDeliveryType.RESTAURANT;
-        paymentSummaryTotals[paymentSummaryTotals.length - 2] = PaymentSummaryTotal(
-          title: "Delivery Fee",
-          value: restaurant.tiptopDelivery.isDeliveryEnabled
-              ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
-              : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
-        );
-        grandTotal = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
-      });
+      selectedDeliveryTypeNotifier.value = initDeliveryTypeSelection(restaurant, cartProvider.foodCart.total.raw);
+      _createOrderAndGetCheckoutData();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -166,7 +162,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilt checkout page');
+    grandTotal = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
     return AppScaffold(
       hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
@@ -198,30 +194,48 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                             valueListenable: selectedDeliveryTypeNotifier,
                             builder: (c, selectedDeliveryType, _) => FoodCheckoutDeliveryOptions(
                               restaurant: restaurant,
+                              cartTotal: cartProvider.foodCart.total.raw,
                               selectedDeliveryType: selectedDeliveryType,
                               selectDeliveryType: (_selectedDeliveryType) {
-                                if(couponCodeNotifier.value != null && _selectedDeliveryType != selectedDeliveryType) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => ConfirmAlertDialog(
-                                      title: 'Are you sure you want to change your delivery option? This will delete your coupon',
-                                    ),
-                                  ).then((response) {
-                                    if (response != null && response) {
-                                      couponCodeNotifier.value = null;
-                                      _createOrderAndGetCheckoutData();
-                                    }
+                                if (_selectedDeliveryType != selectedDeliveryType) {
+                                  if (couponCodeNotifier.value != null) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => ConfirmAlertDialog(
+                                        title: 'Are you sure you want to change your delivery option? This will delete your coupon',
+                                      ),
+                                    ).then((response) {
+                                      if (response != null && response) {
+                                        couponCodeNotifier.value = null;
+                                        _createOrderAndGetCheckoutData();
+                                      }
+                                    });
+                                  }
+                                  selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
+                                  deliveryFee = calculateDeliveryFee(
+                                    selectedDeliveryType: _selectedDeliveryType,
+                                    restaurant: restaurant,
+                                    cartTotal: cartProvider.foodCart.total.raw,
+                                    currency: homeProvider.foodCurrency,
+                                  );
+                                  setState(() {
+                                    paymentSummaryTotals = [
+                                      PaymentSummaryTotal(
+                                        title: "Total",
+                                        value: checkoutData.total.formatted,
+                                      ),
+                                      PaymentSummaryTotal(
+                                        title: "Delivery Fee",
+                                        value: deliveryFee.formatted,
+                                      ),
+                                      PaymentSummaryTotal(
+                                        title: "Grand Total",
+                                        value: priceAndCurrency(checkoutData.grandTotal.raw + deliveryFee.raw, homeProvider.foodCurrency),
+                                        isGrandTotal: true,
+                                      ),
+                                    ];
                                   });
                                 }
-                                selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
-                                setState(() {
-                                  paymentSummaryTotals[paymentSummaryTotals.length - 2] = PaymentSummaryTotal(
-                                    title: "Delivery Fee",
-                                    value: _selectedDeliveryType == RestaurantDeliveryType.TIPTOP
-                                        ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
-                                        : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
-                                  );
-                                });
                               },
                             ),
                           ),
