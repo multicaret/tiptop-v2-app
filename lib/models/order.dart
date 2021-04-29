@@ -236,8 +236,8 @@ class FoodOrderRatingFactors {
       };
 }
 
-class CouponValidationResponseData {
-  CouponValidationResponseData({
+class CouponValidationData {
+  CouponValidationData({
     this.discountedAmount,
     this.deliveryFee,
     this.totalBefore,
@@ -251,7 +251,7 @@ class CouponValidationResponseData {
   DoubleRawStringFormatted totalAfter;
   DoubleRawStringFormatted grandTotal;
 
-  factory CouponValidationResponseData.fromJson(Map<String, dynamic> json) => CouponValidationResponseData(
+  factory CouponValidationData.fromJson(Map<String, dynamic> json) => CouponValidationData(
         discountedAmount: DoubleRawStringFormatted.fromJson(json["discountedAmount"]),
         deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
         totalBefore: DoubleRawStringFormatted.fromJson(json["totalBefore"]),

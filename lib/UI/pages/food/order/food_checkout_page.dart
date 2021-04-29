@@ -41,14 +41,14 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
   bool _isInit = true;
   bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
-  bool _isLoadingValidateCoupon = false;
+  bool _isLoadingvalidateFoodCoupon = false;
 
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   AddressesProvider addressesProvider;
   HomeProvider homeProvider;
-  CouponValidationResponseData couponValidationResponseData;
+  CouponValidationData couponValidationData;
 
   List<PaymentSummaryTotal> paymentSummaryTotals = [];
   PaymentSummaryTotal grandTotal;
@@ -75,7 +75,9 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       ),
       PaymentSummaryTotal(
         title: "Delivery Fee",
-        value: checkoutData.deliveryFee.formatted,
+        value: selectedDeliveryTypeNotifier.value == RestaurantDeliveryType.TIPTOP
+            ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
+            : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
       ),
       PaymentSummaryTotal(
         title: "Grand Total",
@@ -87,42 +89,43 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     setState(() => _isLoadingCreateOrder = false);
   }
 
-  Future<void> _validateCouponCode(String _couponCode) async {
-    setState(() => _isLoadingValidateCoupon = true);
+  Future<void> _validateFoodCouponCode(String _couponCode) async {
+    setState(() => _isLoadingvalidateFoodCoupon = true);
+    if(selectedDeliveryTypeNotifier.value == null) {
+      showToast(msg: Translations.of(context).get("Please select delivery option first!"));
+      return;
+    }
     try {
-      final responseData = await ordersProvider.validateCoupon(
+      await ordersProvider.validateFoodCoupon(
         appProvider: appProvider,
         cartProvider: cartProvider,
         couponCode: _couponCode,
+        deliveryType: selectedDeliveryTypeNotifier.value,
       );
-      if (responseData == 401) {
-        setState(() => _isLoadingValidateCoupon = false);
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
-      }
-      couponValidationResponseData = ordersProvider.couponValidationResponseData;
+      couponValidationData = ordersProvider.couponValidationData;
       couponCodeNotifier.value = _couponCode;
       paymentSummaryTotals = [
         PaymentSummaryTotal(
           title: "Total Before Discount",
-          value: couponValidationResponseData.totalBefore.formatted,
+          value: couponValidationData.totalBefore.formatted,
           isDiscounted: true,
         ),
         PaymentSummaryTotal(
           title: "You Saved",
-          value: couponValidationResponseData.discountedAmount.formatted,
+          value: couponValidationData.discountedAmount.formatted,
           isSavedAmount: true,
         ),
         PaymentSummaryTotal(
           title: "Total After Discount",
-          value: couponValidationResponseData.totalAfter.formatted,
+          value: couponValidationData.totalAfter.formatted,
         ),
         PaymentSummaryTotal(
           title: "Delivery Fee",
-          value: couponValidationResponseData.deliveryFee.formatted,
+          value: couponValidationData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
-          value: couponValidationResponseData.grandTotal.formatted,
+          value: couponValidationData.grandTotal.formatted,
           isGrandTotal: true,
         ),
       ];
@@ -130,7 +133,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     } catch (e) {
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
-    setState(() => _isLoadingValidateCoupon = false);
+    setState(() => _isLoadingvalidateFoodCoupon = false);
   }
 
   @override
@@ -169,7 +172,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       appBar: AppBar(
         title: Text('Checkout'),
       ),
-      body: _isLoadingCreateOrder || _isLoadingValidateCoupon
+      body: _isLoadingCreateOrder || _isLoadingvalidateFoodCoupon
           ? const AppLoader()
           : Form(
               key: _formKey,
@@ -188,9 +191,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                               maxLines: 3,
                               hintText: Translations.of(context).get("You can write your order notes here"),
                               fit: true,
-                              onSaved: (value) {
-                                notes = value;
-                              },
+                              onSaved: (value) => notes = value,
                             ),
                           ),
                           ValueListenableBuilder(
@@ -199,6 +200,19 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                               restaurant: restaurant,
                               selectedDeliveryType: selectedDeliveryType,
                               selectDeliveryType: (_selectedDeliveryType) {
+                                if(couponCodeNotifier.value != null && _selectedDeliveryType != selectedDeliveryType) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ConfirmAlertDialog(
+                                      title: 'Are you sure you want to change your delivery option? This will delete your coupon',
+                                    ),
+                                  ).then((response) {
+                                    if (response != null && response) {
+                                      couponCodeNotifier.value = null;
+                                      _createOrderAndGetCheckoutData();
+                                    }
+                                  });
+                                }
                                 selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
                                 setState(() {
                                   paymentSummaryTotals[paymentSummaryTotals.length - 2] = PaymentSummaryTotal(
@@ -240,7 +254,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                     ),
                                   ).then((_couponCode) {
                                     if (_couponCode is String && _couponCode.isNotEmpty) {
-                                      _validateCouponCode(_couponCode);
+                                      _validateFoodCouponCode(_couponCode);
                                     }
                                   });
                                 },
@@ -270,7 +284,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                   ),
                   TotalButton(
                     isRTL: appProvider.isRTL,
-                    total: grandTotal != null ? grandTotal.value : cartProvider.marketCart.total.formatted,
+                    total: grandTotal.value,
                     isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                     child: Text(Translations.of(context).get("Order Now")),
                     onTap: _submitFoodOrder,

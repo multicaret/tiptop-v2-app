@@ -214,5 +214,7 @@
   "Your Addresses": "Your Addresses",
   "Successfully deleted from cart!": "Successfully deleted from cart!",
   "Error deleting from cart!": "Error deleting from cart!",
-  "Are you sure you want to delete this product from your cart?": "Are you sure you want to delete this product from your cart?"
+  "Are you sure you want to delete this product from your cart?": "Are you sure you want to delete this product from your cart?",
+  "Please select delivery option first!": "Please select delivery option first!",
+  "Are you sure you want to change your delivery option? This will delete your coupon": "Are you sure you want to change your delivery option? This will delete your coupon"
 }

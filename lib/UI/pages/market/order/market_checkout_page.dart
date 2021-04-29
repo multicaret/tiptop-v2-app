@@ -37,14 +37,14 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   bool _isInit = true;
   bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
-  bool _isLoadingValidateCoupon = false;
+  bool _isLoadingvalidateMarketCoupon = false;
 
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   AddressesProvider addressesProvider;
   HomeProvider homeProvider;
-  CouponValidationResponseData couponValidationResponseData;
+  CouponValidationData couponValidationData;
 
   final couponCodeNotifier = ValueNotifier<String>(null);
   final paymentSummaryTotalsNotifier = ValueNotifier<List<PaymentSummaryTotal>>(null);
@@ -80,42 +80,42 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
     setState(() => _isLoadingCreateOrder = false);
   }
 
-  Future<void> _validateCouponCode(String _couponCode) async {
-    setState(() => _isLoadingValidateCoupon = true);
+  Future<void> _validateMarketCouponCode(String _couponCode) async {
+    setState(() => _isLoadingvalidateMarketCoupon = true);
     try {
-      final responseData = await ordersProvider.validateCoupon(
+      final responseData = await ordersProvider.validateMarketCoupon(
         appProvider: appProvider,
         cartProvider: cartProvider,
         couponCode: _couponCode,
       );
       if (responseData == 401) {
-        setState(() => _isLoadingValidateCoupon = false);
+        setState(() => _isLoadingvalidateMarketCoupon = false);
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
       }
-      couponValidationResponseData = ordersProvider.couponValidationResponseData;
+      couponValidationData = ordersProvider.couponValidationData;
       couponCodeNotifier.value = _couponCode;
       paymentSummaryTotalsNotifier.value = [
         PaymentSummaryTotal(
           title: "Total Before Discount",
-          value: couponValidationResponseData.totalBefore.formatted,
+          value: couponValidationData.totalBefore.formatted,
           isDiscounted: true,
         ),
         PaymentSummaryTotal(
           title: "You Saved",
-          value: couponValidationResponseData.discountedAmount.formatted,
+          value: couponValidationData.discountedAmount.formatted,
           isSavedAmount: true,
         ),
         PaymentSummaryTotal(
           title: "Total After Discount",
-          value: couponValidationResponseData.totalAfter.formatted,
+          value: couponValidationData.totalAfter.formatted,
         ),
         PaymentSummaryTotal(
           title: "Delivery Fee",
-          value: couponValidationResponseData.deliveryFee.formatted,
+          value: couponValidationData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
-          value: couponValidationResponseData.grandTotal.formatted,
+          value: couponValidationData.grandTotal.formatted,
           isGrandTotal: true,
         ),
       ];
@@ -123,7 +123,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
     } catch (e) {
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
-    setState(() => _isLoadingValidateCoupon = false);
+    setState(() => _isLoadingvalidateMarketCoupon = false);
   }
 
   @override
@@ -148,7 +148,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       appBar: AppBar(
         title: Text('Checkout'),
       ),
-      body: _isLoadingCreateOrder || _isLoadingValidateCoupon
+      body: _isLoadingCreateOrder || _isLoadingvalidateMarketCoupon
           ? const AppLoader()
           : Form(
               key: _formKey,
@@ -201,7 +201,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                                     ),
                                   ).then((_couponCode) {
                                     if (_couponCode is String && _couponCode.isNotEmpty) {
-                                      _validateCouponCode(_couponCode);
+                                      _validateMarketCouponCode(_couponCode);
                                     }
                                   });
                                 },

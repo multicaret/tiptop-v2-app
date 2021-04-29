@@ -18,7 +18,7 @@ class OrdersProvider with ChangeNotifier {
 
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
-  CouponValidationResponseData couponValidationResponseData;
+  CouponValidationData couponValidationData;
 
   List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
   List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
@@ -259,7 +259,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> validateCoupon({
+  Future<dynamic> validateMarketCoupon({
     AppProvider appProvider,
     CartProvider cartProvider,
     String couponCode,
@@ -277,7 +277,32 @@ class OrdersProvider with ChangeNotifier {
     if (responseData == 401) {
       return 401;
     }
-    couponValidationResponseData = CouponValidationResponseData.fromJson(responseData["data"]);
+    couponValidationData = CouponValidationData.fromJson(responseData["data"]);
     notifyListeners();
   }
+
+  Future<dynamic> validateFoodCoupon({
+    AppProvider appProvider,
+    CartProvider cartProvider,
+    String couponCode,
+    RestaurantDeliveryType deliveryType,
+  }) async {
+    final endpoint = 'coupons/$couponCode/validate';
+    Map<String, String> body = {
+      'branch_id': '${HomeProvider.selectedFoodBranchId}',
+      'cart_id': '${cartProvider.foodCart.id}',
+      'delivery_type': restaurantDeliveryTypeValues.reverse[deliveryType],
+    };
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      body: body,
+      withToken: true,
+    );
+    print('food coupon validation responseData');
+    print(responseData);
+
+    couponValidationData = CouponValidationData.fromJson(responseData["data"]);
+    notifyListeners();
+  }
+
 }
