@@ -116,6 +116,7 @@ class OrdersProvider with ChangeNotifier {
   }
 
   Future<void> submitFoodOrder(
+    BuildContext context,
     AppProvider appProvider,
     CartProvider cartProvider,
     AddressesProvider addressesProvider, {
@@ -162,6 +163,7 @@ class OrdersProvider with ChangeNotifier {
       );
 
       submittedFoodOrder = Order.fromJson(responseData["data"]);
+      cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
       notifyListeners();
     } catch (e) {
       throw e;

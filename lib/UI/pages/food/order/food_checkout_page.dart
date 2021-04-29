@@ -314,6 +314,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     try {
       setState(() => _isLoadingOrderSubmit = true);
       await ordersProvider.submitFoodOrder(
+        context,
         appProvider,
         cartProvider,
         addressesProvider,
