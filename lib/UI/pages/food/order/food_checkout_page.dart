@@ -230,7 +230,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                       ),
                                       PaymentSummaryTotal(
                                         title: "Grand Total",
-                                        value: priceAndCurrency(checkoutData.grandTotal.raw + deliveryFee.raw, homeProvider.foodCurrency),
+                                        value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, homeProvider.foodCurrency),
                                         isGrandTotal: true,
                                       ),
                                     ];
