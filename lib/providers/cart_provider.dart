@@ -74,7 +74,7 @@ class CartProvider with ChangeNotifier {
     if (marketCart == null || marketCart.id == null) {
       print('No marketCart');
       showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
-      appProvider.logout(clearSelectedAddress: true);
+      appProvider.logout();
       return 401;
     }
 
@@ -166,7 +166,7 @@ class CartProvider with ChangeNotifier {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
       showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
-      appProvider.logout(clearSelectedAddress: true);
+      appProvider.logout();
       return 401;
     }
     isLoadingAdjustFoodCartDataRequest = true;
@@ -198,7 +198,7 @@ class CartProvider with ChangeNotifier {
       }
       final responseData = await appProvider.post(endpoint: endpoint, body: productCartData, withToken: true);
       if (responseData == 401) {
-        appProvider.logout(clearSelectedAddress: true);
+        appProvider.logout();
         return 401;
       }
       CartData cartData = CartData.fromJson(responseData["data"]);
@@ -224,7 +224,7 @@ class CartProvider with ChangeNotifier {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
       showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
-      appProvider.logout(clearSelectedAddress: true);
+      appProvider.logout();
       return 401;
     }
 
