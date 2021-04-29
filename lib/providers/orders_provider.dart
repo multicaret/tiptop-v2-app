@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -9,8 +10,8 @@ import 'cart_provider.dart';
 import 'home_provider.dart';
 
 class OrdersProvider with ChangeNotifier {
-  SubmitOrderResponse submitOrderResponse;
-  Order submittedOrder;
+  Order submittedMarketOrder;
+  Order submittedFoodOrder;
   PreviousOrdersResponseData previousOrdersResponseData;
   List<Order> marketPreviousOrders = [];
   List<Order> foodPreviousOrders = [];
@@ -68,8 +69,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  Future<void> submitOrder(
+  Future<void> submitMarketOrder(
     AppProvider appProvider,
     CartProvider cartProvider,
     AddressesProvider addressesProvider, {
@@ -109,14 +109,61 @@ class OrdersProvider with ChangeNotifier {
       withToken: true,
     );
 
-    submitOrderResponse = SubmitOrderResponse.fromJson(responseData);
-    if (submitOrderResponse.submittedOrder == null || submitOrderResponse.status != 200) {
-      throw HttpException(
-          title: 'Http Exception Error', message: submitOrderResponse.message + responseData["file"] ?? "" + responseData["trace"] ?? "");
+    submittedMarketOrder = Order.fromJson(responseData["data"]);
+    notifyListeners();
+  }
+
+  Future<void> submitFoodOrder(
+    AppProvider appProvider,
+    CartProvider cartProvider,
+    AddressesProvider addressesProvider, {
+    @required int paymentMethodId,
+    @required String notes,
+    String couponCode,
+    @required RestaurantDeliveryType deliveryType,
+  }) async {
+    if (cartProvider.noFoodCart) {
+      print('No current cart!');
+      return false;
     }
 
-    submittedOrder = submitOrderResponse.submittedOrder;
-    notifyListeners();
+    if (addressesProvider.selectedAddress == null) {
+      print('No address selected!');
+      return false;
+    }
+
+    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+      return;
+    }
+
+    Map<String, dynamic> body = {
+      'branch_id': HomeProvider.selectedFoodBranchId,
+      'chain_id': HomeProvider.selectedFoodChainId,
+      'cart_id': cartProvider.foodCart.id,
+      'payment_method_id': paymentMethodId,
+      'address_id': addressesProvider.selectedAddress.id,
+      'notes': notes,
+      'coupon_redeem_code': couponCode,
+      'delivery_type': restaurantDeliveryTypeValues.reverse[deliveryType],
+    };
+
+    print('Order submit request body:');
+    print(body);
+
+    final endpoint = 'orders';
+    try {
+      final responseData = await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
+
+      submittedFoodOrder = Order.fromJson(responseData["data"]);
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<dynamic> fetchAndSetMarketPreviousOrders(AppProvider appProvider) async {
@@ -193,8 +240,7 @@ class OrdersProvider with ChangeNotifier {
       marketOrderRatingAvailableIssues =
           List<MarketOrderRatingAvailableIssue>.from(availableIssuesArray.map((x) => MarketOrderRatingAvailableIssue.fromJson(x)));
     } else {
-      foodOrderRatingFactors =
-          List<FoodOrderRatingFactors>.from(responseData["data"].map((x) => FoodOrderRatingFactors.fromJson(x)));
+      foodOrderRatingFactors = List<FoodOrderRatingFactors>.from(responseData["data"].map((x) => FoodOrderRatingFactors.fromJson(x)));
     }
     notifyListeners();
   }

@@ -12,7 +12,6 @@ import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
-import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -52,7 +51,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   final selectedPaymentMethodNotifier = ValueNotifier<int>(null);
 
   CheckoutData checkoutData;
-  Order submittedOrder;
+  Order submittedMarketOrder;
 
   String notes;
 
@@ -256,7 +255,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
     _formKey.currentState.save();
     try {
       setState(() => _isLoadingOrderSubmit = true);
-      await ordersProvider.submitOrder(
+      await ordersProvider.submitMarketOrder(
         appProvider,
         cartProvider,
         addressesProvider,
@@ -264,12 +263,15 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         notes: notes,
         couponCode: couponCodeNotifier.value,
       );
-      submittedOrder = ordersProvider.submittedOrder;
+      submittedMarketOrder = ordersProvider.submittedMarketOrder;
       setState(() => _isLoadingOrderSubmit = false);
+      if (submittedMarketOrder == null) {
+        throw 'No order returned!';
+      }
       showDialog(
         context: context,
         builder: (context) => OrderConfirmedDialog(
-          isLargeOrder: submittedOrder.cart.productsCount >= 10,
+          isLargeOrder: submittedMarketOrder.cart.productsCount >= 10,
         ),
       ).then((_) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);

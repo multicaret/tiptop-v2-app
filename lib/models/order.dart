@@ -63,34 +63,6 @@ class PaymentMethod {
       };
 }
 
-class SubmitOrderResponse {
-  SubmitOrderResponse({
-    this.submittedOrder,
-    this.errors,
-    this.message,
-    this.status,
-  });
-
-  Order submittedOrder;
-  String errors;
-  String message;
-  int status;
-
-  factory SubmitOrderResponse.fromJson(Map<String, dynamic> json) => SubmitOrderResponse(
-        submittedOrder: json["data"] == null ? null : Order.fromJson(json["data"]),
-        errors: json["errors"],
-        message: json["message"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": submittedOrder.toJson(),
-        "errors": errors,
-        "message": message,
-        "status": status,
-      };
-}
-
 class PreviousOrdersResponseData {
   PreviousOrdersResponseData({
     this.previousOrders,

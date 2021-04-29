@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
@@ -16,6 +15,7 @@ import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -27,6 +27,8 @@ import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+
+import '../../../app_wrapper.dart';
 
 class FoodCheckoutPage extends StatefulWidget {
   static const routeName = '/food-checkout-page';
@@ -48,12 +50,14 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
   HomeProvider homeProvider;
   CouponValidationResponseData couponValidationResponseData;
 
+  List<PaymentSummaryTotal> paymentSummaryTotals = [];
+  PaymentSummaryTotal grandTotal;
   final couponCodeNotifier = ValueNotifier<String>(null);
-  final paymentSummaryTotalsNotifier = ValueNotifier<List<PaymentSummaryTotal>>(null);
   final selectedPaymentMethodNotifier = ValueNotifier<int>(null);
+  final selectedDeliveryTypeNotifier = ValueNotifier<RestaurantDeliveryType>(null);
 
   CheckoutData checkoutData;
-  Order submittedOrder;
+  Order submittedFoodOrder;
   Branch restaurant;
 
   String notes;
@@ -64,7 +68,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     setState(() => _isLoadingCreateOrder = true);
     await ordersProvider.createFoodOrderAndGetCheckoutData(appProvider);
     checkoutData = ordersProvider.checkoutData;
-    paymentSummaryTotalsNotifier.value = [
+    paymentSummaryTotals = [
       PaymentSummaryTotal(
         title: "Total",
         value: checkoutData.total.formatted,
@@ -97,7 +101,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       }
       couponValidationResponseData = ordersProvider.couponValidationResponseData;
       couponCodeNotifier.value = _couponCode;
-      paymentSummaryTotalsNotifier.value = [
+      paymentSummaryTotals = [
         PaymentSummaryTotal(
           title: "Total Before Discount",
           value: couponValidationResponseData.totalBefore.formatted,
@@ -134,12 +138,24 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     if (_isInit) {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       restaurant = data["restaurant"];
+
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
-      _createOrderAndGetCheckoutData();
+
+      _createOrderAndGetCheckoutData().then((_) {
+        selectedDeliveryTypeNotifier.value =
+            restaurant.tiptopDelivery.isDeliveryEnabled ? RestaurantDeliveryType.TIPTOP : RestaurantDeliveryType.RESTAURANT;
+        paymentSummaryTotals[paymentSummaryTotals.length - 2] = PaymentSummaryTotal(
+          title: "Delivery Fee",
+          value: restaurant.tiptopDelivery.isDeliveryEnabled
+              ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
+              : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
+        );
+        grandTotal = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -177,8 +193,23 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                               },
                             ),
                           ),
-                          FoodCheckoutDeliveryOptions(
-                            restaurant: restaurant,
+                          ValueListenableBuilder(
+                            valueListenable: selectedDeliveryTypeNotifier,
+                            builder: (c, selectedDeliveryType, _) => FoodCheckoutDeliveryOptions(
+                              restaurant: restaurant,
+                              selectedDeliveryType: selectedDeliveryType,
+                              selectDeliveryType: (_selectedDeliveryType) {
+                                selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
+                                setState(() {
+                                  paymentSummaryTotals[paymentSummaryTotals.length - 2] = PaymentSummaryTotal(
+                                    title: "Delivery Fee",
+                                    value: _selectedDeliveryType == RestaurantDeliveryType.TIPTOP
+                                        ? restaurant.tiptopDelivery.fixedDeliveryFee.formatted
+                                        : restaurant.restaurantDelivery.fixedDeliveryFee.formatted,
+                                  );
+                                });
+                              },
+                            ),
                           ),
                           SectionTitle('Payment Methods'),
                           ValueListenableBuilder(
@@ -205,7 +236,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                   showDialog(
                                     context: context,
                                     builder: (context) => TextFieldDialog(
-                                      textFieldHint: 'Enter Promo Code',
+                                      textFieldHint: "Enter Promo Code",
                                     ),
                                   ).then((_couponCode) {
                                     if (_couponCode is String && _couponCode.isNotEmpty) {
@@ -230,28 +261,19 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                             },
                           ),
                           SectionTitle('Payment Summary'),
-                          ValueListenableBuilder(
-                            valueListenable: paymentSummaryTotalsNotifier,
-                            builder: (c, paymentSummaryTotals, _) => PaymentSummary(
-                              totals: paymentSummaryTotals,
-                            ),
+                          PaymentSummary(
+                            totals: paymentSummaryTotals,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: paymentSummaryTotalsNotifier,
-                    builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
-                      PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
-                      return TotalButton(
-                        isRTL: appProvider.isRTL,
-                        total: total != null ? total.value : cartProvider.marketCart.total.formatted,
-                        isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
-                        child: Text(Translations.of(context).get("Order Now")),
-                        // onTap: _submitOrder,
-                      );
-                    },
+                  TotalButton(
+                    isRTL: appProvider.isRTL,
+                    total: grandTotal != null ? grandTotal.value : cartProvider.marketCart.total.formatted,
+                    isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
+                    child: Text(Translations.of(context).get("Order Now")),
+                    onTap: _submitFoodOrder,
                   ),
                 ],
               ),
@@ -259,24 +281,28 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     );
   }
 
-  Future<void> _submitOrder() async {
+  Future<void> _submitFoodOrder() async {
     _formKey.currentState.save();
     try {
       setState(() => _isLoadingOrderSubmit = true);
-      await ordersProvider.submitOrder(
+      await ordersProvider.submitFoodOrder(
         appProvider,
         cartProvider,
         addressesProvider,
         paymentMethodId: selectedPaymentMethodNotifier.value,
         notes: notes,
         couponCode: couponCodeNotifier.value,
+        deliveryType: selectedDeliveryTypeNotifier.value,
       );
-      submittedOrder = ordersProvider.submittedOrder;
+      submittedFoodOrder = ordersProvider.submittedFoodOrder;
       setState(() => _isLoadingOrderSubmit = false);
+      if (submittedFoodOrder == null) {
+        throw 'No order returned!';
+      }
       showDialog(
         context: context,
         builder: (context) => OrderConfirmedDialog(
-          isLargeOrder: submittedOrder.cart.productsCount >= 10,
+          isLargeOrder: submittedFoodOrder.cart.productsCount >= 10,
         ),
       ).then((_) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
