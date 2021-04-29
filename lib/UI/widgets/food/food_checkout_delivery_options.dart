@@ -30,9 +30,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> getDeliveryOptionInfoItems(BranchDelivery delivery, Currency currency) {
-      double deliveryFee = cartTotal < delivery.minimumOrder.raw
-          ? delivery.fixedDeliveryFee.raw + delivery.underMinimumOrderDeliveryFee.raw
-          : delivery.fixedDeliveryFee.raw;
+      double deliveryFee = calculateDeliveryFee(delivery: delivery, cartTotal: cartTotal);
       List<Map<String, dynamic>> items = [
         {
           'title': 'Time',
@@ -42,7 +40,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
         {
           'title': 'Delivery Fee',
           'icon': LineAwesomeIcons.truck_moving,
-          'value': priceAndCurrency(deliveryFee, currency),
+          'value': deliveryFee == 0 ? Translations.of(context).get("Free") : priceAndCurrency(deliveryFee, currency),
         }
       ];
       if (delivery.underMinimumOrderDeliveryFee.raw == 0) {

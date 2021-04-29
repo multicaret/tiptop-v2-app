@@ -68,7 +68,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     setState(() => _isLoadingCreateOrder = true);
     await ordersProvider.createFoodOrderAndGetCheckoutData(appProvider, addressesProvider.selectedAddress.id);
     checkoutData = ordersProvider.checkoutData;
-    deliveryFee = calculateDeliveryFee(
+    deliveryFee = calculateFinalDeliveryFee(
       selectedDeliveryType: selectedDeliveryTypeNotifier.value,
       restaurant: restaurant,
       cartTotal: cartProvider.foodCart.total.raw,
@@ -81,7 +81,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       ),
       PaymentSummaryTotal(
         title: "Delivery Fee",
-        value: deliveryFee.formatted,
+        value: deliveryFee.raw == 0 ? Translations.of(context).get("Free") : deliveryFee.formatted,
       ),
       PaymentSummaryTotal(
         title: "Grand Total",
@@ -212,7 +212,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                     });
                                   }
                                   selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
-                                  deliveryFee = calculateDeliveryFee(
+                                  deliveryFee = calculateFinalDeliveryFee(
                                     selectedDeliveryType: _selectedDeliveryType,
                                     restaurant: restaurant,
                                     cartTotal: cartProvider.foodCart.total.raw,
@@ -226,7 +226,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                       ),
                                       PaymentSummaryTotal(
                                         title: "Delivery Fee",
-                                        value: deliveryFee.formatted,
+                                        value: deliveryFee.raw == 0 ? Translations.of(context).get("Free") : deliveryFee.formatted,
                                       ),
                                       PaymentSummaryTotal(
                                         title: "Grand Total",

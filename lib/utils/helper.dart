@@ -244,19 +244,26 @@ RestaurantDeliveryType initDeliveryTypeSelection(Branch restaurant, double cartT
   return null;
 }
 
-DoubleRawStringFormatted calculateDeliveryFee({RestaurantDeliveryType selectedDeliveryType, Branch restaurant, double cartTotal, Currency currency}) {
-  double calculatedDeliveryFee = 0.0;
-  if (selectedDeliveryType == RestaurantDeliveryType.TIPTOP) {
-    calculatedDeliveryFee = cartTotal < restaurant.tiptopDelivery.minimumOrder.raw
-        ? restaurant.tiptopDelivery.fixedDeliveryFee.raw + restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw
-        : restaurant.tiptopDelivery.fixedDeliveryFee.raw;
-  } else if (selectedDeliveryType == RestaurantDeliveryType.RESTAURANT) {
-    calculatedDeliveryFee = cartTotal < restaurant.restaurantDelivery.minimumOrder.raw
-        ? restaurant.restaurantDelivery.fixedDeliveryFee.raw + restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw
-        : restaurant.restaurantDelivery.fixedDeliveryFee.raw;
+double calculateDeliveryFee({BranchDelivery delivery, double cartTotal}) {
+  if (delivery.freeDeliveryThreshold.raw > 0 && cartTotal > delivery.freeDeliveryThreshold.raw) {
+    return 0.0;
   } else {
-    calculatedDeliveryFee = 0.0;
+    return cartTotal < delivery.minimumOrder.raw
+        ? delivery.fixedDeliveryFee.raw + delivery.underMinimumOrderDeliveryFee.raw
+        : delivery.fixedDeliveryFee.raw;
   }
+}
+
+DoubleRawStringFormatted calculateFinalDeliveryFee({
+  RestaurantDeliveryType selectedDeliveryType,
+  Branch restaurant,
+  double cartTotal,
+  Currency currency,
+}) {
+  double calculatedDeliveryFee = calculateDeliveryFee(
+    delivery: selectedDeliveryType == RestaurantDeliveryType.TIPTOP ? restaurant.tiptopDelivery : restaurant.restaurantDelivery,
+    cartTotal: cartTotal,
+  );
   return DoubleRawStringFormatted(
     raw: calculatedDeliveryFee,
     formatted: priceAndCurrency(calculatedDeliveryFee, currency),
