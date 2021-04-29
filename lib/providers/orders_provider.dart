@@ -23,11 +23,12 @@ class OrdersProvider with ChangeNotifier {
   List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
   List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
 
-  Future<dynamic> createMarketOrderAndGetCheckoutData(AppProvider appProvider) async {
+  Future<dynamic> createMarketOrderAndGetCheckoutData(AppProvider appProvider, int selectedAddressId) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
       'chain_id': '${HomeProvider.chainId}',
       'branch_id': '${HomeProvider.branchId}',
+      'selected_address_id': '$selectedAddressId',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,
@@ -96,7 +97,7 @@ class OrdersProvider with ChangeNotifier {
       'chain_id': HomeProvider.chainId,
       'cart_id': cartProvider.marketCart.id,
       'payment_method_id': paymentMethodId,
-      'address_id': addressesProvider.selectedAddress.id,
+      'selected_address_id': addressesProvider.selectedAddress.id,
       'notes': notes,
       'coupon_redeem_code': couponCode,
     };

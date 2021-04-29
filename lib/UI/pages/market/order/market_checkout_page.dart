@@ -59,7 +59,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
   Future<void> _createOrderAndGetCheckoutData() async {
     setState(() => _isLoadingCreateOrder = true);
-    await ordersProvider.createMarketOrderAndGetCheckoutData(appProvider);
+    await ordersProvider.createMarketOrderAndGetCheckoutData(appProvider, addressesProvider.selectedAddress.id);
     checkoutData = ordersProvider.checkoutData;
     paymentSummaryTotalsNotifier.value = [
       PaymentSummaryTotal(
