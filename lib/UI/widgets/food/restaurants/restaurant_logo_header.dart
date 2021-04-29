@@ -1,8 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class RestaurantLogoHeader extends StatelessWidget {
+  final Branch restaurant;
+
+  RestaurantLogoHeader({@required this.restaurant});
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -41,7 +48,10 @@ class RestaurantLogoHeader extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 ),
-                child: Image.asset('assets/images/restaurant-logo.png'),
+                child: CachedNetworkImage(
+                  placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                  imageUrl: restaurant.chain.media.logo,
+                ),
               ),
             ],
           ),

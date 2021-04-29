@@ -108,8 +108,7 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
                           order: order,
                           isDisabled: true,
                         ),
-                        //Todo: Add dynamic restaurant data
-                        RestaurantLogoHeader(),
+                        RestaurantLogoHeader(restaurant: order.cart.restaurant),
                         LabeledRatingBar(setRatingValue: (value) => setState(() => _ratingValue = value)),
                         Column(
                           children: List.generate(foodOrderRatingFactors.length, (i) {
