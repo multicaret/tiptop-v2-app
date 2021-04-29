@@ -94,7 +94,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
         final lastTotals = [
           PaymentSummaryTotal(
             title: "Delivery Fee",
-            value: order.deliveryFee.formatted,
+            value: order.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : order.deliveryFee.formatted,
           ),
           PaymentSummaryTotal(
             title: "Grand Total",

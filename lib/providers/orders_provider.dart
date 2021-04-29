@@ -184,13 +184,7 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
 
-    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
-
-    if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
-      throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
-    }
-
-    marketPreviousOrders = previousOrdersResponseData.previousOrders;
+    marketPreviousOrders = List<Order>.from(responseData["data"].map((x) => Order.fromJson(x)));
     notifyListeners();
   }
 
@@ -206,13 +200,7 @@ class OrdersProvider with ChangeNotifier {
       return 401;
     }
 
-    previousOrdersResponseData = PreviousOrdersResponseData.fromJson(responseData);
-
-    if (previousOrdersResponseData.previousOrders == null || previousOrdersResponseData.status != 200) {
-      throw HttpException(title: 'Http Exception Error', message: previousOrdersResponseData.message ?? 'Unknown');
-    }
-
-    foodPreviousOrders = previousOrdersResponseData.previousOrders;
+    foodPreviousOrders = List<Order>.from(responseData["data"].map((x) => Order.fromJson(x)));
     notifyListeners();
   }
 
@@ -221,11 +209,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
 
     final endpoint = 'orders/$orderId/delete';
-    final responseData = await appProvider.post(endpoint: endpoint, withToken: true);
-
-    if (responseData["status"] != 200) {
-      throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
+    await appProvider.post(endpoint: endpoint, withToken: true);
     isLoadingDeleteOrderRequest = false;
     notifyListeners();
   }

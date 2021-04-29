@@ -235,6 +235,8 @@ class _FoodProductPageState extends State<FoodProductPage> {
       );
       if (response != null && response) {
         shouldDeleteExistingCart = true;
+      } else {
+        return;
       }
     }
 

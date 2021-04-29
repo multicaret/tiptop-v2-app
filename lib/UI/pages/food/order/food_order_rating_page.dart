@@ -81,7 +81,7 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
       print('ratingData');
       print(ratingData);
       try {
-        await ordersProvider.storeOrderRating(appProvider, order.id, ratingData);
+        await ordersProvider.storeOrderRating(appProvider, order.id, ratingData, isMarketRating: false);
         setState(() => _isLoadingStoreRatingRequest = false);
         showToast(msg: Translations.of(context).get("Rating submitted successfully"));
         Navigator.of(context).pop();

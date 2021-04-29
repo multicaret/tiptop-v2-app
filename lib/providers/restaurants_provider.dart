@@ -85,7 +85,7 @@ class RestaurantsProvider with ChangeNotifier {
   }
 
   bool get filtersAreEmpty =>
-      filterData['delivery_type'] == null &&
+      filterData['delivery_type'] == 'all' &&
       filterData['min_rating'] == null &&
       filterData['minimum_order'] == minCartValue &&
       filterData['categories'].length == 0;

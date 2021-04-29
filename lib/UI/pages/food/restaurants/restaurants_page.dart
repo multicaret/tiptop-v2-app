@@ -59,7 +59,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
       body: Column(
         children: [
           FilterSortButtons(shouldPopOnly: true),
-          if (!restaurantsProvider.filtersAreEmpty) ActiveFilters(),
+          ActiveFilters(),
           Expanded(
             child: restaurantsProvider.filteredRestaurants.length == 0
                 ? Center(

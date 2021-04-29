@@ -176,7 +176,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     try {
       await restaurantsProvider.submitFiltersAndSort();
       showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
       if (!widget.shouldPopOnly) {
         Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
       }
