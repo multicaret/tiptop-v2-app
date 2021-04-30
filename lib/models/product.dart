@@ -125,14 +125,14 @@ class Product {
         "ratingCount": ratingCount,
         "price": price.toJson(),
         "discountedPrice": discountedPrice == null ? null : discountedPrice.toJson(),
-        "barcodes": List<dynamic>.from(barcodes.map((x) => x)),
+        "barcodes": barcodes == null ? null : List<dynamic>.from(barcodes.map((x) => x)),
         "media": media.toJson(),
         "width": width,
         "height": height,
         "depth": depth,
         "weight": weight,
         "isFavorited": isFavorited,
-        "unit": unit.toJson(),
+        "unit": unit == null ? null : unit.toJson(),
       };
 }
 

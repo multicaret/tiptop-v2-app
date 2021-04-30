@@ -145,6 +145,10 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void initProductOptions(CartProduct existingCartProduct) {
+    if(existingCartProduct != null) {
+      print('existingCartProduct, cart product id: ${existingCartProduct.cartProductId}, selected options:');
+      print(List<dynamic>.from(existingCartProduct.selectedOptions.map((x) => x.toJson())));
+    }
     productTempCartData = ProductCartData(
       productId: product.id,
       selectedOptions: productOptions.map((option) {
