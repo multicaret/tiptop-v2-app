@@ -3,6 +3,7 @@ import 'package:tiptop_v2/models/product.dart';
 
 import 'cart.dart';
 import 'category.dart';
+import 'enums.dart';
 import 'order.dart';
 
 class HomeData {
@@ -325,14 +326,14 @@ class Slide {
   String title;
   StringRawStringFormatted description;
   String linkValue;
-  int linkType;
+  LinkType linkType;
   String image;
 
   factory Slide.fromJson(Map<String, dynamic> json) => Slide(
         title: json["title"],
         description: StringRawStringFormatted.fromJson(json["description"]),
         linkValue: json["linkValue"],
-        linkType: json["linkType"],
+        linkType: json["linkType"] == null ? null : linkTypeValues.map[json["linkType"].toString()],
         image: json["image"],
       );
 

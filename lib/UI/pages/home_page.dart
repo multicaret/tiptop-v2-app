@@ -4,16 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/no_content_view.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/channels_buttons.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_home_slider.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
-import 'package:tiptop_v2/UI/widgets/map_slide.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_home_slider.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/order.dart';
@@ -145,26 +145,19 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    homeProvider.isLoadingHomeData || hideMarketContent
-                        ? Container(
-                            height: homeSliderHeight,
-                            color: AppColors.bg,
-                          )
-                        : AppCarousel(
-                            images: homeProvider.channelIsMarket
-                                ? marketSlides.map((slide) => slide.image).toList()
-                                : foodSlides.map((slide) => slide.image).toList(),
-                            infinite: homeProvider.channelIsMarket ? marketSlides.length > 0 : foodSlides.length > 1,
-                            autoPlay: homeProvider.channelIsMarket ? marketSlides.length > 0 : foodSlides.length > 1,
-                            autoplayDuration: const Duration(milliseconds: 300),
-                            autoPlayInterval: const Duration(seconds: 7),
-                            mapWidget: homeProvider.channelIsMarket && homeProvider.marketHomeData != null
-                                ? MapSlide(
-                                    selectedAddress: addressesProvider.selectedAddress,
-                                    delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
-                                  )
-                                : null,
-                          ),
+                    homeProvider.channelIsMarket
+                        ? homeProvider.isLoadingHomeData || hideMarketContent || homeProvider.marketHomeData == null
+                            ? Container(
+                                height: homeSliderHeight,
+                                color: AppColors.bg,
+                              )
+                            : MarketHomeSlider(slides: homeProvider.marketHomeData.slides)
+                        : homeProvider.isLoadingHomeData || hideFoodContent || homeProvider.foodHomeData == null
+                            ? Container(
+                                height: homeSliderHeight,
+                                color: AppColors.bg,
+                              )
+                            : FoodHomeSlider(slides: homeProvider.foodHomeData.slides),
                     ChannelsButtons(
                       selectedChannel: homeProvider.selectedChannel,
                       onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),

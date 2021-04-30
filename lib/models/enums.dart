@@ -146,3 +146,10 @@ final appChannelValues = EnumValues({
   "food": AppChannel.FOOD,
   "grocery": AppChannel.MARKET,
 });
+
+enum LinkType { EXTERNAL, DEEPLINK }
+
+final linkTypeValues = EnumValues({
+  "1": LinkType.EXTERNAL,
+  "4": LinkType.DEEPLINK,
+});
