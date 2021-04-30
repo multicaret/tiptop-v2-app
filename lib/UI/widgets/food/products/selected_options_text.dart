@@ -53,12 +53,16 @@ class SelectedOptionsText extends StatelessWidget {
                       style: AppTextStyles.subtitleXsSecondary,
                       children: List.generate(fullSelectedOptions[i].selections.length, (j) {
                         ProductOptionSelection selection = fullSelectedOptions[i].selections[j];
-                        String selectionText =
-                            selection.price.raw > 0 ? ' ${selection.title} [+${selection.price.formatted}]' : ' ${selection.title}';
-                        return TextSpan(
-                          text: selectionText + (j == fullSelectedOptions[i].selections.length - 1 ? '' : ', '),
-                          style: AppTextStyles.subtitleXs50,
-                        );
+                        if (selection != null) {
+                          String selectionText =
+                              selection.price.raw > 0 ? ' ${selection.title} [+${selection.price.formatted}]' : ' ${selection.title}';
+                          return TextSpan(
+                            text: selectionText + (j == fullSelectedOptions[i].selections.length - 1 ? '' : ', '),
+                            style: AppTextStyles.subtitleXs50,
+                          );
+                        } else {
+                          return TextSpan();
+                        }
                       }),
                     ),
                   ),
