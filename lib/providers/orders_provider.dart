@@ -8,6 +8,7 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 import 'app_provider.dart';
 import 'cart_provider.dart';
 import 'home_provider.dart';
+import 'local_storage.dart';
 
 class OrdersProvider with ChangeNotifier {
   Order submittedMarketOrder;
@@ -22,6 +23,8 @@ class OrdersProvider with ChangeNotifier {
 
   List<MarketOrderRatingAvailableIssue> marketOrderRatingAvailableIssues = [];
   List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
+
+  LocalStorage storageActions = LocalStorage.getActions();
 
   Future<dynamic> createMarketOrderAndGetCheckoutData(AppProvider appProvider, int selectedAddressId) async {
     final endpoint = 'orders/create';
@@ -164,7 +167,11 @@ class OrdersProvider with ChangeNotifier {
       );
 
       submittedFoodOrder = Order.fromJson(responseData["data"]);
-      cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
+      print('Deleting chain id and branch id from local storage...');
+      await storageActions.deleteData(key: 'selected_food_branch_id');
+      await storageActions.deleteData(key: 'selected_food_chain_id');
+      HomeProvider.selectedFoodBranchId = null;
+      HomeProvider.selectedFoodChainId = null;
       notifyListeners();
     } catch (e) {
       throw e;
