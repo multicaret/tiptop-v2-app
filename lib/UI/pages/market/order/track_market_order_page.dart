@@ -5,20 +5,20 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/track_order_info_container.dart';
-import 'package:tiptop_v2/UI/widgets/track_order_map.dart';
+import 'package:tiptop_v2/UI/widgets/market/track_market_order_map.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 
-class TrackOrderPage extends StatefulWidget {
-  static const routeName = '/track-order';
+class TrackMarketOrderPage extends StatefulWidget {
+  static const routeName = '/track-market-order';
 
   @override
-  _TrackOrderPageState createState() => _TrackOrderPageState();
+  _TrackMarketOrderPageState createState() => _TrackMarketOrderPageState();
 }
 
-class _TrackOrderPageState extends State<TrackOrderPage> {
+class _TrackMarketOrderPageState extends State<TrackMarketOrderPage> {
   bool _isInit = true;
   HomeProvider homeProvider;
   AppProvider appProvider;
@@ -58,7 +58,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
               children: [
                 Container(
                   height: screenSize.height,
-                  child: TrackOrderMap(),
+                  child: TrackMarketOrderMap(),
                 ),
                 Positioned(
                   bottom: 0,

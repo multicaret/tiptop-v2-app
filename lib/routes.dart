@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
+import 'package:tiptop_v2/UI/pages/food/order/track_food_order_page.dart';
 import 'package:tiptop_v2/UI/pages/market/order/market_checkout_page.dart';
 import 'package:tiptop_v2/UI/pages/faq_page.dart';
 import 'package:tiptop_v2/UI/pages/food/food_cart_page.dart';
@@ -35,7 +36,7 @@ import 'package:tiptop_v2/UI/pages/profile/payment_methods_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/pages/terms_page.dart';
-import 'package:tiptop_v2/UI/pages/track_order_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/track_market_order_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 
 import 'UI/pages/food/order/food_checkout_page.dart';
@@ -69,7 +70,8 @@ final routes = <String, WidgetBuilder>{
   FoodPreviousOrdersPage.routeName: (BuildContext context) => FoodPreviousOrdersPage(),
   FoodOrderRatingPage.routeName: (BuildContext context) => FoodOrderRatingPage(),
   AddAddressPage.routeName: (BuildContext context) => AddAddressPage(),
-  TrackOrderPage.routeName: (BuildContext context) => TrackOrderPage(),
+  TrackMarketOrderPage.routeName: (BuildContext context) => TrackMarketOrderPage(),
+  TrackFoodOrderPage.routeName: (BuildContext context) => TrackFoodOrderPage(),
   MarketProductPage.routeName: (BuildContext context) => MarketProductPage(),
   SupportPage.routeName: (BuildContext context) => SupportPage(),
   ArticlePage.routeName: (BuildContext context) => ArticlePage(),

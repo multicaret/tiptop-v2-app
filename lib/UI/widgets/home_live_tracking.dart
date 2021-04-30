@@ -4,8 +4,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/food/order/track_food_order_page.dart';
 import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
-import 'package:tiptop_v2/UI/pages/track_order_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/track_market_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -135,8 +136,10 @@ class HomeLiveTracking extends StatelessWidget {
                         Expanded(
                           flex: 2,
                           child: AppButtons.primarySm(
-                            onPressed: () =>
-                                Navigator.of(context, rootNavigator: true).pushNamed(TrackOrderPage.routeName, arguments: activeOrders[i]),
+                            onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                              channelIsFood ? TrackFoodOrderPage.routeName : TrackMarketOrderPage.routeName,
+                              arguments: activeOrders[i],
+                            ),
                             child: Text(
                               Translations.of(context).get("Track Order"),
                               style: AppTextStyles.subtitleWhite,

@@ -6,12 +6,12 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
-class TrackOrderMap extends StatefulWidget {
+class TrackMarketOrderMap extends StatefulWidget {
   @override
-  _TrackOrderMapState createState() => _TrackOrderMapState();
+  _TrackMarketOrderMapState createState() => _TrackMarketOrderMapState();
 }
 
-class _TrackOrderMapState extends State<TrackOrderMap> {
+class _TrackMarketOrderMapState extends State<TrackMarketOrderMap> {
   double centerLat;
   double centerLong;
 
