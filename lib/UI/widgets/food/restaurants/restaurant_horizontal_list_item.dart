@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
@@ -33,14 +34,17 @@ class RestaurantHorizontalListItem extends StatelessWidget {
             children: [
               Container(
                 width: isMini ? listItemThumbnailSizeSm : listItemThumbnailSize,
+                height: isMini ? listItemThumbnailSizeSm : listItemThumbnailSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: AppColors.border, width: 0.5),
-                  image: DecorationImage(
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: CachedNetworkImage(
+                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
+                    imageUrl: restaurant.chain.media.logo,
                     fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(
-                      restaurant.chain.media.logo,
-                    ),
                   ),
                 ),
               ),

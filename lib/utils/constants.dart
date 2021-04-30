@@ -88,3 +88,6 @@ const double addressListItemHeight = addressIconSize + listItemVerticalPadding *
 
 //Marker icon size after compressing
 const int markerIconCompressedSize = 140;
+
+//Height on label under thumbnail (e.g. restaurant rating label)
+const double thumbLabelHeight = 30;
