@@ -22,6 +22,7 @@ class FoodCartProductListItem extends StatelessWidget {
   final CartProduct cartProduct;
   final bool hasControls;
   final Function dismissAction;
+  final bool editableCartProduct;
 
   FoodCartProductListItem({
     @required this.restaurantId,
@@ -29,6 +30,7 @@ class FoodCartProductListItem extends StatelessWidget {
     @required this.cartProduct,
     this.hasControls = true,
     this.dismissAction,
+    this.editableCartProduct = true,
   });
 
   @override
@@ -37,7 +39,7 @@ class FoodCartProductListItem extends StatelessWidget {
       Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
         "product_id": cartProduct.product.id,
         "has_controls": hasControls,
-        "cart_product": cartProduct,
+        "cart_product": editableCartProduct ? cartProduct : null,
         'chain_id': chainId,
         'restaurant_id': restaurantId,
       });

@@ -146,6 +146,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                           restaurantId: order.cart.restaurant.id,
                           chainId: order.cart.restaurant.chain.id,
                           cartProduct: order.cart.cartProducts[i],
+                          editableCartProduct: false,
                           hasControls: false,
                         ),
                       ),
