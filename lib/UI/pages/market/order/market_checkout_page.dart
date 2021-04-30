@@ -197,7 +197,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                                   showDialog(
                                     context: context,
                                     builder: (context) => TextFieldDialog(
-                                      textFieldHint: 'Enter Promo Code',
+                                      textFieldHint: "Enter Promo Code",
                                     ),
                                   ).then((_couponCode) {
                                     if (_couponCode is String && _couponCode.isNotEmpty) {
