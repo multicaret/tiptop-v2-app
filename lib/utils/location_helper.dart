@@ -14,6 +14,7 @@ import 'package:tiptop_v2/models/google_places.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
+import 'constants.dart';
 import 'http_exception.dart';
 
 Future<bool> getLocationPermissionStatus() async {
@@ -126,7 +127,7 @@ void handleGoogleRequestError(GoogleResponseStatus status) {
   }
 }
 
-Future<Uint8List> getAndCacheMarkerIcon(String imageUrl, {int targetWidth = 180}) async {
+Future<Uint8List> getAndCacheMarkerIcon(String imageUrl, {int targetWidth = markerIconCompressedSize}) async {
   final File markerImageFile = await DefaultCacheManager().getSingleFile(imageUrl);
   final Uint8List markerImageBytes = await markerImageFile.readAsBytes();
 
@@ -144,7 +145,7 @@ Future<Uint8List> getAndCacheMarkerIcon(String imageUrl, {int targetWidth = 180}
   return resizedMarkerImageBytes;
 }
 
-Future<Uint8List> getBytesFromAsset(String path, {int targetWidth = 180}) async {
+Future<Uint8List> getBytesFromAsset(String path, {int targetWidth = markerIconCompressedSize}) async {
   ByteData data = await rootBundle.load(path);
   Codec codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: targetWidth);
   FrameInfo fi = await codec.getNextFrame();

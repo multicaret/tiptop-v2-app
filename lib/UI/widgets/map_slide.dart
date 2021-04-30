@@ -164,7 +164,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
 
     Uint8List userMarkerIconBytes = widget.selectedAddress != null && widget.selectedAddress.kind.markerIcon != null
         ? await getAndCacheMarkerIcon(widget.selectedAddress.kind.markerIcon)
-        : await getBytesFromAsset('assets/images/address-home-marker-icon.png', targetWidth: 150);
+        : await getBytesFromAsset('assets/images/address-home-marker-icon.png');
 
     setState(() {
       userMarker = Marker(
@@ -194,7 +194,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
       bound = LatLngBounds(southwest: userLatLng, northeast: branchLatLng);
     }
 
-    CameraUpdate _cameraUpdate = CameraUpdate.newLatLngBounds(bound, 50);
+    CameraUpdate _cameraUpdate = CameraUpdate.newLatLngBounds(bound, 70);
     this._mapController.animateCamera(_cameraUpdate).then((void v) {
       animate(_cameraUpdate, this._mapController);
     });

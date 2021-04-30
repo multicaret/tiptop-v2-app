@@ -85,3 +85,6 @@ const double addressIconSize = 37;
 
 //Address list item height
 const double addressListItemHeight = addressIconSize + listItemVerticalPadding * 2;
+
+//Marker icon size after compressing
+const int markerIconCompressedSize = 140;
