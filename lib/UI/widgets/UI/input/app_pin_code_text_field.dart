@@ -44,6 +44,12 @@ class _AppPinCodeTextFieldState extends State<AppPinCodeTextField> {
         bgColorBuilder: _invalidForm ? null : PinListenColorBuilder(AppColors.bg, AppColors.bg),
         errorTextStyle: AppTextStyles.dynamicValues(color: AppColors.secondary, fontSize: 14),
       ),
+      cursor: Cursor(
+        color: AppColors.primary,
+        width: 2,
+        height: 20,
+        enabled: true,
+      ),
     );
   }
 }
