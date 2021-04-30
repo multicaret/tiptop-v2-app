@@ -7,12 +7,12 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class DeliveryInfo extends StatelessWidget {
-  final BranchDelivery restaurantDelivery;
+  final BranchDelivery delivery;
   final bool isRestaurant;
   final bool hasDeliveryFeeItem;
 
   DeliveryInfo({
-    @required this.restaurantDelivery,
+    @required this.delivery,
     this.isRestaurant = false,
     this.hasDeliveryFeeItem = true,
   });
@@ -39,22 +39,20 @@ class DeliveryInfo extends StatelessWidget {
             Expanded(
               child: LabeledIcon(
                 icon: LineAwesomeIcons.hourglass,
-                text: '${restaurantDelivery.minDeliveryMinutes}-${restaurantDelivery.maxDeliveryMinutes}',
+                text: '${delivery.minDeliveryMinutes}-${delivery.maxDeliveryMinutes}',
               ),
             ),
             if (hasDeliveryFeeItem)
               Expanded(
                 child: LabeledIcon(
                   icon: LineAwesomeIcons.truck_moving,
-                  text: restaurantDelivery.fixedDeliveryFee.raw == 0
-                      ? Translations.of(context).get("Free")
-                      : restaurantDelivery.fixedDeliveryFee.formatted,
+                  text: delivery.fixedDeliveryFee.raw == 0 ? Translations.of(context).get("Free") : delivery.fixedDeliveryFee.formatted,
                 ),
               ),
             Expanded(
               child: LabeledIcon(
                 icon: LineAwesomeIcons.shopping_basket,
-                text: restaurantDelivery.minimumOrder.formatted,
+                text: delivery.minimumOrder.formatted,
                 isLast: true,
               ),
             ),

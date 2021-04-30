@@ -24,6 +24,6 @@ double getProductGridItemHeight(BuildContext context) {
 }
 
 double getRestaurantPageExpandedHeaderHeight({bool hasDoubleDelivery = false}) {
-  double deliveryInfoContainerHeight = hasDoubleDelivery ? ((restaurantSingleDeliveryInfoHeight * 2) + 10) : restaurantSingleDeliveryInfoHeight;
-  return restaurantCoverHeight + (20 * 2) + deliveryInfoContainerHeight + sliverAppBarSearchBarHeight;
+  double deliveryInfoContainerHeight = hasDoubleDelivery ? (restaurantSingleDeliveryInfoHeight * 2) : restaurantSingleDeliveryInfoHeight;
+  return restaurantCoverHeight + (listItemVerticalPadding * 2) + deliveryInfoContainerHeight + sliverAppBarSearchBarHeight;
 }

@@ -23,11 +23,12 @@ class LabeledIcon extends StatelessWidget {
     return Row(
       mainAxisAlignment: isLast ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        isIconLarge ? AppIcons.icon50(icon) : AppIcons.iconXs50(icon),
+        AppIcons.iconXs50(icon),
         const SizedBox(width: 5),
         Expanded(
           child: Text(
             text,
+            maxLines: 1,
             style: isIconLarge ? AppTextStyles.body50 : AppTextStyles.subtitle50,
           ),
         ),

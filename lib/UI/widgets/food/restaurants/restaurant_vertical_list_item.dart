@@ -31,14 +31,14 @@ class RestaurantVerticalListItem extends StatelessWidget {
               if (restaurant.tiptopDelivery.isDeliveryEnabled)
                 Expanded(
                   child: DeliveryInfo(
-                    restaurantDelivery: restaurant.tiptopDelivery,
+                    delivery: restaurant.tiptopDelivery,
                     hasDeliveryFeeItem: false,
                   ),
                 ),
               if (restaurant.restaurantDelivery.isDeliveryEnabled)
                 Expanded(
                   child: DeliveryInfo(
-                    restaurantDelivery: restaurant.restaurantDelivery,
+                    delivery: restaurant.restaurantDelivery,
                     hasDeliveryFeeItem: false,
                     isRestaurant: true,
                   ),

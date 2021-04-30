@@ -190,6 +190,7 @@ class AppProvider with ChangeNotifier {
       }
 
       final responseData = json.decode(response.body);
+      // print(responseData);
       if (responseData["status"] != 200 && !overrideStatusCheck) {
         throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
       }

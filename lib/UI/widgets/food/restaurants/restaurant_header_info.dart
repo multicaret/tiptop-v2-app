@@ -140,11 +140,12 @@ class RestaurantHeaderInfo extends StatelessWidget {
               ],
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                if (restaurant.tiptopDelivery.isDeliveryEnabled) DeliveryInfo(restaurantDelivery: restaurant.tiptopDelivery),
+                if (restaurant.tiptopDelivery.isDeliveryEnabled) DeliveryInfo(delivery: restaurant.tiptopDelivery),
                 const SizedBox(height: 10),
                 if (restaurant.restaurantDelivery.isDeliveryEnabled)
-                  DeliveryInfo(restaurantDelivery: restaurant.restaurantDelivery, isRestaurant: true),
+                  DeliveryInfo(delivery: restaurant.restaurantDelivery, isRestaurant: true),
               ],
             ),
           ),
