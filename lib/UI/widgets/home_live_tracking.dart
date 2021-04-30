@@ -45,9 +45,10 @@ class HomeLiveTracking extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: ExpansionTile(
-              backgroundColor: AppColors.secondary,
-              collapsedBackgroundColor: AppColors.secondary,
+              backgroundColor: AppColors.secondaryLight,
+              collapsedBackgroundColor: AppColors.secondaryLight,
               childrenPadding: const EdgeInsets.all(0),
+              initiallyExpanded: true,
               leading: Container(
                 height: 28,
                 width: 28,
