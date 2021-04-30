@@ -11,6 +11,10 @@ class FoodHomeSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCarousel(
       images: slides.map((slide) => slide.image).toList(),
+      links: slides.map((slide) => {
+        'type': slide.linkType,
+        'value': slide.linkValue,
+      }).toList(),
       infinite: slides.length > 1,
       autoPlay: slides.length > 1,
       autoplayDuration: const Duration(milliseconds: 300),

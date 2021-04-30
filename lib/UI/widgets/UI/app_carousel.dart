@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppCarousel extends StatefulWidget {
   final double height;
@@ -14,6 +16,7 @@ class AppCarousel extends StatefulWidget {
   final Widget mapWidget;
   final bool infinite;
   final bool hasIndicator;
+  final List<Map<String, dynamic>> links;
 
   AppCarousel({
     this.height = 212,
@@ -25,6 +28,7 @@ class AppCarousel extends StatefulWidget {
     this.mapWidget,
     this.infinite = true,
     this.hasIndicator = false,
+    this.links,
   });
 
   @override
@@ -115,12 +119,23 @@ class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClient
   List<Widget> _getImagesList() {
     return List.generate(
         widget.images.length,
-        (i) => CachedNetworkImage(
-              imageUrl: widget.images[i],
-              fit: BoxFit.cover,
-              width: double.infinity,
-              placeholder: (_, __) => SpinKitFadingCircle(
-                color: AppColors.secondary,
+        (i) => GestureDetector(
+              onTap: widget.links == null || widget.links.length == 0 || widget.links[i] == null
+                  ? null
+                  : () {
+                      print('Slider links:');
+                      print(widget.links);
+                      if (widget.links[i]['type'] == LinkType.EXTERNAL && widget.links[i]['value'] != null) {
+                        launch(widget.links[i]['value']);
+                      }
+                    },
+              child: CachedNetworkImage(
+                imageUrl: widget.images[i],
+                fit: BoxFit.cover,
+                width: double.infinity,
+                placeholder: (_, __) => SpinKitFadingCircle(
+                  color: AppColors.secondary,
+                ),
               ),
             ));
   }
