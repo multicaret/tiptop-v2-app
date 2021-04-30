@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_horizontal_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_vertical_list_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -72,8 +72,8 @@ class RestaurantsIndex extends StatelessWidget {
                     arguments: restaurants[i].id,
                   ),
                   child: restaurantProvider.activeListType == ListType.HORIZONTALLY_STACKED
-                      ? HorizontalRestaurantListItem(restaurant: restaurants[i])
-                      : VerticalRestaurantListItem(restaurant: restaurants[i]),
+                      ? RestaurantHorizontalListItem(restaurant: restaurants[i])
+                      : RestaurantVerticalListItem(restaurant: restaurants[i]),
                 ),
               ),
             ),

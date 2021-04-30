@@ -7,7 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/horizontal_restaurant_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_horizontal_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
@@ -143,7 +143,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                           RestaurantPage.routeName,
                                           arguments: _searchedRestaurants[i].id,
                                         ),
-                                        child: HorizontalRestaurantListItem(
+                                        child: RestaurantHorizontalListItem(
                                           restaurant: _searchedRestaurants[i],
                                           isMini: true,
                                         ),

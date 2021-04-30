@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/min_restaurant_horizontal_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_min_horizontal_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
@@ -49,7 +49,7 @@ class FoodCartPage extends StatelessWidget {
           ),
           body: Column(
             children: [
-              if (!cartProvider.noFoodCart) MinRestaurantHorizontalListItem(restaurant: cartProvider.foodCart.restaurant),
+              if (!cartProvider.noFoodCart) RestaurantMinHorizontalListItem(restaurant: cartProvider.foodCart.restaurant),
               Expanded(
                 child: cartProvider.noFoodCart
                     ? Center(

@@ -5,10 +5,10 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class VerticalRestaurantListItem extends StatelessWidget {
+class RestaurantVerticalListItem extends StatelessWidget {
   final Branch restaurant;
 
-  VerticalRestaurantListItem({@required this.restaurant});
+  RestaurantVerticalListItem({@required this.restaurant});
 
   @override
   Widget build(BuildContext context) {

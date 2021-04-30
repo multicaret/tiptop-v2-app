@@ -10,10 +10,10 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-class MinRestaurantHorizontalListItem extends StatelessWidget {
+class RestaurantMinHorizontalListItem extends StatelessWidget {
   final Branch restaurant;
 
-  MinRestaurantHorizontalListItem({@required this.restaurant});
+  RestaurantMinHorizontalListItem({@required this.restaurant});
 
   @override
   Widget build(BuildContext context) {

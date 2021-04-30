@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/food/restaurants/vertical_restaurant_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_vertical_list_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -72,7 +72,7 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
                           RestaurantPage.routeName,
                           arguments: favoriteRestaurants[i].id,
                         ),
-                        child: VerticalRestaurantListItem(restaurant: favoriteRestaurants[i]),
+                        child: RestaurantVerticalListItem(restaurant: favoriteRestaurants[i]),
                       ),
                     ),
                   ),
