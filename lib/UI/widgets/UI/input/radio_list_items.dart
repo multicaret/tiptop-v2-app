@@ -30,7 +30,7 @@ class RadioListItems extends StatelessWidget {
           return Material(
             color: AppColors.white,
             child: InkWell(
-              onTap: () => action(items[i]['id']),
+              onTap: action == null ? null : () => action(items[i]['id']),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.only(
@@ -52,7 +52,7 @@ class RadioListItems extends StatelessWidget {
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           groupValue: selectedId,
                           activeColor: AppColors.secondary,
-                          onChanged: (itemId) => action(itemId),
+                          onChanged: action == null ? null : (itemId) => action(itemId),
                         ),
                         if (items[i]["icon"] != null)
                           items[i]["icon"] is Widget

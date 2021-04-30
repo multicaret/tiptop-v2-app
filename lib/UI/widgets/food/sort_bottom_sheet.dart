@@ -58,7 +58,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                 RadioListItems(
                   items: _getSortItems(context),
                   selectedId: restaurantsProvider.sortType,
-                  action: (value) => restaurantsProvider.setSortType(value),
+                  action: restaurantsProvider.isLoadingSubmitFilterAndSort ? null : (value) => restaurantsProvider.setSortType(value),
                   hasBorder: false,
                 ),
               ],
