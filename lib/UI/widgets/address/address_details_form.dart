@@ -110,7 +110,7 @@ class AddressDetailsForm extends StatelessWidget {
                 ),
                 AppTextField(
                   labelText: 'Directions',
-                  hintText: 'General explanation on how to find you',
+                  hintText: Translations.of(context).get("General explanation on how to find you"),
                   onSaved: (value) => setAddressDetailsFormData('notes', value),
                 ),
                 AppButtons.secondary(
