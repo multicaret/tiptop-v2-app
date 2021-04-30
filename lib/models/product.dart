@@ -255,23 +255,23 @@ class ProductCartData {
 class ProductSelectedOption {
   ProductSelectedOption({
     this.productOptionId,
-    this.selectedIds,
+    this.selectionIds,
     this.optionTotalPrice,
   });
 
   int productOptionId;
-  List<int> selectedIds;
+  List<int> selectionIds;
   double optionTotalPrice;
 
   factory ProductSelectedOption.fromJson(Map<String, dynamic> json) => ProductSelectedOption(
         productOptionId: json["productOptionId"],
-        selectedIds: List<int>.from(json["selectedIds"].map((x) => x)),
+        selectionIds: json["selectionIds"] == null ? null : List<int>.from(json["selectionIds"].map((x) => x)),
         optionTotalPrice: json["optionTotalPrice"] == null ? 0.0 : json["optionTotalPrice"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
         "productOptionId": productOptionId,
-        "selectedIds": List<int>.from(selectedIds.map((x) => x)),
+        "selectionIds": List<int>.from(selectionIds.map((x) => x)),
         "optionTotalPrice": optionTotalPrice,
       };
 }

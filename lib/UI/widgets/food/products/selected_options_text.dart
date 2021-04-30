@@ -19,7 +19,7 @@ class SelectedOptionsText extends StatelessWidget {
       if (targetOption != null) {
         List<ProductOptionSelection> targetSelectionsOrIngredients =
             targetOption.isBasedOnIngredients ? targetOption.ingredients : targetOption.selections;
-        selectedSelectionsOrIngredients = selectedOption.selectedIds.map((selectedId) {
+        selectedSelectionsOrIngredients = selectedOption.selectionIds.map((selectedId) {
           ProductOptionSelection targetSelectionOrIngredient =
               targetSelectionsOrIngredients.firstWhere((selectionOrIngredient) => selectionOrIngredient.id == selectedId, orElse: () => null);
           if (targetSelectionOrIngredient != null) {

@@ -30,17 +30,17 @@ class ProductsProvider with ChangeNotifier {
     double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
     List<ProductSelectedOption> newSelectedOptions;
     newSelectedOptions = productTempCartData.selectedOptions.map((selectedProductOption) {
-      List<int> selectedIds = selectedProductOption.selectedIds == null ? <int>[] : selectedProductOption.selectedIds;
+      List<int> selectionIds = selectedProductOption.selectionIds == null ? <int>[] : selectedProductOption.selectionIds;
       //Edit target option
       if (selectedProductOption.productOptionId == option.id) {
         double optionTotalPrice = 0.0;
-        List<int> newSelectedIds = <int>[];
+        List<int> newSelectionIds = <int>[];
         //Update selected selections or ingredients ids
         if (option.selectionType == ProductOptionSelectionType.SINGLE) {
-          newSelectedIds = [selectionOrIngredientId];
+          newSelectionIds = [selectionOrIngredientId];
         } else {
-          newSelectedIds = addOrRemoveIdsFromArray(
-            array: selectedIds,
+          newSelectionIds = addOrRemoveIdsFromArray(
+            array: selectionIds,
             id: selectionOrIngredientId,
             maxLength: option.type == ProductOptionType.EXCLUDING ? null : option.maxNumberOfSelection,
             context: context,
@@ -48,7 +48,7 @@ class ProductsProvider with ChangeNotifier {
         }
 
         //Update product total price
-        newSelectedIds.forEach((selectedId) {
+        newSelectionIds.forEach((selectedId) {
           List<ProductOptionSelection> selectionsOrIngredients = option.isBasedOnIngredients ? option.ingredients : option.selections;
           selectionsOrIngredients.forEach((selectionOrIngredient) {
             if (selectionOrIngredient.id == selectedId && selectionOrIngredient.price.raw > 0) {
@@ -59,7 +59,7 @@ class ProductsProvider with ChangeNotifier {
 
         return ProductSelectedOption(
           productOptionId: option.id,
-          selectedIds: newSelectedIds == null ? <int>[] : newSelectedIds,
+          selectionIds: newSelectionIds == null ? <int>[] : newSelectionIds,
           optionTotalPrice: optionTotalPrice,
         );
       } else {
@@ -114,7 +114,7 @@ class ProductsProvider with ChangeNotifier {
         return false;
       }
       if (targetOptionData.selectionType == ProductOptionSelectionType.SINGLE) {
-        if (targetOptionData.isRequired && selectedOption.selectedIds.length == 0) {
+        if (targetOptionData.isRequired && selectedOption.selectionIds.length == 0) {
           optionsAreValid = false;
           invalidOptions.add({
             'product_option_id': selectedOption.productOptionId,
@@ -122,7 +122,7 @@ class ProductsProvider with ChangeNotifier {
           });
         }
       } else {
-        if (selectedOption.selectedIds.length < targetOptionData.minNumberOfSelection) {
+        if (selectedOption.selectionIds.length < targetOptionData.minNumberOfSelection) {
           optionsAreValid = false;
           invalidOptions.add({
             'product_option_id': selectedOption.productOptionId,
@@ -156,10 +156,10 @@ class ProductsProvider with ChangeNotifier {
             ? null
             : existingCartProduct.selectedOptions
                 .firstWhere((existingSelectedOption) => existingSelectedOption.productOptionId == option.id, orElse: () => null);
-        List<int> _selectedIds = _existingSelectedOption != null ? _existingSelectedOption.selectedIds : <int>[];
+        List<int> _selectionIds = _existingSelectedOption != null ? _existingSelectedOption.selectionIds : <int>[];
 
         double _optionTotalPrice = 0.0;
-        _selectedIds.forEach((selectedId) {
+        _selectionIds.forEach((selectedId) {
           List<ProductOptionSelection> selectionsOrIngredients = option.isBasedOnIngredients ? option.ingredients : option.selections;
           selectionsOrIngredients.forEach((selectionOrIngredient) {
             if (selectionOrIngredient.id == selectedId && selectionOrIngredient.price.raw > 0) {
@@ -170,7 +170,7 @@ class ProductsProvider with ChangeNotifier {
 
         return ProductSelectedOption(
           productOptionId: option.id,
-          selectedIds: _selectedIds,
+          selectionIds: _selectionIds,
           optionTotalPrice: _optionTotalPrice,
         );
       }).toList(),

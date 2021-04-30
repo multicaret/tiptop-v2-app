@@ -37,7 +37,7 @@ class FoodProductOptions extends StatelessWidget {
               (selectedProductOption) => selectedProductOption.productOptionId == option.id,
               orElse: () => null,
             );
-            List<int> selectedIds = selectedProductOption.selectedIds == null ? <int>[] : selectedProductOption.selectedIds;
+            List<int> selectionIds = selectedProductOption.selectionIds == null ? <int>[] : selectedProductOption.selectionIds;
             List<Map<String, dynamic>> radioOrCheckboxOrDropdownItems = option.selections
                 .map((selection) => {
                       'id': selection.id,
@@ -71,7 +71,7 @@ class FoodProductOptions extends StatelessWidget {
                 case ProductOptionInputType.RADIO:
                   return RadioListItems(
                     items: radioOrCheckboxOrDropdownItems,
-                    selectedId: selectedIds.length > 0 ? selectedIds[0] : null,
+                    selectedId: selectionIds.length > 0 ? selectionIds[0] : null,
                     action: (id) => updateOption(id),
                     hasBorder: false,
                   );
@@ -90,7 +90,7 @@ class FoodProductOptions extends StatelessWidget {
                           price: option.ingredients[j].price,
                           onTap: () => updateOption(option.ingredients[j].id),
                           isExcluding: option.type == ProductOptionType.EXCLUDING,
-                          isActive: selectedIds.contains(option.ingredients[j].id),
+                          isActive: selectionIds.contains(option.ingredients[j].id),
                         );
                       }),
                     ),
@@ -99,7 +99,7 @@ class FoodProductOptions extends StatelessWidget {
                 case ProductOptionInputType.CHECKBOX:
                   return CheckboxListItems(
                     items: radioOrCheckboxOrDropdownItems,
-                    selectedIds: selectedIds,
+                    selectedIds: selectionIds,
                     action: (id) => updateOption(id),
                     hasBorder: false,
                   );
@@ -109,7 +109,7 @@ class FoodProductOptions extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
                     child: AppDropDownButton(
                       hintText: option.title,
-                      defaultValue: selectedIds.length > 0 ? selectedIds[0] : null,
+                      defaultValue: selectionIds.length > 0 ? selectionIds[0] : null,
                       fit: true,
                       items: radioOrCheckboxOrDropdownItems,
                       onChanged: (id) => updateOption(id),

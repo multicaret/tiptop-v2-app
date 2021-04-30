@@ -113,7 +113,7 @@ class HomeProvider with ChangeNotifier {
     foodHomeDataRequestError = false;
     marketNoBranchFound = false;
     foodNoRestaurantFound = false;
-    try {
+    // try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
         body: body,
@@ -126,19 +126,19 @@ class HomeProvider with ChangeNotifier {
       );
       isLoadingHomeData = false;
       notifyListeners();
-    } catch (e) {
-      if (channelIsMarket) {
-        print('An error happened in market home data request');
-        marketHomeDataRequestError = true;
-        // throw e;
-      } else {
-        print('An error happened in food home data request');
-        foodHomeDataRequestError = true;
-        throw e;
-      }
-      isLoadingHomeData = false;
-      notifyListeners();
-    }
+    // } catch (e) {
+    //   if (channelIsMarket) {
+    //     print('An error happened in market home data request');
+    //     marketHomeDataRequestError = true;
+    //     // throw e;
+    //   } else {
+    //     print('An error happened in food home data request');
+    //     foodHomeDataRequestError = true;
+    //     throw e;
+    //   }
+    //   isLoadingHomeData = false;
+    //   notifyListeners();
+    // }
   }
 
   void setHomeData(CartProvider cartProvider, RestaurantsProvider restaurantsProvider, data) {

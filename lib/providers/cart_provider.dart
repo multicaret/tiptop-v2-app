@@ -180,10 +180,10 @@ class CartProvider with ChangeNotifier {
       'branch_id': restaurantId,
       'quantity': productTempCartData.quantity,
       'selected_options': productTempCartData.selectedOptions
-          .where((selectedOption) => selectedOption.selectedIds.length > 0)
+          .where((selectedOption) => selectedOption.selectionIds.length > 0)
           .map((selectedOption) => {
                 'product_option_id': selectedOption.productOptionId,
-                'selected_ids': selectedOption.selectedIds,
+                'selected_ids': selectedOption.selectionIds,
               })
           .toList(),
     };
