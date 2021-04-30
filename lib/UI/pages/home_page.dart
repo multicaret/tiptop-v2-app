@@ -227,6 +227,7 @@ class _HomePageState extends State<HomePage> {
               HomeLiveTracking(
                 activeOrders: homeProvider.foodHomeData.activeOrders,
                 totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
+                channelIsFood: true,
               ),
             if (homeProvider.foodHomeData != null)
               FoodHomeContent(

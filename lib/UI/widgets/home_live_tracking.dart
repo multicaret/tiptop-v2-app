@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
@@ -7,7 +9,6 @@ import 'package:tiptop_v2/UI/pages/track_order_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -19,10 +20,12 @@ import 'address/address_icon.dart';
 class HomeLiveTracking extends StatelessWidget {
   final List<Order> activeOrders;
   final int totalActiveOrders;
+  final bool channelIsFood;
 
   HomeLiveTracking({
     @required this.activeOrders,
     @required this.totalActiveOrders,
+    this.channelIsFood = false,
   });
 
   @override
@@ -72,10 +75,29 @@ class HomeLiveTracking extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AddressIcon(
-                          isAsset: false,
-                          icon: activeOrders[i].address.kind.icon,
-                        ),
+                        channelIsFood
+                            ? Consumer<AppProvider>(
+                                child: CachedNetworkImage(
+                                  imageUrl: activeOrders[i].cart.restaurant.chain.media.logo,
+                                  width: addressIconSize,
+                                  placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 20),
+                                ),
+                                builder: (c, appProvider, child) => Container(
+                                  padding: EdgeInsets.only(
+                                    right: appProvider.isRTL ? 0 : 10,
+                                    left: appProvider.isRTL ? 10 : 0,
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    right: appProvider.isRTL ? 0 : 10,
+                                    left: appProvider.isRTL ? 10 : 0,
+                                  ),
+                                  child: child,
+                                ),
+                              )
+                            : AddressIcon(
+                                isAsset: false,
+                                icon: activeOrders[i].address.kind.icon,
+                              ),
                         Expanded(
                           flex: 3,
                           child: Column(
@@ -83,26 +105,29 @@ class HomeLiveTracking extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Translations.of(context).get("Address"),
+                                channelIsFood ? activeOrders[i].cart.restaurant.title : Translations.of(context).get("Address"),
                                 style: AppTextStyles.subtitleBold,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    activeOrders[i].address.kind.title,
-                                    style: AppTextStyles.subtitle,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Expanded(
-                                    child: Text(
-                                      activeOrders[i].address.address1,
-                                      style: AppTextStyles.subtitle50,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                              if (!channelIsFood)
+                                Row(
+                                  children: [
+                                    Text(
+                                      activeOrders[i].address.kind.title,
+                                      style: AppTextStyles.subtitle,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Text(
+                                        activeOrders[i].address.address1,
+                                        style: AppTextStyles.subtitle50,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),
@@ -123,10 +148,10 @@ class HomeLiveTracking extends StatelessWidget {
                   );
                 }),
                 if (totalActiveOrders > 4)
-                  Consumer2<HomeProvider, AppProvider>(
-                    builder: (c, homeProvider, appProvider, _) => TextButton(
+                  Consumer<AppProvider>(
+                    builder: (c, appProvider, _) => TextButton(
                       onPressed: () => Navigator.of(context, rootNavigator: true)
-                          .pushNamed(homeProvider.channelIsMarket ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName),
+                          .pushNamed(channelIsFood ? FoodPreviousOrdersPage.routeName : MarketPreviousOrdersPage.routeName),
                       style: TextButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
