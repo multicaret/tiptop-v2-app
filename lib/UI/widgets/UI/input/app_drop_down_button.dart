@@ -29,7 +29,6 @@ class AppDropDownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('defaultValue: $defaultValue');
     return Theme(
       data: Theme.of(context).copyWith(
         canvasColor: AppColors.bg,
