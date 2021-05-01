@@ -67,6 +67,8 @@ class _AddressesPageState extends State<AddressesPage> {
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
           await cartProvider.clearMarketCart(appProvider);
+        } else {
+          return;
         }
       }
     } else {
@@ -81,6 +83,8 @@ class _AddressesPageState extends State<AddressesPage> {
         if (response != null && response) {
           //User accepted changing address while he has filled cart, change address and clear cart
           await cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
+        } else {
+          return;
         }
       }
     }
