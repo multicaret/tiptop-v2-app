@@ -25,7 +25,7 @@ class TrackOrderInfoContainer extends StatefulWidget {
 }
 
 class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
-  double sliderValue = 0;
+  int sliderValue = 0;
   double leftPosition = 30;
   double sliderIndicatorWidth = 55.0;
   double sliderIndicatorHeight = 65.0;
@@ -42,6 +42,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double infoContainerWidth = screenSize.width - (screenHorizontalPadding * 2);
+    sliderValue = getOrderTrackingSliderData(widget.order.status)['slider_value'];
     print('Order status: ${widget.order.status}');
 
     return Column(
@@ -97,7 +98,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Slider(
-                value: sliderValue,
+                value: sliderValue.toDouble(),
                 onChanged: null,
                 divisions: orderStatusTexts.length - 1,
                 min: 0,
@@ -158,10 +159,10 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                       flex: 1,
                       child: AppButtons.primarySm(
                         onPressed: () {
-                          /*Navigator.of(context, rootNavigator: true).pushNamed(
+                          Navigator.of(context, rootNavigator: true).pushNamed(
                             widget.channelIsMarket ? MarketPreviousOrderPage.routeName : FoodPreviousOrderPage.routeName,
                             arguments: widget.order.id,
-                          );*/
+                          );
                         },
                         child: Text(
                           Translations.of(context).get("Details"),
