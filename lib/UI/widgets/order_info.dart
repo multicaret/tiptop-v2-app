@@ -31,6 +31,14 @@ class OrderInfo extends StatelessWidget {
               Text(Translations.of(context).get(orderStatusStringValues.reverse[order.status])),
             ],
           ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(Translations.of(context).get("Order Date"), style: AppTextStyles.body50),
+              Text(order.completedAt.formatted),
+            ],
+          ),
         ],
       ),
     );
