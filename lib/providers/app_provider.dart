@@ -240,7 +240,7 @@ class AppProvider with ChangeNotifier {
         return 401;
       }
       if (responseData["status"] != 200 && !overrideStatusCheck) {
-        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData), errors: responseData["errors"]);
       }
       return responseData;
     } catch (error) {
