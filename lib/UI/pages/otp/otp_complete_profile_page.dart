@@ -12,6 +12,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -168,6 +169,9 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
           isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,
         );
       });
+    } on HttpException catch (error) {
+      appAlert(context: context, title: 'Error Updating Profile', description: error.getErrorsAsString()).show();
+      throw error;
     } catch (e) {
       print("error @submit complete profile");
       print(e.toString());

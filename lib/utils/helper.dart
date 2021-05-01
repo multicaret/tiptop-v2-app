@@ -13,6 +13,7 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 void showToast({@required String msg, Toast length = Toast.LENGTH_SHORT, ToastGravity gravity = ToastGravity.TOP, int timeInSec = 1}) {
@@ -151,6 +152,18 @@ Alert appAlert({BuildContext context, String title, String description}) {
     context: context,
     title: title,
     desc: description,
+    buttons: [
+      DialogButton(
+        height: 45,
+        child: Text(Translations.of(context).get("OK")),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+    style: AlertStyle(
+      alertPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+    ),
   );
 }
 

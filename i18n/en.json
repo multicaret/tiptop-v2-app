@@ -225,5 +225,7 @@
   "At The Address": "At The Address",
   "Scheduled": "Scheduled",
   "Reference Code": "Reference Code",
-  "Status": "Status"
+  "Status": "Status",
+  "OK": "OK",
+  "Please correct the following": "Please correct the following"
 }
