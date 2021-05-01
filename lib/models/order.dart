@@ -1,3 +1,5 @@
+import 'package:tiptop_v2/models/user.dart';
+
 import 'address.dart';
 import 'cart.dart';
 import 'enums.dart';
@@ -96,6 +98,7 @@ class Order {
     this.id,
     this.referenceCode,
     this.address,
+    this.driver,
     this.completedAt,
     this.couponCode,
     this.couponDiscountAmount,
@@ -111,6 +114,7 @@ class Order {
   int id;
   int referenceCode;
   Address address;
+  User driver;
   EdAt completedAt;
   String couponCode;
   DoubleRawStringFormatted couponDiscountAmount;
@@ -126,6 +130,7 @@ class Order {
         id: json["id"],
         referenceCode: json["referenceCode"],
         address: Address.fromJson(json["address"]),
+        driver: json["driver"] == null ? null : User.fromJson(json["driver"]),
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
         couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawStringFormatted.fromJson(json["couponDiscountAmount"]),
@@ -142,6 +147,7 @@ class Order {
         "id": id,
         "referenceCode": referenceCode,
         "address": address.toJson(),
+        "driver": driver.toJson(),
         "completedAt": completedAt.toJson(),
         "deliveryFee": deliveryFee.toJson(),
         "grandTotal": grandTotal.toJson(),
