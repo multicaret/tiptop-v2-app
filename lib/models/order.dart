@@ -100,6 +100,7 @@ class Order {
     this.address,
     this.driver,
     this.completedAt,
+    this.deliveryType,
     this.couponCode,
     this.couponDiscountAmount,
     this.totalAfterCouponDiscount,
@@ -116,6 +117,7 @@ class Order {
   Address address;
   User driver;
   EdAt completedAt;
+  RestaurantDeliveryType deliveryType;
   String couponCode;
   DoubleRawStringFormatted couponDiscountAmount;
   DoubleRawStringFormatted totalAfterCouponDiscount;
@@ -131,6 +133,7 @@ class Order {
         referenceCode: json["referenceCode"],
         address: Address.fromJson(json["address"]),
         driver: json["driver"] == null ? null : User.fromJson(json["driver"]),
+        deliveryType: json["deliveryType"] == null ? null : restaurantDeliveryTypeValues.map[json["deliveryType"]],
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
         couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawStringFormatted.fromJson(json["couponDiscountAmount"]),

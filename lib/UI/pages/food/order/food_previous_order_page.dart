@@ -202,6 +202,24 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                                 ],
                               ),
                             ),
+                          SectionTitle('Delivery Option'),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 15),
+                            color: AppColors.white,
+                            width: double.infinity,
+                            child: order.deliveryType == RestaurantDeliveryType.TIPTOP
+                                ? Row(
+                                    children: [
+                                      Image(
+                                        image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                                        width: 60,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(Translations.of(context).get("Delivery")),
+                                    ],
+                                  )
+                                : Text(Translations.of(context).get("Restaurant Delivery")),
+                          ),
                           SectionTitle('Payment Method'),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
