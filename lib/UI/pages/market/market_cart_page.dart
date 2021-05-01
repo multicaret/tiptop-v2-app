@@ -7,9 +7,11 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -24,31 +26,31 @@ class MarketCartPage extends StatelessWidget {
       builder: (c, appProvider, homeProvider, cartProvider, _) {
         return AppScaffold(
           hasCurve: false,
-          hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest,
+          hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest || cartProvider.isLoadingDeleteMarketCartProduct,
           appBar: AppBar(
             title: Text(Translations.of(context).get("Market Cart")),
             actions: [
               if (!cartProvider.noMarketCart)
                 IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => ConfirmAlertDialog(
-                      title: 'Are you sure you want to empty your cart?',
-                    ),
-                  ).then((response) {
-                    if (response != null && response) {
-                      cartProvider.clearMarketCart(appProvider).then((_) {
-                        showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
-                        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
-                      }).catchError((e) {
-                        showToast(msg: Translations.of(context).get("Error clearing cart!"));
-                      });
-                    }
-                  });
-                },
-                icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-              )
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ConfirmAlertDialog(
+                        title: 'Are you sure you want to empty your cart?',
+                      ),
+                    ).then((response) {
+                      if (response != null && response) {
+                        cartProvider.clearMarketCart(appProvider).then((_) {
+                          showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
+                          Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+                        }).catchError((e) {
+                          showToast(msg: Translations.of(context).get("Error clearing cart!"));
+                        });
+                      }
+                    });
+                  },
+                  icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
+                )
             ],
           ),
           body: Column(
@@ -63,14 +65,47 @@ class MarketCartPage extends StatelessWidget {
                           },
                         ),
                       )
-                    : ListView(
+                    : ListView.builder(
                         physics: AlwaysScrollableScrollPhysics(),
-                        children: cartProvider.marketCart.cartProducts
-                            .map((cartProduct) => MarketProductListItem(
-                                  product: cartProduct.product,
-                                  quantity: cartProduct.quantity,
-                                ))
-                            .toList(),
+                        itemCount: cartProvider.marketCart.cartProducts.length,
+                        itemBuilder: (c, i) {
+                          List<CartProduct> cartProducts = cartProvider.marketCart.cartProducts;
+                          return Dismissible(
+                            key: Key('${cartProducts[i].product.id}'),
+                            direction: DismissDirection.endToStart,
+                            background: Consumer<AppProvider>(
+                              builder: (c, appProvider, _) => Container(
+                                color: Colors.red,
+                                alignment: appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+                                child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
+                              ),
+                            ),
+                            confirmDismiss: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                final response = await showDialog(
+                                  context: context,
+                                  builder: (context) => ConfirmAlertDialog(
+                                    title: 'Are you sure you want to delete this product from your cart?',
+                                  ),
+                                );
+                                return response == null ? false : response;
+                              }
+                              return false;
+                            },
+                            onDismissed: (direction) {
+                              if (direction == DismissDirection.endToStart) {
+                                int productIdToDelete = cartProducts[i].product.id;
+                                cartProducts.removeAt(i);
+                                cartProvider.deleteProductFromMarketCart(context: context, appProvider: appProvider, productId: productIdToDelete);
+                              }
+                            },
+                            child: MarketProductListItem(
+                              product: cartProducts[i].product,
+                              quantity: cartProducts[i].quantity,
+                            ),
+                          );
+                        },
                       ),
               ),
               if (!cartProvider.noMarketCart)

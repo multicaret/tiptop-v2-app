@@ -19,6 +19,7 @@ class CartProvider with ChangeNotifier {
   bool isLoadingClearMarketCartRequest = false;
   bool isLoadingClearFoodCartRequest = false;
   bool isLoadingDeleteFoodCartProduct = false;
+  bool isLoadingDeleteMarketCartProduct = false;
 
   LocalStorage storageActions = LocalStorage.getActions();
 
@@ -215,6 +216,50 @@ class CartProvider with ChangeNotifier {
     } catch (e) {
       // showToast(msg: Translations.of(context).get("An Error Occurred!"));
       isLoadingAdjustFoodCartDataRequest = false;
+      notifyListeners();
+      throw e;
+    }
+  }
+
+  Future<void> deleteProductFromMarketCart({BuildContext context, AppProvider appProvider, int productId}) async {
+    if (marketCart == null || marketCart.id == null) {
+      print('No Market cart!');
+      showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
+      appProvider.logout();
+      return 401;
+    }
+
+    if (HomeProvider.branchId == null || HomeProvider.chainId == null) {
+      print('Either chain id (${HomeProvider.chainId}) or restaurant id (${HomeProvider.branchId}) is null');
+      return;
+    }
+
+    // clearRequestedMoreThanAvailableQuantity();
+    isLoadingDeleteMarketCartProduct = true;
+    notifyListeners();
+
+    Map<String, dynamic> body = {
+      'branch_id': HomeProvider.branchId,
+      'chain_id': HomeProvider.chainId,
+    };
+    print('body: $body');
+
+    final endpoint = 'carts/${marketCart.id}/products/grocery/$productId/delete';
+
+    try {
+      final responseData = await appProvider.post(
+        endpoint: endpoint,
+        body: body,
+        withToken: true,
+      );
+
+      marketCart = Cart.fromJson(responseData["data"]["cart"]);
+      showToast(msg: Translations.of(context).get("Successfully deleted from cart!"));
+      isLoadingDeleteMarketCartProduct = false;
+      notifyListeners();
+    } catch (e) {
+      isLoadingDeleteMarketCartProduct = true;
+      showToast(msg: Translations.of(context).get("Error deleting from cart!"));
       notifyListeners();
       throw e;
     }
