@@ -35,8 +35,48 @@ class FoodCartProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return editableCartProduct
+        ? Dismissible(
+            key: Key('${cartProduct.cartProductId}'),
+            direction: DismissDirection.endToStart,
+            background: Consumer<AppProvider>(
+              builder: (c, appProvider, _) => Container(
+                color: Colors.red,
+                alignment: appProvider.isRTL
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: screenHorizontalPadding),
+                child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
+              ),
+            ),
+            confirmDismiss: (direction) async {
+              if (direction == DismissDirection.endToStart) {
+                final response = await showDialog(
+                  context: context,
+                  builder: (context) => ConfirmAlertDialog(
+                    title:
+                        'Are you sure you want to delete this product from your cart?',
+                  ),
+                );
+                return response == null ? false : response;
+              }
+              return false;
+            },
+            onDismissed: (direction) {
+              if (direction == DismissDirection.endToStart) {
+                dismissAction();
+              }
+            },
+            child: _getCartListItem(context),
+          )
+        : _getCartListItem(context);
+  }
+
+  Widget _getCartListItem(BuildContext context) {
     void openFoodProductPage() {
-      Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+      Navigator.of(context, rootNavigator: true)
+          .pushNamed(FoodProductPage.routeName, arguments: {
         "product_id": cartProduct.product.id,
         "has_controls": hasControls,
         "cart_product": editableCartProduct ? cartProduct : null,
@@ -45,109 +85,83 @@ class FoodCartProductListItem extends StatelessWidget {
       });
     }
 
-    return Dismissible(
-      key: Key('${cartProduct.cartProductId}'),
-      direction: DismissDirection.endToStart,
-      background: Consumer<AppProvider>(
-        builder: (c, appProvider, _) => Container(
-          color: Colors.red,
-          alignment: appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
-          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-          child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: screenHorizontalPadding, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        border: Border(
+          bottom: BorderSide(width: 1, color: AppColors.border),
         ),
       ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
-          final response = await showDialog(
-            context: context,
-            builder: (context) => ConfirmAlertDialog(
-              title: 'Are you sure you want to delete this product from your cart?',
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: openFoodProductPage,
+            child: Container(
+              width: productListItemThumbnailSize,
+              height: productListItemThumbnailSize,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColors.border, width: 1.5),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                        cartProduct.product.media.coverThumbnail),
+                    fit: BoxFit.cover,
+                  )),
             ),
-          );
-          return response == null ? false : response;
-        }
-        return false;
-      },
-      onDismissed: (direction) {
-        if (direction == DismissDirection.endToStart) {
-          dismissAction();
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          border: Border(
-            bottom: BorderSide(width: 1, color: AppColors.border),
           ),
-        ),
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
+          Expanded(
+            child: InkWell(
               onTap: openFoodProductPage,
               child: Container(
-                width: productListItemThumbnailSize,
-                height: productListItemThumbnailSize,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.border, width: 1.5),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(cartProduct.product.media.coverThumbnail),
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: openFoodProductPage,
-                child: Container(
-                  constraints: BoxConstraints(minHeight: productListItemThumbnailSize),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(cartProduct.product.title),
-                      const SizedBox(height: 10),
-                      if (cartProduct.selectedOptions.length > 0)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: SelectedOptionsText(cartProduct: cartProduct),
-                        ),
-                      FormattedPrices(
-                        price: cartProduct.totalPrice,
+                constraints:
+                    BoxConstraints(minHeight: productListItemThumbnailSize),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(cartProduct.product.title),
+                    const SizedBox(height: 10),
+                    if (cartProduct.selectedOptions.length > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: SelectedOptionsText(cartProduct: cartProduct),
                       ),
-                    ],
-                  ),
+                    FormattedPrices(
+                      price: cartProduct.totalPrice,
+                    ),
+                  ],
                 ),
               ),
             ),
-            if (hasControls)
-              Container(
-                width: 99,
-                height: 33,
-                decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
-                ),
-                child: FoodCartControls(
-                  quantity: cartProduct.quantity,
-                  action: (CartAction cartAction) {},
-                  isMin: true,
-                ),
+          ),
+          if (hasControls)
+            Container(
+              width: 99,
+              height: 33,
+              decoration: BoxDecoration(
+                boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
               ),
-            if (cartProduct.quantity != null && !hasControls)
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.bg,
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Text('${cartProduct.quantity}'),
-              )
-          ],
-        ),
+              child: FoodCartControls(
+                quantity: cartProduct.quantity,
+                action: (CartAction cartAction) {},
+                isMin: true,
+              ),
+            ),
+          if (cartProduct.quantity != null && !hasControls)
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.bg,
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Text('${cartProduct.quantity}'),
+            )
+        ],
       ),
     );
   }
