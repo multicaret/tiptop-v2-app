@@ -46,7 +46,7 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                 );
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             if (animationLoaded)
               Container(
                 child: Column(
@@ -61,14 +61,14 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                         Translations.of(context).get("Continue Without Login"),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     AppButtons.primary(
                       onPressed: () {
                         Navigator.of(context).pushReplacementNamed(OTPChooseMethodPage.routeName);
                       },
                       child: Text(Translations.of(context).get("Register")),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(OTPChooseMethodPage.routeName);
