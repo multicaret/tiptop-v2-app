@@ -192,7 +192,7 @@ class AppProvider with ChangeNotifier {
       final responseData = json.decode(response.body);
       // print(responseData);
       if (responseData["status"] != 200 && !overrideStatusCheck) {
-        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
+        throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData), errors: responseData["errors"]);
       }
       return responseData;
     } catch (error) {
@@ -274,12 +274,6 @@ class AppProvider with ChangeNotifier {
         endpoint: 'profile',
         body: userData,
       );
-      if (responseData['data'] == null) {
-        throw HttpException(
-          title: 'Error',
-          message: responseData['message'] != null ? responseData['message'] : 'An error occurred',
-        );
-      }
       User updatedUser = User.fromJson(responseData['data']['user']);
       updateUserData(updatedUser, token);
 
