@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -34,19 +35,36 @@ class MarketPreviousOrderPage extends StatefulWidget {
 
 class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
   bool _isInit = true;
+  bool _isLoadingOrderRequest = false;
+
+  bool hasCoupon = false;
+  OrdersProvider ordersProvider;
+  AppProvider appProvider;
   int orderId;
+  Order order;
   List<PaymentSummaryTotal> totals = [];
+
+  Future<void> _fetchAndSetPreviousOrder() async {
+    setState(() => _isLoadingOrderRequest = true);
+    await ordersProvider.fetchAndSetPreviousOrder(appProvider, orderId);
+    order = ordersProvider.order;
+    setState(() => _isLoadingOrderRequest = false);
+  }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       orderId = ModalRoute.of(context).settings.arguments as int;
+      appProvider = Provider.of<AppProvider>(context);
+      ordersProvider = Provider.of<OrdersProvider>(context);
+      print('orderId: $orderId');
+      _fetchAndSetPreviousOrder();
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  Future<void> _deleteOrder(AppProvider appProvider, OrdersProvider ordersProvider, int orderId) async {
+  Future<void> _deleteOrder() async {
     final response = await showDialog(
       context: context,
       builder: (context) => ConfirmAlertDialog(
@@ -65,140 +83,149 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
     }
   }
 
+  void setTotals() {
+    hasCoupon = order.couponDiscountAmount != null && order.couponDiscountAmount.raw != 0;
+    totals = [
+      PaymentSummaryTotal(
+        title: hasCoupon ? "Total Before Discount" : "Total",
+        value: order.cart.total.formatted,
+        isDiscounted: hasCoupon,
+      ),
+    ];
+    if (hasCoupon) {
+      final couponTotals = [
+        PaymentSummaryTotal(
+          title: "You Saved",
+          value: order.couponDiscountAmount.formatted,
+          isSavedAmount: true,
+        ),
+        PaymentSummaryTotal(
+          title: "Total After Discount",
+          value: order.totalAfterCouponDiscount.formatted,
+        ),
+      ];
+      totals.addAll(couponTotals);
+    }
+    final lastTotals = [
+      PaymentSummaryTotal(
+        title: "Delivery Fee",
+        value: order.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : order.deliveryFee.formatted,
+      ),
+      PaymentSummaryTotal(
+        title: "Grand Total",
+        value: order.grandTotal.formatted,
+        isGrandTotal: true,
+      ),
+    ];
+    totals.addAll(lastTotals);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppProvider, OrdersProvider>(
-      builder: (c, appProvider, ordersProvider, _) {
-        Order order = ordersProvider.marketPreviousOrders.firstWhere((order) => order.id == orderId);
-        bool hasCoupon = order.couponDiscountAmount != null && order.couponDiscountAmount.raw != 0;
-        totals = [
-          PaymentSummaryTotal(
-            title: hasCoupon ? "Total Before Discount" : "Total",
-            value: order.cart.total.formatted,
-            isDiscounted: hasCoupon,
-          ),
-        ];
-        if (hasCoupon) {
-          final couponTotals = [
-            PaymentSummaryTotal(
-              title: "You Saved",
-              value: order.couponDiscountAmount.formatted,
-              isSavedAmount: true,
-            ),
-            PaymentSummaryTotal(
-              title: "Total After Discount",
-              value: order.totalAfterCouponDiscount.formatted,
-            ),
-          ];
-          totals.addAll(couponTotals);
-        }
-        final lastTotals = [
-          PaymentSummaryTotal(
-            title: "Delivery Fee",
-            value: order.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : order.deliveryFee.formatted,
-          ),
-          PaymentSummaryTotal(
-            title: "Grand Total",
-            value: order.grandTotal.formatted,
-            isGrandTotal: true,
-          ),
-        ];
-        totals.addAll(lastTotals);
+    if (!_isLoadingOrderRequest && order != null) {
+      order = ordersProvider.order;
+      setTotals();
+    }
 
-        return AppScaffold(
-          hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
-          appBar: AppBar(
-            title: Text(Translations.of(context).get("Order Details")),
-            actions: [
-              IconButton(
-                onPressed: () => _deleteOrder(appProvider, ordersProvider, order.id),
-                icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-              )
-            ],
-          ),
-          body: Column(
-            children: [
-              AddressSelectButton(
-                isDisabled: true,
-                hasETA: false,
-                forceAddressView: true,
-                addressKindIcon: order.address.kind.icon,
-                addressKindTitle: order.address.kind.title,
-                addressText: order.address.address1,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      OrderInfo(order: order),
-                      if (order.status == OrderStatus.DELIVERED)
-                        OrderRatingButton(
-                          order: order,
-                          onTap: order.orderRating.branchHasBeenRated
-                              ? null
-                              : () =>
-                                  Navigator.of(context, rootNavigator: true).pushNamed(MarketOrderRatingPage.routeName, arguments: {'order': order}),
-                          isRTL: appProvider.isRTL,
-                        ),
-                      SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
-                      ...List.generate(
-                        order.cart.cartProducts.length,
-                        (i) => MarketProductListItem(
-                          quantity: order.cart.cartProducts[i].quantity,
-                          product: order.cart.cartProducts[i].product,
-                          hasControls: false,
-                        ),
-                      ),
-                      if (hasCoupon) SectionTitle('Promotions'),
-                      if (hasCoupon)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            border: Border(bottom: BorderSide(color: AppColors.border)),
+    return AppScaffold(
+      hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
+      appBar: AppBar(
+        title: Text(Translations.of(context).get("Order Details")),
+        actions: [
+          if (!_isLoadingOrderRequest && order.status == OrderStatus.DELIVERED)
+            IconButton(
+              onPressed: _deleteOrder,
+              icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
+            )
+        ],
+      ),
+      body: _isLoadingOrderRequest
+          ? AppLoader()
+          : Column(
+              children: [
+                AddressSelectButton(
+                  isDisabled: true,
+                  hasETA: false,
+                  forceAddressView: true,
+                  addressKindIcon: order.address.kind.icon,
+                  addressKindTitle: order.address.kind.title,
+                  addressText: order.address.address1,
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _fetchAndSetPreviousOrder,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          OrderInfo(order: order),
+                          if (order.status == OrderStatus.DELIVERED)
+                            OrderRatingButton(
+                              order: order,
+                              onTap: order.orderRating.branchHasBeenRated
+                                  ? null
+                                  : () => Navigator.of(context, rootNavigator: true)
+                                      .pushNamed(MarketOrderRatingPage.routeName, arguments: {'order': order}),
+                              isRTL: appProvider.isRTL,
+                            ),
+                          SectionTitle('Cart', suffix: ' (${order.cart.productsCount})'),
+                          ...List.generate(
+                            order.cart.cartProducts.length,
+                            (i) => MarketProductListItem(
+                              quantity: order.cart.cartProducts[i].quantity,
+                              product: order.cart.cartProducts[i].product,
+                              hasControls: false,
+                            ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(Translations.of(context).get("Coupon Code")),
-                              Text(
-                                order.couponCode,
-                                style: AppTextStyles.bodyBold,
+                          if (hasCoupon) SectionTitle('Promotions'),
+                          if (hasCoupon)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                border: Border(bottom: BorderSide(color: AppColors.border)),
                               ),
-                            ],
-                          ),
-                        ),
-                      SectionTitle('Payment Method'),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
-                        color: AppColors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(order.paymentMethod.title),
-                            CachedNetworkImage(
-                              imageUrl: order.paymentMethod.logo,
-                              width: 30,
-                              fit: BoxFit.cover,
-                              placeholder: (_, __) => SpinKitDoubleBounce(
-                                color: AppColors.secondary,
-                                size: 20,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(Translations.of(context).get("Coupon Code")),
+                                  Text(
+                                    order.couponCode,
+                                    style: AppTextStyles.bodyBold,
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          SectionTitle('Payment Method'),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
+                            color: AppColors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(order.paymentMethod.title),
+                                CachedNetworkImage(
+                                  imageUrl: order.paymentMethod.logo,
+                                  width: 30,
+                                  fit: BoxFit.cover,
+                                  placeholder: (_, __) => SpinKitDoubleBounce(
+                                    color: AppColors.secondary,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SectionTitle('Payment Summary'),
+                          PaymentSummary(totals: totals),
+                          const SizedBox(height: 30),
+                        ],
                       ),
-                      SectionTitle('Payment Summary'),
-                      PaymentSummary(totals: totals),
-                      const SizedBox(height: 30),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
     );
   }
 }

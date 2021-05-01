@@ -62,7 +62,7 @@ class _TrackMarketOrderPageState extends State<TrackMarketOrderPage> {
                 ),
                 Positioned(
                   bottom: 0,
-                  child: TrackOrderInfoContainer(),
+                  child: TrackOrderInfoContainer(order: order),
                 )
               ],
             ),

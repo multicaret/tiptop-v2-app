@@ -16,6 +16,7 @@ class OrdersProvider with ChangeNotifier {
   PreviousOrdersResponseData previousOrdersResponseData;
   List<Order> marketPreviousOrders = [];
   List<Order> foodPreviousOrders = [];
+  Order order;
 
   CheckoutData checkoutData;
   bool isLoadingDeleteOrderRequest = false;
@@ -211,6 +212,22 @@ class OrdersProvider with ChangeNotifier {
     }
 
     foodPreviousOrders = List<Order>.from(responseData["data"].map((x) => Order.fromJson(x)));
+    notifyListeners();
+  }
+
+  Future<dynamic> fetchAndSetPreviousOrder(AppProvider appProvider, int orderId) async {
+    final endpoint = 'orders/$orderId';
+
+    final responseData = await appProvider.get(
+      endpoint: endpoint,
+      withToken: true,
+    );
+    // print(responseData);
+    if (responseData == 401) {
+      return 401;
+    }
+
+    order = Order.fromJson(responseData["data"]["order"]);
     notifyListeners();
   }
 
