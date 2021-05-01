@@ -10,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_min_horizontal_list_item.dart';
+import 'package:tiptop_v2/UI/widgets/order_info.dart';
 import 'package:tiptop_v2/UI/widgets/order_rating_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -125,11 +126,12 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                 addressKindTitle: order.address.kind.title,
                 addressText: order.address.address1,
               ),
-              RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      OrderInfo(order: order),
+                      RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
                       if (order.status == OrderStatus.DELIVERED)
                         OrderRatingButton(
                           order: order,

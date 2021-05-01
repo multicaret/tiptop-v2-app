@@ -103,6 +103,19 @@ final orderStatusValues = EnumValues({
   "25": OrderStatus.SCHEDULED,
 });
 
+
+final orderStatusStringValues = EnumValues({
+  "Cancelled": OrderStatus.CANCELLED,
+  "Draft": OrderStatus.DRAFT,
+  "New": OrderStatus.NEW,
+  "Preparing": OrderStatus.PREPARING,
+  "Waiting Courier": OrderStatus.WAITING_COURIER,
+  "On the Way": OrderStatus.ON_THE_WAY,
+  "At The Address": OrderStatus.AT_THE_ADDRESS,
+  "Delivered": OrderStatus.DELIVERED,
+  "Scheduled": OrderStatus.SCHEDULED,
+});
+
 enum ProductOptionType {
   EXCLUDING,
   INCLUDING,

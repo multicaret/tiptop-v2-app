@@ -94,6 +94,7 @@ class PreviousOrdersResponseData {
 class Order {
   Order({
     this.id,
+    this.referenceCode,
     this.address,
     this.completedAt,
     this.couponCode,
@@ -108,6 +109,7 @@ class Order {
   });
 
   int id;
+  int referenceCode;
   Address address;
   EdAt completedAt;
   String couponCode;
@@ -122,6 +124,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
+        referenceCode: json["referenceCode"],
         address: Address.fromJson(json["address"]),
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
@@ -137,6 +140,7 @@ class Order {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "referenceCode": referenceCode,
         "address": address.toJson(),
         "completedAt": completedAt.toJson(),
         "deliveryFee": deliveryFee.toJson(),
