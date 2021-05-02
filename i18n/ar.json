@@ -52,8 +52,8 @@
   "Favorite Products": "المنتجات المفضلة لدي",
   "Favorite Restaurants": "المطاعم المفضلة لدي",
   "Previous Orders": "الطلبات السابقة",
-  "Payment Method": "طريقة الدفع",
   "Payment Methods": "طرق الدفع",
+  "Payment Method": "طريقة الدفع",
   "Support": "الدعم",
   "Blog": "مقالات",
   "FAQ": "الأسئلة الشائعة",
@@ -67,8 +67,8 @@
   "Search": "البحث",
   "Profile": "الملف الشخصي",
   "This field is required": "هذا الحقل مطلوب",
-  "results match your search": "نتائج تطابق عملية البحث",
-  "result match your search": "نتيجة تطابق عملية البحث",
+  "Results match your search": "نتائج تطابق عملية البحث",
+  "Result match your search": "نتيجة تطابق عملية البحث",
   "Order Now": "اطلب الآن",
   "Details": "التفاصيل",
   "Notes": "ملاحظات",
@@ -163,7 +163,6 @@
   "By Distance": "حسب المسافة",
   "No Results Match Your Search": "لا يوجد نتائج تطابق بحثك",
   "result(s) match your search": "نتائج تطابق بحثك",
-  "Delivery Option": "خيار التوصيل",
   "Delivery Options": "خيارات التوصيل",
   "Delivery": "توصيل",
   "Time": "الوقت",
@@ -233,5 +232,6 @@
   "This item is not available": "هذا المنتج غير متوفر حالياً",
   "John Doe": "حسين محمد",
   "Please make sure the following is corrected": "الرجاء تصحيح التالي",
-  "You can't delete this order because it's still in progress!": "لا يمكنك حذف هذا الطلب لأنه قيد التنفيذ!"
+  "You can't delete this order because it's still in progress!": "لا يمكنك حذف هذا الطلب لأنه قيد التنفيذ!",
+  "Delivery Option": "خيار التوصيل"
 }
