@@ -7,6 +7,7 @@ import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../UI/input/address_icon_dropdown.dart';
 
@@ -62,6 +63,7 @@ class AddressDetailsForm extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 40, bottom: 40),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -102,6 +104,53 @@ class AddressDetailsForm extends StatelessWidget {
                   items: citiesDropDownItems,
                   onChanged: (cityId) => setAddressDetailsFormData('city_id', cityId),
                 ),
+                RichText(
+                  text: TextSpan(
+                    text: Translations.of(context).get("Phone Number"),
+                    style: AppTextStyles.bodyBold,
+                    children: <TextSpan>[
+                      TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  textDirection: TextDirection.ltr,
+                  children: [
+                    Container(
+                      height: 45,
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/iraq-flag.png',
+                            width: 30,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '+964',
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: AppTextField(
+                        required: true,
+                        fit: true,
+                        textDirection: TextDirection.ltr,
+                        // initialValue: '5070326662',
+                        initialValue: '',
+                        hasInnerLabel: false,
+                        keyboardType: TextInputType.numberWithOptions(signed: true),
+                        hintText: 'xxx-xxx-xx-xx',
+                        onSaved: (value) => setAddressDetailsFormData('phone_number', value),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 AppTextField(
                   labelText: 'Address',
                   required: true,

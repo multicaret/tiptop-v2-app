@@ -96,7 +96,7 @@ class _AppTextFieldState extends State<AppTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (!widget.hasInnerLabel)
+          if (!widget.hasInnerLabel && widget.labelText != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: RichText(

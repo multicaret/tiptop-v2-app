@@ -71,7 +71,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
       selectedCity = addressesProvider.createAddressData.selectedCity;
       selectedRegion = addressesProvider.createAddressData.selectedRegion;
       setState(() {
-        //Todo: find a way to save user data
         addressDetailsFormData = {
           'kind': selectedKind.id,
           'alias': selectedKind.title,
@@ -113,6 +112,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     'latitude': '',
     'longitude': '',
     'notes': '',
+    'phone_number': '',
   };
 
   @override
