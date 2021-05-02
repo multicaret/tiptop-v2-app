@@ -170,7 +170,11 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
         );
       });
     } on HttpException catch (error) {
-      appAlert(context: context, title: 'Error Updating Profile', description: error.getErrorsAsString()).show();
+      appAlert(
+        context: context,
+        title: Translations.of(context).get("Please make sure the following is corrected"),
+        description: error.getErrorsAsString(),
+      ).show();
       throw error;
     } catch (e) {
       print("error @submit complete profile");
