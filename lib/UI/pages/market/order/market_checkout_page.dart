@@ -115,7 +115,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
-          value: couponValidationData.grandTotal.formatted,
+          value: couponValidationData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : couponValidationData.deliveryFee.formatted,
           isGrandTotal: true,
         ),
       ];

@@ -127,7 +127,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
         ),
         PaymentSummaryTotal(
           title: "Delivery Fee",
-          value: couponValidationData.deliveryFee.formatted,
+          value: couponValidationData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : couponValidationData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
@@ -137,12 +137,16 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       ];
       showToast(msg: Translations.of(context).get("Successfully validated coupon code!"));
     } on HttpException catch (error) {
-      appAlert(
-        context: context,
-        title: Translations.of(context).get("Please make sure the following is corrected"),
-        description: error.getErrorsAsString(),
-      ).show();
+      if (error.errors != null && error.errors.length > 0) {
+        appAlert(
+          context: context,
+          title: Translations.of(context).get("Please make sure the following is corrected"),
+          description: error.getErrorsAsString(),
+        ).show();
+      }
+      showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
       setState(() => _isLoadingvalidateFoodCoupon = false);
+      throw error;
     } catch (e) {
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
