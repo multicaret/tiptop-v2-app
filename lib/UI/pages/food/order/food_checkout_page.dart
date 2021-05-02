@@ -25,6 +25,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../../../app_wrapper.dart';
@@ -135,6 +136,13 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
         ),
       ];
       showToast(msg: Translations.of(context).get("Successfully validated coupon code!"));
+    } on HttpException catch (error) {
+      appAlert(
+        context: context,
+        title: Translations.of(context).get("Please make sure the following is corrected"),
+        description: error.getErrorsAsString(),
+      ).show();
+      setState(() => _isLoadingvalidateFoodCoupon = false);
     } catch (e) {
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
