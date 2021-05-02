@@ -189,7 +189,7 @@
   "Validation Failed!": "فشل التحقق!",
   "Unable to send SMS code, please try another method!": "فشل في إرسال رمز SMS ، يرجى محاولة طريقة أخرى!",
   "Sending SMS code again": "يتم إرسال رمز SMS مرة أخرى...",
-  "An error occurred!": "حدث خطأ! يتم تسجيل الخروج...",
+  "An error occurred!": "حدث خطأ!",
   "Invalid Pin!": "الرمز غير صالح!",
   "Address stored successfully!": "تم تخزين العنوان بنجاح!",
   "Successfully deleted address!": "تم حذف العنوان بنجاح!",

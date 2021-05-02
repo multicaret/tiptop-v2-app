@@ -50,14 +50,21 @@ class _AddressesPageState extends State<AddressesPage> {
 
   Future<void> _fetchAndSetAddresses() async {
     setState(() => _isLoadingAddress = true);
-    final response = await addressesProvider.fetchAndSetAddresses(appProvider);
-    if (response == 401) {
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
-      return;
+    try {
+      final response = await addressesProvider.fetchAndSetAddresses(appProvider);
+      if (response == 401) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
+      addresses = addressesProvider.addresses;
+      kinds = addressesProvider.kinds;
+      setState(() => _isLoadingAddress = false);
+    } catch (e) {
+      showToast(msg: Translations.of(context).get("An error occurred!"));
+      setState(() => _isLoadingAddress = false);
+      Navigator.of(context).pop();
+      throw e;
     }
-    addresses = addressesProvider.addresses;
-    kinds = addressesProvider.kinds;
-    setState(() => _isLoadingAddress = false);
   }
 
   Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {

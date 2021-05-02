@@ -12,6 +12,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -214,6 +215,8 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
       return;
     }
     _phoneNumberFormKey.currentState.save();
+    try {
+
     await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
     if (otpProvider.reference == null) {
       showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
@@ -224,5 +227,16 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
       'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
     });
+    } on HttpException catch (error) {
+      if (error.errors != null && error.errors.length > 0) {
+        appAlert(
+          context: context,
+          title: Translations.of(context).get("Please make sure the following is corrected"),
+          description: error.getErrorsAsString(),
+        ).show();
+      }
+    } catch (e) {
+      throw e;
+    }
   }
 }
