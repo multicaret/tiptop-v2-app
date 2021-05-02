@@ -142,7 +142,7 @@ class Order {
         grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
         status: json["status"] == null ? null : orderStatusValues.map[json["status"].toString()],
-        cart: Cart.fromJson(json["cart"]),
+        cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
       );
 

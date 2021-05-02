@@ -88,7 +88,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     totals = [
       PaymentSummaryTotal(
         title: hasCoupon ? "Total Before Discount" : "Total",
-        value: order.cart.total.formatted,
+        value: order.cart == null ? order.grandTotal.formatted : order.cart.total.formatted,
         isDiscounted: hasCoupon,
       ),
     ];
@@ -159,8 +159,8 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                       child: Column(
                         children: [
                           OrderInfo(order: order),
-                          RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
-                          if (order.status == OrderStatus.DELIVERED)
+                          if (order.cart != null) RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
+                          if (order.status == OrderStatus.DELIVERED && order.orderRating.branchRatingValue != 0)
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated
@@ -169,20 +169,22 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                                       .pushNamed(FoodOrderRatingPage.routeName, arguments: {'order': order}),
                               isRTL: appProvider.isRTL,
                             ),
-                          SectionTitle(
-                            'Cart',
-                            suffix: ' (${order.cart.productsCount})',
-                          ),
-                          ...List.generate(
-                            order.cart.cartProducts.length,
-                            (i) => FoodCartProductListItem(
-                              restaurantId: order.cart.restaurant.id,
-                              chainId: order.cart.restaurant.chain.id,
-                              cartProduct: order.cart.cartProducts[i],
-                              editableCartProduct: false,
-                              hasControls: false,
+                          if (order.cart != null)
+                            SectionTitle(
+                              'Cart',
+                              suffix: ' (${order.cart.productsCount})',
                             ),
-                          ),
+                          if (order.cart != null)
+                            ...List.generate(
+                              order.cart.cartProducts.length,
+                              (i) => FoodCartProductListItem(
+                                restaurantId: order.cart.restaurant.id,
+                                chainId: order.cart.restaurant.chain.id,
+                                cartProduct: order.cart.cartProducts[i],
+                                editableCartProduct: false,
+                                hasControls: false,
+                              ),
+                            ),
                           if (hasCoupon) SectionTitle('Promotions'),
                           if (hasCoupon)
                             Container(
