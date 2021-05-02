@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -41,6 +43,10 @@ class PreviousOrderItem extends StatelessWidget {
           ),
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
+              if (order.status != OrderStatus.DELIVERED && order.status != OrderStatus.CANCELLED) {
+                showToast(msg: "You can't delete this order because it's still in progress!");
+                return false;
+              }
               final response = await showDialog(
                 context: context,
                 builder: (context) => ConfirmAlertDialog(

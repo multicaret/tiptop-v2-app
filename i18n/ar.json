@@ -232,5 +232,6 @@
   "Order Date": "تاريخ الطلب",
   "This item is not available": "هذا المنتج غير متوفر حالياً",
   "John Doe": "حسين محمد",
-  "Please make sure the following is corrected": "الرجاء تصحيح التالي"
+  "Please make sure the following is corrected": "الرجاء تصحيح التالي",
+  "You can't delete this order because it's still in progress!": "لا يمكنك حذف هذا الطلب لأنه قيد التنفيذ!"
 }
