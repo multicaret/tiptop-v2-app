@@ -5,10 +5,6 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class OrderConfirmedDialog extends StatelessWidget {
-  final bool isLargeOrder;
-
-  OrderConfirmedDialog({this.isLargeOrder = false});
-
   @override
   Widget build(BuildContext context) {
     return AppAlertDialog(
@@ -16,8 +12,10 @@ class OrderConfirmedDialog extends StatelessWidget {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50),
-          child: Image(
-            image: AssetImage('assets/images/order-cart${isLargeOrder ? '-large' : ''}.png'),
+          child: Text(
+            '🤩',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 40),
           ),
         ),
         const SizedBox(height: 20),

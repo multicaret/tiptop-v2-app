@@ -330,9 +330,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       }
       showDialog(
         context: context,
-        builder: (context) => OrderConfirmedDialog(
-          isLargeOrder: submittedFoodOrder.cart.productsCount >= 10,
-        ),
+        builder: (context) => OrderConfirmedDialog(),
       ).then((_) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
       });
