@@ -29,6 +29,13 @@ class AddressesPage extends StatefulWidget {
 }
 
 class _AddressesPageState extends State<AddressesPage> {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   bool _isInit = true;
   bool _isLoadingAddress = false;
   bool _isLoadingChangingAddress = false;
