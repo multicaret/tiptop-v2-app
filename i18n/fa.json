@@ -222,5 +222,6 @@
   "Status": "الحالة",
   "OK": "متابعة",
   "Please correct the following": "الرجاء تصحيح التالي",
-  "Order Date": "تاريخ الطلب"
+  "Order Date": "تاريخ الطلب",
+  "This item is not available": "هذا المنتج غير متوفر حالياً"
 }
