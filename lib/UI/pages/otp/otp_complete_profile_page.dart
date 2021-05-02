@@ -109,7 +109,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       keyboardType: TextInputType.name,
                       required: true,
                       labelText: 'Full Name',
-                      hintText: 'John Doe',
+                      hintText: Translations.of(context).get("John Doe"),
                       initialValue: formData['full_name'],
                       onSaved: (value) {
                         formData['full_name'] = value;
