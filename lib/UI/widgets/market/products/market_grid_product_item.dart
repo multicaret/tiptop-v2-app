@@ -59,7 +59,7 @@ class MarketGridProductItem extends StatelessWidget {
                 }),
               ),
               Positioned(
-                bottom: product.unit == null || product.unit.title == null ? 0 : marketProductUnitTitleHeight,
+                bottom: hasUnitTitle ? marketProductUnitTitleHeight : 0,
                 left: cartControlsMargin,
                 right: cartControlsMargin,
                 height: getCartControlButtonHeight(context),

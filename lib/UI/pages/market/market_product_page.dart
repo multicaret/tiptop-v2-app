@@ -46,11 +46,13 @@ class _MarketProductPageState extends State<MarketProductPage> {
   List<String> productGallery = [];
   bool hasDiscountedPrice = false;
   bool hasControls = true;
+  bool hasUnitTitle = false;
 
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, product.id);
     product = productsProvider.product;
+    hasUnitTitle = product.unit != null && product.unit.title != null;
     productIsFavorited = product.isFavorited;
     setState(() => _isLoadingProduct = false);
   }
@@ -162,20 +164,33 @@ class _MarketProductPageState extends State<MarketProductPage> {
                       right: screenHorizontalPadding,
                       left: screenHorizontalPadding,
                     ),
-                    height: actionButtonContainerHeight,
+                    height: actionButtonContainerHeight + 20,
                     color: AppColors.bg,
-                    child: Container(
-                      constraints: BoxConstraints(maxHeight: buttonHeightSm),
-                      height: buttonHeightSm,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(color: AppColors.shadow, blurRadius: 6),
-                        ],
-                      ),
-                      child: MarketCartControls(
-                        isModalControls: true,
-                        product: product,
-                      ),
+                    child: Column(
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(maxHeight: buttonHeightSm),
+                          height: buttonHeightSm,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(color: AppColors.shadow, blurRadius: 6),
+                            ],
+                          ),
+                          child: MarketCartControls(
+                            isModalControls: true,
+                            product: product,
+                          ),
+                        ),
+                        if(hasUnitTitle)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Text(
+                              product.unit.title,
+                              style: AppTextStyles.subtitleXs50,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                      ],
                     ),
                   )
               ],

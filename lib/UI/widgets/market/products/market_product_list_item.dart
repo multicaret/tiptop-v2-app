@@ -22,6 +22,8 @@ class MarketProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool hasUnitTitle = product.unit != null && product.unit.title != null;
+
     void openMarketProductPage() {
       Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
         "product": product,
@@ -78,11 +80,28 @@ class MarketProductListItem extends StatelessWidget {
           if (hasControls)
             Container(
               width: 99,
-              height: 33,
-              decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    width: 99,
+                    height: 33,
+                    decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
+                    ),
+                    child: MarketCartControls(product: product, isListItem: true),
+                  ),
+                  if (hasUnitTitle)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Text(
+                        product.unit.title,
+                        style: AppTextStyles.subtitleXxs50,
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                ],
               ),
-              child: MarketCartControls(product: product, isListItem: true),
             ),
           if (quantity != null && !hasControls)
             Container(
