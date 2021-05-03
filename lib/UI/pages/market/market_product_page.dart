@@ -164,7 +164,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
                       right: screenHorizontalPadding,
                       left: screenHorizontalPadding,
                     ),
-                    height: actionButtonContainerHeight + 20,
+                    height: hasUnitTitle ? actionButtonContainerHeight + 20 : actionButtonContainerHeight,
                     color: AppColors.bg,
                     child: Column(
                       children: [
