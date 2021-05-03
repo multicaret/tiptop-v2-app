@@ -48,16 +48,8 @@ class _HomePageState extends State<HomePage> {
   HomeProvider homeProvider;
   AddressesProvider addressesProvider;
 
-  HomeData marketHomeData;
-  HomeData foodHomeData;
-  List<Slide> marketSlides = [];
-  List<Slide> foodSlides = [];
-
   bool hasActiveMarketOrders = false;
-  List<Order> activeMarketOrders = [];
-
   bool hasActiveFoodOrders = false;
-  List<Order> activeFoodOrders = [];
 
   bool hideMarketContent = false;
   bool hideFoodContent = false;
@@ -72,28 +64,22 @@ class _HomePageState extends State<HomePage> {
     if (homeProvider.channelIsMarket) {
       hideMarketContent = homeProvider.marketHomeData == null || homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
       if (!hideMarketContent) {
-        marketHomeData = homeProvider.marketHomeData;
-        marketSlides = marketHomeData.slides;
         hasActiveMarketOrders =
             appProvider.isAuth && homeProvider.marketHomeData.activeOrders != null && homeProvider.marketHomeData.activeOrders.length > 0;
-        activeMarketOrders = hasActiveMarketOrders ? homeProvider.marketHomeData.activeOrders : [];
       }
     } else {
       hideFoodContent = homeProvider.foodHomeData == null || homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
       if (!hideFoodContent) {
         print('Setting food data in home page!');
-        foodHomeData = homeProvider.foodHomeData;
-        foodSlides = foodHomeData.slides;
         hasActiveFoodOrders =
             appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
-        activeFoodOrders = hasActiveFoodOrders ? homeProvider.foodHomeData.activeOrders : [];
       }
     }
   }
 
   void channelButtonAction(AppChannel _channel) {
     homeProvider.setSelectedChannel(_channel);
-    if ((_channel == AppChannel.FOOD && foodHomeData == null) || (_channel == AppChannel.MARKET && marketHomeData == null)) {
+    if ((_channel == AppChannel.FOOD && homeProvider.foodHomeData == null) || (_channel == AppChannel.MARKET && homeProvider.marketHomeData == null)) {
       fetchAndSetHomeData();
     }
   }
@@ -127,8 +113,11 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
   }
 
+  int count = 0;
   @override
   Widget build(BuildContext context) {
+    // print('Rebuilt home page ${count++} times');
+
     return AppScaffold(
       appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
       bodyPadding: const EdgeInsets.all(0),

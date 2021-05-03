@@ -33,7 +33,7 @@ class _AppWrapperState extends State<AppWrapper> {
     return _tabNavKeys[_cupertinoTabController.index];
   }
 
-  void onTabItemTapped(int index, HomeProvider homeProvider) {
+  void onTabItemTapped(int index) {
     if (_tabNavKeys[index].currentState != null && currentTabIndex == index) {
       _tabNavKeys[index].currentState.popUntil((r) => r.isFirst);
     }
@@ -118,7 +118,7 @@ class _AppWrapperState extends State<AppWrapper> {
               backgroundColor: AppColors.white,
               controller: _cupertinoTabController,
               tabBar: CupertinoTabBar(
-                onTap: (index) => onTabItemTapped(index, homeProvider),
+                onTap: (index) => onTabItemTapped(index),
                 currentIndex: currentTabIndex,
                 backgroundColor: AppColors.primary,
                 activeColor: AppColors.secondary,
