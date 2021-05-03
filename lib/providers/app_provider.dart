@@ -89,7 +89,7 @@ class AppProvider with ChangeNotifier {
   ];
 
   // Auth Related.
-  static const DOMAIN = 'https://titan.trytiptop.app/';
+  static const DOMAIN = 'https://trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
   User authUser;
   int userId;
@@ -363,7 +363,7 @@ class AppProvider with ChangeNotifier {
     if (responseData["data"] != null) {
       remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
       remoteConfigs = remoteConfigsData.configs;
-      appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
+      // appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
     }
     print('selected channel is:');
     print(appDefaultChannel);

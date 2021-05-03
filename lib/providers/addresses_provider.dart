@@ -113,6 +113,7 @@ class AddressesProvider with ChangeNotifier {
     if (selectedAddress != null && selectedAddress.id == addressId) {
       print('😱😱😱😱 Ya Lahweeee you are deleting selected address');
       storageActions.deleteData(key: 'selected_address');
+      selectedAddressId = null;
       selectedAddress = null;
     }
   }

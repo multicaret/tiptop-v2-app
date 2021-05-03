@@ -39,6 +39,7 @@ class _AddressesPageState extends State<AddressesPage> {
   bool _isInit = true;
   bool _isLoadingAddress = false;
   bool _isLoadingChangingAddress = false;
+  bool _shouldPopAfterSelection = false;
 
   AddressesProvider addressesProvider;
   AppProvider appProvider;
@@ -110,7 +111,11 @@ class _AddressesPageState extends State<AddressesPage> {
     setState(() => _isLoadingChangingAddress = true);
     await addressesProvider.changeSelectedAddress(_selectedAddress, shouldClearExistingCart: shouldClearExistingCart);
     setState(() => _isLoadingChangingAddress = false);
-    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+    if (_shouldPopAfterSelection) {
+      Navigator.of(context).pop(true);
+    } else {
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+    }
   }
 
   Future<void> _deleteAddress(int _addressId) async {
@@ -138,6 +143,10 @@ class _AddressesPageState extends State<AddressesPage> {
       addressesProvider = Provider.of<AddressesProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      if (data != null) {
+        _shouldPopAfterSelection = data['should_pop_after_selection'] ?? false;
+      }
       _fetchAndSetAddresses();
     }
     _isInit = false;
@@ -245,8 +254,13 @@ class _AddressesPageState extends State<AddressesPage> {
               AddAddressPage.routeName,
               arguments: {
                 'kind': kinds[i],
+                'should_pop_after_address_creation': _shouldPopAfterSelection,
               },
-            );
+            ).then((shouldPop) {
+              if (shouldPop != null && shouldPop) {
+                Navigator.of(context).pop();
+              }
+            });
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),

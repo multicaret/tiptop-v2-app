@@ -207,7 +207,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
     }
     if (!addressesProvider.addressIsSelected) {
       showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamed(
+        AddressesPage.routeName,
+        arguments: {'should_pop_after_selection': true},
+      );
       return;
     }
     bool optionsAreValid = productsProvider.validateProductOptions(context);

@@ -57,7 +57,10 @@ class _MarketCartControlsState extends State<MarketCartControls> {
       Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
     } else if (!addressesProvider.addressIsSelected) {
       showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamed(
+        AddressesPage.routeName,
+        arguments: {'should_pop_after_selection': true},
+      );
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
       final responseData = await cartProvider.adjustMarketProductQuantity(

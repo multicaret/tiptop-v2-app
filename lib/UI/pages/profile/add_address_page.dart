@@ -35,6 +35,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   bool _isInit = true;
   bool _isLoadingStoreAddressRequest = false;
   bool _isLoadingCreateAddressRequest = false;
+  bool shouldPopAfterAddressCreation = false;
 
   Kind selectedKind;
   String currentMarkerIcon;
@@ -122,6 +123,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       appProvider = Provider.of<AppProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       selectedKind = data['kind'];
+      shouldPopAfterAddressCreation = data['should_pop_after_address_creation'] ?? false;
       currentMarkerIcon = selectedKind.markerIcon;
       addressAliasTextFieldController.text = selectedKind.title;
     }
@@ -279,6 +281,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
     await addressesProvider.storeAddress(appProvider, addressDetailsFormData);
     setState(() => _isLoadingStoreAddressRequest = false);
     showToast(msg: Translations.of(context).get("Address stored successfully!"));
-    Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+    if (shouldPopAfterAddressCreation) {
+      Navigator.of(context).pop(true);
+    } else {
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+    }
   }
 }
