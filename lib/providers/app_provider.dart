@@ -363,7 +363,7 @@ class AppProvider with ChangeNotifier {
     if (responseData["data"] != null) {
       remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
       remoteConfigs = remoteConfigsData.configs;
-      // appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
+      appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
     }
     print('selected channel is:');
     print(appDefaultChannel);
