@@ -160,13 +160,22 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                         children: [
                           OrderInfo(order: order),
                           if (order.cart != null) RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
-                          if (order.status == OrderStatus.DELIVERED && order.orderRating.branchRatingValue != 0)
+                          if (order.status == OrderStatus.DELIVERED &&
+                              !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated
                                   ? null
-                                  : () => Navigator.of(context, rootNavigator: true)
-                                      .pushNamed(FoodOrderRatingPage.routeName, arguments: {'order': order}),
+                                  : () {
+                                      Navigator.of(context, rootNavigator: true).pushNamed(
+                                        FoodOrderRatingPage.routeName,
+                                        arguments: {'order': order},
+                                      ).then((response) {
+                                        if (response != null && response) {
+                                          _fetchAndSetPreviousOrder();
+                                        }
+                                      });
+                                    },
                               isRTL: appProvider.isRTL,
                             ),
                           if (order.cart != null)

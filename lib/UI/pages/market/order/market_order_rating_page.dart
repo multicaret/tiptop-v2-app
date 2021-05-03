@@ -77,7 +77,7 @@ class _MarketOrderRatingPageState extends State<MarketOrderRatingPage> {
         await ordersProvider.storeOrderRating(appProvider, order.id, ratingData);
         setState(() => _isLoadingStoreRatingRequest = false);
         showToast(msg: Translations.of(context).get("Rating submitted successfully"));
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(true);
       } catch (e) {
         showToast(msg: Translations.of(context).get("Error submitting rating!"));
         setState(() => _isLoadingStoreRatingRequest = false);

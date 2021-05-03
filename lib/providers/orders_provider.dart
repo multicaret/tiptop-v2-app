@@ -258,7 +258,7 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> storeOrderRating(AppProvider appProvider, int orderId, Map<String, dynamic> ratingData, {bool isMarketRating = true}) async {
+  Future<void> storeOrderRating(AppProvider appProvider, int orderId, Map<String, dynamic> ratingData) async {
     final endpoint = 'orders/$orderId/rate';
     final responseData = await appProvider.post(endpoint: endpoint, body: ratingData, withToken: true);
     if (responseData == 401) {
@@ -267,11 +267,6 @@ class OrdersProvider with ChangeNotifier {
     }
     if (responseData["status"] != 200) {
       throw HttpException(title: 'Http Exception Error', message: getHttpExceptionMessage(responseData));
-    }
-    if (isMarketRating) {
-      await fetchAndSetMarketPreviousOrders(appProvider);
-    } else {
-      await fetchAndSetFoodPreviousOrders(appProvider);
     }
     notifyListeners();
   }
