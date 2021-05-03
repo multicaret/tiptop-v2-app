@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -284,4 +285,20 @@ DoubleRawStringFormatted calculateFinalDeliveryFee({
     raw: calculatedDeliveryFee,
     formatted: priceAndCurrency(calculatedDeliveryFee, currency),
   );
+}
+
+List<Category> filterTwoLevelCategories(List<Category> originalCategories) {
+  return originalCategories.where((parentCategory) {
+    bool atLeastOneChildHasProducts = false;
+    if (parentCategory.hasChildren) {
+      final childCategories = parentCategory.childCategories;
+      childCategories.forEach((child) {
+        if (child.products.length > 0) {
+          atLeastOneChildHasProducts = true;
+          return;
+        }
+      });
+    }
+    return parentCategory.hasChildren && atLeastOneChildHasProducts;
+  }).toList();
 }

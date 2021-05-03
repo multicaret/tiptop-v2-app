@@ -201,8 +201,7 @@ class _HomePageState extends State<HomePage> {
                 totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
               ),
             MarketHomeCategoriesGrid(
-              categories: homeProvider.marketCategories,
-              fetchAndSetHomeData: fetchAndSetHomeData,
+              parentCategories: homeProvider.marketParentCategories,
             ),
           ],
         );

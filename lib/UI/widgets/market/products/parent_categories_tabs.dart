@@ -4,23 +4,23 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ParentCategoriesTabs extends StatelessWidget {
-  final List<Category> parents;
+  final List<Category> parentCategories;
   final int selectedParentCategoryId;
   final TabController tabController;
 
   const ParentCategoriesTabs({
-    @required this.parents,
+    @required this.parentCategories,
     @required this.selectedParentCategoryId,
     @required this.tabController,
   });
 
-  static double _parentsTabHeight = 50.0;
+  static double _parentCategoriesTabHeight = 50.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: _parentsTabHeight,
+      height: _parentCategoriesTabHeight,
       color: AppColors.primary,
       child: TabBar(
         indicatorPadding: const EdgeInsets.only(top: 6, left: 6, right: 6),
@@ -40,7 +40,7 @@ class ParentCategoriesTabs extends StatelessWidget {
         ),
         indicatorColor: AppColors.white,
         tabs: <Widget>[
-          ...parents.map((parent) => Transform.translate(
+          ...parentCategories.map((parent) => Transform.translate(
                 offset: Offset(0.0, 3.0),
                 child: Tab(text: parent.title),
               ))

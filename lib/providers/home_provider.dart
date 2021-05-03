@@ -6,7 +6,9 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'addresses_provider.dart';
@@ -15,7 +17,7 @@ import 'local_storage.dart';
 
 class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
-  List<Category> marketCategories = [];
+  List<Category> marketParentCategories = [];
   Currency marketCurrency;
 
   HomeData foodHomeData;
@@ -60,11 +62,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setIsLoadingHomeData(bool _value) {
-    isLoadingHomeData = _value;
-    notifyListeners();
-  }
-
   EstimatedArrivalTime getEstimateArrivalTime() {
     if (channelIsMarket) {
       return marketHomeData == null ? null : marketHomeData.estimatedArrivalTime;
@@ -83,6 +80,7 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
     RestaurantsProvider restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
+    ProductsProvider productsProvider = Provider.of<ProductsProvider>(context, listen: false);
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
       print('Lat/Long not found!');
@@ -113,7 +111,7 @@ class HomeProvider with ChangeNotifier {
     foodHomeDataRequestError = false;
     marketNoBranchFound = false;
     foodNoRestaurantFound = false;
-    // try {
+    try {
       final responseData = await appProvider.get(
         endpoint: endpoint,
         body: body,
@@ -121,27 +119,34 @@ class HomeProvider with ChangeNotifier {
       );
       setHomeData(
         cartProvider,
+        productsProvider,
         restaurantsProvider,
         responseData["data"],
       );
       isLoadingHomeData = false;
+      print('Notifying listeners from home provider fetch home data function!');
       notifyListeners();
-    // } catch (e) {
-    //   if (channelIsMarket) {
-    //     print('An error happened in market home data request');
-    //     marketHomeDataRequestError = true;
-    //     // throw e;
-    //   } else {
-    //     print('An error happened in food home data request');
-    //     foodHomeDataRequestError = true;
-    //     throw e;
-    //   }
-    //   isLoadingHomeData = false;
-    //   notifyListeners();
-    // }
+    } catch (e) {
+      if (channelIsMarket) {
+        print('An error happened in market home data request');
+        marketHomeDataRequestError = true;
+        // throw e;
+      } else {
+        print('An error happened in food home data request');
+        foodHomeDataRequestError = true;
+        throw e;
+      }
+      isLoadingHomeData = false;
+      notifyListeners();
+    }
   }
 
-  void setHomeData(CartProvider cartProvider, RestaurantsProvider restaurantsProvider, data) {
+  void setHomeData(
+    CartProvider cartProvider,
+    ProductsProvider productsProvider,
+    RestaurantsProvider restaurantsProvider,
+    data,
+  ) {
     if (channelIsMarket) {
       print('Setting market home data...');
       marketHomeData = HomeData.fromJson(data);
@@ -161,21 +166,8 @@ class HomeProvider with ChangeNotifier {
         marketBranchLong = marketHomeData.branch.longitude;
       }
 
-      final _marketCategories = marketHomeData.categories;
-      marketCategories = _marketCategories.where((parentCategory) {
-        bool atLeastOneChildHasProducts = false;
-        if (parentCategory.hasChildren) {
-          final childCategories = parentCategory.childCategories;
-          childCategories.forEach((child) {
-            if (child.products.length > 0) {
-              atLeastOneChildHasProducts = true;
-              return;
-            }
-          });
-        }
-        return parentCategory.hasChildren && atLeastOneChildHasProducts;
-      }).toList();
-
+      marketParentCategories = filterTwoLevelCategories(marketHomeData.categories);
+      productsProvider.setMarketParentCategories(marketParentCategories);
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);
       }

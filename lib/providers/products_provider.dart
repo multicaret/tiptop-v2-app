@@ -11,15 +11,31 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
 class ProductsProvider with ChangeNotifier {
-  CategoryParentsData categoryParentsData;
-  Category selectedParent;
-  List<Category> parents = [];
+  Category selectedParentCategory;
+  List<Category> marketParentCategories = <Category>[];
+  List<Category> marketParentCategoriesWithoutProducts = <Category>[];
   List<Category> selectedParentChildCategories = [];
+
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
   Product product;
   List<ProductOption> productOptions = <ProductOption>[];
   ProductCartData productTempCartData;
+
+  void setMarketParentCategories(List<Category> _marketParentCategories) {
+    marketParentCategories = _marketParentCategories;
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetChildCategoriesAndProducts(int selectedParentCategoryId) async {
+    final endpoint = 'categories/$selectedParentCategoryId/products';
+
+    final responseData = await AppProvider().get(endpoint: endpoint);
+    marketParentCategoriesWithoutProducts = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
+    selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
+    selectedParentChildCategories = selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
+    notifyListeners();
+  }
 
   void setProductTempOption({
     Product product,
@@ -145,7 +161,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void initProductOptions(CartProduct existingCartProduct) {
-    if(existingCartProduct != null) {
+    if (existingCartProduct != null) {
       print('existingCartProduct, cart product id: ${existingCartProduct.cartProductId}, selected options:');
       print(List<dynamic>.from(existingCartProduct.selectedOptions.map((x) => x.toJson())));
     }
@@ -184,17 +200,6 @@ class ProductsProvider with ChangeNotifier {
     invalidOptions = [];
     print('initial productTempCartData:');
     print(json.encode(productTempCartData.toJson()["selectedOptions"]));
-  }
-
-  Future<void> fetchAndSetParentsAndProducts(int selectedParentCategoryId) async {
-    final endpoint = 'categories/$selectedParentCategoryId/products';
-
-    final responseData = await AppProvider().get(endpoint: endpoint);
-
-    categoryParentsData = CategoryParentsData.fromJson(responseData["data"]);
-    parents = categoryParentsData.parentCategories;
-    selectedParent = categoryParentsData.selectedParentCategory;
-    selectedParentChildCategories = selectedParent.childCategories;
   }
 
   Future<void> fetchSearchedProducts(searchQuery) async {

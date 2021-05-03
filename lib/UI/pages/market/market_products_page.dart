@@ -11,14 +11,12 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 class MarketProductsPage extends StatefulWidget {
   static const routeName = '/products';
 
-  final List<Category> parents;
+  final List<Category> parentCategories;
   final int selectedParentCategoryId;
-  final Function refreshHomeData;
 
   MarketProductsPage({
-    @required this.parents,
+    @required this.parentCategories,
     @required this.selectedParentCategoryId,
-    @required this.refreshHomeData,
   });
 
   @override
@@ -26,7 +24,6 @@ class MarketProductsPage extends StatefulWidget {
 }
 
 class _MarketProductsPageState extends State<MarketProductsPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  AppProvider appProvider;
   TabController tabController;
   int currentTabIndex = 0;
 
@@ -34,10 +31,9 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
 
   @override
   void initState() {
-    appProvider = Provider.of<AppProvider>(context, listen: false);
-    selectedParentIndex = widget.parents.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
+    selectedParentIndex = widget.parentCategories.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
 
-    tabController = TabController(length: widget.parents.length, vsync: this);
+    tabController = TabController(length: widget.parentCategories.length, vsync: this);
     tabController.animateTo(selectedParentIndex);
     super.initState();
   }
@@ -56,24 +52,28 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
       hasCurve: false,
       appBar: AppBar(
         title: Text(Translations.of(context).get("Products")),
-        actions: appProvider.isAuth ? [AppBarCartTotal()] : null,
+        actions: [
+          Consumer<AppProvider>(
+            builder: (c, appProvider, _) => appProvider.isAuth ? AppBarCartTotal() : Container(),
+          ),
+        ],
       ),
       body: Column(
         children: [
           ParentCategoriesTabs(
-            parents: widget.parents,
+            parentCategories: widget.parentCategories,
             selectedParentCategoryId: widget.selectedParentCategoryId,
             tabController: tabController,
           ),
           Expanded(
             child: TabBarView(
               controller: tabController,
-              children: List.generate(widget.parents.length, (i) {
-                List<Category> children = widget.parents[i].childCategories.where((child) => child.products.length > 0).toList();
+              children: List.generate(widget.parentCategories.length, (i) {
+                List<Category> childCategories = widget.parentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
 
                 return ParentCategoryTabContent(
-                  children: children,
-                  refreshHomeData: widget.refreshHomeData,
+                  selectedParentCategoryId: widget.parentCategories[i].id,
+                  childCategories: childCategories,
                 );
               }),
             ),

@@ -7,16 +7,15 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class MarketHomeCategoriesGrid extends StatelessWidget {
-  final List<Category> categories;
-  final Function fetchAndSetHomeData;
+  final List<Category> parentCategories;
 
   MarketHomeCategoriesGrid({
-    @required this.categories,
-    @required this.fetchAndSetHomeData,
+    @required this.parentCategories,
   });
 
   @override
   Widget build(BuildContext context) {
+    print('Built market home categories grid!');
     double colSize = getColItemHeight(4, context);
     double crossAxisCount = colSize / (colSize + 25);
 
@@ -28,15 +27,14 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
       crossAxisCount: 4,
       crossAxisSpacing: 15,
       mainAxisSpacing: 16,
-      children: categories
+      children: parentCategories
           .map((category) => GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     CupertinoPageRoute<void>(
                       builder: (BuildContext context) => MarketProductsPage(
                         selectedParentCategoryId: category.id,
-                        parents: categories,
-                        refreshHomeData: fetchAndSetHomeData,
+                        parentCategories: parentCategories,
                       ),
                     ),
                   );

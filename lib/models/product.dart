@@ -1,25 +1,7 @@
 import 'dart:convert';
 
-import 'category.dart';
 import 'enums.dart';
 import 'models.dart';
-
-class CategoryParentsData {
-  CategoryParentsData({
-    this.selectedParentCategory,
-    this.parentCategories,
-  });
-
-  Category selectedParentCategory;
-  List<Category> parentCategories;
-
-  factory CategoryParentsData.fromJson(Map<String, dynamic> json) => CategoryParentsData(
-        selectedParentCategory: Category.fromJson(json["selectedParent"]),
-        parentCategories: List<Category>.from(json["parents"].map((x) => Category.fromJson(x))),
-      );
-}
-
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
 class Product {
   Product({
