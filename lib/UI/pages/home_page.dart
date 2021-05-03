@@ -151,7 +151,11 @@ class _HomePageState extends State<HomePage> {
                                 height: homeSliderHeight,
                                 color: AppColors.bg,
                               )
-                            : MarketHomeSlider(slides: homeProvider.marketHomeData.slides)
+                            : MarketHomeSlider(
+                                slides: homeProvider.marketHomeData.slides,
+                                delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
+                                selectedAddress: addressesProvider.selectedAddress,
+                              )
                         : homeProvider.isLoadingHomeData || hideFoodContent || homeProvider.foodHomeData == null
                             ? Container(
                                 height: homeSliderHeight,
