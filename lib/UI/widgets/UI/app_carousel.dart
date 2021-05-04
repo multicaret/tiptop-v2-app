@@ -37,7 +37,7 @@ class AppCarousel extends StatefulWidget {
 
 class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClientMixin<AppCarousel> {
   final CarouselController _controller = CarouselController();
-  int _currentSlide = 0;
+  final currentSlideNotifier = ValueNotifier<int>(0);
 
   @override
   void initState() {
@@ -64,17 +64,6 @@ class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClient
           width: widget.width,
           child: CarouselSlider(
             carouselController: _controller,
-            //Building widgets on demand (if needed)
-            /*itemCount: widget.mapWidget != null ? widget.images.length + 1 : widget.images.length,
-            itemBuilder: (c, index, _) {
-              return CachedNetworkImage(
-                      imageUrl: widget.images[index],
-                      fit: BoxFit.cover,
-                      color: AppColors.text.withOpacity(widget.imageOverlay ? 0.3 : 0),
-                      colorBlendMode: BlendMode.darken,
-                    );
-            },*/
-            // items: _getImagesList(),
             items: widget.mapWidget != null ? [widget.mapWidget, ..._getImagesList()] : _getImagesList(),
             options: CarouselOptions(
               viewportFraction: 1,
@@ -82,7 +71,7 @@ class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClient
               height: widget.height,
               autoPlayInterval: widget.autoPlayInterval,
               autoPlayAnimationDuration: widget.autoplayDuration,
-              // onPageChanged: (index, reason) => setState(() => _currentSlide = index),
+              onPageChanged: (index, reason) => currentSlideNotifier.value = index,
               enableInfiniteScroll: widget.infinite,
             ),
           ),
@@ -90,26 +79,23 @@ class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClient
         if (widget.hasIndicator && widget.images.length > 1)
           Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(widget.images.length, (index) {
-                return AnimatedContainer(
-                  margin: EdgeInsets.symmetric(horizontal: 3),
-                  duration: const Duration(milliseconds: 300),
-                  height: _currentSlide == index ? 10 : 8,
-                  width: _currentSlide == index ? 10 : 8,
-                  child: AnimatedOpacity(
+            child: ValueListenableBuilder(
+              valueListenable: currentSlideNotifier,
+              builder: (c, currentSlide, _) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(widget.images.length, (index) {
+                  return AnimatedContainer(
+                    margin: EdgeInsets.symmetric(horizontal: 3),
                     duration: const Duration(milliseconds: 300),
-                    opacity: _currentSlide == index ? 1 : 0.5,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.secondary,
-                      ),
+                    height: currentSlide == index ? 10 : 8,
+                    width: currentSlide == index ? 10 : 8,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withOpacity(currentSlide == index ? 1 : 0.5),
+                      shape: BoxShape.circle,
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
       ],
