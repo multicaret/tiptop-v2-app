@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
         //Market/Grocery channel home content
         return Column(
           children: [
-            if (hasActiveMarketOrders)
+            if (hasActiveMarketOrders && appProvider.isAuth)
               HomeLiveTracking(
                 activeOrders: homeProvider.marketHomeData.activeOrders,
                 totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
         //Food channel home content
         return Column(
           children: [
-            if (hasActiveFoodOrders)
+            if (hasActiveFoodOrders && appProvider.isAuth)
               HomeLiveTracking(
                 activeOrders: homeProvider.foodHomeData.activeOrders,
                 totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,

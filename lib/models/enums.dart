@@ -15,6 +15,23 @@ class EnumValues<T> {
   }
 }
 
+//To get the enum use values.reverse[]
+//To get the string use values.map[]
+
+class EnumReverseValues<T> {
+  Map<T, String> map;
+  Map<String, T> reverseMap;
+
+  EnumReverseValues(this.map);
+
+  Map<String, T> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap;
+  }
+}
+
 enum GoogleResponseStatus {
   OK,
   ZERO_RESULTS,
@@ -104,16 +121,16 @@ final orderStatusValues = EnumValues({
 });
 
 
-final orderStatusStringValues = EnumValues({
-  "Cancelled": OrderStatus.CANCELLED,
-  "Draft": OrderStatus.DRAFT,
-  "New": OrderStatus.NEW,
-  "Preparing": OrderStatus.PREPARING,
-  "Waiting Courier": OrderStatus.WAITING_COURIER,
-  "On the Way": OrderStatus.ON_THE_WAY,
-  "At The Address": OrderStatus.AT_THE_ADDRESS,
-  "Delivered": OrderStatus.DELIVERED,
-  "Scheduled": OrderStatus.SCHEDULED,
+final orderStatusStringValues = EnumReverseValues({
+  OrderStatus.CANCELLED : "Cancelled",
+  OrderStatus.DRAFT : "Draft",
+  OrderStatus.NEW : "Preparing",
+  OrderStatus.PREPARING : "Preparing",
+  OrderStatus.WAITING_COURIER : "Preparing",
+  OrderStatus.ON_THE_WAY : "On the Way",
+  OrderStatus.AT_THE_ADDRESS : "At The Address",
+  OrderStatus.DELIVERED : "Delivered",
+  OrderStatus.SCHEDULED : "Scheduled",
 });
 
 enum ProductOptionType {

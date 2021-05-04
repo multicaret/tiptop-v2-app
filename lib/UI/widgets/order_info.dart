@@ -32,7 +32,7 @@ class OrderInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(Translations.of(context).get("Status"), style: AppTextStyles.body50),
-              Text(Translations.of(context).get(orderStatusStringValues.reverse[order.status])),
+              Text(Translations.of(context).get(orderStatusStringValues.map[order.status])),
             ],
           ),
           const SizedBox(height: 10),
