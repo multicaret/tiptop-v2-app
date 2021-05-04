@@ -63,7 +63,6 @@ class AddressesProvider with ChangeNotifier {
     }
 
     createAddressData = CreateAddressData.fromJson(responseData["data"]);
-
     notifyListeners();
   }
 
