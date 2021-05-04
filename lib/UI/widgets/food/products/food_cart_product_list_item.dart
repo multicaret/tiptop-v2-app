@@ -23,6 +23,8 @@ class FoodCartProductListItem extends StatelessWidget {
   final bool hasControls;
   final Function dismissAction;
   final bool editableCartProduct;
+  final Function editQuantityAction;
+  final bool isLoadingAdjustQuantity;
 
   FoodCartProductListItem({
     @required this.restaurantId,
@@ -31,6 +33,8 @@ class FoodCartProductListItem extends StatelessWidget {
     this.hasControls = true,
     this.dismissAction,
     this.editableCartProduct = true,
+    this.editQuantityAction,
+    this.isLoadingAdjustQuantity = false,
   });
 
   @override
@@ -42,11 +46,8 @@ class FoodCartProductListItem extends StatelessWidget {
             background: Consumer<AppProvider>(
               builder: (c, appProvider, _) => Container(
                 color: Colors.red,
-                alignment: appProvider.isRTL
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: screenHorizontalPadding),
+                alignment: appProvider.isRTL ? Alignment.centerLeft : Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
                 child: AppIcons.iconMdWhite(FontAwesomeIcons.trashAlt),
               ),
             ),
@@ -55,8 +56,7 @@ class FoodCartProductListItem extends StatelessWidget {
                 final response = await showDialog(
                   context: context,
                   builder: (context) => ConfirmAlertDialog(
-                    title:
-                        'Are you sure you want to delete this product from your cart?',
+                    title: 'Are you sure you want to delete this product from your cart?',
                   ),
                 );
                 return response == null ? false : response;
@@ -75,19 +75,20 @@ class FoodCartProductListItem extends StatelessWidget {
 
   Widget _getCartListItem(BuildContext context) {
     void openFoodProductPage() {
-      Navigator.of(context, rootNavigator: true)
-          .pushNamed(FoodProductPage.routeName, arguments: {
-        "product_id": cartProduct.product.id,
-        "has_controls": hasControls,
-        "cart_product": editableCartProduct ? cartProduct : null,
-        'chain_id': chainId,
-        'restaurant_id': restaurantId,
-      });
+      Navigator.of(context, rootNavigator: true).pushNamed(
+        FoodProductPage.routeName,
+        arguments: {
+          "product_id": cartProduct.product.id,
+          "has_controls": hasControls,
+          "cart_product": editableCartProduct ? cartProduct : null,
+          'chain_id': chainId,
+          'restaurant_id': restaurantId,
+        },
+      );
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: screenHorizontalPadding, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
@@ -107,8 +108,7 @@ class FoodCartProductListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: AppColors.border, width: 1.5),
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        cartProduct.product.media.coverThumbnail),
+                    image: CachedNetworkImageProvider(cartProduct.product.media.coverThumbnail),
                     fit: BoxFit.cover,
                   )),
             ),
@@ -117,8 +117,7 @@ class FoodCartProductListItem extends StatelessWidget {
             child: InkWell(
               onTap: openFoodProductPage,
               child: Container(
-                constraints:
-                    BoxConstraints(minHeight: productListItemThumbnailSize),
+                constraints: BoxConstraints(minHeight: productListItemThumbnailSize),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
@@ -148,7 +147,8 @@ class FoodCartProductListItem extends StatelessWidget {
               ),
               child: FoodCartControls(
                 quantity: cartProduct.quantity,
-                action: (CartAction cartAction) {},
+                isLoadingQuantity: isLoadingAdjustQuantity,
+                action: editQuantityAction,
                 isMin: true,
               ),
             ),

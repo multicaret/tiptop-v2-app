@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -9,11 +10,13 @@ class FoodCartControls extends StatelessWidget {
   final int quantity;
   final Function action;
   final bool isMin;
+  final bool isLoadingQuantity;
 
   FoodCartControls({
     @required this.quantity,
     @required this.action,
     this.isMin = false,
+    this.isLoadingQuantity = false,
   });
 
   @override
@@ -34,7 +37,7 @@ class FoodCartControls extends StatelessWidget {
               onTap: () => action(CartAction.REMOVE),
               child: Container(
                 child: Icon(
-                  FontAwesomeIcons.minus,
+                  quantity == 1 ? FontAwesomeIcons.trashAlt : FontAwesomeIcons.minus,
                   color: AppColors.white,
                   size: isMin ? 14 : 20,
                 ),
@@ -46,14 +49,19 @@ class FoodCartControls extends StatelessWidget {
             child: Container(
               color: AppColors.white,
               alignment: Alignment.center,
-              child: Text(
-                '$quantity',
-                style: isMin
-                    ? quantity.toString().length >= 2
-                        ? AppTextStyles.subtitleXsBold
-                        : AppTextStyles.subtitleBold
-                    : AppTextStyles.bodyBold,
-              ),
+              child: isLoadingQuantity && isMin
+                  ? SpinKitFadingCircle(
+                      color: AppColors.primary,
+                      size: 20,
+                    )
+                  : Text(
+                      '$quantity',
+                      style: isMin
+                          ? quantity.toString().length >= 2
+                              ? AppTextStyles.subtitleXsBold
+                              : AppTextStyles.subtitleBold
+                          : AppTextStyles.bodyBold,
+                    ),
             ),
           ),
           //Add button

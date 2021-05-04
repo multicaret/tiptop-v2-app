@@ -8,7 +8,9 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_min_horizontal_
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -63,6 +65,9 @@ class FoodCartPage extends StatelessWidget {
                     : ListView.builder(
                         itemCount: cartProducts.length,
                         itemBuilder: (c, i) {
+                          bool isLoadingAdjustQuantity =
+                              cartProvider.isLoadingAdjustFoodProductQuantityRequest[cartProducts[i].cartProductId] ?? false;
+
                           return Padding(
                             padding: EdgeInsets.only(
                               top: i == 0 ? 20 : 0,
@@ -72,12 +77,22 @@ class FoodCartPage extends StatelessWidget {
                               restaurantId: cartProvider.foodCart.restaurant.id,
                               chainId: cartProvider.foodCart.restaurant.chain.id,
                               cartProduct: cartProducts[i],
-                              hasControls: false,
+                              isLoadingAdjustQuantity: isLoadingAdjustQuantity,
+                              editQuantityAction: (CartAction _cartAction) => _editCartProductQuantity(
+                                context: context,
+                                appProvider: appProvider,
+                                cartProvider: cartProvider,
+                                cartAction: _cartAction,
+                                cartProduct: cartProducts[i],
+                              ),
                               dismissAction: () {
                                 int cartProductIdToDelete = cartProducts[i].cartProductId;
                                 cartProducts.removeAt(i);
                                 cartProvider.deleteProductFromFoodCart(
-                                    context: context, appProvider: appProvider, cartProductId: cartProductIdToDelete);
+                                  context: context,
+                                  appProvider: appProvider,
+                                  cartProductId: cartProductIdToDelete,
+                                );
                               },
                             ),
                           );
@@ -112,5 +127,50 @@ class FoodCartPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _editCartProductQuantity({
+    BuildContext context,
+    CartAction cartAction,
+    AppProvider appProvider,
+    CartProvider cartProvider,
+    CartProduct cartProduct,
+  }) async {
+    if (cartProduct.quantity == 1 && cartAction == CartAction.REMOVE) {
+      showDialog(
+        context: context,
+        builder: (context) => ConfirmAlertDialog(
+          title: 'Are you sure you want to delete this product from your cart?',
+        ),
+      ).then((response) {
+        if (response != null && response) {
+          cartProvider.deleteProductFromFoodCart(
+            context: context,
+            appProvider: appProvider,
+            cartProductId: cartProduct.cartProductId,
+          );
+        }
+        return;
+      });
+    } else {
+      print('cartAction: $cartAction');
+      int newQuantity = cartAction == CartAction.ADD ? cartProduct.quantity + 1 : cartProduct.quantity - 1;
+      ProductCartData productCartData = ProductCartData(
+        productId: cartProduct.product.id,
+        quantity: newQuantity,
+        selectedOptions: cartProduct.selectedOptions,
+      );
+      print(cartProduct.selectedOptions.map((x) => x.toJson()).toList());
+      await cartProvider.adjustFoodProductCart(
+        context,
+        appProvider,
+        productId: cartProduct.product.id,
+        cartProductId: cartProduct.cartProductId,
+        restaurantId: cartProvider.foodCart.restaurant.id,
+        chainId: cartProvider.foodCart.restaurant.chain.id,
+        productTempCartData: productCartData,
+        adjustingQuantity: true,
+      );
+    }
   }
 }

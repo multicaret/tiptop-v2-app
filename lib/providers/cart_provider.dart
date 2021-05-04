@@ -65,6 +65,7 @@ class CartProvider with ChangeNotifier {
 
   Map<int, bool> requestedMoreThanAvailableQuantity = {};
   Map<int, bool> isLoadingAdjustMarketProductQuantityRequest = {};
+  Map<int, bool> isLoadingAdjustFoodProductQuantityRequest = {};
 
   Future<int> adjustMarketProductQuantity({
     @required AppProvider appProvider,
@@ -163,12 +164,16 @@ class CartProvider with ChangeNotifier {
     @required int restaurantId,
     @required ProductCartData productTempCartData,
     bool deleteExistingCart = false,
+    bool adjustingQuantity = false,
   }) async {
     if (foodCart == null || foodCart.id == null) {
       print('No food cart!');
       showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
       appProvider.logout();
       return 401;
+    }
+    if(adjustingQuantity) {
+      isLoadingAdjustFoodProductQuantityRequest[cartProductId] = true;
     }
     isLoadingAdjustFoodCartDataRequest = true;
     notifyListeners();
@@ -203,6 +208,9 @@ class CartProvider with ChangeNotifier {
         return 401;
       }
       CartData cartData = CartData.fromJson(responseData["data"]);
+      if(adjustingQuantity) {
+        isLoadingAdjustFoodProductQuantityRequest[cartProductId] = false;
+      }
       isLoadingAdjustFoodCartDataRequest = false;
       foodCart = cartData.cart;
       if (HomeProvider.selectedFoodBranchId == null && HomeProvider.selectedFoodChainId == null) {
@@ -216,6 +224,9 @@ class CartProvider with ChangeNotifier {
     } catch (e) {
       // showToast(msg: Translations.of(context).get("An Error Occurred!"));
       isLoadingAdjustFoodCartDataRequest = false;
+      if(adjustingQuantity) {
+        isLoadingAdjustFoodProductQuantityRequest[cartProductId] = false;
+      }
       notifyListeners();
       throw e;
     }
