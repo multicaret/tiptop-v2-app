@@ -76,7 +76,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           'kind': selectedKind.id,
           'alias': selectedKind.title,
           'region_id': selectedRegion.id,
-          'city_id': selectedCity.id,
+          'city_id': null,
           'address1': '',
           'latitude': pickedPosition.latitude,
           'longitude': pickedPosition.longitude,
