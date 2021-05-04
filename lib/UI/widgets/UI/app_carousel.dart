@@ -6,7 +6,7 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AppCarousel extends StatefulWidget {
+class AppCarousel extends StatelessWidget {
   final double height;
   final double width;
   final List<String> images;
@@ -31,59 +31,36 @@ class AppCarousel extends StatefulWidget {
     this.links,
   });
 
-  @override
-  _AppCarouselState createState() => _AppCarouselState();
-}
-
-class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClientMixin<AppCarousel> {
-  final CarouselController _controller = CarouselController();
   final currentSlideNotifier = ValueNotifier<int>(0);
 
   @override
-  void initState() {
-    if (_controller.ready) {
-      _controller.startAutoPlay();
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    print('Disposed carousel!');
-    _controller.stopAutoPlay();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Column(
       children: [
         SizedBox(
-          height: widget.height,
-          width: widget.width,
+          height: height,
+          width: width,
           child: CarouselSlider(
-            carouselController: _controller,
-            items: widget.mapWidget != null ? [widget.mapWidget, ..._getImagesList()] : _getImagesList(),
+            items: mapWidget != null ? [mapWidget, ..._getImagesList()] : _getImagesList(),
             options: CarouselOptions(
               viewportFraction: 1,
-              autoPlay: widget.autoPlay,
-              height: widget.height,
-              autoPlayInterval: widget.autoPlayInterval,
-              autoPlayAnimationDuration: widget.autoplayDuration,
+              autoPlay: autoPlay,
+              height: height,
+              autoPlayInterval: autoPlayInterval,
+              autoPlayAnimationDuration: autoplayDuration,
               onPageChanged: (index, reason) => currentSlideNotifier.value = index,
-              enableInfiniteScroll: widget.infinite,
+              enableInfiniteScroll: infinite,
             ),
           ),
         ),
-        if (widget.hasIndicator && widget.images.length > 1)
+        if (hasIndicator && images.length > 1)
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ValueListenableBuilder(
               valueListenable: currentSlideNotifier,
               builder: (c, currentSlide, _) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(widget.images.length, (index) {
+                children: List.generate(images.length, (index) {
                   return AnimatedContainer(
                     margin: EdgeInsets.symmetric(horizontal: 3),
                     duration: const Duration(milliseconds: 300),
@@ -104,28 +81,26 @@ class _AppCarouselState extends State<AppCarousel> with AutomaticKeepAliveClient
 
   List<Widget> _getImagesList() {
     return List.generate(
-        widget.images.length,
-        (i) => GestureDetector(
-              onTap: widget.links == null || widget.links.length == 0 || widget.links[i] == null
-                  ? null
-                  : () {
-                      print('Slider links:');
-                      print(widget.links);
-                      if (widget.links[i]['type'] == LinkType.EXTERNAL && widget.links[i]['value'] != null) {
-                        launch(widget.links[i]['value']);
-                      }
-                    },
-              child: CachedNetworkImage(
-                imageUrl: widget.images[i],
-                fit: BoxFit.cover,
-                width: double.infinity,
-                placeholder: (_, __) => SpinKitFadingCircle(
-                  color: AppColors.secondary,
-                ),
-              ),
-            ));
+      images.length,
+      (i) => GestureDetector(
+        onTap: links == null || links.length == 0 || links[i] == null
+            ? null
+            : () {
+                print('Slider links:');
+                print(links);
+                if (links[i]['type'] == LinkType.EXTERNAL && links[i]['value'] != null) {
+                  launch(links[i]['value']);
+                }
+              },
+        child: CachedNetworkImage(
+          imageUrl: images[i],
+          fit: BoxFit.cover,
+          width: double.infinity,
+          placeholder: (_, __) => SpinKitFadingCircle(
+            color: AppColors.secondary,
+          ),
+        ),
+      ),
+    );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
