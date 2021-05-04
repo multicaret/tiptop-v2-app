@@ -13,11 +13,13 @@ class MarketProductListItem extends StatelessWidget {
   final int quantity;
   final Product product;
   final bool hasControls;
+  final bool disabled;
 
   MarketProductListItem({
     this.quantity,
     @required this.product,
     this.hasControls = true,
+    this.disabled = false,
   });
 
   @override
@@ -44,7 +46,7 @@ class MarketProductListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: openMarketProductPage,
+            onTap: disabled ? null : openMarketProductPage,
             child: Container(
               width: productListItemThumbnailSize,
               height: productListItemThumbnailSize,
@@ -59,7 +61,7 @@ class MarketProductListItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: openMarketProductPage,
+              onTap: disabled ? null : openMarketProductPage,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

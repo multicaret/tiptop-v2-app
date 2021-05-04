@@ -184,6 +184,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                               (i) => MarketProductListItem(
                                 quantity: order.cart.cartProducts[i].quantity,
                                 product: order.cart.cartProducts[i].product,
+                                disabled: true,
                                 hasControls: false,
                               ),
                             ),

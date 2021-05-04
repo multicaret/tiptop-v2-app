@@ -100,7 +100,7 @@ class FoodCartProductListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: openFoodProductPage,
+            onTap: editableCartProduct ? openFoodProductPage : null,
             child: Container(
               width: productListItemThumbnailSize,
               height: productListItemThumbnailSize,
@@ -115,7 +115,7 @@ class FoodCartProductListItem extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: openFoodProductPage,
+              onTap: editableCartProduct ? openFoodProductPage : null,
               child: Container(
                 constraints: BoxConstraints(minHeight: productListItemThumbnailSize),
                 alignment: Alignment.center,
