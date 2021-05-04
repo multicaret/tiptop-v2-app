@@ -97,6 +97,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    double screenHeightWithoutActionButton = screenSize.height - (buttonHeightSm + listItemVerticalPadding + actionButtonBottomPadding + 187);
+    print('screenHeightWithoutActionButton');
+    print(screenHeightWithoutActionButton);
     if (!_isLoadingProduct) {
       productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
     }
@@ -120,41 +124,49 @@ class _FoodProductPageState extends State<FoodProductPage> {
                       child: Column(
                         children: [
                           Container(
-                            height: 400,
-                            child: CachedNetworkImage(
-                              imageUrl: product.media.cover,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                            constraints: BoxConstraints(minHeight: screenHeightWithoutActionButton),
                             child: Column(
                               children: [
-                                Text(
-                                  product.title,
-                                  style: AppTextStyles.h2,
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 20),
-                                if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 20),
-                                    child: Text(
-                                      product.description.raw,
-                                      textAlign: TextAlign.center,
-                                    ),
+                                Container(
+                                  height: screenSize.height * 0.4,
+                                  width: double.infinity,
+                                  child: CachedNetworkImage(
+                                    imageUrl: product.media.cover,
+                                    fit: BoxFit.cover,
                                   ),
-                                FormattedPrices(
-                                  price: product.price,
-                                  discountedPrice: product.discountedPrice,
-                                  isLarge: true,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        product.title,
+                                        style: AppTextStyles.h2,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      if (product.description != null && product.description.raw != null && product.description.raw.isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 20),
+                                          child: Text(
+                                            product.description.raw,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      FormattedPrices(
+                                        price: product.price,
+                                        discountedPrice: product.discountedPrice,
+                                        isLarge: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                FoodProductOptions(
+                                  product: product,
+                                  productOptions: productsProvider.productOptions,
                                 ),
                               ],
                             ),
-                          ),
-                          FoodProductOptions(
-                            product: product,
-                            productOptions: productsProvider.productOptions,
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
