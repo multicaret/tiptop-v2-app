@@ -90,6 +90,7 @@ class Media {
     this.logo,
     this.cover,
     this.coverThumbnail,
+    this.coverSmall,
     this.coverFull,
     this.gallery,
   });
@@ -97,6 +98,7 @@ class Media {
   String logo;
   String cover;
   String coverThumbnail;
+  String coverSmall;
   String coverFull;
   List<Gallery> gallery;
 
@@ -104,6 +106,7 @@ class Media {
         logo: json["logo"],
         cover: json["cover"],
         coverThumbnail: json["coverThumbnail"],
+        coverSmall: json["coverSmall"],
         coverFull: json["coverFull"],
         gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
       );
@@ -112,6 +115,7 @@ class Media {
         "logo": logo,
         "cover": cover,
         "coverThumbnail": coverThumbnail,
+        "coverSmall": coverSmall,
         "coverFull": coverFull,
         "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
       };

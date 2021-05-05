@@ -83,7 +83,7 @@ class FoodProductListItem extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: CachedNetworkImage(
-                      imageUrl: product.media.coverThumbnail,
+                      imageUrl: product.media.coverSmall,
                       fit: BoxFit.cover,
                       width: listItemThumbnailSize,
                       height: listItemThumbnailSize,

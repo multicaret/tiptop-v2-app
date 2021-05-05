@@ -8,7 +8,6 @@ import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/selected_options_text.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/models/cart.dart';
-import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -105,12 +104,13 @@ class FoodCartProductListItem extends StatelessWidget {
               width: productListItemThumbnailSize,
               height: productListItemThumbnailSize,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.border, width: 1.5),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(cartProduct.product.media.coverThumbnail),
-                    fit: BoxFit.cover,
-                  )),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border, width: 1.5),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(cartProduct.product.media.coverSmall),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
           Expanded(
