@@ -76,64 +76,67 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppProvider, HomeProvider>(
-      builder: (c, appProvider, homeProvider, _) {
-        Language selectedLanguage =
-            appProvider.appLanguages.firstWhere((language) => language.locale == appProvider.appLocale.languageCode, orElse: () => null);
-        int selectedLanguageId = selectedLanguage.id;
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppScaffold(
+        hasCurve: false,
+        appBar: AppBar(
+          title: Text(Translations.of(context).get("Profile")),
+        ),
+        body: Consumer2<AppProvider, HomeProvider>(
+          builder: (c, appProvider, homeProvider, _) {
+            Language selectedLanguage =
+                appProvider.appLanguages.firstWhere((language) => language.locale == appProvider.appLocale.languageCode, orElse: () => null);
+            int selectedLanguageId = selectedLanguage.id;
 
-        return AppScaffold(
-          hasCurve: false,
-          appBar: AppBar(
-            title: Text(Translations.of(context).get("Profile")),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                ProfileAuthHeader(),
-                const SizedBox(height: 30),
-                ProfileSettingItem(
-                  title: 'Support',
-                  icon: FontAwesomeIcons.headphones,
-                  route: SupportPage.routeName,
-                ),
-                if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems(homeProvider.channelIsMarket)),
-                SectionTitle('Languages'),
-                RadioListItems(
-                  items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
-                  selectedId: selectedLanguageId,
-                  action: (languageId) async {
-                    Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
-                    appProvider.changeLanguage(selectedLanguage.locale);
-                    await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
-                  },
-                  isAssetLogo: true,
-                ),
-                const SizedBox(height: 30),
-                ..._getProfileSettingItems(context, profileItems),
-                const SizedBox(height: 30),
-                if (appProvider.isAuth)
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  ProfileAuthHeader(),
+                  const SizedBox(height: 30),
                   ProfileSettingItem(
-                    title: 'Logout',
-                    icon: FontAwesomeIcons.doorOpen,
-                    action: appProvider.logout,
-                    hasTrailing: false,
+                    title: 'Support',
+                    icon: FontAwesomeIcons.headphones,
+                    route: SupportPage.routeName,
                   ),
-                const SizedBox(height: 50),
-                ProfileSettingItem(
-                  title: 'Version',
-                  icon: FontAwesomeIcons.mobileAlt,
-                  trailing: Text(
-                    '1.0.0',
-                    style: AppTextStyles.body50,
+                  if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems(homeProvider.channelIsMarket)),
+                  SectionTitle('Languages'),
+                  RadioListItems(
+                    items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
+                    selectedId: selectedLanguageId,
+                    action: (languageId) async {
+                      Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
+                      appProvider.changeLanguage(selectedLanguage.locale);
+                      await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
+                    },
+                    isAssetLogo: true,
                   ),
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          ),
-        );
-      },
+                  const SizedBox(height: 30),
+                  ..._getProfileSettingItems(context, profileItems),
+                  const SizedBox(height: 30),
+                  if (appProvider.isAuth)
+                    ProfileSettingItem(
+                      title: 'Logout',
+                      icon: FontAwesomeIcons.doorOpen,
+                      action: appProvider.logout,
+                      hasTrailing: false,
+                    ),
+                  const SizedBox(height: 50),
+                  ProfileSettingItem(
+                    title: 'Version',
+                    icon: FontAwesomeIcons.mobileAlt,
+                    trailing: Text(
+                      '1.0.0',
+                      style: AppTextStyles.body50,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

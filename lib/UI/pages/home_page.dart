@@ -15,8 +15,6 @@ import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_categories_grid.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_home_slider.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/home.dart';
-import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -79,7 +77,8 @@ class _HomePageState extends State<HomePage> {
 
   void channelButtonAction(AppChannel _channel) {
     homeProvider.setSelectedChannel(_channel);
-    if ((_channel == AppChannel.FOOD && homeProvider.foodHomeData == null) || (_channel == AppChannel.MARKET && homeProvider.marketHomeData == null)) {
+    if ((_channel == AppChannel.FOOD && homeProvider.foodHomeData == null) ||
+        (_channel == AppChannel.MARKET && homeProvider.marketHomeData == null)) {
       fetchAndSetHomeData();
     }
   }
@@ -114,55 +113,59 @@ class _HomePageState extends State<HomePage> {
   }
 
   int count = 0;
+
   @override
   Widget build(BuildContext context) {
     // print('Rebuilt home page ${count++} times');
 
-    return AppScaffold(
-      appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
-      bodyPadding: const EdgeInsets.all(0),
-      hasOverlayLoader: homeProvider.isLoadingHomeData,
-      body: Column(
-        children: [
-          AddressSelectButton(),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => fetchAndSetHomeData(),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 50.0),
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    homeProvider.channelIsMarket
-                        ? homeProvider.isLoadingHomeData || hideMarketContent || homeProvider.marketHomeData == null
-                            ? Container(
-                                height: homeSliderHeight,
-                                color: AppColors.bg,
-                              )
-                            : MarketHomeSlider(
-                                slides: homeProvider.marketHomeData.slides,
-                                delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
-                                selectedAddress: addressesProvider.selectedAddress,
-                              )
-                        : homeProvider.isLoadingHomeData || hideFoodContent || homeProvider.foodHomeData == null
-                            ? Container(
-                                height: homeSliderHeight,
-                                color: AppColors.bg,
-                              )
-                            : FoodHomeSlider(slides: homeProvider.foodHomeData.slides),
-                    ChannelsButtons(
-                      selectedChannel: homeProvider.selectedChannel,
-                      onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),
-                      isRTL: appProvider.isRTL,
-                    ),
-                    _homeContent(),
-                  ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppScaffold(
+        appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
+        bodyPadding: const EdgeInsets.all(0),
+        hasOverlayLoader: homeProvider.isLoadingHomeData,
+        body: Column(
+          children: [
+            AddressSelectButton(),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () => fetchAndSetHomeData(),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      homeProvider.channelIsMarket
+                          ? homeProvider.isLoadingHomeData || hideMarketContent || homeProvider.marketHomeData == null
+                              ? Container(
+                                  height: homeSliderHeight,
+                                  color: AppColors.bg,
+                                )
+                              : MarketHomeSlider(
+                                  slides: homeProvider.marketHomeData.slides,
+                                  delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
+                                  selectedAddress: addressesProvider.selectedAddress,
+                                )
+                          : homeProvider.isLoadingHomeData || hideFoodContent || homeProvider.foodHomeData == null
+                              ? Container(
+                                  height: homeSliderHeight,
+                                  color: AppColors.bg,
+                                )
+                              : FoodHomeSlider(slides: homeProvider.foodHomeData.slides),
+                      ChannelsButtons(
+                        selectedChannel: homeProvider.selectedChannel,
+                        onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),
+                        isRTL: appProvider.isRTL,
+                      ),
+                      _homeContent(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

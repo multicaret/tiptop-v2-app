@@ -65,77 +65,80 @@ class _SupportPageState extends State<SupportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-      bgColor: AppColors.white,
-      bgImage: "assets/images/page-bg-pattern-white.png",
-      appBar: AppBar(
-        title: Text(Translations.of(context).get("Support")),
-      ),
-      body: _isLoading
-          ? const AppLoader()
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    Translations.of(context).get("We are at your service 24/7. Please contact us via"),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppButtons.secondaryXl(
-                          onPressed: () {
-                            launch('tel://$phoneNumber');
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.phoneAlt,
-                                color: AppColors.primary,
-                                size: 50,
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                Translations.of(context).get("Direct Call"),
-                                style: AppTextStyles.body,
-                              ),
-                            ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppScaffold(
+        bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+        bgColor: AppColors.white,
+        bgImage: "assets/images/page-bg-pattern-white.png",
+        appBar: AppBar(
+          title: Text(Translations.of(context).get("Support")),
+        ),
+        body: _isLoading
+            ? const AppLoader()
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      Translations.of(context).get("We are at your service 24/7. Please contact us via"),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppButtons.secondaryXl(
+                            onPressed: () {
+                              launch('tel://$phoneNumber');
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.phoneAlt,
+                                  color: AppColors.primary,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 15),
+                                Text(
+                                  Translations.of(context).get("Direct Call"),
+                                  style: AppTextStyles.body,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: AppButtons.primaryXl(
-                          onPressed: () {
-                            initLiveChat();
-                            // Navigator.of(context, rootNavigator: true).pushNamed(LiveChatPage.routeName);
-                          },
-                          child: Column(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.solidCommentDots,
-                                color: AppColors.white,
-                                size: 50,
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                Translations.of(context).get("Live Chat"),
-                                style: AppTextStyles.bodyWhite,
-                              ),
-                            ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: AppButtons.primaryXl(
+                            onPressed: () {
+                              initLiveChat();
+                              // Navigator.of(context, rootNavigator: true).pushNamed(LiveChatPage.routeName);
+                            },
+                            child: Column(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.solidCommentDots,
+                                  color: AppColors.white,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 15),
+                                Text(
+                                  Translations.of(context).get("Live Chat"),
+                                  style: AppTextStyles.bodyWhite,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 }

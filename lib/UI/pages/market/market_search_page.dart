@@ -83,62 +83,65 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      hasCurve: false,
-      appBar: AppBar(
-        title: Text(Translations.of(context).get("Search")),
-        actions: [
-          if (_searchedProducts.isNotEmpty)
-            IconButton(
-              onPressed: _clearSearchResults,
-              icon: AppIcons.icon(FontAwesomeIcons.eraser),
-            )
-        ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppScaffold(
+        hasCurve: false,
+        appBar: AppBar(
+          title: Text(Translations.of(context).get("Search")),
+          actions: [
+            if (_searchedProducts.isNotEmpty)
+              IconButton(
+                onPressed: _clearSearchResults,
+                icon: AppIcons.icon(FontAwesomeIcons.eraser),
+              )
+          ],
+        ),
+        body: _isLoading
+            ? const AppLoader()
+            : Column(
+                children: [
+                  AppSearchField(
+                    submitAction: (String searchQuery) => _submitSearch(searchQuery),
+                    controller: searchFieldController,
+                    focusNode: searchFieldFocusNode,
+                  ),
+                  _searchedProducts.isNotEmpty
+                      ? SectionTitle(
+                          'Search Results',
+                          suffix: ' (${_searchedProducts.length})',
+                        )
+                      : Column(
+                          children: [
+                            homeProvider.selectedChannel == "food"
+                                ? Container(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: CategoriesSlider(categories: homeProvider.foodHomeData.categories),
+                                  )
+                                : Container(),
+                            SectionTitle('Most Searched Terms'),
+                          ],
+                        ),
+                  _searchedProducts.isNotEmpty
+                      ? Expanded(
+                          child: Container(
+                            color: AppColors.white,
+                            child: MarketProductsGridView(
+                              products: _searchedProducts,
+                              physics: AlwaysScrollableScrollPhysics(),
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [..._getMostSearchedTermsList()],
+                            ),
+                          ),
+                        ),
+                ],
+              ),
       ),
-      body: _isLoading
-          ? const AppLoader()
-          : Column(
-              children: [
-                AppSearchField(
-                  submitAction: (String searchQuery) => _submitSearch(searchQuery),
-                  controller: searchFieldController,
-                  focusNode: searchFieldFocusNode,
-                ),
-                _searchedProducts.isNotEmpty
-                    ? SectionTitle(
-                        'Search Results',
-                        suffix: ' (${_searchedProducts.length})',
-                      )
-                    : Column(
-                        children: [
-                          homeProvider.selectedChannel == "food"
-                              ? Container(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: CategoriesSlider(categories: homeProvider.foodHomeData.categories),
-                                )
-                              : Container(),
-                          SectionTitle('Most Searched Terms'),
-                        ],
-                      ),
-                _searchedProducts.isNotEmpty
-                    ? Expanded(
-                        child: Container(
-                          color: AppColors.white,
-                          child: MarketProductsGridView(
-                            products: _searchedProducts,
-                            physics: AlwaysScrollableScrollPhysics(),
-                          ),
-                        ),
-                      )
-                    : Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [..._getMostSearchedTermsList()],
-                          ),
-                        ),
-                      ),
-              ],
-            ),
     );
   }
 

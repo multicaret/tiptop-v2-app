@@ -88,138 +88,141 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      hasCurve: false,
-      appBar: AppBar(
-        title: Text(Translations.of(context).get("Search")),
-        actions: [
-          if (_searchedRestaurants.isNotEmpty)
-            IconButton(
-              onPressed: _clearSearchResults,
-              icon: AppIcons.icon(FontAwesomeIcons.eraser),
-            )
-        ],
-      ),
-      body: _isLoading
-          ? const AppLoader()
-          : Column(
-              children: [
-                AppSearchField(
-                  submitAction: (String searchQuery) => submitFoodSearch(searchQuery),
-                  controller: searchFieldController,
-                  focusNode: searchFieldFocusNode,
-                ),
-                _searchedRestaurants.isNotEmpty
-                    ? SectionTitle(
-                        'Search Results',
-                        suffix: ' (${_searchedRestaurants.length})',
-                      )
-                    : Column(
-                        children: [
-                          SectionTitle('Categories'),
-                          CategoriesSlider(
-                            categories: restaurantsProvider.foodCategories,
-                            onCategoryTap: (String categoryTitle) {
-                              searchFieldController.text = categoryTitle;
-                              submitFoodSearch(categoryTitle);
-                            },
-                          ),
-                          SectionTitle('Most Searched Terms'),
-                        ],
-                      ),
-                _searchedRestaurants.isNotEmpty
-                    ? Expanded(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: _searchedRestaurants.length,
-                            itemBuilder: (c, i) {
-                              return Container(
-                                child: Column(
-                                  children: [
-                                    Material(
-                                      color: AppColors.white,
-                                      child: InkWell(
-                                        onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                                          RestaurantPage.routeName,
-                                          arguments: _searchedRestaurants[i].id,
-                                        ),
-                                        child: RestaurantHorizontalListItem(
-                                          restaurant: _searchedRestaurants[i],
-                                          isMini: true,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AppScaffold(
+        hasCurve: false,
+        appBar: AppBar(
+          title: Text(Translations.of(context).get("Search")),
+          actions: [
+            if (_searchedRestaurants.isNotEmpty)
+              IconButton(
+                onPressed: _clearSearchResults,
+                icon: AppIcons.icon(FontAwesomeIcons.eraser),
+              )
+          ],
+        ),
+        body: _isLoading
+            ? const AppLoader()
+            : Column(
+                children: [
+                  AppSearchField(
+                    submitAction: (String searchQuery) => submitFoodSearch(searchQuery),
+                    controller: searchFieldController,
+                    focusNode: searchFieldFocusNode,
+                  ),
+                  _searchedRestaurants.isNotEmpty
+                      ? SectionTitle(
+                          'Search Results',
+                          suffix: ' (${_searchedRestaurants.length})',
+                        )
+                      : Column(
+                          children: [
+                            SectionTitle('Categories'),
+                            CategoriesSlider(
+                              categories: restaurantsProvider.foodCategories,
+                              onCategoryTap: (String categoryTitle) {
+                                searchFieldController.text = categoryTitle;
+                                submitFoodSearch(categoryTitle);
+                              },
+                            ),
+                            SectionTitle('Most Searched Terms'),
+                          ],
+                        ),
+                  _searchedRestaurants.isNotEmpty
+                      ? Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _searchedRestaurants.length,
+                              itemBuilder: (c, i) {
+                                return Container(
+                                  child: Column(
+                                    children: [
+                                      Material(
+                                        color: AppColors.white,
+                                        child: InkWell(
+                                          onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                                            RestaurantPage.routeName,
+                                            arguments: _searchedRestaurants[i].id,
+                                          ),
+                                          child: RestaurantHorizontalListItem(
+                                            restaurant: _searchedRestaurants[i],
+                                            isMini: true,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: _searchedRestaurants[i].searchProducts.length,
-                                        itemBuilder: (c, j) {
-                                          var product = _searchedRestaurants[i].searchProducts[j];
-                                          return Material(
-                                            color: AppColors.white,
-                                            child: InkWell(
-                                              onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
-                                                'product_id': product.id,
-                                                'restaurant_id': _searchedRestaurants[i].id,
-                                                'chain_id': _searchedRestaurants[i].chain.id,
-                                              }),
-                                              child: Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
-                                                decoration: BoxDecoration(
-                                                  border: Border(bottom: BorderSide(color: AppColors.primary50)),
-                                                ),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Text(product.title),
-                                                          if (product.excerpt.raw != null && product.excerpt.raw.isNotEmpty)
-                                                            Text(
-                                                              product.excerpt.raw,
-                                                              style: AppTextStyles.subtitle50,
-                                                              maxLines: 2,
-                                                              overflow: TextOverflow.ellipsis,
-                                                            ),
-                                                        ],
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: _searchedRestaurants[i].searchProducts.length,
+                                          itemBuilder: (c, j) {
+                                            var product = _searchedRestaurants[i].searchProducts[j];
+                                            return Material(
+                                              color: AppColors.white,
+                                              child: InkWell(
+                                                onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+                                                  'product_id': product.id,
+                                                  'restaurant_id': _searchedRestaurants[i].id,
+                                                  'chain_id': _searchedRestaurants[i].chain.id,
+                                                }),
+                                                child: Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
+                                                  decoration: BoxDecoration(
+                                                    border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Text(product.title),
+                                                            if (product.excerpt.raw != null && product.excerpt.raw.isNotEmpty)
+                                                              Text(
+                                                                product.excerpt.raw,
+                                                                style: AppTextStyles.subtitle50,
+                                                                maxLines: 2,
+                                                                overflow: TextOverflow.ellipsis,
+                                                              ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: FormattedPrices(
-                                                        price: product.price,
-                                                        discountedPrice: product.discountedPrice,
-                                                        isEndAligned: true,
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: FormattedPrices(
+                                                          price: product.price,
+                                                          discountedPrice: product.discountedPrice,
+                                                          isEndAligned: true,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    // Text(
-                                                    //   product.price.formatted,
-                                                    //   style: AppTextStyles.subtitleSecondary,
-                                                    // ),
-                                                  ],
+                                                      // Text(
+                                                      //   product.price.formatted,
+                                                      //   style: AppTextStyles.subtitleSecondary,
+                                                      // ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        }),
-                                  ],
-                                ),
-                              );
-                            }),
-                      )
-                    : Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [..._getMostSearchedTermsList()],
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                );
+                              }),
+                        )
+                      : Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [..._getMostSearchedTermsList()],
+                            ),
                           ),
                         ),
-                      ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
