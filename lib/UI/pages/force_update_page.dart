@@ -7,7 +7,7 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'UI/widgets/UI/app_scaffold.dart';
+import '../widgets/UI/app_scaffold.dart';
 
 class ForceUpdatePage extends StatelessWidget {
   final AppProvider appProvider;
