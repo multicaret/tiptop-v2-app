@@ -83,12 +83,8 @@ class _MarketCartControlsState extends State<MarketCartControls> {
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
     double cartButtonHeight = widget.isModalControls ? buttonHeightSm : getCartControlButtonHeight(context);
     int quantity = cartProvider.getProductQuantity(widget.product.id);
-    bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] == null
-        ? false
-        : cartProvider.requestedMoreThanAvailableQuantity[widget.product.id];
-    bool isLoadingQuantity = cartProvider.isLoadingAdjustMarketProductQuantityRequest[widget.product.id] == null
-        ? false
-        : cartProvider.isLoadingAdjustMarketProductQuantityRequest[widget.product.id];
+    bool disableAddition = cartProvider.requestedMoreThanAvailableQuantity[widget.product.id] ?? false;
+    bool isLoadingQuantity = cartProvider.isLoadingAdjustMarketProductQuantityRequest[widget.product.id] ?? false;
 
     return Stack(
       children: [
@@ -132,6 +128,7 @@ class _MarketCartControlsState extends State<MarketCartControls> {
           cartAction: CartAction.ADD,
           isRTL: appProvider.isRTL,
           quantity: quantity,
+          isProductDisabled: widget.product.isDisabled,
           onTap: disableAddition || isLoadingQuantity ? null : () => adjustMarketProductQuantity(CartAction.ADD),
           isModalControls: widget.isModalControls,
           isLoadingFirstAddition: quantity == 0 && isLoadingQuantity,

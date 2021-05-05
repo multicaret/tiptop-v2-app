@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class CartAnimatedButton extends StatelessWidget {
   final bool isRTL;
   final Function onTap;
+  final bool isProductDisabled;
   final CartAction cartAction;
   final int quantity;
   final bool isModalControls;
@@ -18,6 +20,7 @@ class CartAnimatedButton extends StatelessWidget {
   const CartAnimatedButton({
     @required this.isRTL,
     this.onTap,
+    this.isProductDisabled = false,
     @required this.cartAction,
     @required this.quantity,
     this.isModalControls = false,
@@ -80,18 +83,19 @@ class CartAnimatedButton extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     double screenThirdWidth = (screenSize.width - (screenHorizontalPadding * 2)) / 3;
     double cartButtonHeight = isModalControls ? buttonHeightSm : getCartControlButtonHeight(context);
+    bool disabled = onTap == null || isProductDisabled;
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 200),
       left: isModalControls ? getModalLeftOffset(screenThirdWidth, cartAction, isRTL) : getLeftOffset(cartAction, isRTL, cartButtonHeight, quantity),
       child: InkWell(
-        onTap: onTap,
+        onTap: disabled ? () => showToast(msg: Translations.of(context).get("This item is not available")) : onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           height: cartButtonHeight,
           width: isModalControls ? screenThirdWidth : cartButtonHeight,
           decoration: BoxDecoration(
-            color: onTap == null ? AppColors.primaryLight : AppColors.primary,
+            color: disabled ? AppColors.primaryLight : AppColors.primary,
             borderRadius: getBorderRadius(cartAction, isRTL, quantity),
             boxShadow: [
               const BoxShadow(blurRadius: 6, color: AppColors.shadow),
@@ -109,7 +113,7 @@ class CartAnimatedButton extends StatelessWidget {
                           ? FontAwesomeIcons.trashAlt
                           : FontAwesomeIcons.minus,
                   size: 14,
-                  color: AppColors.white.withOpacity(onTap == null ? 0.6 : 1),
+                  color: AppColors.white.withOpacity(disabled ? 0.6 : 1),
                 ),
         ),
       ),

@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
@@ -19,10 +21,14 @@ class MarketGridProductItem extends StatelessWidget {
   const MarketGridProductItem({@required this.product});
 
   void openMarketProductPage(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
-      "product": product,
-      "has_controls": true,
-    });
+    if (product.isDisabled) {
+      showToast(msg: Translations.of(context).get("This item is not available"));
+    } else {
+      Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
+        "product": product,
+        "has_controls": true,
+      });
+    }
   }
 
   @override
@@ -39,12 +45,12 @@ class MarketGridProductItem extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => openMarketProductPage(context),
-                child: Consumer<CartProvider>(builder: (c, cartProvider, _) {
-                  int productCartQuantity = cartProvider.getProductQuantity(product.id);
+                child: Opacity(
+                  opacity: product.isDisabled ? 0.5 : 1,
+                  child: Consumer<CartProvider>(builder: (c, cartProvider, _) {
+                    int productCartQuantity = cartProvider.getProductQuantity(product.id);
 
-                  return GestureDetector(
-                    onTap: () => openMarketProductPage(context),
-                    child: Container(
+                    return Container(
                       height: getColItemHeight(3, context),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
@@ -54,9 +60,9 @@ class MarketGridProductItem extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
               Positioned(
                 bottom: hasUnitTitle ? marketProductUnitTitleHeight : 0,
@@ -85,25 +91,28 @@ class MarketGridProductItem extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Expanded(
-          child: GestureDetector(
-            onTap: () => openMarketProductPage(context),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.title,
-                  style: AppTextStyles.subtitle,
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 10),
-                FormattedPrices(
-                  price: product.price,
-                  discountedPrice: product.discountedPrice,
-                ),
-                if (product.unitText != null) Expanded(child: Text(product.unitText, style: AppTextStyles.subtitleXs50))
-              ],
+          child: Opacity(
+            opacity: product.isDisabled ? 0.5 : 1,
+            child: GestureDetector(
+              onTap: () => openMarketProductPage(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.title,
+                    style: AppTextStyles.subtitle,
+                    textAlign: TextAlign.start,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 10),
+                  FormattedPrices(
+                    price: product.price,
+                    discountedPrice: product.discountedPrice,
+                  ),
+                  if (product.unitText != null) Expanded(child: Text(product.unitText, style: AppTextStyles.subtitleXs50))
+                ],
+              ),
             ),
           ),
         ),
