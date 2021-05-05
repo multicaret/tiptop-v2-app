@@ -233,5 +233,8 @@
   "John Doe": "حسين محمد",
   "Please make sure the following is corrected": "الرجاء تصحيح التالي",
   "You can't delete this order because it's still in progress!": "لا يمكنك حذف هذا الطلب لأنه قيد التنفيذ!",
-  "Delivery Option": "خيار التوصيل"
+  "Delivery Option": "خيار التوصيل",
+  "Please check your internet connection then try again!": "Please check your internet connection then try again!",
+  "Try Again": "Try Again",
+  "You are still not connected to the internet!": "You are still not connected to the internet!"
 }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, SocketException;
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -137,8 +137,9 @@ class AppProvider with ChangeNotifier {
 
   bool isLocationPermissionGranted = false;
 
+  bool noInternet = false;
+
   Future<void> bootActions() async {
-    initInstaBug();
     await fetchBootConfigurations();
     await fetchLocale();
 
@@ -359,27 +360,32 @@ class AppProvider with ChangeNotifier {
       'build_number': mobileAppDetails['buildNumber'],
       'platform': mobileAppDetails['device']['platform'],
     };
-    final responseData = await get(endpoint: 'remote-configs', body: body);
-    if (responseData["data"] != null) {
-      remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
-      remoteConfigs = remoteConfigsData.configs;
-      appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
-    }
-    print('selected channel is:');
-    print(appDefaultChannel);
-    print("bootConfigs");
-    if (remoteConfigs != null) {
-      print("remoteConfigs.updateMethod");
-      print(remoteConfigs.updateMethod);
-      if (remoteConfigs.updateMethod == 2) {
-        print("HARD");
-        isForceUpdateEnabled = true;
-      } else if (remoteConfigs.updateMethod == 1) {
-        print("SOFT");
-        isSoftUpdateEnabled = true;
+    try {
+      final responseData = await get(endpoint: 'remote-configs', body: body);
+      noInternet = false;
+      notifyListeners();
+      if (responseData["data"] != null) {
+        remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
+        remoteConfigs = remoteConfigsData.configs;
+        appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
       }
+      print('selected channel is: $appDefaultChannel');
+      if (remoteConfigs != null) {
+        print("bootConfigs");
+        print("remoteConfigs.updateMethod: ${remoteConfigs.updateMethod}");
+        if (remoteConfigs.updateMethod == 2) {
+          print("HARD");
+          isForceUpdateEnabled = true;
+        } else if (remoteConfigs.updateMethod == 1) {
+          print("SOFT");
+          isSoftUpdateEnabled = true;
+        }
+      }
+    } on SocketException catch (_) {
+      print('Thrown socket exception!');
+      noInternet = true;
+      notifyListeners();
     }
-
     /*bool isStorageCleared = storageActions.checkKey(key: 'storage_cleared');
     if (!isStorageCleared) {
       print('APP YIELD! your locale storage has been cleared!');

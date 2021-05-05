@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
+import 'package:tiptop_v2/UI/pages/no_internet_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -13,9 +14,9 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'UI/app_wrapper.dart';
+import 'UI/pages/force_update_page.dart';
 import 'UI/pages/location_permission_page.dart';
 import 'UI/splash_screen.dart';
-import 'UI/pages/force_update_page.dart';
 import 'i18n/translations.dart';
 
 void main() async {
@@ -26,6 +27,7 @@ void main() async {
       // LocalStorage().clear();
       // LocalStorage().deleteData(key: 'selected_address');
       AppProvider appProvider = AppProvider();
+      appProvider.initInstaBug();
       await appProvider.bootActions();
       runApp(MyApp(
         appProvider: appProvider,
@@ -136,21 +138,27 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget getHomeWidget(AppProvider app) {
-    if (app.isForceUpdateEnabled) {
-      return ForceUpdatePage(
+    if (app.noInternet) {
+      return NoInternetPage(
         appProvider: app,
       );
+    } else {
+      if (app.isForceUpdateEnabled) {
+        return ForceUpdatePage(
+          appProvider: app,
+        );
+      }
+      return app.localeSelected
+          ? app.isAuth
+              ? !app.isLocationPermissionGranted
+                  ? LocationPermissionPage()
+                  : AppWrapper()
+              : FutureBuilder(
+                  future: _autoLoginFuture,
+                  builder: (c, authResultSnapshot) =>
+                      authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
+                )
+          : LanguageSelectPage();
     }
-    return app.localeSelected
-        ? app.isAuth
-            ? !app.isLocationPermissionGranted
-                ? LocationPermissionPage()
-                : AppWrapper()
-            : FutureBuilder(
-                future: _autoLoginFuture,
-                builder: (c, authResultSnapshot) =>
-                    authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
-              )
-        : LanguageSelectPage();
   }
 }

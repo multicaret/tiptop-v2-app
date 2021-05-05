@@ -233,5 +233,8 @@
   "John Doe": "John Doe",
   "Please make sure the following is corrected": "Please make sure the following is corrected",
   "You can't delete this order because it's still in progress!": "You can't delete this order because it's still in progress!",
-  "Delivery Option": "Delivery Option"
+  "Delivery Option": "Delivery Option",
+  "Please check your internet connection then try again!": "Please check your internet connection then try again!",
+  "Try Again": "Try Again",
+  "You are still not connected to the internet!": "You are still not connected to the internet!"
 }
