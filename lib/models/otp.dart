@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:tiptop_v2/models/user.dart';
-
-import 'models.dart';
 
 class OTPData {
   OTPData({
