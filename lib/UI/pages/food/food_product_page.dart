@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
@@ -41,6 +42,8 @@ class _FoodProductPageState extends State<FoodProductPage> {
       super.setState(fn);
     }
   }
+
+  AutoScrollController productOptionsScrollController;
 
   bool _isInit = true;
   bool _isLoadingProduct = false;
@@ -96,6 +99,15 @@ class _FoodProductPageState extends State<FoodProductPage> {
   }
 
   @override
+  void initState() {
+    productOptionsScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical,
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double screenHeightWithoutActionButton = screenSize.height - (buttonHeightSm + listItemVerticalPadding + actionButtonBottomPadding + 187);
@@ -120,6 +132,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                   child: RefreshIndicator(
                     onRefresh: _fetchAndSetProduct,
                     child: SingleChildScrollView(
+                      controller: productOptionsScrollController,
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
@@ -162,6 +175,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                                   ),
                                 ),
                                 FoodProductOptions(
+                                  productOptionsScrollController: productOptionsScrollController,
                                   product: product,
                                   productOptions: productsProvider.productOptions,
                                 ),
@@ -227,6 +241,15 @@ class _FoodProductPageState extends State<FoodProductPage> {
     }
     bool optionsAreValid = productsProvider.validateProductOptions(context);
     if (!optionsAreValid) {
+      int firstInvalidOptionIndex =
+          productsProvider.productOptions.indexWhere((option) => option.id == productsProvider.invalidOptions[0]['product_option_id']);
+      print('firstInvalidOptionIndex: $firstInvalidOptionIndex, product option id: ${productsProvider.invalidOptions[0]['product_option_id']}');
+      if (firstInvalidOptionIndex != null) {
+        productOptionsScrollController.scrollToIndex(
+          firstInvalidOptionIndex,
+          preferPosition: AutoScrollPosition.begin,
+        );
+      }
       showToast(
         msg: "Invalid options! Please check the error messages and modify your options accordingly",
         timeInSec: 3,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/checkbox_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
@@ -16,10 +17,12 @@ import 'product_option_pill.dart';
 class FoodProductOptions extends StatelessWidget {
   final Product product;
   final List<ProductOption> productOptions;
+  final AutoScrollController productOptionsScrollController;
 
   FoodProductOptions({
     @required this.product,
     @required this.productOptions,
+    @required this.productOptionsScrollController,
   });
 
   @override
@@ -29,8 +32,8 @@ class FoodProductOptions extends StatelessWidget {
         List<ProductSelectedOption> selectedProductOptions = productsProvider.productTempCartData.selectedOptions;
 
         return Column(
-          children: List.generate(productOptions.length, (i) {
-            ProductOption option = productOptions[i];
+          children: List.generate(productOptions.length, (optionIndex) {
+            ProductOption option = productOptions[optionIndex];
             Map<String, dynamic> optionValidation = productsProvider.getOptionValidation(option.id);
 
             ProductSelectedOption selectedProductOption = selectedProductOptions.firstWhere(
@@ -122,33 +125,38 @@ class FoodProductOptions extends StatelessWidget {
 
             return option.selections.length == 0 && option.ingredients.length == 0
                 ? Container()
-                : Column(
-                    children: [
-                      SectionTitle(
-                        option.title,
-                        suffix: option.isRequired ? ' *' : null,
-                        suffixTextStyle: AppTextStyles.bodySecondary,
-                        translate: false,
-                      ),
-                      if (optionValidation != null)
+                : AutoScrollTag(
+                    controller: productOptionsScrollController,
+                    index: optionIndex,
+                    key: ValueKey(option.id),
+                    child: Column(
+                      children: [
+                        SectionTitle(
+                          option.title,
+                          suffix: option.isRequired ? ' *' : null,
+                          suffixTextStyle: AppTextStyles.bodySecondary,
+                          translate: false,
+                        ),
+                        if (optionValidation != null)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                              color: AppColors.bg,
+                              border: Border(bottom: BorderSide(color: Colors.red)),
+                            ),
+                            child: Text(
+                              optionValidation['message'],
+                              style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
+                            ),
+                          ),
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.bg,
-                            border: Border(bottom: BorderSide(color: Colors.red)),
-                          ),
-                          child: Text(
-                            optionValidation['message'],
-                            style: AppTextStyles.subtitleXs.copyWith(color: Colors.red),
-                          ),
+                          color: AppColors.white,
+                          child: getOptionContent(),
                         ),
-                      Container(
-                        width: double.infinity,
-                        color: AppColors.white,
-                        child: getOptionContent(),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
           }),
         );
