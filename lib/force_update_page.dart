@@ -9,10 +9,10 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'UI/widgets/UI/app_scaffold.dart';
 
-class ForceUpdateWidget extends StatelessWidget {
+class ForceUpdatePage extends StatelessWidget {
   final AppProvider appProvider;
 
-  const ForceUpdateWidget({Key key, this.appProvider}) : super(key: key);
+  const ForceUpdatePage({Key key, this.appProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
