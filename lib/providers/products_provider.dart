@@ -33,7 +33,8 @@ class ProductsProvider with ChangeNotifier {
     final responseData = await AppProvider().get(endpoint: endpoint);
     marketParentCategoriesWithoutProducts = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
-    selectedParentChildCategories = selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
+    selectedParentChildCategories =
+        selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
     notifyListeners();
   }
 
@@ -226,7 +227,16 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'products/$productId';
     final responseData = await appProvider.get(endpoint: endpoint, withToken: appProvider.isAuth);
     product = Product.fromJson(responseData["data"]);
-    productOptions = product.options.where((option) => option.selections.length != 0 || option.ingredients.length != 0).toList();
+    productOptions = product.options.where((option) {
+      //Items lengths condition
+      bool hasItems = option.selections.length != 0 || option.ingredients.length != 0;
+      //valid option properties condition
+      bool validIngredientBasedOptionProperties = true;
+      if(option.isBasedOnIngredients) {
+        validIngredientBasedOptionProperties = option.isBasedOnIngredients && option.inputType == ProductOptionInputType.PILL;
+      }
+      return hasItems && validIngredientBasedOptionProperties;
+    }).toList();
     initProductOptions(cartProduct);
     notifyListeners();
   }
