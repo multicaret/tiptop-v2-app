@@ -134,7 +134,7 @@ class HomeProvider with ChangeNotifier {
       } else {
         print('An error happened in food home data request');
         foodHomeDataRequestError = true;
-        throw e;
+        // throw e;
       }
       isLoadingHomeData = false;
       notifyListeners();
