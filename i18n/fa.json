@@ -234,7 +234,7 @@
   "Please make sure the following is corrected": "تکایە ئەمەی خوارەوە ڕاست بکەوە:",
   "You can't delete this order because it's still in progress!": "ناتوانیت ئەم داواکارییە بسڕیەوە چونکە لەباری جێبەجێ کردنە!",
   "Delivery Option": "بژاردەی گەیاندن",
-  "Please check your internet connection then try again!": "Please check your internet connection then try again!",
-  "Try Again": "Try Again",
-  "You are still not connected to the internet!": "You are still not connected to the internet!"
+  "Please check your internet connection then try again!": "تکایە دڵنیایی بکەرەوە لە پەیوەندیکردن بە ئەنتەرنێت و جارێکی تر هەوڵ بدە!",
+  "Try Again": "هەوڵ بدە سەرلەنوێ",
+  "You are still not connected to the internet!": "تا ئێستا پەیوەندیت نەکردووە بە ئەنتەرنێت!"
 }
