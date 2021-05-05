@@ -108,7 +108,7 @@ class Media {
         coverThumbnail: json["coverThumbnail"],
         coverSmall: json["coverSmall"],
         coverFull: json["coverFull"],
-        gallery: List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
+        gallery: json["gallery"] == null ? null : List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
