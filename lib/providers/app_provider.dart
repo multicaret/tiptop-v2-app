@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io' show Platform, SocketException;
 
 import 'package:device_info/device_info.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:instabug_flutter/Instabug.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -127,13 +129,18 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
-/*  static final facebookAppEvents = FacebookAppEvents();
+  static final facebookAppEvents = FacebookAppEvents();
   Mixpanel mixpanel;
 
   Future<void> initMixpanel() async {
-    mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
-    mixpanel.setServerURL("https://api-eu.mixpanel.com");
-  }*/
+    try {
+      print('Initiating MixPanel...');
+      mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
+      mixpanel.setServerURL("https://api-eu.mixpanel.com");
+    } catch (e) {
+      throw e;
+    }
+  }
 
   bool isLocationPermissionGranted = false;
 
@@ -396,7 +403,7 @@ class AppProvider with ChangeNotifier {
     // notifyListeners();
   }
 
-/*  Future<void> sendAppFirstVisitEvent() async {
+  Future<void> sendAppFirstVisitEvent() async {
     print('Sending app open event!');
     Map<String, dynamic> params = {
       'platform': mobileAppDetails['device']['platform'],
@@ -409,5 +416,5 @@ class AppProvider with ChangeNotifier {
       parameters: params,
     );
     mixpanel.track('first_visit', properties: params);
-  }*/
+  }
 }
