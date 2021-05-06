@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io' show Platform, SocketException;
 
+import 'package:adjust_sdk/adjust.dart';
+import 'package:adjust_sdk/adjust_config.dart';
 import 'package:device_info/device_info.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
@@ -328,6 +330,23 @@ class AppProvider with ChangeNotifier {
     if (Platform.isIOS) {
       Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
     }
+  }
+
+
+  void initAdjust() {
+    // Todo: init Adjust & send event with callback url params
+    AdjustConfig adjustConfig = new AdjustConfig('yajo2k3wjp4w', AdjustEnvironment.sandbox);
+    adjustConfig.logLevel = AdjustLogLevel.verbose;
+    adjustConfig.launchDeferredDeeplink = true;
+    adjustConfig.deferredDeeplinkCallback = (String uri) {
+      print('[Adjust]: Received deferred deeplink: ' + uri);
+    };
+    Adjust.start(adjustConfig);
+
+    // AdjustEvent adjustEvent = new AdjustEvent('2xbdbu');
+    // adjustEvent.addCallbackParameter('status', 'Booted');
+    // adjustEvent.setRevenue(6, 'EUR');
+    // Adjust.trackEvent(adjustEvent);
   }
 
   Future<PackageInfo> getDeviceData() async {

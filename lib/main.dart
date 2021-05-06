@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:adjust_sdk/adjust.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
@@ -10,6 +12,7 @@ import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
+import 'package:tiptop_v2/utils/adjust.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -28,6 +31,7 @@ void main() async {
       // LocalStorage().deleteData(key: 'selected_address');
       AppProvider appProvider = AppProvider();
       appProvider.initInstaBug();
+      appProvider.initAdjust();
       await appProvider.bootActions();
       runApp(MyApp(
         appProvider: appProvider,
@@ -45,13 +49,54 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _autoLoginFuture;
 
   @override
   void initState() {
     _autoLoginFuture = widget.appProvider.autoLogin();
+    WidgetsBinding.instance.addObserver(this);
+    getDeepLinkUrlFromPlugin();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.resumed:
+        Adjust.onResume();
+        break;
+      case AppLifecycleState.paused:
+        Adjust.onPause();
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
+    // Todo: To get fresh data on all states
+    print('state = $state');
+    getDeepLinkUrlFromPlugin();
+  }
+
+  // Todo: Move this class to somewhere else
+  Future<void> getDeepLinkUrlFromPlugin() async {
+    String deepLinkUrl;
+    try {
+      deepLinkUrl = await DeepLinkPlugin.getUrl;
+    } on PlatformException {
+      deepLinkUrl = 'Error on init deep link plugin';
+    }
+    if (!mounted) return;
+
+    print("got a deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep link:");
+    print(deepLinkUrl);
   }
 
   @override

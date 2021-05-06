@@ -67,6 +67,7 @@ dependencies:
   flutter_svg: ^0.20.0-nullsafety.3
   onesignal_flutter: ^2.6.3
   rxdart: ^0.26.0
+  adjust_sdk: ^4.28.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,10 @@
 PODS:
+  - Adjust (4.28.0):
+    - Adjust/Core (= 4.28.0)
+  - Adjust/Core (4.28.0)
+  - adjust_sdk (4.28.0):
+    - Adjust (= 4.28.0)
+    - Flutter
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -57,6 +63,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - adjust_sdk (from `.symlinks/plugins/adjust_sdk/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -80,6 +87,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Adjust
     - FMDB
     - GoogleMaps
     - Instabug
@@ -89,6 +97,8 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  adjust_sdk:
+    :path: ".symlinks/plugins/adjust_sdk/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   Flutter:
@@ -127,6 +137,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  Adjust: 131c77905f67b26e946d1b831fad20ed2b41134c
+  adjust_sdk: 0f2eca502e94cf4b78d15e895533c294c2953d77
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58

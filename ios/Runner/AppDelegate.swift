@@ -5,7 +5,8 @@ import Mobilisten
 
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, AdjustDelegate {
+    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -88,4 +89,23 @@ import Mobilisten
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+    
+    
+    
+    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+        NSLog("Scheme based deep link opened an app: %@", url.absoluteString)
+        // Pass deep link to Adjust in order to potentially reattribute user.
+        Adjust.appWillOpen(url)
+        return true
+    }
+    
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+           if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+               NSLog("Universal link opened an app: %@", userActivity.webpageURL!.absoluteString)
+               // Pass deep link to Adjust in order to potentially reattribute user.
+               Adjust.appWillOpen(userActivity.webpageURL!)
+           }
+           return true
+       }
 }
