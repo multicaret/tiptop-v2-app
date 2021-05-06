@@ -97,6 +97,8 @@ flutter:
     - assets/images/
     - assets/images/lottie-loader/
     - assets/images/lottie-walkthrough/
+    - assets/countries/
+    - assets/countries/flags/
     - i18n/
 
   fonts:

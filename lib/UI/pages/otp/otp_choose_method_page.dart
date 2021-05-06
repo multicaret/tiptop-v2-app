@@ -54,10 +54,9 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   List<Map<String, dynamic>> countriesDropDownItems = [];
   bool resumedFirstTime = true;
 
-  Future<void> _fetchAndSetCountries() async {
+  Future<void> _getCountriesFromJsonFile() async {
     setState(() => _isLoadingFetchCountriesRequest = true);
-    await otpProvider.fetchAndSetCountries();
-    countries = otpProvider.countries;
+    countries = await getCountriesFromJsonFile();
     phoneCountryCode = countries[0].phoneCode;
     setState(() => _isLoadingFetchCountriesRequest = false);
   }
@@ -142,7 +141,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                 resumedFirstTime = true;
                 if (method == 'sms') {
                   setState(() => pickedSMSMethod = true);
-                  _fetchAndSetCountries();
+                  _getCountriesFromJsonFile();
                 } else {
                   setState(() => pickedSMSMethod = false);
                   _initOTPValidation(method);
@@ -216,17 +215,16 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
     }
     _phoneNumberFormKey.currentState.save();
     try {
-
-    await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
-    if (otpProvider.reference == null) {
-      showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
-      return;
-    }
-    Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {
-      'reference': otpProvider.reference,
-      'phone_country_code': phoneCountryCode,
-      'phone_number': phoneNumber,
-    });
+      await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
+      if (otpProvider.reference == null) {
+        showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
+        return;
+      }
+      Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {
+        'reference': otpProvider.reference,
+        'phone_country_code': phoneCountryCode,
+        'phone_number': phoneNumber,
+      });
     } on HttpException catch (error) {
       if (error.errors != null && error.errors.length > 0) {
         appAlert(

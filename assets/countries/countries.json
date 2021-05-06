@@ -1,0 +1,162 @@
+[
+  {
+    "id": 107,
+    "nameEnglish": "IRAQ",
+    "alpha2Code": "IQ",
+    "alpha3Code": "IRQ",
+    "flagUrl": "assets/countries/flags/iraq.png",
+    "phoneCode": "964"
+  },
+  {
+    "id": 38,
+    "nameEnglish": "CANADA",
+    "alpha2Code": "CA",
+    "alpha3Code": "CAN",
+    "flagUrl":"assets/countries/flags/canada.png",
+    "phoneCode": "1"
+  },
+  {
+    "id": 57,
+    "nameEnglish": "GERMANY",
+    "alpha2Code": "DE",
+    "alpha3Code": "DEU",
+    "flagUrl": "assets/countries/flags/germany.png",
+    "phoneCode": "49"
+  },
+  {
+    "id": 65,
+    "nameEnglish": "EGYPT",
+    "alpha2Code": "EG",
+    "alpha3Code": "EGY",
+    "flagUrl": "assets/countries/flags/egypt.png",
+    "phoneCode": "20"
+  },
+  {
+    "id": 75,
+    "nameEnglish": "FRANCE",
+    "alpha2Code": "FR",
+    "alpha3Code": "FRA",
+    "flagUrl": "assets/countries/flags/france.png",
+    "phoneCode": "33"
+  },
+  {
+    "id": 77,
+    "nameEnglish": "UNITED KINGDOM",
+    "alpha2Code": "GB",
+    "alpha3Code": "GBR",
+    "flagUrl": "assets/countries/flags/united-kingdom.png",
+    "phoneCode": "44"
+  },
+  {
+    "id": 101,
+    "nameEnglish": "INDONESIA",
+    "alpha2Code": "ID",
+    "alpha3Code": "IDN",
+    "flagUrl": "assets/countries/flags/indonesia.png",
+    "phoneCode": "62"
+  },
+  {
+    "id": 108,
+    "nameEnglish": "IRAN",
+    "alpha2Code": "IR",
+    "alpha3Code": "IRN",
+    "flagUrl": "assets/countries/flags/iran.png",
+    "phoneCode": "98"
+  },
+  {
+    "id": 113,
+    "nameEnglish": "JORDAN",
+    "alpha2Code": "JO",
+    "alpha3Code": "JOR",
+    "flagUrl": "assets/countries/flags/jordan.png",
+    "phoneCode": "962"
+  },
+  {
+    "id": 123,
+    "nameEnglish": "KUWAIT",
+    "alpha2Code": "KW",
+    "alpha3Code": "KWT",
+    "flagUrl": "assets/countries/flags/kuwait.png",
+    "phoneCode": "965"
+  },
+  {
+    "id": 193,
+    "nameEnglish": "SAUDI ARABIA",
+    "alpha2Code": "SA",
+    "alpha3Code": "SAU",
+    "flagUrl": "assets/countries/flags/saudi-arabia.png",
+    "phoneCode": "966"
+  },
+  {
+    "id": 212,
+    "nameEnglish": "SYRIAN ARAB REPUBLIC",
+    "alpha2Code": "SY",
+    "alpha3Code": "SYR",
+    "flagUrl": "assets/countries/flags/syrian-arab-republic.png",
+    "phoneCode": "963"
+  },
+  {
+    "id": 225,
+    "nameEnglish": "TURKEY",
+    "alpha2Code": "TR",
+    "alpha3Code": "TUR",
+    "flagUrl": "assets/countries/flags/turkey.png",
+    "phoneCode": "90"
+  },
+  {
+    "id": 233,
+    "nameEnglish": "UNITED STATES",
+    "alpha2Code": "US",
+    "alpha3Code": "USA",
+    "flagUrl": "assets/countries/flags/united-states.png",
+    "phoneCode": "1"
+  },
+  {
+    "id": 251,
+    "nameEnglish": "Qatar",
+    "alpha2Code": "QA",
+    "alpha3Code": "QAT",
+    "flagUrl": "assets/countries/flags/qatar.png",
+    "phoneCode": "974"
+  },
+  {
+    "id": 252,
+    "nameEnglish": "United Arab Emirates",
+    "alpha2Code": "AE",
+    "alpha3Code": "UAE",
+    "flagUrl": "assets/countries/flags/united-arab-emirates.png",
+    "phoneCode": "971"
+  },
+  {
+    "id": 253,
+    "nameEnglish": "Lebanon",
+    "alpha2Code": "LB",
+    "alpha3Code": "LBN",
+    "flagUrl": "assets/countries/flags/lebanon.png",
+    "phoneCode": "961"
+  },
+  {
+    "id": 254,
+    "nameEnglish": "Bahrain",
+    "alpha2Code": "BH",
+    "alpha3Code": "BHR",
+    "flagUrl": "assets/countries/flags/bahrain.png",
+    "phoneCode": "973"
+  },
+  {
+    "id": 255,
+    "nameEnglish": "India",
+    "alpha2Code": "IN",
+    "alpha3Code": "IND",
+    "flagUrl": "assets/countries/flags/india.png",
+    "phoneCode": "246"
+  },
+  {
+    "id": 256,
+    "nameEnglish": "Oman",
+    "alpha2Code": "OM",
+    "alpha3Code": "OMN",
+    "flagUrl": "assets/countries/flags/oman.png",
+    "phoneCode": "968"
+  }
+]
