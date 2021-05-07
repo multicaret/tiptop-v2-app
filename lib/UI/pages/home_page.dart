@@ -87,8 +87,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  EventTracking eventTracking = EventTracking.getActions();
+
   Future<void> trackHomeViewEvent() async {
-    EventTracking eventTracking = EventTracking.getActions();
     Map<String, dynamic> eventParams = {
       'screen': appChannelRealValues.reverse[homeProvider.selectedChannel],
     };

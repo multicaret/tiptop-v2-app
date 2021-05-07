@@ -53,9 +53,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _autoLoginFuture;
+  EventTracking eventTracking = EventTracking.getActions();
 
   Future<void> _initEventTracking() async {
-    EventTracking eventTracking = EventTracking.getActions();
     await eventTracking.initEventTracking();
 
     //Send app visit event

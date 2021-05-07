@@ -170,8 +170,9 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     );
   }
 
+  EventTracking eventTracking = EventTracking.getActions();
+
   Future<void> trackCompleteRegistrationEvent() async {
-    EventTracking eventTracking = EventTracking.getActions();
     //Todo: remove this check, might be unnecessary
     if (appProvider.authUser == null) {
       print('No user!');
