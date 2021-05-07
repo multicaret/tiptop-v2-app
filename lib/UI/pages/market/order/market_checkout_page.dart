@@ -67,14 +67,17 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
     paymentSummaryTotalsNotifier.value = [
       PaymentSummaryTotal(
         title: "Total",
+        rawValue: checkoutData.total.raw,
         value: checkoutData.total.formatted,
       ),
       PaymentSummaryTotal(
         title: "Delivery Fee",
-        value: checkoutData.deliveryFee.formatted,
+        rawValue: checkoutData.deliveryFee.raw,
+        value: checkoutData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : checkoutData.deliveryFee.formatted,
       ),
       PaymentSummaryTotal(
         title: "Grand Total",
+        rawValue: checkoutData.grandTotal.raw,
         value: checkoutData.grandTotal.formatted,
         isGrandTotal: true,
       ),
@@ -148,7 +151,6 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
     Map<String, dynamic> eventParams = {
       'cart_product_count': cart.productsCount,
-      'restaurant_name': cart.restaurant.englishTitle,
       'cart_total': cart.total.raw,
       'cart_product_ids': cartProductIds,
       'cart_product_names': cartProductNames,
@@ -169,7 +171,9 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
-      _createOrderAndGetCheckoutData();
+      _createOrderAndGetCheckoutData().then((_) {
+        trackViewCheckoutEvent();
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -270,10 +274,10 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                   ValueListenableBuilder(
                     valueListenable: paymentSummaryTotalsNotifier,
                     builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
-                      PaymentSummaryTotal total = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+                      PaymentSummaryTotal grandTotal = paymentSummaryTotals.firstWhere((grandTotal) => grandTotal.isGrandTotal, orElse: () => null);
                       return TotalButton(
                         isRTL: appProvider.isRTL,
-                        total: total != null ? total.value : cartProvider.marketCart.total.formatted,
+                        total: grandTotal != null ? grandTotal.value : cartProvider.marketCart.total.formatted,
                         isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
                         child: Text(Translations.of(context).get("Order Now")),
                         onTap: _submitOrder,
