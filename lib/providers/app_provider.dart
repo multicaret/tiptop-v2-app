@@ -131,19 +131,6 @@ class AppProvider with ChangeNotifier {
     return _appLocale;
   }
 
-  static final facebookAppEvents = FacebookAppEvents();
-  Mixpanel mixpanel;
-
-  Future<void> initMixpanel() async {
-    try {
-      print('Initiating MixPanel...');
-      mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
-      mixpanel.setServerURL("https://api-eu.mixpanel.com");
-    } catch (e) {
-      throw e;
-    }
-  }
-
   bool isLocationPermissionGranted = false;
 
   bool noInternet = false;
@@ -151,10 +138,6 @@ class AppProvider with ChangeNotifier {
   Future<void> bootActions() async {
     await fetchBootConfigurations();
     await fetchLocale();
-
-    //Init Analytics
-    // await initMixpanel();
-    // await facebookAppEvents.setAdvertiserTracking(enabled: true);
 
     await checkIfIsFirstOpen();
     isLocationPermissionGranted = await getLocationPermissionStatus();
@@ -420,20 +403,5 @@ class AppProvider with ChangeNotifier {
     }*/
 
     // notifyListeners();
-  }
-
-  Future<void> sendAppFirstVisitEvent() async {
-    print('Sending app open event!');
-    Map<String, dynamic> params = {
-      'platform': mobileAppDetails['device']['platform'],
-      'user_language': _appLocale.languageCode,
-    };
-    print('params');
-    print(params);
-    await facebookAppEvents.logEvent(
-      name: 'first_visit',
-      parameters: params,
-    );
-    mixpanel.track('first_visit', properties: params);
   }
 }
