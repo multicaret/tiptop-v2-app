@@ -167,7 +167,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     }
 
     Map<String, dynamic> eventParams = {
-      'restaurant_name': restaurant.title,
+      'restaurant_name': restaurant.englishTitle,
       'restaurant_rating': restaurant.rating.averageRaw,
       'restaurant_categories': restaurantCategoriesEnglishTitles,
       'restaurant_city': restaurant.regionEnglishName,
@@ -341,6 +341,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 product: searchProductsResult[i],
                                 restaurantId: restaurant.id,
                                 chainId: restaurant.chain.id,
+                                restaurantEnglishTitle: restaurant.englishTitle,
                               ),
                             )
                           : List.generate(
@@ -364,6 +365,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                         product: menuCategories[i].products[j],
                                         restaurantId: restaurant.id,
                                         chainId: restaurant.chain.id,
+                                        categoryEnglishTitle: menuCategories[i].englishTitle,
+                                        restaurantEnglishTitle: restaurant.englishTitle,
                                       ),
                                     ),
                                   ),

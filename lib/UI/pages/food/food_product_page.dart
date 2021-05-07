@@ -22,6 +22,7 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -57,6 +58,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
   CartProduct cartProduct;
   Product product;
 
+  String categoryEnglishTitle;
+  String restaurantEnglishTitle;
+
   bool hasDiscountedPrice = false;
   bool hasControls = true;
 
@@ -72,7 +76,34 @@ class _FoodProductPageState extends State<FoodProductPage> {
     );
     product = productsProvider.product;
     productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
+    hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
     setState(() => _isLoadingProduct = false);
+  }
+
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackViewProductDetailsEvent() async {
+    Map<String, dynamic> eventParams = {
+      'product_name': product.englishTitle,
+      //Todo: get categoryEnglishTitle from API (product show endpoint)
+      'product_category': categoryEnglishTitle,
+      'product_cost': hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw,
+      'product_id': product.id,
+      'restaurant_name': restaurantEnglishTitle,
+      //Todo: check if the next 2 params are correct
+      'product_options': productsProvider.productOptions != null && productsProvider.productOptions.length > 0,
+      'product_ingredients': product.description != null && product.description.raw != null && product.description.raw.isNotEmpty,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_PRODUCT_DETAILS, eventParams);
+  }
+
+  @override
+  void initState() {
+    productOptionsScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical,
+    );
+    super.initState();
   }
 
   @override
@@ -82,6 +113,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
       print('Route data: $data');
       productId = data["product_id"];
       cartProduct = data["cart_product"];
+      categoryEnglishTitle = data["category_english_title"];
+      restaurantEnglishTitle = data["restaurant_english_title"];
+
       if (cartProduct != null) {
         print('Cart product id: ${cartProduct.cartProductId}');
       }
@@ -92,19 +126,12 @@ class _FoodProductPageState extends State<FoodProductPage> {
       appProvider = Provider.of<AppProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
 
-      _fetchAndSetProduct();
+      _fetchAndSetProduct().then((_) {
+        trackViewProductDetailsEvent();
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    productOptionsScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.vertical,
-    );
-    super.initState();
   }
 
   @override
