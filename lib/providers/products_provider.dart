@@ -39,7 +39,7 @@ class ProductsProvider with ChangeNotifier {
       final responseData = await AppProvider().get(endpoint: endpoint, body: {
         'branch_id': '${HomeProvider.branchId}',
       });
-      marketParentCategories = List<Category>.from(responseData["data"].map((x) => Category.fromJson(x)));
+      marketParentCategories = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
       isLoadingFetchAllProductsRequest = false;
       print('Fetched all market products in the background 👻');
       notifyListeners();
