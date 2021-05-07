@@ -5,7 +5,9 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../../UI/scrollable_horizontal_tabs.dart';
@@ -13,10 +15,12 @@ import '../../UI/scrollable_horizontal_tabs.dart';
 class ParentCategoryTabContent extends StatefulWidget {
   final List<Category> childCategories;
   final int selectedParentCategoryId;
+  final String selectedParentCategoryEnglishTitle;
 
   ParentCategoryTabContent({
     @required this.childCategories,
     @required this.selectedParentCategoryId,
+    @required this.selectedParentCategoryEnglishTitle,
   });
 
   @override
@@ -44,22 +48,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
     setState(() => _isRefreshingData = false);
   }
 
-  @override
-  void initState() {
-    childCategoriesScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.horizontal,
-    );
-
-    productsScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.vertical,
-    );
-    selectedParentChildCategories = widget.childCategories;
-    selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
-    super.initState();
-  }
-
   void scrollToCategory(int index) {
     childCategoriesScrollController.scrollToIndex(
       index,
@@ -74,12 +62,33 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
     );
   }
 
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackViewCategoryEvent(String categoryEnglishTitle) async {
+    Map<String, String> eventParams = {
+      'category_type': 'market',
+      'category': categoryEnglishTitle,
+      'parent_category': widget.selectedParentCategoryEnglishTitle,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_CATEGORY, eventParams);
+  }
+
   @override
-  void dispose() {
-    print('disposing products page controllers');
-    childCategoriesScrollController.dispose();
-    productsScrollController.dispose();
-    super.dispose();
+  void initState() {
+    childCategoriesScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.horizontal,
+    );
+
+    productsScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical,
+    );
+    selectedParentChildCategories = widget.childCategories;
+    selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
+    //Todo: ask if this should be not, not recommended for performance
+    // trackViewCategoryEvent(selectedParentChildCategories[0].englishTitle);
+    super.initState();
   }
 
   @override
@@ -99,6 +108,14 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   }
 
   @override
+  void dispose() {
+    print('disposing products page controllers');
+    childCategoriesScrollController.dispose();
+    productsScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -109,10 +126,11 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             itemScrollController: childCategoriesScrollController,
             selectedChildCategoryId: _selectedChildCategoryId,
             //Fired when a child category is clicked
-            action: (index) {
+            action: (index, categoryEnglishTitle) {
               selectedChildCategoryIdNotifier.value = selectedParentChildCategories[index].id;
               scrollToCategory(index);
               scrollToProducts(index);
+              trackViewCategoryEvent(categoryEnglishTitle);
             },
           ),
         ),

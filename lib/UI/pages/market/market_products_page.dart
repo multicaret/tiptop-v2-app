@@ -73,6 +73,7 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
 
                 return ParentCategoryTabContent(
                   selectedParentCategoryId: widget.parentCategories[i].id,
+                  selectedParentCategoryEnglishTitle: widget.parentCategories[i].englishTitle,
                   childCategories: childCategories,
                 );
               }),

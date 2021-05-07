@@ -148,8 +148,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 
-  Future<void> trackRestaurantMenuViewEvent() async {
-    EventTracking eventTracking = EventTracking.getActions();
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackViewRestaurantMenuEvent() async {
     if (restaurant == null) {
       print('No restaurant!');
       return;
@@ -158,10 +159,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
         restaurant.categories.length == 0 ? <String>[] : restaurant.categories.map((category) => category.englishTitle).toList();
 
     List<String> restaurantDeliveryMethods = <String>[];
-    if(restaurant.tiptopDelivery.isDeliveryEnabled) {
+    if (restaurant.tiptopDelivery.isDeliveryEnabled) {
       restaurantDeliveryMethods.add('tiptop');
     }
-    if(restaurant.restaurantDelivery.isDeliveryEnabled) {
+    if (restaurant.restaurantDelivery.isDeliveryEnabled) {
       restaurantDeliveryMethods.add('restaurant');
     }
 
@@ -175,6 +176,14 @@ class _RestaurantPageState extends State<RestaurantPage> {
       'restaurant_delivery_methods': restaurantDeliveryMethods,
     };
     await eventTracking.trackEvent(TrackingEvent.VIEW_RESTAURANT_MENU, eventParams);
+  }
+
+  Future<void> trackViewCategoryEvent(String categoryEnglishTitle) async {
+    Map<String, String> eventParams = {
+      'category_type': 'food',
+      'category': categoryEnglishTitle,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_CATEGORY, eventParams);
   }
 
   @override
@@ -212,7 +221,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         if (menuCategories.length > 0) {
           selectedCategoryIdNotifier.value = menuCategories[0].id;
         }
-        trackRestaurantMenuViewEvent();
+        trackViewRestaurantMenuEvent();
       });
     }
     _isInit = false;
@@ -270,10 +279,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                             itemScrollController: categoriesScrollController,
                                             selectedChildCategoryId: _selectedChildCategoryId,
                                             //Fired when a child category is clicked
-                                            action: (i) {
+                                            action: (i, categoryEnglishTitle) {
+                                              print(categoryEnglishTitle);
                                               selectedCategoryIdNotifier.value = menuCategories[i].id;
                                               scrollToCategory(i);
                                               scrollToProducts(i);
+                                              trackViewCategoryEvent(categoryEnglishTitle);
                                             },
                                           ),
                                         ),
