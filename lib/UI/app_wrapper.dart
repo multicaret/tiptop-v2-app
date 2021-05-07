@@ -94,7 +94,7 @@ class _AppWrapperState extends State<AppWrapper> {
       },
       {
         'title': 'Support',
-        'page': SupportPage(),
+        'page': SupportPage(asTab: true),
         'icon': LineAwesomeIcons.headset,
       },
       {

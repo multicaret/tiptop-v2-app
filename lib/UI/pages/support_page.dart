@@ -15,6 +15,10 @@ import 'package:url_launcher/url_launcher.dart';
 class SupportPage extends StatefulWidget {
   static const routeName = '/support';
 
+  final bool asTab;
+
+  SupportPage({this.asTab = false});
+
   @override
   _SupportPageState createState() => _SupportPageState();
 }
@@ -66,7 +70,7 @@ class _SupportPageState extends State<SupportPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => !widget.asTab,
       child: AppScaffold(
         bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
         bgColor: AppColors.white,
