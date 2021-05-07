@@ -39,7 +39,7 @@ class EventTracking {
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {
     String eventName = trackingEventsValues.reverse[trackingEvent];
     print('user phone from track event: ${AppProvider.userPhoneNumber}');
-    print('Tracking event ($eventName) with params: $params');
+    print('Tracking event ($eventName)');
 
     Map<String, dynamic> mixpanelEventParams = params;
     if(AppProvider.userPhoneNumber != null) {
@@ -54,7 +54,6 @@ class EventTracking {
 
     //Adjust Event Tracking
     String adjustEventToken = adjustTrackingEventsTokens.reverse[trackingEvent];
-    print('adjustEventToken: $adjustEventToken');
     AdjustEvent adjustEvent = new AdjustEvent(adjustEventToken);
     params.forEach((key, value) {
       String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
