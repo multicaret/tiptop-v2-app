@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchAndSetHomeData() async {
     await addressesProvider.fetchSelectedAddress();
-    await homeProvider.fetchAndSetHomeData(context, appProvider, productsProvider);
+    await homeProvider.fetchAndSetHomeData(context, appProvider);
     await trackHomeViewEvent();
     _setHomeData();
   }
@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeDataAndProducts() async {
     await fetchAndSetHomeData();
     if(homeProvider.channelIsMarket) {
+      productsProvider.setMarketParentCategories(homeProvider.marketParentCategories);
       await productsProvider.fetchAndSetParentCategoriesAndProducts();
     }
   }

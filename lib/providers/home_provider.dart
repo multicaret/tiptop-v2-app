@@ -6,7 +6,6 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
@@ -71,8 +70,7 @@ class HomeProvider with ChangeNotifier {
 
   Future<void> fetchAndSetHomeData(
     BuildContext context,
-    AppProvider appProvider,
-    ProductsProvider productsProvider, {
+    AppProvider appProvider, {
     bool afterLanguageChange = false,
   }) async {
     final endpoint = 'home';
@@ -118,7 +116,6 @@ class HomeProvider with ChangeNotifier {
       );
       setHomeData(
         cartProvider,
-        productsProvider,
         restaurantsProvider,
         responseData["data"],
       );
@@ -142,7 +139,6 @@ class HomeProvider with ChangeNotifier {
 
   void setHomeData(
     CartProvider cartProvider,
-    ProductsProvider productsProvider,
     RestaurantsProvider restaurantsProvider,
     data,
   ) {
@@ -166,7 +162,6 @@ class HomeProvider with ChangeNotifier {
       }
 
       marketParentCategories = marketHomeData.categories;
-      productsProvider.setMarketParentCategories(marketParentCategories);
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);
       }

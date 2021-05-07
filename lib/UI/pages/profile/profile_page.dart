@@ -109,8 +109,9 @@ class ProfilePage extends StatelessWidget {
                       action: (languageId) async {
                         Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
                         appProvider.changeLanguage(selectedLanguage.locale);
-                        await homeProvider.fetchAndSetHomeData(context, appProvider, productsProvider, afterLanguageChange: true);
+                        await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
                         if (homeProvider.channelIsMarket) {
+                          productsProvider.setMarketParentCategories(homeProvider.marketParentCategories);
                           await productsProvider.fetchAndSetParentCategoriesAndProducts();
                         }
                       },
