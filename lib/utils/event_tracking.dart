@@ -51,7 +51,7 @@ class EventTracking {
     String adjustEventToken = adjustTrackingEventsTokens.reverse[trackingEvent];
     AdjustEvent adjustEvent = new AdjustEvent(adjustEventToken);
     params.forEach((key, value) {
-      String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
+      String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value.toString();
       adjustEvent.addCallbackParameter(key, paramValue);
     });
     Adjust.trackEvent(adjustEvent);

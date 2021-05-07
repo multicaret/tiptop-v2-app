@@ -280,6 +280,7 @@ class OrdersProvider with ChangeNotifier {
     Map<String, String> body = {
       'branch_id': '${HomeProvider.branchId}',
       'cart_id': '${cartProvider.marketCart.id}',
+      'selected_address_id': '${AddressesProvider.selectedAddressId}',
     };
     final responseData = await appProvider.get(
       endpoint: endpoint,

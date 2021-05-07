@@ -27,6 +27,7 @@ import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class MarketCheckoutPage extends StatefulWidget {
@@ -55,6 +56,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
   CheckoutData checkoutData;
   Order submittedMarketOrder;
+  PaymentSummaryTotal grandTotal;
 
   String notes;
 
@@ -82,6 +84,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         isGrandTotal: true,
       ),
     ];
+    grandTotal = paymentSummaryTotalsNotifier.value.firstWhere((total) => total.isGrandTotal, orElse: () => null);
     selectedPaymentMethodNotifier.value = checkoutData.paymentMethods[0].id;
     setState(() => _isLoadingCreateOrder = false);
   }
@@ -121,7 +124,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         PaymentSummaryTotal(
           title: "Delivery Fee",
           rawValue: couponValidationData.deliveryFee.raw,
-          value: couponValidationData.deliveryFee.formatted,
+          value: couponValidationData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : couponValidationData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
@@ -131,25 +134,39 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         ),
       ];
       showToast(msg: Translations.of(context).get("Successfully validated coupon code!"));
-    } catch (e) {
+      setState(() => _isLoadingvalidateMarketCoupon = false);
+    } on HttpException catch (error) {
+      if (error.errors != null && error.errors.length > 0) {
+        appAlert(
+          context: context,
+          title: Translations.of(context).get("Please make sure the following is corrected"),
+          description: error.getErrorsAsString(),
+        ).show();
+      }
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
+      setState(() => _isLoadingvalidateMarketCoupon = false);
+      couponCodeNotifier.value = null;
+      throw error;
+    } catch (e) {
+      couponCodeNotifier.value = null;
+      showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
+      setState(() => _isLoadingvalidateMarketCoupon = false);
+      throw e;
     }
-    setState(() => _isLoadingvalidateMarketCoupon = false);
   }
 
   EventTracking eventTracking = EventTracking.getActions();
+  Cart cart;
+  List<int> cartProductIds;
+  List<String> cartProductNames;
+  Map<String, dynamic> commonEventsParams = {};
 
-  Future<void> trackViewCheckoutEvent() async {
-    Cart cart = cartProvider.marketCart;
-    if(cart == null) {
-      print('Tracking failed! No cart!');
-      return;
-    }
-    List<int> cartProductIds = cart.cartProducts.map((cartProduct) => cartProduct.product.id).toList();
-    List<String> cartProductNames = cart.cartProducts.map((cartProduct) => cartProduct.product.englishTitle).toList();
-    PaymentSummaryTotal grandTotal = paymentSummaryTotalsNotifier.value.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+  void setCommonEventsParams() {
+    cart = cartProvider.marketCart;
+    cartProductIds = cart.cartProducts.map((cartProduct) => cartProduct.product.id).toList();
+    cartProductNames = cart.cartProducts.map((cartProduct) => cartProduct.product.englishTitle).toList();
 
-    Map<String, dynamic> eventParams = {
+    commonEventsParams = {
       'cart_product_count': cart.productsCount,
       'cart_total': cart.total.raw,
       'cart_product_ids': cartProductIds,
@@ -159,8 +176,36 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       'cart_product_parent_categories': '',
       'cart_grand_total': grandTotal.rawValue,
     };
+  }
 
-    await eventTracking.trackEvent(TrackingEvent.VIEW_CHECKOUT, eventParams);
+  Future<void> trackViewCheckoutEvent() async {
+    if (cart == null) {
+      print('Tracking failed! No cart!');
+      return;
+    }
+
+    await eventTracking.trackEvent(TrackingEvent.VIEW_CHECKOUT, commonEventsParams);
+  }
+
+  Future<void> trackCompletePurchaseEvent() async {
+    if (submittedMarketOrder == null) {
+      print('No submitted order!!');
+      return;
+    }
+    Map<String, dynamic> eventParams = commonEventsParams;
+
+    eventParams.addAll({
+      'delivery_fee': couponCodeNotifier.value == null ? checkoutData.deliveryFee.raw : couponValidationData.deliveryFee.raw,
+      'order_id': submittedMarketOrder.id,
+      'coupon_used': couponCodeNotifier.value != null,
+    });
+    if (couponCodeNotifier.value != null) {
+      eventParams.addAll({
+        'coupon_code': couponCodeNotifier.value,
+        'coupon_value': couponValidationData.discountedAmount.raw,
+      });
+    }
+    await eventTracking.trackEvent(TrackingEvent.COMPLETE_PURCHASE, eventParams);
   }
 
   @override
@@ -172,6 +217,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       addressesProvider = Provider.of<AddressesProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       _createOrderAndGetCheckoutData().then((_) {
+        setCommonEventsParams();
         trackViewCheckoutEvent();
       });
     }
@@ -181,7 +227,6 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilt checkout page');
     return AppScaffold(
       hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
@@ -274,7 +319,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
                   ValueListenableBuilder(
                     valueListenable: paymentSummaryTotalsNotifier,
                     builder: (c, List<PaymentSummaryTotal> paymentSummaryTotals, _) {
-                      PaymentSummaryTotal grandTotal = paymentSummaryTotals.firstWhere((grandTotal) => grandTotal.isGrandTotal, orElse: () => null);
+                      grandTotal = paymentSummaryTotals.firstWhere((grandTotal) => grandTotal.isGrandTotal, orElse: () => null);
                       return TotalButton(
                         isRTL: appProvider.isRTL,
                         total: grandTotal != null ? grandTotal.value : cartProvider.marketCart.total.formatted,
@@ -307,6 +352,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       if (submittedMarketOrder == null) {
         throw 'No order returned!';
       }
+      await trackCompletePurchaseEvent();
       showDialog(
         context: context,
         builder: (context) => OrderConfirmedDialog(),
