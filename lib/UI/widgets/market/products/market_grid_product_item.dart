@@ -77,7 +77,11 @@ class MarketGridProductItem extends StatelessWidget {
                 left: cartControlsMargin,
                 right: cartControlsMargin,
                 height: getCartControlButtonHeight(context),
-                child: MarketCartControls(product: product),
+                child: MarketCartControls(
+                  product: product,
+                  categoryEnglishTitle: categoryEnglishTitle,
+                  parentCategoryEnglishTitle: parentCategoryEnglishTitle,
+                ),
               ),
               if (hasUnitTitle)
                 Positioned(

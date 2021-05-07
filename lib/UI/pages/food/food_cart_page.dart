@@ -13,6 +13,7 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -110,8 +111,11 @@ class FoodCartPage extends StatelessWidget {
                         getRestaurantMinimumOrder(cartProvider.foodCart.restaurant, cartProvider.foodCart.total.raw);
                     if (restaurantMinimumOrder != null && cartProvider.foodCart.total.raw < restaurantMinimumOrder.raw) {
                       showToast(
-                          msg: Translations.of(context)
-                              .get('Order total should be greater than: {branchMinimumOrder}', args: [restaurantMinimumOrder.formatted]));
+                        msg: Translations.of(context).get(
+                          'Order total should be greater than: {branchMinimumOrder}',
+                          args: [restaurantMinimumOrder.formatted],
+                        ),
+                      );
                       return;
                     }
                     Navigator.of(context, rootNavigator: true).pushNamed(
@@ -171,6 +175,21 @@ class FoodCartPage extends StatelessWidget {
         productTempCartData: productCartData,
         adjustingQuantity: true,
       );
+      if (cartAction == CartAction.ADD) {
+        EventTracking eventTracking = EventTracking.getActions();
+
+        Map<String, dynamic> eventParams = {
+          'product_name': cartProduct.product.englishTitle,
+          //Todo: get the next 2 params from API (product show endpoint)
+          'product_category': '',
+          'product_parent_category': '',
+          'product_cost': cartProduct.totalPrice.raw,
+          'product_id': cartProduct.product.id,
+          'item_quantity': newQuantity,
+        };
+
+        await eventTracking.trackEvent(TrackingEvent.ADD_PRODUCT_TO_CART, eventParams);
+      }
     }
   }
 }

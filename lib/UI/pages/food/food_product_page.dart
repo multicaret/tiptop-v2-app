@@ -143,10 +143,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       productTempCartData: productsProvider.productTempCartData,
       deleteExistingCart: shouldDeleteExistingCart,
     );
-    if (cartProduct == null) {
-      //Todo: here I'm firing the event only on first addition, check if it should be done otherwise
-      await trackAddProductToCartEvent(productsProvider.productTempCartData.quantity);
-    }
+    await trackAddProductToCartEvent(productsProvider.productTempCartData.quantity);
     showToast(
         msg: Translations.of(context).get(cartProduct == null
             ? shouldDeleteExistingCart

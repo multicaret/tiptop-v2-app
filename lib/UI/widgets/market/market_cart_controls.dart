@@ -24,11 +24,15 @@ class MarketCartControls extends StatefulWidget {
   final Product product;
   final bool isModalControls;
   final bool isListItem;
+  final String categoryEnglishTitle;
+  final String parentCategoryEnglishTitle;
 
   MarketCartControls({
     @required this.product,
     this.isModalControls = false,
     this.isListItem = false,
+    this.categoryEnglishTitle,
+    this.parentCategoryEnglishTitle,
   });
 
   @override
@@ -65,7 +69,9 @@ class _MarketCartControlsState extends State<MarketCartControls> {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }
-      trackAddProductToCartEvent(returnedQuantity);
+      if (action == CartAction.ADD) {
+        trackAddProductToCartEvent(returnedQuantity);
+      }
     }
   }
 
@@ -75,8 +81,8 @@ class _MarketCartControlsState extends State<MarketCartControls> {
     Map<String, dynamic> eventParams = {
       'product_name': widget.product.englishTitle,
       //Todo: get the next 2 params from API (product show endpoint)
-      'product_category': '',
-      'product_parent_category': '',
+      'product_category': widget.categoryEnglishTitle,
+      'product_parent_category': widget.parentCategoryEnglishTitle,
       'product_cost': productHasDiscountedPrice ? widget.product.discountedPrice.raw : widget.product.price.raw,
       'product_id': widget.product.id,
       'item_quantity': quantity,
