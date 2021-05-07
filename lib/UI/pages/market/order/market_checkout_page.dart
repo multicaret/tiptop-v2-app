@@ -15,6 +15,8 @@ import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -23,6 +25,7 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -97,24 +100,29 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       paymentSummaryTotalsNotifier.value = [
         PaymentSummaryTotal(
           title: "Total Before Discount",
+          rawValue: couponValidationData.totalBefore.raw,
           value: couponValidationData.totalBefore.formatted,
           isDiscounted: true,
         ),
         PaymentSummaryTotal(
           title: "You Saved",
+          rawValue: couponValidationData.discountedAmount.raw,
           value: couponValidationData.discountedAmount.formatted,
           isSavedAmount: true,
         ),
         PaymentSummaryTotal(
           title: "Total After Discount",
+          rawValue: couponValidationData.totalAfter.raw,
           value: couponValidationData.totalAfter.formatted,
         ),
         PaymentSummaryTotal(
           title: "Delivery Fee",
+          rawValue: couponValidationData.deliveryFee.raw,
           value: couponValidationData.deliveryFee.formatted,
         ),
         PaymentSummaryTotal(
           title: "Grand Total",
+          rawValue: couponValidationData.deliveryFee.raw,
           value: couponValidationData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : couponValidationData.deliveryFee.formatted,
           isGrandTotal: true,
         ),
@@ -124,6 +132,33 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
     }
     setState(() => _isLoadingvalidateMarketCoupon = false);
+  }
+
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackViewCheckoutEvent() async {
+    Cart cart = cartProvider.marketCart;
+    if(cart == null) {
+      print('Tracking failed! No cart!');
+      return;
+    }
+    List<int> cartProductIds = cart.cartProducts.map((cartProduct) => cartProduct.product.id).toList();
+    List<String> cartProductNames = cart.cartProducts.map((cartProduct) => cartProduct.product.englishTitle).toList();
+    PaymentSummaryTotal grandTotal = paymentSummaryTotalsNotifier.value.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+
+    Map<String, dynamic> eventParams = {
+      'cart_product_count': cart.productsCount,
+      'restaurant_name': cart.restaurant.englishTitle,
+      'cart_total': cart.total.raw,
+      'cart_product_ids': cartProductIds,
+      'cart_product_names': cartProductNames,
+      //Todo: fill the next 2 params after getting them from product show endpoint
+      'cart_product_categories': '',
+      'cart_product_parent_categories': '',
+      'cart_grand_total': grandTotal.rawValue,
+    };
+
+    await eventTracking.trackEvent(TrackingEvent.VIEW_CHECKOUT, eventParams);
   }
 
   @override

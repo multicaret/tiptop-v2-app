@@ -541,6 +541,7 @@ class DialogAction {
 class PaymentSummaryTotal {
   final String title;
   final String value;
+  final double rawValue;
   final bool isSavedAmount;
   final bool isGrandTotal;
   final bool isDiscounted;
@@ -548,6 +549,7 @@ class PaymentSummaryTotal {
   PaymentSummaryTotal({
     @required this.title,
     @required this.value,
+    this.rawValue,
     this.isSavedAmount = false,
     this.isGrandTotal = false,
     this.isDiscounted = false,

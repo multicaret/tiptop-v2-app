@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:adjust_sdk/adjust.dart';
+import 'package:adjust_sdk/adjust_event.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -50,10 +52,12 @@ class EventTracking {
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: params);
 
-    //Todo: track event in Adjust
-    // AdjustEvent adjustEvent = new AdjustEvent('2xbdbu');
-    // adjustEvent.addCallbackParameter('status', 'Booted');
-    // adjustEvent.setRevenue(6, 'EUR');
+    //Adjust Event Tracking
+    // AdjustEvent adjustEvent = new AdjustEvent(eventToken);
+    // params.forEach((key, value) {
+    //   String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
+    //   adjustEvent.addCallbackParameter(key, paramValue);
+    // });
     // Adjust.trackEvent(adjustEvent);
   }
 }
