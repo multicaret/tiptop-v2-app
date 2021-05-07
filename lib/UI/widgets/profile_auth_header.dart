@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -18,9 +19,17 @@ class ProfileAuthHeader extends StatelessWidget {
         color: AppColors.white,
         child: InkWell(
           onTap: () {
-            Navigator.of(context, rootNavigator: true).pushNamed(
-              appProvider.isAuth ? OTPCompleteProfile.routeName : WalkthroughPage.routeName,
-            );
+            if (appProvider.isAuth) {
+              Navigator.of(context, rootNavigator: true).pushNamed(
+                OTPCompleteProfile.routeName,
+                arguments: {
+                  'updating_profile': true,
+                }
+              );
+            } else {
+              showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+              Navigator.of(context).pushNamed(WalkthroughPage.routeName);
+            }
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),

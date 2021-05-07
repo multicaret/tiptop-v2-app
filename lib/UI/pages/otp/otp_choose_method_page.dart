@@ -43,6 +43,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   String reference;
   String deepLink;
   bool pickedSMSMethod;
+  String selectedOTPMethod;
 
   bool _isLoadingFetchCountriesRequest = false;
   bool _isLoadingInitOTPValidation = false;
@@ -100,7 +101,12 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
           setState(() => _isLoadingCheckOTPValidation = false);
           if (isNewUser) {
             print('New user, navigating to complete profile page');
-            Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+            Navigator.of(context).pushReplacementNamed(
+              OTPCompleteProfile.routeName,
+              arguments: {
+                'selected_otp_method': selectedOTPMethod,
+              },
+            );
           } else {
             print('Registered user, navigating to home page');
             Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
@@ -139,6 +145,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             OTPMethodsButtons(
               initOTPAction: (String method) {
                 resumedFirstTime = true;
+                selectedOTPMethod = method;
                 if (method == 'sms') {
                   setState(() => pickedSMSMethod = true);
                   _getCountriesFromJsonFile();
