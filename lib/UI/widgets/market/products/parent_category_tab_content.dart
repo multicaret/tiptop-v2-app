@@ -155,7 +155,11 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
                           scrollToCategory(index);
                         },
                         categoriesHeights: childCategoriesHeights,
-                        singleTabContent: MarketProductsGridView(products: selectedParentChildCategories[i].products),
+                        singleTabContent: MarketProductsGridView(
+                          products: selectedParentChildCategories[i].products,
+                          categoryEnglishTitle: selectedParentChildCategories[i].englishTitle,
+                          parentCategoryEnglishTitle: widget.selectedParentCategoryEnglishTitle,
+                        ),
                         pageTopOffset: 0,
                       ),
                     ),

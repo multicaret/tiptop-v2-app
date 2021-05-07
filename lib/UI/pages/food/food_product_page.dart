@@ -166,9 +166,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
       'product_cost': hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw,
       'product_id': product.id,
       'restaurant_name': restaurantEnglishTitle,
-      //Todo: check if the next 2 params are correct
       'product_options': productsProvider.productOptions != null && productsProvider.productOptions.length > 0,
-      'product_ingredients': product.description != null && product.description.raw != null && product.description.raw.isNotEmpty,
     };
     await eventTracking.trackEvent(TrackingEvent.VIEW_PRODUCT_DETAILS, eventParams);
   }

@@ -95,8 +95,8 @@ class _MarketProductPageState extends State<MarketProductPage> {
     Map<String, dynamic> eventParams = {
       'product_name': product.englishTitle,
       //Todo: get categoryEnglishTitle & parentCategoryEnglishTitle from API (product show endpoint)
-      'product_category': '',
-      'product_parent_category': '',
+      'product_category': categoryEnglishTitle,
+      'product_parent_category': parentCategoryEnglishTitle,
       'product_cost': hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw,
       'product_id': product.id,
       //Todo: check if the next 2 params are correct
@@ -111,6 +111,8 @@ class _MarketProductPageState extends State<MarketProductPage> {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       product = data["product"];
       hasControls = data["has_controls"];
+      categoryEnglishTitle = data["category_english_title"];
+      parentCategoryEnglishTitle = data["parent_category_english_title"];
 
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);

@@ -7,10 +7,14 @@ import 'package:tiptop_v2/utils/ui_helper.dart';
 class MarketProductsGridView extends StatelessWidget {
   final List<Product> products;
   final ScrollPhysics physics;
+  final String categoryEnglishTitle;
+  final String parentCategoryEnglishTitle;
 
   const MarketProductsGridView({
     @required this.products,
     this.physics,
+    this.categoryEnglishTitle,
+    this.parentCategoryEnglishTitle,
   });
 
   @override
@@ -30,7 +34,11 @@ class MarketProductsGridView extends StatelessWidget {
         crossAxisCount: 3,
         childAspectRatio: productGridItemAspectRatio,
       ),
-      itemBuilder: (c, i) => MarketGridProductItem(product: products[i]),
+      itemBuilder: (c, i) => MarketGridProductItem(
+        product: products[i],
+        categoryEnglishTitle: categoryEnglishTitle,
+        parentCategoryEnglishTitle: parentCategoryEnglishTitle,
+      ),
     );
   }
 }

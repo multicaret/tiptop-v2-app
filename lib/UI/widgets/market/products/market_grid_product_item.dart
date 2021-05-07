@@ -17,9 +17,13 @@ import '../market_cart_controls.dart';
 
 class MarketGridProductItem extends StatelessWidget {
   final Product product;
+  final String categoryEnglishTitle;
+  final String parentCategoryEnglishTitle;
 
   const MarketGridProductItem({
     @required this.product,
+    this.categoryEnglishTitle,
+    this.parentCategoryEnglishTitle,
   });
 
   void openMarketProductPage(BuildContext context) {
@@ -29,6 +33,8 @@ class MarketGridProductItem extends StatelessWidget {
       Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
         "product": product,
         "has_controls": true,
+        "category_english_title": categoryEnglishTitle,
+        "parent_category_english_title": parentCategoryEnglishTitle,
       });
     }
   }
