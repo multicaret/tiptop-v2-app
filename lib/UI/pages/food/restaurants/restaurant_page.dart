@@ -14,11 +14,13 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dar
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
@@ -75,56 +77,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
     menuCategories = restaurantsProvider.menuCategories;
     print(restaurant != null ? 'restaurant chain id: ${restaurant.chain.id}' : '');
     setState(() => _isLoadingRestaurantShowRequest = false);
-  }
-
-  @override
-  void initState() {
-    categoriesScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.horizontal,
-    );
-
-    productsScrollController = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.vertical,
-    );
-    productsScrollController.addListener(scrollListener);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      restaurantId = ModalRoute.of(context).settings.arguments as int;
-      appProvider = Provider.of<AppProvider>(context);
-      restaurantsProvider = Provider.of<RestaurantsProvider>(context);
-      _fetchAndSetRestaurant().then((_) {
-        expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
-          hasDoubleDelivery:
-              restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled,
-        );
-        categoriesHeights = List.generate(
-            menuCategories.length,
-            (i) => {
-                  'id': menuCategories[i].id,
-                  'height': listItemHeight * menuCategories[i].products.length,
-                });
-        if (menuCategories.length > 0) {
-          selectedCategoryIdNotifier.value = menuCategories[0].id;
-        }
-      });
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    productsScrollController.removeListener(scrollListener);
-    productsScrollController.dispose();
-    searchFieldController.dispose();
-    searchFieldFocusNode.dispose();
-    super.dispose();
   }
 
   void scrollToCategory(int index) {
@@ -194,6 +146,86 @@ class _RestaurantPageState extends State<RestaurantPage> {
         }
       }),
     );
+  }
+
+  Future<void> trackRestaurantMenuViewEvent() async {
+    EventTracking eventTracking = EventTracking.getActions();
+    if (restaurant == null) {
+      print('No restaurant!');
+      return;
+    }
+    List<String> restaurantCategoriesEnglishTitles =
+        restaurant.categories.length == 0 ? <String>[] : restaurant.categories.map((category) => category.englishTitle).toList();
+
+    List<String> restaurantDeliveryMethods = <String>[];
+    if(restaurant.tiptopDelivery.isDeliveryEnabled) {
+      restaurantDeliveryMethods.add('tiptop');
+    }
+    if(restaurant.restaurantDelivery.isDeliveryEnabled) {
+      restaurantDeliveryMethods.add('restaurant');
+    }
+
+    Map<String, dynamic> eventParams = {
+      'restaurant_name': restaurant.title,
+      'restaurant_rating': restaurant.rating.averageRaw,
+      'restaurant_categories': restaurantCategoriesEnglishTitles,
+      'restaurant_city': restaurant.regionEnglishName,
+      'restaurant_latitude': restaurant.latitude,
+      'restaurant_longitude': restaurant.longitude,
+      'restaurant_delivery_methods': restaurantDeliveryMethods,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_RESTAURANT_MENU, eventParams);
+  }
+
+  @override
+  void initState() {
+    categoriesScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.horizontal,
+    );
+
+    productsScrollController = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical,
+    );
+    productsScrollController.addListener(scrollListener);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      restaurantId = ModalRoute.of(context).settings.arguments as int;
+      appProvider = Provider.of<AppProvider>(context);
+      restaurantsProvider = Provider.of<RestaurantsProvider>(context);
+      _fetchAndSetRestaurant().then((_) {
+        expandedHeaderHeight = getRestaurantPageExpandedHeaderHeight(
+          hasDoubleDelivery:
+              restaurant == null ? true : restaurant.tiptopDelivery.isDeliveryEnabled && restaurant.restaurantDelivery.isDeliveryEnabled,
+        );
+        categoriesHeights = List.generate(
+            menuCategories.length,
+            (i) => {
+                  'id': menuCategories[i].id,
+                  'height': listItemHeight * menuCategories[i].products.length,
+                });
+        if (menuCategories.length > 0) {
+          selectedCategoryIdNotifier.value = menuCategories[0].id;
+        }
+        trackRestaurantMenuViewEvent();
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    productsScrollController.removeListener(scrollListener);
+    productsScrollController.dispose();
+    searchFieldController.dispose();
+    searchFieldFocusNode.dispose();
+    super.dispose();
   }
 
   @override

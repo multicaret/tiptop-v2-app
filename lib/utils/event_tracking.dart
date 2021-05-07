@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -37,10 +39,14 @@ class EventTracking {
     print('Tracking event ($eventName) with params:');
     print(params);
 
+    Map<String, dynamic> facebookEventParams = {};
+    params.forEach((key, value) {
+      facebookEventParams[key] = value is List<String> || value is List<int> ? json.encode(value) : value;
+    });
     //Facebook Event Tracking
     await facebookAppEvents.logEvent(
       name: eventName,
-      parameters: params,
+      parameters: facebookEventParams,
     );
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: params);
