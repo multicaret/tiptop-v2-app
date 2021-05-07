@@ -28,7 +28,6 @@ class EventTracking {
     try {
       print('Initiating MixPanel...');
       mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
-      mixpanel.setServerURL("https://api-eu.mixpanel.com");
     } catch (e) {
       throw e;
     }
