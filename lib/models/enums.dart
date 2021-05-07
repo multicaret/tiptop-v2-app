@@ -120,17 +120,16 @@ final orderStatusValues = EnumValues({
   "25": OrderStatus.SCHEDULED,
 });
 
-
 final orderStatusStringValues = EnumReverseValues({
-  OrderStatus.CANCELLED : "Cancelled",
-  OrderStatus.DRAFT : "Draft",
-  OrderStatus.NEW : "Preparing",
-  OrderStatus.PREPARING : "Preparing",
-  OrderStatus.WAITING_COURIER : "Preparing",
-  OrderStatus.ON_THE_WAY : "On the Way",
-  OrderStatus.AT_THE_ADDRESS : "At The Address",
-  OrderStatus.DELIVERED : "Delivered",
-  OrderStatus.SCHEDULED : "Scheduled",
+  OrderStatus.CANCELLED: "Cancelled",
+  OrderStatus.DRAFT: "Draft",
+  OrderStatus.NEW: "Preparing",
+  OrderStatus.PREPARING: "Preparing",
+  OrderStatus.WAITING_COURIER: "Preparing",
+  OrderStatus.ON_THE_WAY: "On the Way",
+  OrderStatus.AT_THE_ADDRESS: "At The Address",
+  OrderStatus.DELIVERED: "Delivered",
+  OrderStatus.SCHEDULED: "Scheduled",
 });
 
 enum ProductOptionType {
@@ -182,4 +181,28 @@ enum LinkType { EXTERNAL, DEEPLINK }
 final linkTypeValues = EnumValues({
   "1": LinkType.EXTERNAL,
   "4": LinkType.DEEPLINK,
+});
+
+enum TrackingEvent {
+  VISIT,
+  COMPLETE_REGISTRATION, //User completes registration ( no matter Whatsapp or SMS)
+  VIEW_HOME, //When user visits Food / Market Home
+  VIEW_CATEGORY, //if food, food category is viewd, if market the market category (Child + parent)
+  VIEW_RESTAURANT_MENU, //User view any restaurant menu
+  VIEW_PRODUCT_DETAILS,
+  ADD_PRODUCT_TO_CART,
+  VIEW_CHECKOUT,
+  COMPLETE_PURCHASE,
+}
+
+final trackingEventsValues = EnumValues({
+  "visit": TrackingEvent.VISIT,
+  "complete_registration": TrackingEvent.COMPLETE_REGISTRATION,
+  "view_home": TrackingEvent.VIEW_HOME,
+  "view_category": TrackingEvent.VIEW_CATEGORY,
+  "view_restaurant_menu": TrackingEvent.VIEW_RESTAURANT_MENU,
+  "view_product_details": TrackingEvent.VIEW_PRODUCT_DETAILS,
+  "add_product_to_cart": TrackingEvent.ADD_PRODUCT_TO_CART,
+  "view_checkout": TrackingEvent.VIEW_CHECKOUT,
+  "complete_purchase": TrackingEvent.COMPLETE_PURCHASE,
 });
