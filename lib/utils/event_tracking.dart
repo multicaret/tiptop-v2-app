@@ -41,7 +41,6 @@ class EventTracking {
 
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {
     String eventName = trackingEventsValues.reverse[trackingEvent];
-    print('user phone from track event: ${AppProvider.userPhoneNumber}');
     print('Tracking event ($eventName): $params');
 
     //MixPanel Event Tracking
