@@ -192,7 +192,7 @@ enum TrackingEvent {
   VISIT,
   COMPLETE_REGISTRATION, //User completes registration ( no matter Whatsapp or SMS)
   VIEW_HOME, //When user visits Food / Market Home
-  VIEW_CATEGORY, //if food, food category is viewd, if market the market category (Child + parent)
+  VIEW_CATEGORY, //if food, food category is viewed, if market the market category (Child + parent)
   VIEW_RESTAURANT_MENU, //User view any restaurant menu
   VIEW_PRODUCT_DETAILS,
   ADD_PRODUCT_TO_CART,
