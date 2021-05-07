@@ -43,7 +43,7 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
   @override
   void dispose() {
     tabController.dispose();
-    print('Disposed products page!');
+    // print('Disposed products page!');
     super.dispose();
   }
 
