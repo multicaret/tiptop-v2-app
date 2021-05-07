@@ -21,16 +21,43 @@ class ProductsProvider with ChangeNotifier {
   Product product;
   List<ProductOption> productOptions = <ProductOption>[];
   ProductCartData productTempCartData;
+  bool isLoadingFetchAllProductsRequest = false;
+  bool fetchAllProductsError = false;
 
   void setMarketParentCategories(List<Category> _marketParentCategories) {
     marketParentCategories = _marketParentCategories;
     notifyListeners();
   }
 
-  Future<void> fetchAndSetChildCategoriesAndProducts(int selectedParentCategoryId) async {
-    final endpoint = 'categories/$selectedParentCategoryId/products';
+  Future<void> fetchAndSetParentCategoriesAndProducts() async {
+    final endpoint = 'grocery/categories';
+    fetchAllProductsError = false;
+    isLoadingFetchAllProductsRequest = true;
+    notifyListeners();
+    try {
+      print('Fetching all market products in the background.... 👻');
+      final responseData = await AppProvider().get(endpoint: endpoint, body: {
+        'branch_id': '${HomeProvider.branchId}',
+      });
+      marketParentCategories = List<Category>.from(responseData["data"].map((x) => Category.fromJson(x)));
+      isLoadingFetchAllProductsRequest = false;
+      print('Fetched all market products in the background 👻');
+      notifyListeners();
+    } catch (e) {
+      print('An error occurred while fetching all market products in the background.... 👻');
+      fetchAllProductsError = true;
+      isLoadingFetchAllProductsRequest = false;
+      notifyListeners();
+      throw e;
+    }
+  }
 
-    final responseData = await AppProvider().get(endpoint: endpoint);
+  Future<void> fetchAndSetChildCategoriesAndProducts(int selectedParentCategoryId) async {
+    final endpoint = 'grocery/categories/$selectedParentCategoryId/products';
+
+    final responseData = await AppProvider().get(endpoint: endpoint, body: {
+      'branch_id': '${HomeProvider.branchId}',
+    });
     marketParentCategoriesWithoutProducts = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
     selectedParentChildCategories =
@@ -232,7 +259,7 @@ class ProductsProvider with ChangeNotifier {
       bool hasItems = option.selections.length != 0 || option.ingredients.length != 0;
       //valid option properties condition
       bool validIngredientBasedOptionProperties = true;
-      if(option.isBasedOnIngredients) {
+      if (option.isBasedOnIngredients) {
         validIngredientBasedOptionProperties = option.isBasedOnIngredients && option.inputType == ProductOptionInputType.PILL;
       }
       return hasItems && validIngredientBasedOptionProperties;

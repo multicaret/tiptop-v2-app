@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_categories_tabs.dart';
@@ -7,6 +8,7 @@ import 'package:tiptop_v2/UI/widgets/market/products/parent_category_tab_content
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/products_provider.dart';
 
 class MarketProductsPage extends StatefulWidget {
   static const routeName = '/products';
@@ -65,19 +67,30 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
             selectedParentCategoryId: widget.selectedParentCategoryId,
             tabController: tabController,
           ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: List.generate(widget.parentCategories.length, (i) {
-                List<Category> childCategories = widget.parentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
+          Consumer<ProductsProvider>(
+            builder: (c, productsProvider, _) {
+              List<Category> marketParentCategories = productsProvider.marketParentCategories;
 
-                return ParentCategoryTabContent(
-                  selectedParentCategoryId: widget.parentCategories[i].id,
-                  selectedParentCategoryEnglishTitle: widget.parentCategories[i].englishTitle,
-                  childCategories: childCategories,
-                );
-              }),
-            ),
+              return Expanded(
+                child: productsProvider.isLoadingFetchAllProductsRequest
+                    ? AppLoader()
+                    : productsProvider.fetchAllProductsError
+                        ? Center(child: Text(Translations.of(context).get("An Error Occurred!")))
+                        : TabBarView(
+                            controller: tabController,
+                            children: List.generate(marketParentCategories.length, (i) {
+                              List<Category> childCategories =
+                                  marketParentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
+
+                              return ParentCategoryTabContent(
+                                selectedParentCategoryId: marketParentCategories[i].id,
+                                selectedParentCategoryEnglishTitle: marketParentCategories[i].englishTitle,
+                                childCategories: childCategories,
+                              );
+                            }),
+                          ),
+              );
+            },
           ),
         ],
       ),

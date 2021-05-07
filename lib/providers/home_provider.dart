@@ -8,7 +8,6 @@ import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
 import 'addresses_provider.dart';
@@ -72,7 +71,8 @@ class HomeProvider with ChangeNotifier {
 
   Future<void> fetchAndSetHomeData(
     BuildContext context,
-    AppProvider appProvider, {
+    AppProvider appProvider,
+    ProductsProvider productsProvider, {
     bool afterLanguageChange = false,
   }) async {
     final endpoint = 'home';
@@ -80,7 +80,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
     RestaurantsProvider restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
-    ProductsProvider productsProvider = Provider.of<ProductsProvider>(context, listen: false);
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
       print('Lat/Long not found!');
@@ -166,7 +165,7 @@ class HomeProvider with ChangeNotifier {
         marketBranchLong = marketHomeData.branch.longitude;
       }
 
-      marketParentCategories = filterTwoLevelCategories(marketHomeData.categories);
+      marketParentCategories = marketHomeData.categories;
       productsProvider.setMarketParentCategories(marketParentCategories);
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);

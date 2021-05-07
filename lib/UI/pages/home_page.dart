@@ -19,6 +19,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
+import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   AppProvider appProvider;
   HomeProvider homeProvider;
+  ProductsProvider productsProvider;
   AddressesProvider addressesProvider;
 
   bool hasActiveMarketOrders = false;
@@ -55,7 +57,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchAndSetHomeData() async {
     await addressesProvider.fetchSelectedAddress();
-    await homeProvider.fetchAndSetHomeData(context, appProvider);
+    await homeProvider.fetchAndSetHomeData(context, appProvider, productsProvider);
+    if(homeProvider.channelIsMarket) {
+      await productsProvider.fetchAndSetParentCategoriesAndProducts();
+    }
     await trackHomeViewEvent();
     _setHomeData();
   }
@@ -103,6 +108,8 @@ class _HomePageState extends State<HomePage> {
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
+      productsProvider = Provider.of<ProductsProvider>(context);
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetchAndSetHomeData();
       });

@@ -21,6 +21,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -101,15 +102,20 @@ class ProfilePage extends StatelessWidget {
                   ),
                   if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems(homeProvider.channelIsMarket)),
                   SectionTitle('Languages'),
-                  RadioListItems(
-                    items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
-                    selectedId: selectedLanguageId,
-                    action: (languageId) async {
-                      Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
-                      appProvider.changeLanguage(selectedLanguage.locale);
-                      await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
-                    },
-                    isAssetLogo: true,
+                  Consumer<ProductsProvider>(
+                    builder: (c, productsProvider, _) => RadioListItems(
+                      items: appProvider.appLanguages.map((language) => {'id': language.id, 'title': language.title, 'logo': language.logo}).toList(),
+                      selectedId: selectedLanguageId,
+                      action: (languageId) async {
+                        Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
+                        appProvider.changeLanguage(selectedLanguage.locale);
+                        await homeProvider.fetchAndSetHomeData(context, appProvider, productsProvider, afterLanguageChange: true);
+                        if (homeProvider.channelIsMarket) {
+                          await productsProvider.fetchAndSetParentCategoriesAndProducts();
+                        }
+                      },
+                      isAssetLogo: true,
+                    ),
                   ),
                   const SizedBox(height: 30),
                   ..._getProfileSettingItems(context, profileItems),
