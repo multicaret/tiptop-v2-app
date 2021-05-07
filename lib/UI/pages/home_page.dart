@@ -58,11 +58,15 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeData() async {
     await addressesProvider.fetchSelectedAddress();
     await homeProvider.fetchAndSetHomeData(context, appProvider, productsProvider);
+    await trackHomeViewEvent();
+    _setHomeData();
+  }
+
+  Future<void> fetchAndSetHomeDataAndProducts() async {
+    await fetchAndSetHomeData();
     if(homeProvider.channelIsMarket) {
       await productsProvider.fetchAndSetParentCategoriesAndProducts();
     }
-    await trackHomeViewEvent();
-    _setHomeData();
   }
 
   void _setHomeData() {
@@ -86,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     homeProvider.setSelectedChannel(_channel);
     if ((_channel == AppChannel.FOOD && homeProvider.foodHomeData == null) ||
         (_channel == AppChannel.MARKET && homeProvider.marketHomeData == null)) {
-      fetchAndSetHomeData();
+      fetchAndSetHomeDataAndProducts();
     } else {
       trackHomeViewEvent();
     }
@@ -111,7 +115,7 @@ class _HomePageState extends State<HomePage> {
       productsProvider = Provider.of<ProductsProvider>(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        fetchAndSetHomeData();
+        fetchAndSetHomeDataAndProducts();
       });
       _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
       if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
