@@ -57,6 +57,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
     await productsProvider.fetchAndSetProduct(appProvider, product.id);
     product = productsProvider.product;
     hasUnitTitle = product.unit != null && product.unit.title != null;
+    hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
     productIsFavorited = product.isFavorited;
     setState(() => _isLoadingProduct = false);
   }

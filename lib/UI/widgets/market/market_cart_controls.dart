@@ -11,6 +11,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -39,17 +40,7 @@ class _MarketCartControlsState extends State<MarketCartControls> {
   CartProvider cartProvider;
   AddressesProvider addressesProvider;
   bool _isInit = true;
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
-      addressesProvider = Provider.of<AddressesProvider>(context);
-      cartProvider = Provider.of<CartProvider>(context);
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
+  bool productHasDiscountedPrice = false;
 
   Future<void> adjustMarketProductQuantity(CartAction action) async {
     if (!appProvider.isAuth) {
@@ -63,18 +54,49 @@ class _MarketCartControlsState extends State<MarketCartControls> {
       );
     } else {
       print('$action ${widget.product.id} ${widget.product.title}');
-      final responseData = await cartProvider.adjustMarketProductQuantity(
+      final returnedQuantity = await cartProvider.adjustMarketProductQuantity(
         appProvider: appProvider,
         isAdding: action == CartAction.ADD,
         product: widget.product,
         context: context,
       );
-      if (responseData == 401) {
+      if (returnedQuantity == 401) {
         showToast(msg: Translations.of(context).get("You Need to Log In First!"));
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }
+      trackAddProductToCartEvent(returnedQuantity);
     }
+  }
+
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackAddProductToCartEvent(int quantity) async {
+    Map<String, dynamic> eventParams = {
+      'product_name': widget.product.englishTitle,
+      //Todo: get the next 2 params from API (product show endpoint)
+      'product_category': '',
+      'product_parent_category': '',
+      'product_cost': productHasDiscountedPrice ? widget.product.discountedPrice.raw : widget.product.price.raw,
+      'product_id': widget.product.id,
+      'item_quantity': quantity,
+    };
+
+    await eventTracking.trackEvent(TrackingEvent.ADD_PRODUCT_TO_CART, eventParams);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      appProvider = Provider.of<AppProvider>(context);
+      addressesProvider = Provider.of<AddressesProvider>(context);
+      cartProvider = Provider.of<CartProvider>(context);
+      productHasDiscountedPrice = widget.product.discountedPrice != null &&
+          widget.product.discountedPrice.raw != 0 &&
+          widget.product.discountedPrice.raw < widget.product.price.raw;
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
