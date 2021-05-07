@@ -201,13 +201,13 @@ enum TrackingEvent {
 }
 
 final trackingEventsValues = EnumValues({
-  "visit": TrackingEvent.VISIT,
-  "complete_registration": TrackingEvent.COMPLETE_REGISTRATION,
-  "view_home": TrackingEvent.VIEW_HOME,
-  "view_category": TrackingEvent.VIEW_CATEGORY,
-  "view_restaurant_menu": TrackingEvent.VIEW_RESTAURANT_MENU,
-  "view_product_details": TrackingEvent.VIEW_PRODUCT_DETAILS,
-  "add_product_to_cart": TrackingEvent.ADD_PRODUCT_TO_CART,
-  "view_checkout": TrackingEvent.VIEW_CHECKOUT,
-  "complete_purchase": TrackingEvent.COMPLETE_PURCHASE,
+  "Visit": TrackingEvent.VISIT,
+  "Complete Registration": TrackingEvent.COMPLETE_REGISTRATION,
+  "View Home": TrackingEvent.VIEW_HOME,
+  "View Category": TrackingEvent.VIEW_CATEGORY,
+  "View Restaurant Menu": TrackingEvent.VIEW_RESTAURANT_MENU,
+  "View Product Details": TrackingEvent.VIEW_PRODUCT_DETAILS,
+  "Add Product To Cart": TrackingEvent.ADD_PRODUCT_TO_CART,
+  "Initiate Checkout": TrackingEvent.VIEW_CHECKOUT,
+  "Purchase": TrackingEvent.COMPLETE_PURCHASE,
 });
