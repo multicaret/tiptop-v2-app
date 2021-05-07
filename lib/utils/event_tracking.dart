@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:adjust_sdk/adjust.dart';
+import 'package:adjust_sdk/adjust_event.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -37,7 +39,7 @@ class EventTracking {
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {
     String eventName = trackingEventsValues.reverse[trackingEvent];
     print('user phone from track event: ${AppProvider.userPhoneNumber}');
-    print('Tracking event ($eventName) with params: $params');
+    print('Tracking event ($eventName)');
 
     Map<String, dynamic> mixpanelEventParams = params;
     if(AppProvider.userPhoneNumber != null) {
@@ -45,18 +47,19 @@ class EventTracking {
         'distinct_id': AppProvider.userPhoneNumber,
       });
     }
-    print('mixpanelEventParams: ${mixpanelEventParams}');
+    print('mixpanelEventParams: $mixpanelEventParams');
 
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: mixpanelEventParams);
 
     //Adjust Event Tracking
-    // AdjustEvent adjustEvent = new AdjustEvent(eventToken);
-    // params.forEach((key, value) {
-    //   String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
-    //   adjustEvent.addCallbackParameter(key, paramValue);
-    // });
-    // Adjust.trackEvent(adjustEvent);
+    String adjustEventToken = adjustTrackingEventsTokens.reverse[trackingEvent];
+    AdjustEvent adjustEvent = new AdjustEvent(adjustEventToken);
+    params.forEach((key, value) {
+      String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
+      adjustEvent.addCallbackParameter(key, paramValue);
+    });
+    Adjust.trackEvent(adjustEvent);
 
     //Facebook Event Tracking
     Map<String, dynamic> facebookEventParams = {};

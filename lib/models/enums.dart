@@ -211,3 +211,15 @@ final trackingEventsValues = EnumValues({
   "Initiate Checkout": TrackingEvent.VIEW_CHECKOUT,
   "Purchase": TrackingEvent.COMPLETE_PURCHASE,
 });
+
+final adjustTrackingEventsTokens = EnumValues({
+  "m6rns8": TrackingEvent.VISIT,
+  "xl9t8a": TrackingEvent.COMPLETE_REGISTRATION,
+  "9gjkks": TrackingEvent.VIEW_HOME,
+  "iui6u8": TrackingEvent.VIEW_CATEGORY,
+  "z0kt4r": TrackingEvent.VIEW_RESTAURANT_MENU,
+  "m4yuev": TrackingEvent.VIEW_PRODUCT_DETAILS,
+  "5re48j": TrackingEvent.ADD_PRODUCT_TO_CART,
+  "cwty3j": TrackingEvent.VIEW_CHECKOUT,
+  "9mh6li": TrackingEvent.COMPLETE_PURCHASE,
+});
