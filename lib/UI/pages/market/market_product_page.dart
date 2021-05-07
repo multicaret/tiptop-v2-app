@@ -13,6 +13,7 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
@@ -48,27 +49,17 @@ class _MarketProductPageState extends State<MarketProductPage> {
   bool hasControls = true;
   bool hasUnitTitle = false;
 
+  String categoryEnglishTitle;
+  String parentCategoryEnglishTitle;
+
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
     await productsProvider.fetchAndSetProduct(appProvider, product.id);
     product = productsProvider.product;
     hasUnitTitle = product.unit != null && product.unit.title != null;
+    hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
     productIsFavorited = product.isFavorited;
     setState(() => _isLoadingProduct = false);
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      product = data["product"];
-      hasControls = data["has_controls"];
-      productsProvider = Provider.of<ProductsProvider>(context);
-      appProvider = Provider.of<AppProvider>(context);
-      _fetchAndSetProduct();
-    }
-    _isInit = false;
-    super.didChangeDependencies();
   }
 
   Future<void> interactWithProduct() async {
@@ -96,6 +87,39 @@ class _MarketProductPageState extends State<MarketProductPage> {
       showToast(msg: Translations.of(context).get("An error occurred and we couldn't add this product to your favorites!"));
       throw e;
     }
+  }
+
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackViewProductDetailsEvent() async {
+    Map<String, dynamic> eventParams = {
+      'product_name': product.englishTitle,
+      //Todo: get categoryEnglishTitle & parentCategoryEnglishTitle from API (product show endpoint)
+      'product_category': '',
+      'product_parent_category': '',
+      'product_cost': hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw,
+      'product_id': product.id,
+      //Todo: check if the next 2 params are correct
+      'product_ingredients': product.description != null && product.description.raw != null && product.description.raw.isNotEmpty,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_PRODUCT_DETAILS, eventParams);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      product = data["product"];
+      hasControls = data["has_controls"];
+
+      productsProvider = Provider.of<ProductsProvider>(context);
+      appProvider = Provider.of<AppProvider>(context);
+      _fetchAndSetProduct().then((_) {
+        trackViewProductDetailsEvent();
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -181,7 +205,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
                             product: product,
                           ),
                         ),
-                        if(hasUnitTitle)
+                        if (hasUnitTitle)
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: Text(

@@ -7,10 +7,12 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
@@ -30,8 +32,12 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   final GlobalKey<FormState> _profileFormKey = GlobalKey();
   AppProvider appProvider;
   OTPProvider otpProvider;
+
+  bool updatingProfile = false;
   bool _isInit = true;
   bool _isLoadingCreateEditProfileRequest = false;
+
+  String selectedOTPMethod;
 
   Map<String, dynamic> formData = {
     'full_name': null,
@@ -61,15 +67,23 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      updatingProfile = data["updating_profile"] ?? false;
+      selectedOTPMethod = data["selected_otp_method"];
+      print('route data: $data');
+
       appProvider = Provider.of<AppProvider>(context);
       otpProvider = Provider.of<OTPProvider>(context);
-      formData = {
-        'full_name':
-            appProvider.authUser == null || appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
-        'email': appProvider.authUser == null ? null : appProvider.authUser.email,
-        'region_id': appProvider.authUser == null || appProvider.authUser.region == null ? null : appProvider.authUser.region.id,
-        'city_id': appProvider.authUser == null || appProvider.authUser.city == null ? null : appProvider.authUser.city.id,
-      };
+
+      if (appProvider.authUser != null) {
+        //User exists, init form data with their info
+        formData = {
+          'full_name': appProvider.authUser.name.contains(appProvider.authUser.phone) ? null : appProvider.authUser.name,
+          'email': appProvider.authUser.email,
+          'region_id': appProvider.authUser.region == null ? null : appProvider.authUser.region.id,
+          'city_id': appProvider.authUser.city == null ? null : appProvider.authUser.city.id,
+        };
+      }
       _createEditProfileRequest();
     }
     _isInit = false;
@@ -156,6 +170,24 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     );
   }
 
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> trackCompleteRegistrationEvent() async {
+    //Todo: remove this check, might be unnecessary
+    if (appProvider.authUser == null) {
+      print('No user!');
+      return;
+    }
+    Map<String, dynamic> eventParams = {
+      'phone': '${appProvider.authUser.phoneCode}${appProvider.authUser.phone}',
+      'registration_date': appProvider.authUser.approvedAt.timestamp,
+      'registration_method': selectedOTPMethod,
+      'name': appProvider.authUser.name,
+      'email': appProvider.authUser.email,
+    };
+    await eventTracking.trackEvent(TrackingEvent.COMPLETE_REGISTRATION, eventParams);
+  }
+
   Future<void> _submit(BuildContext context, AppProvider appProvider) async {
     if (!_profileFormKey.currentState.validate()) {
       showToast(msg: Translations.of(context).get("Invalid Form"));
@@ -164,6 +196,10 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     _profileFormKey.currentState.save();
     try {
       await appProvider.updateProfile(formData);
+      if (!updatingProfile) {
+        //Track complete registration event
+        await trackCompleteRegistrationEvent();
+      }
       getLocationPermissionStatus().then((isGranted) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(
           isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,

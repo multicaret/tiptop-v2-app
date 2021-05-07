@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -55,19 +53,13 @@ class CountryCodeDropDown extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         children: [
-                          SvgPicture.network(
+                          Image.asset(
                             country.flagUrl,
                             width: 30,
                             alignment: Alignment.center,
-                            placeholderBuilder: (BuildContext context) => Container(
-                              child: SpinKitCircle(
-                                color: AppColors.primary,
-                                size: 20,
-                              ),
-                            ),
                           ),
                           const SizedBox(width: 5),
-                          Text('${country.phoneCode}'),
+                          Text('+${country.phoneCode}'),
                         ],
                       ),
                     ),

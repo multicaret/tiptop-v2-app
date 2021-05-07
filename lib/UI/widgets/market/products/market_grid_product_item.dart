@@ -18,7 +18,9 @@ import '../market_cart_controls.dart';
 class MarketGridProductItem extends StatelessWidget {
   final Product product;
 
-  const MarketGridProductItem({@required this.product});
+  const MarketGridProductItem({
+    @required this.product,
+  });
 
   void openMarketProductPage(BuildContext context) {
     if (product.isDisabled) {

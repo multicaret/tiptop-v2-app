@@ -72,10 +72,12 @@ class OTPProvider with ChangeNotifier {
 
   Future<void> initSMSOTPAndSendCode(String phoneCountryCode, String phoneNumber) async {
     final endpoint = 'otp/sms-send';
-    final responseData = await AppProvider().post(endpoint: endpoint, body: {
+    Map<String, dynamic> body = {
       'phone_country_code': phoneCountryCode,
       'phone_number': phoneNumber,
-    });
+    };
+
+    final responseData = await AppProvider().post(endpoint: endpoint, body: body);
     print('initSMSOTPAndSendCode responseData');
     print(responseData);
 

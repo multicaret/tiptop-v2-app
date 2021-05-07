@@ -15,12 +15,14 @@ import 'package:tiptop_v2/routes.dart';
 import 'package:tiptop_v2/utils/adjust.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 
 import 'UI/app_wrapper.dart';
 import 'UI/pages/force_update_page.dart';
 import 'UI/pages/location_permission_page.dart';
 import 'UI/splash_screen.dart';
 import 'i18n/translations.dart';
+import 'models/enums.dart';
 
 void main() async {
   await runZonedGuarded<Future<void>>(() async {
@@ -51,12 +53,27 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _autoLoginFuture;
+  EventTracking eventTracking = EventTracking.getActions();
+
+  Future<void> _initEventTracking() async {
+    await eventTracking.initEventTracking();
+
+    //Send app visit event
+    Map<String, dynamic> visitEventParams = {
+      'platform': widget.appProvider.mobileAppDetails['device']['platform'],
+      'user_language': widget.appProvider.appLocale.languageCode,
+    };
+    await eventTracking.trackEvent(TrackingEvent.VISIT, visitEventParams);
+  }
 
   @override
   void initState() {
     _autoLoginFuture = widget.appProvider.autoLogin();
     WidgetsBinding.instance.addObserver(this);
     getDeepLinkUrlFromPlugin();
+
+    //Init tracking services
+    _initEventTracking();
     super.initState();
   }
 
@@ -72,6 +89,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.resumed:
+        //Todo: track visit event again???
         Adjust.onResume();
         break;
       case AppLifecycleState.paused:

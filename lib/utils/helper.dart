@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -301,4 +303,9 @@ List<Category> filterTwoLevelCategories(List<Category> originalCategories) {
     }
     return parentCategory.hasChildren && atLeastOneChildHasProducts;
   }).toList();
+}
+
+Future<List<Country>> getCountriesFromJsonFile() async {
+  final countries = await rootBundle.loadString('assets/countries/countries.json');
+  return List<Country>.from(json.decode(countries).map((x) => Country.fromJson(x)));
 }

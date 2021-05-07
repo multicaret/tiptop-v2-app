@@ -43,6 +43,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   String reference;
   String deepLink;
   bool pickedSMSMethod;
+  String selectedOTPMethod;
 
   bool _isLoadingFetchCountriesRequest = false;
   bool _isLoadingInitOTPValidation = false;
@@ -54,10 +55,9 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   List<Map<String, dynamic>> countriesDropDownItems = [];
   bool resumedFirstTime = true;
 
-  Future<void> _fetchAndSetCountries() async {
+  Future<void> _getCountriesFromJsonFile() async {
     setState(() => _isLoadingFetchCountriesRequest = true);
-    await otpProvider.fetchAndSetCountries();
-    countries = otpProvider.countries;
+    countries = await getCountriesFromJsonFile();
     phoneCountryCode = countries[0].phoneCode;
     setState(() => _isLoadingFetchCountriesRequest = false);
   }
@@ -101,7 +101,12 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
           setState(() => _isLoadingCheckOTPValidation = false);
           if (isNewUser) {
             print('New user, navigating to complete profile page');
-            Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+            Navigator.of(context).pushReplacementNamed(
+              OTPCompleteProfile.routeName,
+              arguments: {
+                'selected_otp_method': selectedOTPMethod,
+              },
+            );
           } else {
             print('Registered user, navigating to home page');
             Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
@@ -140,9 +145,10 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             OTPMethodsButtons(
               initOTPAction: (String method) {
                 resumedFirstTime = true;
+                selectedOTPMethod = method;
                 if (method == 'sms') {
                   setState(() => pickedSMSMethod = true);
-                  _fetchAndSetCountries();
+                  _getCountriesFromJsonFile();
                 } else {
                   setState(() => pickedSMSMethod = false);
                   _initOTPValidation(method);
@@ -216,17 +222,16 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
     }
     _phoneNumberFormKey.currentState.save();
     try {
-
-    await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
-    if (otpProvider.reference == null) {
-      showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
-      return;
-    }
-    Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {
-      'reference': otpProvider.reference,
-      'phone_country_code': phoneCountryCode,
-      'phone_number': phoneNumber,
-    });
+      await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
+      if (otpProvider.reference == null) {
+        showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
+        return;
+      }
+      Navigator.of(context).pushReplacementNamed(OTPSMSCodePage.routeName, arguments: {
+        'reference': otpProvider.reference,
+        'phone_country_code': phoneCountryCode,
+        'phone_number': phoneNumber,
+      });
     } on HttpException catch (error) {
       if (error.errors != null && error.errors.length > 0) {
         appAlert(

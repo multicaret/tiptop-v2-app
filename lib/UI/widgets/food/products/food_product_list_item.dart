@@ -14,11 +14,15 @@ class FoodProductListItem extends StatelessWidget {
   final Product product;
   final int restaurantId;
   final int chainId;
+  final String restaurantEnglishTitle;
+  final String categoryEnglishTitle;
 
   FoodProductListItem({
     @required this.product,
     @required this.restaurantId,
     @required this.chainId,
+    @required this.restaurantEnglishTitle,
+    @required this.categoryEnglishTitle,
   });
 
   @override
@@ -36,6 +40,8 @@ class FoodProductListItem extends StatelessWidget {
                 'product_id': product.id,
                 'chain_id': chainId,
                 'restaurant_id': restaurantId,
+                'restaurant_english_title': restaurantEnglishTitle,
+                'category_english_title': categoryEnglishTitle,
               });
             }
           },

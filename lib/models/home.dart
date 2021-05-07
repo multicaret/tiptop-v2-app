@@ -72,6 +72,8 @@ class Branch {
   Branch({
     this.id,
     this.title,
+    this.englishTitle,
+    this.regionEnglishName,
     this.regionId,
     this.cityId,
     this.tiptopDelivery,
@@ -91,6 +93,8 @@ class Branch {
 
   int id;
   String title;
+  String englishTitle;
+  String regionEnglishName;
   int regionId;
   int cityId;
   BranchDelivery tiptopDelivery;
@@ -110,6 +114,8 @@ class Branch {
   factory Branch.fromJson(Map<String, dynamic> json) => Branch(
         id: json["id"],
         title: json["title"],
+        englishTitle: json["englishTitle"],
+        regionEnglishName: json["regionEnglishName"],
         regionId: json["regionId"],
         cityId: json["cityId"],
         tiptopDelivery: BranchDelivery.fromJson(json["tiptopDelivery"]),

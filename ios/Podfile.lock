@@ -7,6 +7,15 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
+  - facebook_app_events (0.0.1):
+    - FBSDKCoreKit (~> 9.1.0)
+    - Flutter
+  - FBSDKCoreKit (9.1.0):
+    - FBSDKCoreKit/Basics (= 9.1.0)
+    - FBSDKCoreKit/Core (= 9.1.0)
+  - FBSDKCoreKit/Basics (9.1.0)
+  - FBSDKCoreKit/Core (9.1.0):
+    - FBSDKCoreKit/Basics
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
@@ -65,6 +74,7 @@ PODS:
 DEPENDENCIES:
   - adjust_sdk (from `.symlinks/plugins/adjust_sdk/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
+  - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
@@ -88,6 +98,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Adjust
+    - FBSDKCoreKit
     - FMDB
     - GoogleMaps
     - Instabug
@@ -101,6 +112,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/adjust_sdk/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
+  facebook_app_events:
+    :path: ".symlinks/plugins/facebook_app_events/ios"
   Flutter:
     :path: Flutter
   fluttertoast:
@@ -140,6 +153,8 @@ SPEC CHECKSUMS:
   Adjust: 131c77905f67b26e946d1b831fad20ed2b41134c
   adjust_sdk: 0f2eca502e94cf4b78d15e895533c294c2953d77
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  facebook_app_events: 3f4d7bb584f5ab326f2009a1e13e69b02ba35906
+  FBSDKCoreKit: a00fe2efd780c195a5e09201bf51c56106245b40
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

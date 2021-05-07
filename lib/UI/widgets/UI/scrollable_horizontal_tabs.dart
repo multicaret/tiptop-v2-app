@@ -37,7 +37,7 @@ class ScrollableHorizontalTabs extends StatelessWidget {
           index: i,
           isSelected: children[i].id == selectedChildCategoryId,
           isInverted: isInverted,
-          action: action,
+          action: (index) => action(index, children[i].englishTitle),
           childCategory: children[i],
           scrollController: itemScrollController,
         ),

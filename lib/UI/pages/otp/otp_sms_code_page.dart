@@ -173,7 +173,12 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     if (isValid == true) {
       if (isNewUser) {
         print('New user, navigating to complete profile page');
-        Navigator.of(context).pushReplacementNamed(OTPCompleteProfile.routeName);
+        Navigator.of(context).pushReplacementNamed(
+          OTPCompleteProfile.routeName,
+          arguments: {
+            'selected_otp_method': 'sms',
+          },
+        );
       } else {
         print('Registered user, navigating to home page');
         Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
