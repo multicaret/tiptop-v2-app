@@ -96,6 +96,7 @@ class AppProvider with ChangeNotifier {
   User authUser;
   int userId;
   String token;
+  static String userPhoneNumber;
 
   bool get isAuth => token != null;
 
@@ -286,6 +287,11 @@ class AppProvider with ChangeNotifier {
     authUser = User.fromJson(json.decode(responseData['data']));
     userId = LocalStorage.userId = responseData['userId'];
     token = responseData['accessToken'];
+    if (authUser.phoneCode != null && authUser.phone != null) {
+      userPhoneNumber = '${authUser.phoneCode}${authUser.phone}';
+    }
+    print('userPhoneNumber: $userPhoneNumber');
+
     if (token != null) {
       print('Token found in local storage, auto login successful!');
       print('User id: ${authUser.id}, username: ${authUser.name}');
@@ -298,6 +304,7 @@ class AppProvider with ChangeNotifier {
   Future<void> logout() async {
     token = null;
     userId = null;
+    userPhoneNumber = null;
     await storageActions.deleteData(key: 'userData');
     await storageActions.deleteData(key: 'selected_address');
     print('Deleted user data and logged out');

@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:adjust_sdk/adjust.dart';
-import 'package:adjust_sdk/adjust_event.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 
 class EventTracking {
   static final EventTracking _instance = EventTracking();
@@ -37,20 +36,19 @@ class EventTracking {
 
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {
     String eventName = trackingEventsValues.reverse[trackingEvent];
-    print('Tracking event ($eventName) with params:');
-    print(params);
+    print('user phone from track event: ${AppProvider.userPhoneNumber}');
+    print('Tracking event ($eventName) with params: $params');
 
-    Map<String, dynamic> facebookEventParams = {};
-    params.forEach((key, value) {
-      facebookEventParams[key] = value is List<String> || value is List<int> ? json.encode(value) : value;
-    });
-    //Facebook Event Tracking
-    await facebookAppEvents.logEvent(
-      name: eventName,
-      parameters: facebookEventParams,
-    );
+    Map<String, dynamic> mixpanelEventParams = params;
+    if(AppProvider.userPhoneNumber != null) {
+      params.addAll({
+        'distinct_id': AppProvider.userPhoneNumber,
+      });
+    }
+    print('mixpanelEventParams: ${mixpanelEventParams}');
+
     //MixPanel Event Tracking
-    mixpanel.track(eventName, properties: params);
+    mixpanel.track(eventName, properties: mixpanelEventParams);
 
     //Adjust Event Tracking
     // AdjustEvent adjustEvent = new AdjustEvent(eventToken);
@@ -59,5 +57,15 @@ class EventTracking {
     //   adjustEvent.addCallbackParameter(key, paramValue);
     // });
     // Adjust.trackEvent(adjustEvent);
+
+    //Facebook Event Tracking
+    Map<String, dynamic> facebookEventParams = {};
+    params.forEach((key, value) {
+      facebookEventParams[key] = value is List<String> || value is List<int> ? json.encode(value) : value;
+    });
+    await facebookAppEvents.logEvent(
+      name: eventName,
+      parameters: facebookEventParams,
+    );
   }
 }
