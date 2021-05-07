@@ -2,10 +2,9 @@ import UIKit
 import Flutter
 import GoogleMaps
 import Mobilisten
-import Adjust
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, AdjustDelegate {
+@objc class AppDelegate: FlutterAppDelegate {
     
     override func application(
         _ application: UIApplication,
@@ -86,26 +85,8 @@ import Adjust
         })
         
         
-        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    
-    
-    override func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        NSLog("Scheme based deep link opened an app: %@", url.absoluteString)
-        // Pass deep link to Adjust in order to potentially reattribute user.
-        Adjust.appWillOpen(url)
-        return true
-    }
-    
-    
-    override func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-           if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
-               NSLog("Universal link opened an app: %@", userActivity.webpageURL!.absoluteString)
-               // Pass deep link to Adjust in order to potentially reattribute user.
-               Adjust.appWillOpen(userActivity.webpageURL!)
-           }
-           return true
-       }
+  
 }
