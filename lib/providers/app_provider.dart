@@ -319,22 +319,6 @@ class AppProvider with ChangeNotifier {
     }
   }
 
-  void initAdjust() {
-    // Todo: init Adjust & send event with callback url params
-    AdjustConfig adjustConfig = new AdjustConfig('yajo2k3wjp4w', AdjustEnvironment.sandbox);
-    adjustConfig.logLevel = AdjustLogLevel.verbose;
-    adjustConfig.launchDeferredDeeplink = true;
-    adjustConfig.deferredDeeplinkCallback = (String uri) {
-      print('[Adjust]: Received deferred deeplink: ' + uri);
-    };
-    Adjust.start(adjustConfig);
-
-    // AdjustEvent adjustEvent = new AdjustEvent('2xbdbu');
-    // adjustEvent.addCallbackParameter('status', 'Booted');
-    // adjustEvent.setRevenue(6, 'EUR');
-    // Adjust.trackEvent(adjustEvent);
-  }
-
   Future<PackageInfo> getDeviceData() async {
     return await PackageInfo.fromPlatform();
   }
