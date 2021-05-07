@@ -20,6 +20,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeData() async {
     await addressesProvider.fetchSelectedAddress();
     await homeProvider.fetchAndSetHomeData(context, appProvider);
+    await trackHomeViewEvent();
     _setHomeData();
   }
 
@@ -80,12 +82,23 @@ class _HomePageState extends State<HomePage> {
     if ((_channel == AppChannel.FOOD && homeProvider.foodHomeData == null) ||
         (_channel == AppChannel.MARKET && homeProvider.marketHomeData == null)) {
       fetchAndSetHomeData();
+    } else {
+      trackHomeViewEvent();
     }
+  }
+
+  Future<void> trackHomeViewEvent() async {
+    EventTracking eventTracking = EventTracking.getActions();
+    Map<String, dynamic> eventParams = {
+      'screen': appChannelRealValues.reverse[homeProvider.selectedChannel],
+    };
+    await eventTracking.trackEvent(TrackingEvent.VIEW_HOME, eventParams);
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      print('initedddd');
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);

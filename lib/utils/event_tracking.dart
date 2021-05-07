@@ -37,8 +37,6 @@ class EventTracking {
     print('Tracking event ($eventName) with params:');
     print(params);
 
-    //Todo: track event in Adjust
-
     //Facebook Event Tracking
     await facebookAppEvents.logEvent(
       name: eventName,
@@ -46,5 +44,11 @@ class EventTracking {
     );
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: params);
+
+    //Todo: track event in Adjust
+    // AdjustEvent adjustEvent = new AdjustEvent('2xbdbu');
+    // adjustEvent.addCallbackParameter('status', 'Booted');
+    // adjustEvent.setRevenue(6, 'EUR');
+    // Adjust.trackEvent(adjustEvent);
   }
 }
