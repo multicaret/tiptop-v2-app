@@ -119,21 +119,21 @@ class HomeProvider with ChangeNotifier {
         restaurantsProvider,
         responseData["data"],
       );
-      isLoadingHomeData = false;
       print('Notifying listeners from home provider fetch home data function!');
+      isLoadingHomeData = false;
       notifyListeners();
     } catch (e) {
       if (channelIsMarket) {
         print('An error happened in market home data request');
         marketHomeDataRequestError = true;
-        // throw e;
+        isLoadingHomeData = false;
       } else {
         print('An error happened in food home data request');
         foodHomeDataRequestError = true;
-        // throw e;
+        isLoadingHomeData = false;
       }
-      isLoadingHomeData = false;
       notifyListeners();
+      throw e;
     }
   }
 
