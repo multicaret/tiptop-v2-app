@@ -85,7 +85,9 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       axis: Axis.vertical,
     );
     selectedParentChildCategories = widget.childCategories;
-    selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
+    if (selectedParentChildCategories.length > 0) {
+      selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
+    }
     //Todo: ask if this should be not, not recommended for performance
     // trackViewCategoryEvent(selectedParentChildCategories[0].englishTitle);
     super.initState();
