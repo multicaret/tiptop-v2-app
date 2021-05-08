@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:adjust_sdk/adjust.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
@@ -12,9 +11,10 @@ import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:uni_links/uni_links.dart';
 
 import 'UI/app_wrapper.dart';
@@ -64,86 +64,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       'user_language': widget.appProvider.appLocale.languageCode,
     };
     await eventTracking.trackEvent(TrackingEvent.VISIT, visitEventParams);
-
     // Attach a listener to the stream
     _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
       print("Got a deeeeep deep link: 💩💩💩💩💩💩💩");
       if (uri != null) {
-        String mainAction = uri.host;
-        var params = uri.queryParametersAll;
-        String uriChannel = params['channel'] as String;
-        String itemId = params['id'] as String;
-        String itemParentId = params['parent_id'] as String;
-        // Some Flags
-        bool hasId = itemId != null;
-        bool hasParentId = itemParentId != null;
-        bool hasChannel = uriChannel != null;
-        if (mainAction != null) {
-          switch (mainAction) {
-            case "blog_index":
-              // Todo: Open Blog page:
-              print("Open Blog page:");
-              break;
-            case "blog_show":
-              if (hasId) {
-                // Todo: Open Blog show page: using {itemId}
-                print("Open Blog show page: using {itemId}");
-              }
-              break;
-            case "favorites":
-              if (hasChannel) {
-                // Todo: Open Favorites page: using {uriChannel}
-                print("Open Favorites page: using {uriChannel}");
-              }
-              break;
-            case "addresses":
-              // Todo: Open Addresses page
-              print("Open Addresses page");
-              break;
-            case "home_screen_by_channel":
-              if (hasChannel) {
-                // Todo: Open Home page: using {uriChannel}
-                print("Open Home page: using {uriChannel}");
-              }
-              break;
-            case "market_food_category_show":
-              if (hasChannel && hasId && hasParentId) {
-                // Todo: Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}
-                print("Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}");
-                // OR
-                // Todo: Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}
-                print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-              }
-              break;
-            case "order_rating":
-              if (hasId) {
-                // Todo: Open Order Rating screen: using: {itemId}
-                print("Open Order Rating screen: using: {itemId}");
-              }
-              break;
-            case "order_tracking":
-              if (hasId) {
-                // Todo: Open Order Tracking screen: using: {itemId}
-                print("Open Order Tracking screen: using: {itemId}");
-              }
-              break;
-            case "previous_orders":
-              if (hasChannel) {
-                // Todo: Open Previous Orders page: using {uriChannel}
-                print("Open Previous Orders page: using {uriChannel}");
-              }
-              break;
-            case "product_show":
-              if (hasId && hasChannel) {
-                // Todo: Open Product Show screen: using {itemId,hasChannel}
-                print("Open Product Show screen: using {itemId,hasChannel}");
-              }
-              break;
-          }
-        }
+        print('context: $context');
+        runDeepLinkAction(context, uri);
       }
       // Use the uri and warn the user, if it is not correct
     }, onError: (err) {
+      print('Error while listening to deeplink stream!');
+      print('@e $err');
       // Handle exception by warning the user their action did not succeed
     });
   }

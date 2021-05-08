@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,7 +42,7 @@ class AppCarousel extends StatelessWidget {
           height: height,
           width: width,
           child: CarouselSlider(
-            items: mapWidget != null ? [mapWidget, ..._getImagesList()] : _getImagesList(),
+            items: mapWidget != null ? [mapWidget, ..._getImagesList(context)] : _getImagesList(context),
             options: CarouselOptions(
               viewportFraction: 1,
               autoPlay: autoPlay,
@@ -79,17 +80,20 @@ class AppCarousel extends StatelessWidget {
     );
   }
 
-  List<Widget> _getImagesList() {
+  List<Widget> _getImagesList(BuildContext context) {
     return List.generate(
       images.length,
       (i) => GestureDetector(
         onTap: links == null || links.length == 0 || links[i] == null
             ? null
             : () {
-                print('Slider links:');
-                print(links);
-                if (links[i]['type'] == LinkType.EXTERNAL && links[i]['value'] != null) {
+                String link = links[i]['value'];
+                print('Slider link: $link');
+                if (links[i]['type'] == LinkType.EXTERNAL && link != null) {
                   launch(links[i]['value']);
+                } else {
+                  Uri uri = Uri.parse(link);
+                  runDeepLinkAction(context, uri);
                 }
               },
         child: CachedNetworkImage(
