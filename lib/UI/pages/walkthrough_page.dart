@@ -46,7 +46,6 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                 );
               },
             ),
-            const SizedBox(height: 10),
             if (animationLoaded)
               Container(
                 child: Column(
