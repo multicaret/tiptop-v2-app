@@ -13,11 +13,9 @@ import 'package:tiptop_v2/providers/products_provider.dart';
 class MarketProductsPage extends StatefulWidget {
   static const routeName = '/products';
 
-  final List<Category> parentCategories;
   final int selectedParentCategoryId;
 
   MarketProductsPage({
-    @required this.parentCategories,
     @required this.selectedParentCategoryId,
   });
 
@@ -28,16 +26,25 @@ class MarketProductsPage extends StatefulWidget {
 class _MarketProductsPageState extends State<MarketProductsPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController tabController;
   int currentTabIndex = 0;
+  ProductsProvider productsProvider;
 
   int selectedParentIndex;
 
-  @override
-  void initState() {
-    selectedParentIndex = widget.parentCategories.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
+  bool _isInit = true;
 
-    tabController = TabController(length: widget.parentCategories.length, vsync: this);
-    tabController.animateTo(selectedParentIndex);
-    super.initState();
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      productsProvider = Provider.of<ProductsProvider>(context);
+      selectedParentIndex =
+          productsProvider.marketParentCategoriesWithoutChildren.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
+      tabController = TabController(length: productsProvider.marketParentCategoriesWithoutChildren.length, vsync: this);
+      if (selectedParentIndex != null) {
+        tabController.animateTo(selectedParentIndex);
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -50,6 +57,11 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('Route name from market products page');
+    print(ModalRoute.of(context).settings.name);
+    List<Category> marketParentCategories = productsProvider.marketParentCategories;
+    List<Category> marketParentCategoriesWithoutChildren = productsProvider.marketParentCategoriesWithoutChildren;
+
     return AppScaffold(
       hasCurve: false,
       appBar: AppBar(
@@ -63,34 +75,28 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
       body: Column(
         children: [
           ParentCategoriesTabs(
-            parentCategories: widget.parentCategories,
+            parentCategories: marketParentCategoriesWithoutChildren,
             selectedParentCategoryId: widget.selectedParentCategoryId,
             tabController: tabController,
           ),
-          Consumer<ProductsProvider>(
-            builder: (c, productsProvider, _) {
-              List<Category> marketParentCategories = productsProvider.marketParentCategories;
+          Expanded(
+            child: productsProvider.isLoadingFetchAllProductsRequest
+                ? AppLoader()
+                : productsProvider.fetchAllProductsError
+                ? Center(child: Text(Translations.of(context).get("An Error Occurred!")))
+                : TabBarView(
+              controller: tabController,
+              children: List.generate(marketParentCategories.length, (i) {
+                List<Category> childCategories =
+                marketParentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
 
-              return Expanded(
-                child: productsProvider.isLoadingFetchAllProductsRequest
-                    ? AppLoader()
-                    : productsProvider.fetchAllProductsError
-                        ? Center(child: Text(Translations.of(context).get("An Error Occurred!")))
-                        : TabBarView(
-                            controller: tabController,
-                            children: List.generate(marketParentCategories.length, (i) {
-                              List<Category> childCategories =
-                                  marketParentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
-
-                              return ParentCategoryTabContent(
-                                selectedParentCategoryId: marketParentCategories[i].id,
-                                selectedParentCategoryEnglishTitle: marketParentCategories[i].englishTitle,
-                                childCategories: childCategories,
-                              );
-                            }),
-                          ),
-              );
-            },
+                return ParentCategoryTabContent(
+                  selectedParentCategoryId: marketParentCategories[i].id,
+                  selectedParentCategoryEnglishTitle: marketParentCategories[i].englishTitle,
+                  childCategories: childCategories,
+                );
+              }),
+            ),
           ),
         ],
       ),

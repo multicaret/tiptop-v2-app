@@ -15,7 +15,7 @@ import 'local_storage.dart';
 
 class HomeProvider with ChangeNotifier {
   HomeData marketHomeData;
-  List<Category> marketParentCategories = [];
+  List<Category> marketParentCategoriesWithoutChildren = <Category>[];
   Currency marketCurrency;
 
   HomeData foodHomeData;
@@ -161,7 +161,7 @@ class HomeProvider with ChangeNotifier {
         marketBranchLong = marketHomeData.branch.longitude;
       }
 
-      marketParentCategories = marketHomeData.categories;
+      marketParentCategoriesWithoutChildren = marketHomeData.categories;
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);
       }

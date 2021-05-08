@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchAndSetHomeDataAndProducts() async {
     await fetchAndSetHomeData();
     if (homeProvider.channelIsMarket) {
-      productsProvider.setMarketParentCategories(homeProvider.marketParentCategories);
+      productsProvider.setMarketParentCategoriesWithoutChildren(homeProvider.marketParentCategoriesWithoutChildren);
       await productsProvider.fetchAndSetParentCategoriesAndProducts();
     }
   }
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                 totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
               ),
             MarketHomeCategoriesGrid(
-              parentCategories: homeProvider.marketParentCategories,
+              parentCategories: homeProvider.marketParentCategoriesWithoutChildren,
             ),
           ],
         );

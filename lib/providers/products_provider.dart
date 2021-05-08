@@ -13,7 +13,7 @@ import 'package:tiptop_v2/utils/helper.dart';
 class ProductsProvider with ChangeNotifier {
   Category selectedParentCategory;
   List<Category> marketParentCategories = <Category>[];
-  List<Category> marketParentCategoriesWithoutProducts = <Category>[];
+  List<Category> marketParentCategoriesWithoutChildren = <Category>[];
   List<Category> selectedParentChildCategories = [];
 
   List<Product> searchedProducts = [];
@@ -24,8 +24,8 @@ class ProductsProvider with ChangeNotifier {
   bool isLoadingFetchAllProductsRequest = false;
   bool fetchAllProductsError = false;
 
-  void setMarketParentCategories(List<Category> _marketParentCategories) {
-    marketParentCategories = _marketParentCategories;
+  void setMarketParentCategoriesWithoutChildren(List<Category> _marketParentCategoriesWithoutChildren) {
+    marketParentCategoriesWithoutChildren = _marketParentCategoriesWithoutChildren;
     notifyListeners();
   }
 
@@ -58,7 +58,7 @@ class ProductsProvider with ChangeNotifier {
     final responseData = await AppProvider().get(endpoint: endpoint, body: {
       'branch_id': '${HomeProvider.branchId}',
     });
-    marketParentCategoriesWithoutProducts = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
+    marketParentCategoriesWithoutChildren = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
     selectedParentChildCategories =
         selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();

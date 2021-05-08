@@ -111,7 +111,7 @@ class ProfilePage extends StatelessWidget {
                         appProvider.changeLanguage(selectedLanguage.locale);
                         await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
                         if (homeProvider.channelIsMarket) {
-                          productsProvider.setMarketParentCategories(homeProvider.marketParentCategories);
+                          productsProvider.setMarketParentCategoriesWithoutChildren(homeProvider.marketParentCategoriesWithoutChildren);
                           await productsProvider.fetchAndSetParentCategoriesAndProducts();
                         }
                       },

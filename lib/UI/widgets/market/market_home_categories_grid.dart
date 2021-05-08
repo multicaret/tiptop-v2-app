@@ -34,8 +34,8 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
                     CupertinoPageRoute<void>(
                       builder: (BuildContext context) => MarketProductsPage(
                         selectedParentCategoryId: category.id,
-                        parentCategories: parentCategories,
                       ),
+                      settings: RouteSettings(name: 'market-products-page'),
                     ),
                   );
                 },
