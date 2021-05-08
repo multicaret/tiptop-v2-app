@@ -42,6 +42,9 @@ class EventTracking {
     try {
       print('Initiating MixPanel...');
       mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
+      if(AppProvider.userPhoneNumber != null) {
+        mixpanel.identify(AppProvider.userPhoneNumber);
+      }
     } catch (e) {
       throw e;
     }
@@ -244,25 +247,16 @@ class EventTracking {
 
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {
     String eventName = trackingEventsValues.reverse[trackingEvent];
-    print('user phone from track event: ${AppProvider.userPhoneNumber}');
-    print('Tracking event ($eventName)');
-
-    Map<String, dynamic> mixpanelEventParams = params;
-    if (AppProvider.userPhoneNumber != null) {
-      params.addAll({
-        'distinct_id': AppProvider.userPhoneNumber,
-      });
-    }
-    print('mixpanelEventParams: $mixpanelEventParams');
+    print('Tracking event ($eventName): $params');
 
     //MixPanel Event Tracking
-    mixpanel.track(eventName, properties: mixpanelEventParams);
+    mixpanel.track(eventName, properties: params);
 
     //Adjust Event Tracking
     String adjustEventToken = adjustTrackingEventsTokens.reverse[trackingEvent];
     AdjustEvent adjustEvent = new AdjustEvent(adjustEventToken);
     params.forEach((key, value) {
-      String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value;
+      String paramValue = value is List<String> || value is List<int> ? json.encode(value) : value.toString();
       adjustEvent.addCallbackParameter(key, paramValue);
     });
     Adjust.trackEvent(adjustEvent);

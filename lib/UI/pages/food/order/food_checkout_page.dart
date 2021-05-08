@@ -61,7 +61,6 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
 
   CheckoutData checkoutData;
   Order submittedFoodOrder;
-  Branch restaurant;
 
   String notes;
 
@@ -73,7 +72,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     checkoutData = ordersProvider.checkoutData;
     deliveryFee = calculateFinalDeliveryFee(
       selectedDeliveryType: selectedDeliveryTypeNotifier.value,
-      restaurant: restaurant,
+      restaurant: cartProvider.foodCart.restaurant,
       cartTotal: cartProvider.foodCart.total.raw,
       currency: homeProvider.foodCurrency,
     );
@@ -95,6 +94,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
         isGrandTotal: true,
       ),
     ];
+    grandTotal = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
     selectedPaymentMethodNotifier.value = checkoutData.paymentMethods[0].id;
     setState(() => _isLoadingCreateOrder = false);
   }
@@ -164,15 +164,34 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
   }
 
   EventTracking eventTracking = EventTracking.getActions();
+  Cart cart;
+  List<int> cartProductIds;
+  List<String> cartProductNames;
+  Map<String, dynamic> commonEventsParams = {};
+
+  void setCommonEventsParams() {
+    cart = cartProvider.foodCart;
+    cartProductIds = cart.cartProducts.map((cartProduct) => cartProduct.product.id).toList();
+    cartProductNames = cart.cartProducts.map((cartProduct) => cartProduct.product.englishTitle).toList();
+
+    commonEventsParams = {
+      'restaurant_name': cart.restaurant.englishTitle,
+      'cart_product_count': cart.productsCount,
+      'cart_total': cart.total.raw,
+      'cart_product_ids': cartProductIds,
+      'cart_product_names': cartProductNames,
+      //Todo: fill the next 2 params after getting them from product show endpoint
+      'cart_product_categories': '',
+      'cart_product_parent_categories': '',
+      'cart_grand_total': grandTotal.rawValue,
+    };
+  }
 
   Future<void> trackViewCheckoutEvent() async {
-    Cart cart = cartProvider.foodCart;
-    if(cart == null || cart.restaurant == null) {
+    if (cart == null || cart.restaurant == null) {
       print('Tracking failed! No cart or no restaurant in cart!');
       return;
     }
-    List<int> cartProductIds = cart.cartProducts.map((cartProduct) => cartProduct.product.id).toList();
-    List<String> cartProductNames = cart.cartProducts.map((cartProduct) => cartProduct.product.englishTitle).toList();
 
     List<String> restaurantDeliveryMethods = <String>[];
     if (cart.restaurant.tiptopDelivery.isDeliveryEnabled) {
@@ -182,36 +201,53 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       restaurantDeliveryMethods.add('restaurant');
     }
 
-    Map<String, dynamic> eventParams = {
-      'cart_product_count': cart.productsCount,
-      'restaurant_name': cart.restaurant.englishTitle,
-      'cart_total': cart.total.raw,
-      'cart_product_ids': cartProductIds,
-      'cart_product_names': cartProductNames,
-      //Todo: fill cart_product_categories after getting them from product show endpoint
-      'cart_product_categories': '',
-      'cart_grand_total': grandTotal.rawValue,
-      'delivery_methods': restaurantDeliveryMethods
-    };
+    Map<String, dynamic> eventParams = commonEventsParams;
+    eventParams.addAll({'delivery_methods': restaurantDeliveryMethods});
 
     await eventTracking.trackEvent(TrackingEvent.VIEW_CHECKOUT, eventParams);
+  }
+
+  Future<void> trackCompletePurchaseEvent() async {
+    if (submittedFoodOrder == null) {
+      print('No submitted order!!');
+      return;
+    }
+    Map<String, dynamic> eventParams = commonEventsParams;
+
+    List<String> restaurantCategories = cart.restaurant.categories.map((category) => category.englishTitle).toList();
+
+    eventParams.addAll({
+      'restaurant_categories': restaurantCategories,
+      'restaurant_city': cart.restaurant.regionEnglishName,
+      'delivery_method': restaurantDeliveryTypeValues.reverse[selectedDeliveryTypeNotifier.value],
+      'delivery_fee': couponCodeNotifier.value == null ? checkoutData.deliveryFee.raw : couponValidationData.deliveryFee.raw,
+      'order_id': submittedFoodOrder.id,
+      'coupon_used': couponCodeNotifier.value != null,
+    });
+    if (couponCodeNotifier.value != null) {
+      eventParams.addAll({
+        'coupon_code': couponCodeNotifier.value,
+        'coupon_value': couponValidationData.discountedAmount.raw,
+      });
+    }
+    await eventTracking.trackEvent(TrackingEvent.COMPLETE_PURCHASE, eventParams);
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      restaurant = data["restaurant"];
-
       cartProvider = Provider.of<CartProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
 
-      selectedDeliveryTypeNotifier.value = initDeliveryTypeSelection(restaurant, cartProvider.foodCart.total.raw);
+      selectedDeliveryTypeNotifier.value = initDeliveryTypeSelection(
+        cartProvider.foodCart.restaurant,
+        cartProvider.foodCart.total.raw,
+      );
       _createOrderAndGetCheckoutData().then((_) {
-        grandTotal = paymentSummaryTotals.firstWhere((total) => total.isGrandTotal, orElse: () => null);
+        setCommonEventsParams();
         trackViewCheckoutEvent();
       });
     }
@@ -252,7 +288,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                           ValueListenableBuilder(
                             valueListenable: selectedDeliveryTypeNotifier,
                             builder: (c, selectedDeliveryType, _) => FoodCheckoutDeliveryOptions(
-                              restaurant: restaurant,
+                              restaurant: cartProvider.foodCart.restaurant,
                               cartTotal: cartProvider.foodCart.total.raw,
                               selectedDeliveryType: selectedDeliveryType,
                               selectDeliveryType: (_selectedDeliveryType) {
@@ -273,7 +309,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                   selectedDeliveryTypeNotifier.value = _selectedDeliveryType;
                                   deliveryFee = calculateFinalDeliveryFee(
                                     selectedDeliveryType: _selectedDeliveryType,
-                                    restaurant: restaurant,
+                                    restaurant: cartProvider.foodCart.restaurant,
                                     cartTotal: cartProvider.foodCart.total.raw,
                                     currency: homeProvider.foodCurrency,
                                   );
@@ -387,6 +423,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       if (submittedFoodOrder == null) {
         throw 'No order returned!';
       }
+      await trackCompletePurchaseEvent();
       showDialog(
         context: context,
         builder: (context) => OrderConfirmedDialog(),

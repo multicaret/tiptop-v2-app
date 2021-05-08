@@ -118,12 +118,7 @@ class FoodCartPage extends StatelessWidget {
                       );
                       return;
                     }
-                    Navigator.of(context, rootNavigator: true).pushNamed(
-                      FoodCheckoutPage.routeName,
-                      arguments: {
-                        'restaurant': cartProvider.foodCart.restaurant,
-                      },
-                    );
+                    Navigator.of(context, rootNavigator: true).pushNamed(FoodCheckoutPage.routeName);
                   },
                 ),
             ],

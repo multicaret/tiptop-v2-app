@@ -37,7 +37,7 @@ class HomeData {
         slides: List<Slide>.from(json["slides"].map((x) => Slide.fromJson(x))),
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         estimatedArrivalTime: EstimatedArrivalTime.fromJson(json["estimated_arrival_time"]),
-        activeOrders: json["activeOrders"] == null ? null : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
+        activeOrders: json["activeOrders"] == null ? <Order>[] : List<Order>.from(json["activeOrders"].map((x) => Order.fromJson(x))),
         totalActiveOrders: json["totalActiveOrders"],
         noAvailabilityMessage: json["noAvailabilityMessage"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),

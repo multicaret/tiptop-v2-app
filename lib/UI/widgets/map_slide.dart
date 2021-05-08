@@ -148,7 +148,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    print('Carousel map recreated!!');
+    // print('Carousel map recreated!!');
     _mapController = controller;
     _controller.complete(controller);
 

@@ -49,41 +49,17 @@ class _HomePageState extends State<HomePage> {
   ProductsProvider productsProvider;
   AddressesProvider addressesProvider;
 
-  bool hasActiveMarketOrders = false;
-  bool hasActiveFoodOrders = false;
-
-  bool hideMarketContent = false;
-  bool hideFoodContent = false;
-
   Future<void> fetchAndSetHomeData() async {
     await addressesProvider.fetchSelectedAddress();
     await homeProvider.fetchAndSetHomeData(context, appProvider);
     await trackHomeViewEvent();
-    _setHomeData();
   }
 
   Future<void> fetchAndSetHomeDataAndProducts() async {
     await fetchAndSetHomeData();
-    if(homeProvider.channelIsMarket) {
+    if (homeProvider.channelIsMarket) {
       productsProvider.setMarketParentCategories(homeProvider.marketParentCategories);
       await productsProvider.fetchAndSetParentCategoriesAndProducts();
-    }
-  }
-
-  void _setHomeData() {
-    if (homeProvider.channelIsMarket) {
-      hideMarketContent = homeProvider.marketHomeData == null || homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
-      if (!hideMarketContent) {
-        hasActiveMarketOrders =
-            appProvider.isAuth && homeProvider.marketHomeData.activeOrders != null && homeProvider.marketHomeData.activeOrders.length > 0;
-      }
-    } else {
-      hideFoodContent = homeProvider.foodHomeData == null || homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
-      if (!hideFoodContent) {
-        print('Setting food data in home page!');
-        hasActiveFoodOrders =
-            appProvider.isAuth && homeProvider.foodHomeData.activeOrders != null && homeProvider.foodHomeData.activeOrders.length > 0;
-      }
     }
   }
 
@@ -142,7 +118,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // print('Rebuilt home page ${count++} times');
+    bool hideMarketContent = homeProvider.isLoadingHomeData || homeProvider.marketHomeData == null || homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
+    bool hideFoodContent = homeProvider.isLoadingHomeData || homeProvider.foodHomeData == null || homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -163,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       homeProvider.channelIsMarket
-                          ? homeProvider.isLoadingHomeData || hideMarketContent || homeProvider.marketHomeData == null
+                          ? hideMarketContent
                               ? Container(
                                   height: homeSliderHeight,
                                   color: AppColors.bg,
@@ -173,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                   delivery: homeProvider.marketHomeData.branch.tiptopDelivery,
                                   selectedAddress: addressesProvider.selectedAddress,
                                 )
-                          : homeProvider.isLoadingHomeData || hideFoodContent || homeProvider.foodHomeData == null
+                          : hideFoodContent
                               ? Container(
                                   height: homeSliderHeight,
                                   color: AppColors.bg,
@@ -184,7 +161,10 @@ class _HomePageState extends State<HomePage> {
                         onPressed: (value) => homeProvider.isLoadingHomeData ? {} : channelButtonAction(value),
                         isRTL: appProvider.isRTL,
                       ),
-                      _homeContent(),
+                      _homeContent(
+                        hideMarketContent: hideMarketContent,
+                        hideFoodContent: hideFoodContent,
+                      ),
                     ],
                   ),
                 ),
@@ -196,7 +176,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _homeContent() {
+  Widget _homeContent({
+    bool hideMarketContent,
+    bool hideFoodContent,
+  }) {
+    bool hasActiveMarketOrders = !hideMarketContent && appProvider.isAuth && homeProvider.marketHomeData.activeOrders.length > 0;
+    bool hasActiveFoodOrders = !hideFoodContent && appProvider.isAuth && homeProvider.foodHomeData.activeOrders.length > 0;
+
     if (homeProvider.isLoadingHomeData) {
       //Display nothing when data is loading
       return Container();
@@ -213,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         //Market/Grocery channel home content
         return Column(
           children: [
-            if (hasActiveMarketOrders && appProvider.isAuth)
+            if (hasActiveMarketOrders)
               HomeLiveTracking(
                 activeOrders: homeProvider.marketHomeData.activeOrders,
                 totalActiveOrders: homeProvider.marketHomeData.totalActiveOrders,
@@ -225,7 +211,7 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } else if (homeProvider.selectedChannel == AppChannel.FOOD) {
-      if (hideMarketContent) {
+      if (hideFoodContent) {
         //No Content View for food channel
         return NoContentView(
             text: homeProvider.foodNoRestaurantFound
@@ -237,7 +223,7 @@ class _HomePageState extends State<HomePage> {
         //Food channel home content
         return Column(
           children: [
-            if (hasActiveFoodOrders && appProvider.isAuth)
+            if (hasActiveFoodOrders)
               HomeLiveTracking(
                 activeOrders: homeProvider.foodHomeData.activeOrders,
                 totalActiveOrders: homeProvider.foodHomeData.totalActiveOrders,
