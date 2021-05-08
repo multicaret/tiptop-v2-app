@@ -53,7 +53,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _autoLoginFuture;
   EventTracking eventTracking = EventTracking.getActions();
-  StreamSubscription _deepLinksSubscription;
 
   Future<void> _initEventTracking() async {
     await eventTracking.initEventTracking();
@@ -64,19 +63,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       'user_language': widget.appProvider.appLocale.languageCode,
     };
     await eventTracking.trackEvent(TrackingEvent.VISIT, visitEventParams);
-    // Attach a listener to the stream
-/*    _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
-      print("Got a deeeeep deep link: 💩💩💩💩💩💩💩");
-      if (uri != null) {
-        print('context: $context');
-        runDeepLinkAction(context, uri);
-      }
-      // Use the uri and warn the user, if it is not correct
-    }, onError: (err) {
-      print('Error while listening to deeplink stream!');
-      print('@e $err');
-      // Handle exception by warning the user their action did not succeed
-    });*/
   }
 
   @override
@@ -92,7 +78,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _deepLinksSubscription.cancel();
     super.dispose();
   }
 
@@ -187,17 +172,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),
           home: StreamBuilder<Uri>(
-              stream: uriLinkStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  print("snapshot.data snapshot.data snapshot.data snapshot.data snapshot.data 💍💍💍💍💍");
-                  print(snapshot.data);
-                  if (snapshot.data != null) {
+            stream: uriLinkStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print("snapshot.data 💍💍💍💍💍: ${snapshot.data}");
+                if (snapshot.data != null) {
+                  Future.delayed(Duration.zero, () {
                     runDeepLinkAction(context, snapshot.data);
-                  }
+                  });
                 }
-                return getHomeWidget(app);
-              }),
+              }
+              return getHomeWidget(app);
+            },
+          ),
           routes: routes,
           onGenerateRoute: (routeSettings) {
             return MaterialPageRoute(
