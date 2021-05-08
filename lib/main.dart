@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     };
     await eventTracking.trackEvent(TrackingEvent.VISIT, visitEventParams);
     // Attach a listener to the stream
-    _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
+/*    _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
       print("Got a deeeeep deep link: 💩💩💩💩💩💩💩");
       if (uri != null) {
         print('context: $context');
@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       print('Error while listening to deeplink stream!');
       print('@e $err');
       // Handle exception by warning the user their action did not succeed
-    });
+    });*/
   }
 
   @override
@@ -186,8 +186,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ),
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),
-          home: getHomeWidget(app),
+          home: StreamBuilder<Uri>(
+              stream: uriLinkStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  print("snapshot.data snapshot.data snapshot.data snapshot.data snapshot.data 💍💍💍💍💍");
+                  print(snapshot.data);
+                  if (snapshot.data != null) {
+                    runDeepLinkAction(context, snapshot.data);
+                  }
+                }
+                return getHomeWidget(app);
+              }),
           routes: routes,
+          onGenerateRoute: (routeSettings) {
+            return MaterialPageRoute(
+              builder: (context) => Container(
+                color: Colors.red,
+              ),
+            );
+          },
         ),
       ),
     );
