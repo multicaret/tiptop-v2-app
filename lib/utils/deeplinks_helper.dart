@@ -73,6 +73,10 @@ void runDeepLinkAction(BuildContext context, Uri uri) {
     case "addresses":
       print("Open Addresses page");
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+      /*Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (context) => new AddressesPage()),
+      );*/
       break;
     case "home_screen_by_channel":
       if (hasChannel) {
