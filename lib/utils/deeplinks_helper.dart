@@ -4,7 +4,10 @@ import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/favorite_products_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 
 void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
   String deepLink; //full deep link with main action and params
@@ -59,11 +62,17 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
     case "blog_show":
       if (itemId != null) {
         print("Open Blog show page of article with id: $itemId");
-        Navigator.of(context, rootNavigator: true).pushNamed(ArticlePage.routeName, arguments: {'article_id': itemId});
+        Navigator.of(context, rootNavigator: true).pushNamed(ArticlePage.routeName, arguments: {'article_id': int.parse(itemId)});
       }
       break;
     case "favorites":
       //Check if channel exists in params and is equal to one of the app's channels
+      if (!isAuth) {
+        print('User not authenticated to enter this route');
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
       if (hasIdentifiedChannel && isAuth) {
         print("Open Favorites page: in $requestedAppChannel");
         Navigator.of(context, rootNavigator: true).pushNamed(
@@ -72,6 +81,12 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       }
       break;
     case "addresses":
+      if (!isAuth) {
+        print('User not authenticated to enter this route');
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
       print("Open Addresses page");
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
       break;
@@ -84,6 +99,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
     case "market_food_category_show":
       if (requestedAppChannel != null && itemId != null && itemParentId != null) {
         // Todo: Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}
+        if (requestedAppChannel == AppChannel.MARKET) {}
         print("Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}");
         // OR
         // Todo: Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}
@@ -97,12 +113,24 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       }
       break;
     case "order_tracking":
+      if (!isAuth) {
+        print('User not authenticated to enter this route');
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
       if (isAuth && itemId != null) {
         // Todo: Open Order Tracking screen: using: {itemId}
         print("Open Order Tracking screen: using: {itemId}");
       }
       break;
     case "previous_orders":
+      if (!isAuth) {
+        print('User not authenticated to enter this route');
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
       if (isAuth && hasIdentifiedChannel) {
         // Todo: Open Previous Orders page: using {uriChannel}
         print("Open Previous Orders page: using {uriChannel}");
