@@ -27,8 +27,7 @@ class ProfileAuthHeader extends StatelessWidget {
                 }
               );
             } else {
-              showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-              Navigator.of(context).pushNamed(WalkthroughPage.routeName);
+              Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
             }
           },
           child: Container(
