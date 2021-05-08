@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/article_list_item.dart';
 import 'package:tiptop_v2/models/blog.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -34,8 +35,7 @@ class _BlogPageState extends State<BlogPage> {
       _isLoading = true;
     });
     final responseData = await AppProvider().get(endpoint: 'blog');
-    BlogResponse staticPageResponse = BlogResponse.fromJson(responseData);
-    _articles = staticPageResponse.articles;
+    _articles = List<Article>.from(responseData["data"].map((x) => Article.fromJson(x)));
     setState(() {
       _isLoading = false;
     });
@@ -54,86 +54,8 @@ class _BlogPageState extends State<BlogPage> {
               ? const Center(child: const AppLoader())
               : ListView.builder(
                   itemCount: _articles.length,
-                  itemBuilder: (context, i) => ArticleTile(article: _articles[i]),
+                  itemBuilder: (context, i) => ArticleListItem(article: _articles[i]),
                 ),
-        ),
-      ),
-    );
-  }
-}
-
-class ArticleTile extends StatelessWidget {
-  final Article article;
-  final AppProvider appProvider;
-
-  ArticleTile({
-    this.article,
-    this.appProvider,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    AppProvider appProvider = Provider.of<AppProvider>(context);
-    return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(ArticlePage.routeName, arguments: {'article': article}),
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  ListTile(
-                    // leading: Icon(Icons.arrow_drop_down_circle),
-                    title: Text(
-                      article.title,
-                      style: AppTextStyles.body,
-                    ),
-                    subtitle: Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.calendarAlt,
-                          size: 14.0,
-                          color: AppColors.text50,
-                        ),
-                        const SizedBox(width: 5.0),
-                        Text(
-                          article.updatedAt.formatted,
-                          style: AppTextStyles.subtitle50,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(screenHorizontalPadding),
-                    child: Text(
-                      article.exc.raw,
-                      style: AppTextStyles.subtitle,
-                    ),
-                  ),
-                  // if (/*article.cover*/ false) Image.asset('assets/card-sample-image.jpg'),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: appProvider.isRTL ? EdgeInsets.only(left: screenHorizontalPadding) : EdgeInsets.only(right: screenHorizontalPadding),
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [const BoxShadow(blurRadius: 4, color: AppColors.shadow)],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6.0),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      imageUrl: article.cover,
-                      placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
         ),
       ),
     );

@@ -2,26 +2,6 @@ import 'dart:convert';
 
 import 'package:tiptop_v2/models/models.dart';
 
-BlogResponse blogResponseFromJson(String str) => BlogResponse.fromJson(json.decode(str));
-
-String blogResponseToJson(BlogResponse data) => json.encode(data.toJson());
-
-class BlogResponse {
-  BlogResponse({
-    this.articles,
-  });
-
-  List<Article> articles;
-
-  factory BlogResponse.fromJson(Map<String, dynamic> json) => BlogResponse(
-        articles: List<Article>.from(json["data"].map((x) => Article.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(articles.map((x) => x.toJson())),
-      };
-}
-
 class Article {
   Article({
     this.id,
