@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ...providers,
       ],
       child: Consumer<AppProvider>(
-        builder: (c, app, _) => MaterialApp(
+        builder: (c, appProvider, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'TipTop',
           localizationsDelegates: [
@@ -114,8 +114,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          locale: app.appLocale,
-          supportedLocales: app.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
+          locale: appProvider.appLocale,
+          supportedLocales: appProvider.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: AppColors.primary,
@@ -173,16 +173,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
           home: StreamBuilder<Uri>(
             stream: uriLinkStream,
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<Uri> snapshot) {
+              print('REBUILT WHOLE APP BECAUSE OF STREAMBUILDER!');
               if (snapshot.hasData) {
-                print("snapshot.data 💍💍💍💍💍: ${snapshot.data}");
                 if (snapshot.data != null) {
                   Future.delayed(Duration.zero, () {
-                    runDeepLinkAction(context, snapshot.data);
+                    runDeepLinkAction(context, snapshot.data, appProvider.isAuth);
                   });
                 }
               }
-              return getHomeWidget(app);
+              return getHomeWidget(appProvider);
             },
           ),
           routes: routes,
@@ -198,20 +198,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 
-  Widget getHomeWidget(AppProvider app) {
-    if (app.noInternet) {
+  Widget getHomeWidget(AppProvider appProvider) {
+    if (appProvider.noInternet) {
       return NoInternetPage(
-        appProvider: app,
+        appProvider: appProvider,
       );
     } else {
-      if (app.isForceUpdateEnabled) {
+      if (appProvider.isForceUpdateEnabled) {
         return ForceUpdatePage(
-          appProvider: app,
+          appProvider: appProvider,
         );
       }
-      return app.localeSelected
-          ? app.isAuth
-              ? !app.isLocationPermissionGranted
+      return appProvider.localeSelected
+          ? appProvider.isAuth
+              ? !appProvider.isLocationPermissionGranted
                   ? LocationPermissionPage()
                   : AppWrapper()
               : FutureBuilder(

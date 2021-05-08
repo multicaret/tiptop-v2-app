@@ -20,7 +20,7 @@ class ArticleListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed(ArticlePage.routeName, arguments: {'article_id': article.id}),
+      onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(ArticlePage.routeName, arguments: {'article_id': article.id}),
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: Row(
