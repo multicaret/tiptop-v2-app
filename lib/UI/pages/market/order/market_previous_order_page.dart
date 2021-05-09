@@ -43,6 +43,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
   int orderId;
   Order order;
   List<PaymentSummaryTotal> totals = [];
+  bool shouldNavigateToOrderRating = false;
 
   Future<void> _fetchAndSetPreviousOrder() async {
     setState(() => _isLoadingOrderRequest = true);
@@ -54,11 +55,24 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      orderId = ModalRoute.of(context).settings.arguments as int;
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      orderId = data["order_id"];
+      shouldNavigateToOrderRating = data["should_navigate_to_rating"] ?? false;
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       print('orderId: $orderId');
-      _fetchAndSetPreviousOrder();
+      _fetchAndSetPreviousOrder().then((_) {
+        if(shouldNavigateToOrderRating) {
+          Navigator.of(context, rootNavigator: true).pushNamed(
+            MarketOrderRatingPage.routeName,
+            arguments: {'order': order},
+          ).then((response) {
+            if (response != null && response) {
+              _fetchAndSetPreviousOrder();
+            }
+          });
+        }
+      });
     }
     _isInit = false;
     super.didChangeDependencies();

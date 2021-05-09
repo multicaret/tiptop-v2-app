@@ -1,4 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
+import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
+import 'package:tiptop_v2/UI/pages/food/order/food_previous_order_page.dart';
+import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
+import 'package:tiptop_v2/UI/pages/market/market_products_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/market_previous_order_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
@@ -49,7 +59,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
   AppChannel requestedAppChannel = appChannelValues.map[uriChannel];
   // Some Flags
   //Check if channel exists in params and is equal to one of the app's channels
-  bool hasIdentifiedChannel = requestedAppChannel != null && (requestedAppChannel == AppChannel.MARKET || requestedAppChannel == AppChannel.FOOD);
+  bool hasValidChannel = requestedAppChannel != null && (requestedAppChannel == AppChannel.MARKET || requestedAppChannel == AppChannel.FOOD);
   print('requestedAppChannel: $requestedAppChannel');
   print('itemId: $itemId');
   print('itemParentId: $itemParentId');
@@ -73,7 +83,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }
-      if (hasIdentifiedChannel && isAuth) {
+      if (hasValidChannel && isAuth) {
         print("Open Favorites page: in $requestedAppChannel");
         Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.FOOD ? FavoriteRestaurantsPage.routeName : FavoriteMarketProductsPage.routeName,
@@ -91,25 +101,40 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
       break;
     case "home_screen_by_channel":
-      if (hasIdentifiedChannel) {
-        // Todo: Open Home page: using {uriChannel}
-        print("Open Home page: using {uriChannel}");
+      if (hasValidChannel) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          AppWrapper.routeName,
+          arguments: {'initially_selected_channel': requestedAppChannel},
+        );
       }
       break;
     case "market_food_category_show":
-      if (requestedAppChannel != null && itemId != null && itemParentId != null) {
-        // Todo: Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}
-        if (requestedAppChannel == AppChannel.MARKET) {}
-        print("Open Food Branch scroll to category: using: { uriChannel, itemId, itemParentId}");
-        // OR
-        // Todo: Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}
-        print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
+      if (hasValidChannel && itemId != null && itemParentId != null) {
+        if (requestedAppChannel == AppChannel.MARKET) {
+          print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
+          //Todo: scroll down to category
+          Navigator.of(context).push(
+            CupertinoPageRoute<void>(
+              builder: (BuildContext context) => MarketProductsPage(
+                selectedParentCategoryId: int.parse(itemParentId),
+              ),
+            ),
+          );
+        } else {
+          print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
+          Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: itemId);
+        }
       }
       break;
     case "order_rating":
-      if (itemId != null) {
-        // Todo: Open Order Rating screen: using: {itemId}
-        print("Open Order Rating screen: using: {itemId}");
+      if (hasValidChannel && itemId != null) {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          requestedAppChannel == AppChannel.MARKET ? MarketPreviousOrderPage.routeName : FoodPreviousOrderPage.routeName,
+          arguments: {
+            'order_id': int.parse(itemId),
+            'should_navigate_to_rating': true,
+          },
+        );
       }
       break;
     case "order_tracking":
@@ -131,15 +156,22 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
         Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return;
       }
-      if (isAuth && hasIdentifiedChannel) {
-        // Todo: Open Previous Orders page: using {uriChannel}
-        print("Open Previous Orders page: using {uriChannel}");
+      if (isAuth && hasValidChannel) {
+        print("Open Previous Orders page: using $requestedAppChannel");
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          requestedAppChannel == AppChannel.MARKET ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName,
+        );
       }
       break;
     case "product_show":
-      if (itemId != null && hasIdentifiedChannel) {
-        // Todo: Open Product Show screen: using {itemId,hasChannel}
+      if (itemId != null && hasValidChannel) {
         print("Open Product Show screen: using {itemId,hasChannel}");
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+          requestedAppChannel == AppChannel.MARKET ? MarketProductPage.routeName : FoodProductPage.routeName,
+          arguments: {
+            'product_id': itemId,
+          },
+        );
       }
       break;
   }

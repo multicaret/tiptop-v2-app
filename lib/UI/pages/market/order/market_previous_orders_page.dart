@@ -68,9 +68,12 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
                     itemBuilder: (context, i) => PreviousOrderItem(
                       order: previousOrders[i],
                       action: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed(MarketPreviousOrderPage.routeName, arguments: previousOrders[i].id)
-                            .then((shouldRefresh) {
+                        Navigator.of(context, rootNavigator: true).pushNamed(
+                          MarketPreviousOrderPage.routeName,
+                          arguments: {
+                            'order_id': previousOrders[i].id,
+                          },
+                        ).then((shouldRefresh) {
                           print('shouldRefresh');
                           print(shouldRefresh);
                           if (shouldRefresh != null && shouldRefresh == true) {

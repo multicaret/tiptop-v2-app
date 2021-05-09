@@ -31,7 +31,7 @@ class MarketGridProductItem extends StatelessWidget {
       showToast(msg: Translations.of(context).get("This item is not available"));
     } else {
       Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
-        "product": product,
+        "product_id": product.id,
         "has_controls": true,
         "category_english_title": categoryEnglishTitle,
         "parent_category_english_title": parentCategoryEnglishTitle,

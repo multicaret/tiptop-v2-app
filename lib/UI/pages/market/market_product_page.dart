@@ -43,6 +43,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
   bool productIsFavorited = false;
   ProductsProvider productsProvider;
   AppProvider appProvider;
+  int productId;
   Product product;
   List<String> productGallery = [];
   bool hasDiscountedPrice = false;
@@ -54,7 +55,7 @@ class _MarketProductPageState extends State<MarketProductPage> {
 
   Future<void> _fetchAndSetProduct() async {
     setState(() => _isLoadingProduct = true);
-    await productsProvider.fetchAndSetProduct(appProvider, product.id);
+    await productsProvider.fetchAndSetProduct(appProvider, productId);
     product = productsProvider.product;
     hasUnitTitle = product.unit != null && product.unit.title != null;
     hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
@@ -109,8 +110,8 @@ class _MarketProductPageState extends State<MarketProductPage> {
   void didChangeDependencies() {
     if (_isInit) {
       Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      product = data["product"];
-      hasControls = data["has_controls"];
+      productId = data["product_id"];
+      hasControls = data["has_controls"] ?? true;
       categoryEnglishTitle = data["category_english_title"];
       parentCategoryEnglishTitle = data["parent_category_english_title"];
 

@@ -28,7 +28,7 @@ class MarketProductListItem extends StatelessWidget {
 
     void openMarketProductPage() {
       Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
-        "product": product,
+        "product_id": product.id,
         "has_controls": hasControls,
       });
     }

@@ -161,7 +161,9 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                         onPressed: () {
                           Navigator.of(context, rootNavigator: true).pushNamed(
                             widget.channelIsMarket ? MarketPreviousOrderPage.routeName : FoodPreviousOrderPage.routeName,
-                            arguments: widget.order.id,
+                            arguments: {
+                              'order_id': widget.order.id,
+                            },
                           );
                         },
                         child: Text(
