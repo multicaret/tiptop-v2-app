@@ -26,11 +26,11 @@ class EventTracking {
   final facebookAppEvents = FacebookAppEvents();
   Mixpanel mixpanel;
 
-  Future<void> initEventTracking() async {
+  Future<void> initEventTracking(AppProvider appProvider) async {
     await initFacebookAppEvents();
     await initMixpanel();
     await initAdjust();
-    await initUniLinks();
+    await initUniLinks(appProvider);
   }
 
   Future<void> initFacebookAppEvents() async {
@@ -228,7 +228,7 @@ class EventTracking {
     }
   }
 
-  Future<void> initUniLinks() async {
+  Future<void> initUniLinks(AppProvider appProvider) async {
     // Uri parsing may fail, so we use a try/catch FormatException.
     try {
       final initialUri = await getInitialUri();
@@ -237,6 +237,7 @@ class EventTracking {
       if (initialUri != null) {
         print("Got a deeeeep deep link initialUri 😇🍑:");
         print(initialUri);
+        appProvider.setInitialUri(initialUri);
       }
     } on FormatException {
       // Handle exception by warning the user their action did not succeed

@@ -21,6 +21,7 @@ import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
@@ -92,7 +93,12 @@ class _HomePageState extends State<HomePage> {
       productsProvider = Provider.of<ProductsProvider>(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        fetchAndSetHomeDataAndProducts();
+        fetchAndSetHomeDataAndProducts().then((_) {
+          if (appProvider.initialUri != null) {
+            runDeepLinkAction(context, appProvider.initialUri, appProvider.isAuth);
+            appProvider.setInitialUri(null);
+          }
+        });
       });
       _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
       if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
@@ -118,8 +124,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool hideMarketContent = homeProvider.isLoadingHomeData || homeProvider.marketHomeData == null || homeProvider.marketHomeDataRequestError || homeProvider.marketNoBranchFound;
-    bool hideFoodContent = homeProvider.isLoadingHomeData || homeProvider.foodHomeData == null || homeProvider.foodHomeDataRequestError || homeProvider.foodNoRestaurantFound;
+    bool hideMarketContent = homeProvider.isLoadingHomeData ||
+        homeProvider.marketHomeData == null ||
+        homeProvider.marketHomeDataRequestError ||
+        homeProvider.marketNoBranchFound;
+    bool hideFoodContent = homeProvider.isLoadingHomeData ||
+        homeProvider.foodHomeData == null ||
+        homeProvider.foodHomeDataRequestError ||
+        homeProvider.foodNoRestaurantFound;
 
     return WillPopScope(
       onWillPop: () async => false,
