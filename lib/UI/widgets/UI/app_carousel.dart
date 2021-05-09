@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -85,7 +86,7 @@ class AppCarousel extends StatelessWidget {
   List<Widget> _getImagesList(BuildContext context) {
     return List.generate(
       images.length,
-      (i) => Consumer<AppProvider>(
+      (i) => Consumer2<AppProvider, HomeProvider>(
         child: CachedNetworkImage(
           imageUrl: images[i],
           fit: BoxFit.cover,
@@ -94,7 +95,7 @@ class AppCarousel extends StatelessWidget {
             color: AppColors.secondary,
           ),
         ),
-        builder: (c, appProvider, child) => GestureDetector(
+        builder: (c, appProvider, homeProvider, child) => GestureDetector(
           onTap: links == null || links.length == 0 || links[i] == null
               ? null
               : () {
@@ -104,7 +105,7 @@ class AppCarousel extends StatelessWidget {
                     launch(links[i]['value']);
                   } else {
                     Uri uri = Uri.parse(link);
-                    runDeepLinkAction(context, uri, appProvider.isAuth);
+                    runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider.selectedChannel);
                   }
                 },
           child: child,

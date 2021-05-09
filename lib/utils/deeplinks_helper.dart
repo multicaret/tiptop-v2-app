@@ -19,7 +19,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
+void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel currentChannel) {
   String deepLink; //full deep link with main action and params
   Uri deepLinkUri = uri; //full deep link with main action and params as URI to query params from
   String mainAction; //the main action (e.g. blog_index, favorites, ...) without params
@@ -110,19 +110,23 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       break;
     case "market_food_category_show":
       if (hasValidChannel && itemId != null && itemParentId != null) {
-        if (requestedAppChannel == AppChannel.MARKET) {
-          print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-          //Todo: scroll down to category
-          Navigator.of(context).push(
-            CupertinoPageRoute<void>(
-              builder: (BuildContext context) => MarketProductsPage(
-                selectedParentCategoryId: int.parse(itemParentId),
+        if (currentChannel == requestedAppChannel) {
+          if (requestedAppChannel == AppChannel.MARKET) {
+            print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
+            Navigator.of(context).push(
+              CupertinoPageRoute<void>(
+                builder: (BuildContext context) => MarketProductsPage(
+                  selectedParentCategoryId: int.parse(itemParentId),
+                  selectedChildCategoryId: int.parse(itemId),
+                ),
               ),
-            ),
-          );
-        } else {
-          print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
-          Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: itemId);
+            );
+          } else if (requestedAppChannel == AppChannel.FOOD) {
+            print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
+            Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
+              'restaurant_id': itemId,
+            });
+          }
         }
       }
       break;

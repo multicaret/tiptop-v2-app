@@ -143,7 +143,9 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                         child: InkWell(
                                           onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
                                             RestaurantPage.routeName,
-                                            arguments: _searchedRestaurants[i].id,
+                                            arguments: {
+                                              'restaurant_id': _searchedRestaurants[i].id,
+                                            },
                                           ),
                                           child: RestaurantHorizontalListItem(
                                             restaurant: _searchedRestaurants[i],
@@ -160,7 +162,8 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                             return Material(
                                               color: AppColors.white,
                                               child: InkWell(
-                                                onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+                                                onTap: () =>
+                                                    Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
                                                   'product_id': product.id,
                                                   'restaurant_id': _searchedRestaurants[i].id,
                                                   'chain_id': _searchedRestaurants[i].chain.id,

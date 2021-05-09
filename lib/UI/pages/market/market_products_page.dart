@@ -14,9 +14,11 @@ class MarketProductsPage extends StatefulWidget {
   static const routeName = '/products';
 
   final int selectedParentCategoryId;
+  final int selectedChildCategoryId;
 
   MarketProductsPage({
     @required this.selectedParentCategoryId,
+    this.selectedChildCategoryId,
   });
 
   @override
@@ -57,8 +59,6 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('Route name from market products page');
-    print(ModalRoute.of(context).settings.name);
     List<Category> marketParentCategories = productsProvider.marketParentCategories;
     List<Category> marketParentCategoriesWithoutChildren = productsProvider.marketParentCategoriesWithoutChildren;
 
@@ -92,6 +92,7 @@ class _MarketProductsPageState extends State<MarketProductsPage> with SingleTick
 
                 return ParentCategoryTabContent(
                   selectedParentCategoryId: marketParentCategories[i].id,
+                  selectedChildCategoryId: widget.selectedChildCategoryId,
                   selectedParentCategoryEnglishTitle: marketParentCategories[i].englishTitle,
                   childCategories: childCategories,
                 );

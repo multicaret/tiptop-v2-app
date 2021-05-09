@@ -23,7 +23,9 @@ class RestaurantMinHorizontalListItem extends StatelessWidget {
         onTap: () {
           Navigator.of(context, rootNavigator: true).pushNamed(
             RestaurantPage.routeName,
-            arguments: restaurant.id,
+            arguments: {
+              'restaurant_id': restaurant.id,
+            },
           );
         },
         child: Container(

@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetchAndSetHomeDataAndProducts().then((_) {
           if (appProvider.initialUri != null) {
-            runDeepLinkAction(context, appProvider.initialUri, appProvider.isAuth);
+            runDeepLinkAction(context, appProvider.initialUri, appProvider.isAuth, homeProvider.selectedChannel);
             appProvider.setInitialUri(null);
           }
         });

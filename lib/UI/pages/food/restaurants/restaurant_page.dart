@@ -204,7 +204,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      restaurantId = ModalRoute.of(context).settings.arguments as int;
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      restaurantId = data["restaurant_id"];
+
       appProvider = Provider.of<AppProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
       _fetchAndSetRestaurant().then((_) {

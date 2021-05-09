@@ -95,7 +95,7 @@ class _AppWrapperState extends State<AppWrapper> {
         print("Got a deeeeep deep link from subscription: 💩💩💩💩💩💩💩");
         if (uri != null) {
           print('uri: $uri');
-          runDeepLinkAction(context, uri, appProvider.isAuth);
+          runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider.selectedChannel);
         }
         // Use the uri and warn the user, if it is not correct
       }, onError: (err) {
@@ -142,8 +142,6 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    print('Route name from app wrapper');
-    print(ModalRoute.of(context).settings.name);
 
     return WillPopScope(
       onWillPop: () async {

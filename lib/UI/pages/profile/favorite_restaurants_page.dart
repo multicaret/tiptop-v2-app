@@ -70,7 +70,9 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
                       child: InkWell(
                         onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
                           RestaurantPage.routeName,
-                          arguments: favoriteRestaurants[i].id,
+                          arguments: {
+                            'restaurant_id': favoriteRestaurants[i].id,
+                          },
                         ),
                         child: RestaurantVerticalListItem(restaurant: favoriteRestaurants[i]),
                       ),

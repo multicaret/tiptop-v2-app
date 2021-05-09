@@ -15,11 +15,13 @@ import '../../UI/scrollable_horizontal_tabs.dart';
 class ParentCategoryTabContent extends StatefulWidget {
   final List<Category> childCategories;
   final int selectedParentCategoryId;
+  final int selectedChildCategoryId;
   final String selectedParentCategoryEnglishTitle;
 
   ParentCategoryTabContent({
     @required this.childCategories,
     @required this.selectedParentCategoryId,
+    @required this.selectedChildCategoryId,
     @required this.selectedParentCategoryEnglishTitle,
   });
 
@@ -104,6 +106,11 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
           'height': (rowsCount * productGridItemHeight) + (10 * 2) + (10 * (rowsCount - 1)),
         };
       });
+      if(widget.selectedChildCategoryId != null) {
+        selectedChildCategoryIdNotifier.value = widget.selectedChildCategoryId;
+        int selectedChildCategoryIndex = widget.childCategories.indexWhere((childCategory) => childCategory.id == widget.selectedChildCategoryId);
+        scrollToProducts(selectedChildCategoryIndex);
+      }
     }
     _isInit = false;
     super.didChangeDependencies();

@@ -69,7 +69,9 @@ class RestaurantsIndex extends StatelessWidget {
                 child: InkWell(
                   onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
                     RestaurantPage.routeName,
-                    arguments: restaurants[i].id,
+                    arguments: {
+                      'restaurant_id': restaurants[i].id,
+                    },
                   ),
                   child: restaurantProvider.activeListType == ListType.HORIZONTALLY_STACKED
                       ? RestaurantHorizontalListItem(restaurant: restaurants[i])
