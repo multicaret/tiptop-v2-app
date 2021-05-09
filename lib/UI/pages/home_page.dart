@@ -116,6 +116,10 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }
+    if (_oneSignalNotificationsProvider.oneSignalDeepLink != null) {
+      runDeepLinkAction(context, _oneSignalNotificationsProvider.oneSignalDeepLink, appProvider.isAuth, homeProvider);
+      _oneSignalNotificationsProvider.setOneSignalDeepLink(null);
+    }
     _isInit = false;
     super.didChangeDependencies();
   }
