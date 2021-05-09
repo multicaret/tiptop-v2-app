@@ -50,7 +50,7 @@
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
                         android:scheme="tiptop"
-                        android:host="trytiptop.app" />
+                        android:host="" />
             </intent-filter>
 
             <!-- App Links -->
@@ -62,7 +62,6 @@
                 <data
                         android:scheme="https"
                         android:host="66dh.adj.st"
-                        android:pathPrefix="/deep_link"
                 />
             </intent-filter>
 
