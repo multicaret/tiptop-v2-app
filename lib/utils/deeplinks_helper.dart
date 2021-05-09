@@ -186,5 +186,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
         return;
       }
       break;
+    default:
+      return;
   }
 }
