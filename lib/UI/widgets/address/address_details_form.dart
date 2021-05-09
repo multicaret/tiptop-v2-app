@@ -143,7 +143,7 @@ class AddressDetailsForm extends StatelessWidget {
                         // initialValue: '5070326662',
                         initialValue: '',
                         hasInnerLabel: false,
-                        keyboardType: TextInputType.numberWithOptions(signed: true),
+                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                         hintText: 'xxx-xxx-xx-xx',
                         onSaved: (value) => setAddressDetailsFormData('phone_number', value),
                       ),
