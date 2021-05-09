@@ -58,11 +58,12 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       orderId = data["order_id"];
       shouldNavigateToOrderRating = data["should_navigate_to_rating"] ?? false;
+
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       print('orderId: $orderId');
       _fetchAndSetPreviousOrder().then((_) {
-        if(shouldNavigateToOrderRating) {
+        if(shouldNavigateToOrderRating && order != null) {
           Navigator.of(context, rootNavigator: true).pushNamed(
             MarketOrderRatingPage.routeName,
             arguments: {'order': order},

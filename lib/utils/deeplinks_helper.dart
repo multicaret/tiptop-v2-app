@@ -135,6 +135,12 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       }
       break;
     case "order_rating":
+      if (!isAuth) {
+        print('User not authenticated to enter this route');
+        showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        return;
+      }
       if (hasValidChannel && itemId != null) {
         Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.MARKET ? MarketPreviousOrderPage.routeName : FoodPreviousOrderPage.routeName,
