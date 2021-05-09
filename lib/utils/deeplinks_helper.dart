@@ -128,7 +128,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       break;
     case "order_rating":
       if (hasValidChannel && itemId != null) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+        Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.MARKET ? MarketPreviousOrderPage.routeName : FoodPreviousOrderPage.routeName,
           arguments: {
             'order_id': int.parse(itemId),

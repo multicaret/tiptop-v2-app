@@ -40,6 +40,13 @@ class AppProvider with ChangeNotifier {
     _isSoftUpdateEnabled = isSoftUpdateEnabled;
   }
 
+  Uri initialUri;
+
+  void setInitialUri(uri) {
+    initialUri = uri;
+    notifyListeners();
+  }
+
   //  Location
   /*Todo: set these coordinates to be a proper place*/
   static double latitude;

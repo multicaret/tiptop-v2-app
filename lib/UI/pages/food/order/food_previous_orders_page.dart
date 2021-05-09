@@ -69,9 +69,12 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
                     itemBuilder: (context, i) => PreviousOrderItem(
                       order: previousOrders[i],
                       action: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed(FoodPreviousOrderPage.routeName, arguments: previousOrders[i].id)
-                            .then((shouldRefresh) {
+                        Navigator.of(context, rootNavigator: true).pushNamed(
+                          FoodPreviousOrderPage.routeName,
+                          arguments: {
+                            'order_id': previousOrders[i].id,
+                          },
+                        ).then((shouldRefresh) {
                           print('shouldRefresh');
                           print(shouldRefresh);
                           if (shouldRefresh != null && shouldRefresh == true) {

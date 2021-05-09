@@ -54,7 +54,9 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      orderId = ModalRoute.of(context).settings.arguments as int;
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      orderId = data["order_id"];
+
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       print('orderId: $orderId');
