@@ -99,6 +99,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       }
       print("Open Addresses page");
       Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+      return;
       break;
     case "home_screen_by_channel":
       if (hasValidChannel) {
@@ -106,27 +107,29 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
           AppWrapper.routeName,
           arguments: {'initially_selected_channel': requestedAppChannel},
         );
+        return;
       }
       break;
     case "market_food_category_show":
-      if (hasValidChannel && itemId != null && itemParentId != null) {
-        if (currentChannel == requestedAppChannel) {
-          if (requestedAppChannel == AppChannel.MARKET) {
-            print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-            Navigator.of(context).push(
-              CupertinoPageRoute<void>(
-                builder: (BuildContext context) => MarketProductsPage(
-                  selectedParentCategoryId: int.parse(itemParentId),
-                  selectedChildCategoryId: int.parse(itemId),
-                ),
+      if (hasValidChannel && itemId != null && itemParentId != null && currentChannel == requestedAppChannel) {
+        if (requestedAppChannel == AppChannel.MARKET) {
+          print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
+          Navigator.of(context).push(
+            CupertinoPageRoute<void>(
+              builder: (BuildContext context) => MarketProductsPage(
+                selectedParentCategoryId: int.parse(itemParentId),
+                selectedChildCategoryId: int.parse(itemId),
               ),
-            );
-          } else if (requestedAppChannel == AppChannel.FOOD) {
-            print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
-            Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
-              'restaurant_id': itemId,
-            });
-          }
+            ),
+          );
+          return;
+        } else if (requestedAppChannel == AppChannel.FOOD) {
+          print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
+          Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
+            'restaurant_id': int.parse(itemParentId),
+            'selected_menu_category_id': int.parse(itemId),
+          });
+          return;
         }
       }
       break;
@@ -139,6 +142,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
             'should_navigate_to_rating': true,
           },
         );
+        return;
       }
       break;
     case "order_tracking":
@@ -151,6 +155,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       if (isAuth && itemId != null) {
         // Todo: Open Order Tracking screen: using: {itemId}
         print("Open Order Tracking screen: using: {itemId}");
+        return;
       }
       break;
     case "previous_orders":
@@ -162,20 +167,22 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       }
       if (isAuth && hasValidChannel) {
         print("Open Previous Orders page: using $requestedAppChannel");
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+        Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.MARKET ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName,
         );
+        return;
       }
       break;
     case "product_show":
       if (itemId != null && hasValidChannel) {
         print("Open Product Show screen: using {itemId,hasChannel}");
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+        Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.MARKET ? MarketProductPage.routeName : FoodProductPage.routeName,
           arguments: {
-            'product_id': itemId,
+            'product_id': int.parse(itemId),
           },
         );
+        return;
       }
       break;
   }

@@ -42,6 +42,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
   int restaurantId;
   Branch restaurant;
 
+  int selectedMenuCategoryId;
+
   TextEditingController searchFieldController = TextEditingController();
   FocusNode searchFieldFocusNode = FocusNode();
 
@@ -206,6 +208,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     if (_isInit) {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       restaurantId = data["restaurant_id"];
+      selectedMenuCategoryId = data["selected_menu_category_id"];
 
       appProvider = Provider.of<AppProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
@@ -224,6 +227,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
           selectedCategoryIdNotifier.value = menuCategories[0].id;
         }
         trackViewRestaurantMenuEvent();
+        if (selectedMenuCategoryId != null) {
+          selectedCategoryIdNotifier.value = selectedMenuCategoryId;
+          int selectedMenuCategoryIndex = restaurant.categories.indexWhere((childCategory) => childCategory.id == selectedMenuCategoryId);
+          scrollToProducts(selectedMenuCategoryIndex);
+          selectedMenuCategoryId = null;
+        }
       });
     }
     _isInit = false;
