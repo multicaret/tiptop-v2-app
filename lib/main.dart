@@ -6,16 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/no_internet_page.dart';
-import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
-import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
-import 'package:uni_links/uni_links.dart';
 
 import 'UI/app_wrapper.dart';
 import 'UI/pages/force_update_page.dart';
@@ -55,7 +52,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   EventTracking eventTracking = EventTracking.getActions();
 
   Future<void> _initEventTracking() async {
-    await eventTracking.initEventTracking();
+    await eventTracking.initEventTracking(widget.appProvider);
 
     //Send app visit event
     Map<String, dynamic> visitEventParams = {
@@ -105,82 +102,84 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ...providers,
       ],
       child: Consumer<AppProvider>(
-        builder: (c, appProvider, _) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'TipTop',
-          localizationsDelegates: [
-            Translations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: appProvider.appLocale,
-          supportedLocales: appProvider.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            primaryColor: AppColors.primary,
-            accentColor: AppColors.secondaryLight,
-            scaffoldBackgroundColor: Colors.transparent,
-            fontFamily: 'NeoSansArabic',
-            textTheme: TextTheme(
-              headline1: AppTextStyles.h2,
-              button: AppTextStyles.button,
-              bodyText1: AppTextStyles.body,
-              bodyText2: AppTextStyles.body, //Default style everywhere, e.g. Text widget
-            ),
-            appBarTheme: AppBarTheme(
-              centerTitle: true,
-              color: Colors.transparent,
-              shadowColor: Colors.transparent,
+        builder: (c, appProvider, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'TipTop',
+            localizationsDelegates: [
+              Translations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            locale: appProvider.appLocale,
+            supportedLocales: appProvider.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              primaryColor: AppColors.primary,
+              accentColor: AppColors.secondaryLight,
+              scaffoldBackgroundColor: Colors.transparent,
+              fontFamily: 'NeoSansArabic',
               textTheme: TextTheme(
                 headline1: AppTextStyles.h2,
-                headline6: AppTextStyles.h2,
+                button: AppTextStyles.button,
                 bodyText1: AppTextStyles.body,
+                bodyText2: AppTextStyles.body, //Default style everywhere, e.g. Text widget
               ),
-              iconTheme: IconThemeData(color: AppColors.primary, size: 20),
-              actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                primary: AppColors.primary,
-                onPrimary: AppColors.white,
-                minimumSize: Size.fromHeight(55),
-                textStyle: AppTextStyles.button,
-                elevation: 4,
-                shadowColor: AppColors.shadowDark,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(8.0),
+              appBarTheme: AppBarTheme(
+                centerTitle: true,
+                color: Colors.transparent,
+                shadowColor: Colors.transparent,
+                textTheme: TextTheme(
+                  headline1: AppTextStyles.h2,
+                  headline6: AppTextStyles.h2,
+                  bodyText1: AppTextStyles.body,
+                ),
+                iconTheme: IconThemeData(color: AppColors.primary, size: 20),
+                actionsIconTheme: IconThemeData(color: AppColors.primary, size: 20),
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  primary: AppColors.primary,
+                  onPrimary: AppColors.white,
+                  minimumSize: Size.fromHeight(55),
+                  textStyle: AppTextStyles.button,
+                  elevation: 4,
+                  shadowColor: AppColors.shadowDark,
+                  shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(8.0),
+                  ),
                 ),
               ),
-            ),
-            sliderTheme: SliderThemeData(
-              showValueIndicator: ShowValueIndicator.onlyForContinuous,
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
-              tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
-              activeTickMarkColor: AppColors.primary,
-              activeTrackColor: AppColors.primary,
-              inactiveTickMarkColor: AppColors.primary50,
-              inactiveTrackColor: AppColors.primary50,
-              thumbColor: AppColors.primary,
-              valueIndicatorColor: AppColors.secondary,
-              disabledInactiveTrackColor: AppColors.primary50,
-              disabledActiveTickMarkColor: AppColors.primary,
-              disabledInactiveTickMarkColor: AppColors.primary50,
-              disabledActiveTrackColor: AppColors.primary,
-              disabledThumbColor: AppColors.primary,
-            ),
-            textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
-          ),
-          home: getHomeWidget(appProvider),
-          routes: routes,
-          onGenerateRoute: (routeSettings) {
-            return MaterialPageRoute(
-              builder: (context) => Container(
-                color: Colors.red,
+              sliderTheme: SliderThemeData(
+                showValueIndicator: ShowValueIndicator.onlyForContinuous,
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 6.0),
+                activeTickMarkColor: AppColors.primary,
+                activeTrackColor: AppColors.primary,
+                inactiveTickMarkColor: AppColors.primary50,
+                inactiveTrackColor: AppColors.primary50,
+                thumbColor: AppColors.primary,
+                valueIndicatorColor: AppColors.secondary,
+                disabledInactiveTrackColor: AppColors.primary50,
+                disabledActiveTickMarkColor: AppColors.primary,
+                disabledInactiveTickMarkColor: AppColors.primary50,
+                disabledActiveTrackColor: AppColors.primary,
+                disabledThumbColor: AppColors.primary,
               ),
-            );
-          },
-        ),
+              textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
+            ),
+            home: getHomeWidget(appProvider),
+            routes: routes,
+            onGenerateRoute: (routeSettings) {
+              return MaterialPageRoute(
+                builder: (context) => Container(
+                  color: Colors.red,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -203,8 +202,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   : AppWrapper()
               : FutureBuilder(
                   future: _autoLoginFuture,
-                  builder: (c, authResultSnapshot) =>
-                      authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AppWrapper(),
+                  builder: (c, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AppWrapper(),
                 )
           : LanguageSelectPage();
     }
