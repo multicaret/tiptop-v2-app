@@ -104,7 +104,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       break;
     case "home_screen_by_channel":
       if (hasValidChannel) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppWrapper.routeName,
           (Route<dynamic> route) => false,
           arguments: {'initially_selected_channel': requestedAppChannel},
