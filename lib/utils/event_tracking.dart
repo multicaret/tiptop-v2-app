@@ -52,8 +52,8 @@ class EventTracking {
 
   Future<void> initAdjust() async {
     try {
-      AdjustConfig config = new AdjustConfig('yajo2k3wjp4w', AdjustEnvironment.sandbox);
-      config.logLevel = AdjustLogLevel.verbose;
+      AdjustConfig config = new AdjustConfig('yajo2k3wjp4w', AdjustEnvironment.production);
+      config.logLevel = AdjustLogLevel.suppress;
       // config.isDeviceKnown = false;
       // config.defaultTracker = 'abc123';
       // config.processName = 'com.adjust.examples';

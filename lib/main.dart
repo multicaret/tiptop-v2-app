@@ -171,20 +171,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ),
             textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: AppColors.primary, textStyle: AppTextStyles.textButton)),
           ),
-          home: StreamBuilder<Uri>(
-            stream: uriLinkStream,
-            builder: (context, AsyncSnapshot<Uri> snapshot) {
-              print('REBUILT WHOLE APP BECAUSE OF STREAMBUILDER!');
-              if (snapshot.hasData) {
-                if (snapshot.data != null) {
-                  Future.delayed(Duration.zero, () {
-                    runDeepLinkAction(context, snapshot.data, appProvider.isAuth);
-                  });
-                }
-              }
-              return getHomeWidget(appProvider);
-            },
-          ),
+          home: getHomeWidget(appProvider),
           routes: routes,
           onGenerateRoute: (routeSettings) {
             return MaterialPageRoute(
@@ -217,7 +204,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               : FutureBuilder(
                   future: _autoLoginFuture,
                   builder: (c, authResultSnapshot) =>
-                      authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : WalkthroughPage(),
+                      authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AppWrapper(),
                 )
           : LanguageSelectPage();
     }

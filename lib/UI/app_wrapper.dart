@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,9 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:uni_links/uni_links.dart';
 
 class AppWrapper extends StatefulWidget {
   static const routeName = '/app-wrapper';
@@ -25,7 +28,9 @@ class AppWrapper extends StatefulWidget {
 class _AppWrapperState extends State<AppWrapper> {
   final CupertinoTabController _cupertinoTabController = CupertinoTabController();
   int currentTabIndex = 0;
+  AppProvider appProvider;
   HomeProvider homeProvider;
+  StreamSubscription _deepLinksSubscription;
 
   List<GlobalKey<NavigatorState>> _tabNavKeys = List.generate(_getCupertinoTabsList().length, (i) => GlobalKey<NavigatorState>());
 
@@ -75,6 +80,19 @@ class _AppWrapperState extends State<AppWrapper> {
   void didChangeDependencies() {
     if (_isInit) {
       homeProvider = Provider.of<HomeProvider>(context);
+      appProvider = Provider.of<AppProvider>(context);
+      _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
+        print("Got a deeeeep deep link from subscription: 💩💩💩💩💩💩💩");
+        if (uri != null) {
+          print('uri: $uri');
+          runDeepLinkAction(context, uri, appProvider.isAuth);
+        }
+        // Use the uri and warn the user, if it is not correct
+      }, onError: (err) {
+        print('Error while listening to deeplink stream!');
+        print('@e $err');
+        // Handle exception by warning the user their action did not succeed
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -106,7 +124,17 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 
   @override
+  void dispose() {
+    print('main.dart disposed');
+    _deepLinksSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('Route name from app wrapper');
+    print(ModalRoute.of(context).settings.name);
+
     return WillPopScope(
       onWillPop: () async {
         return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;
