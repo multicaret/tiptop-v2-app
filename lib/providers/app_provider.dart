@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io' show Platform, SocketException;
 
-import 'package:adjust_sdk/adjust.dart';
-import 'package:adjust_sdk/adjust_config.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
