@@ -186,7 +186,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       if (_searchedProducts.isEmpty) {
         showToast(msg: Translations.of(context).get("No results match your search"));
       } else {
-        var key = 'result${_searchedProducts.length > 1 ? "s" : ""} match your search';
+        var key = 'Result${_searchedProducts.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedProducts.length} ${Translations.of(context).get(key)}');
       }
       fetchAndSetSearchTerms();

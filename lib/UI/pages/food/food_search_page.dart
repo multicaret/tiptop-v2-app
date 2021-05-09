@@ -268,7 +268,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
       if (_searchedRestaurants.isEmpty) {
         showToast(msg: Translations.of(context).get("No results match your search"));
       } else {
-        var key = 'result${_searchedRestaurants.length > 1 ? "s" : ""} match your search';
+        var key = 'Result${_searchedRestaurants.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedRestaurants.length} ${Translations.of(context).get(key)}');
       }
       fetchAndSetSearchTerms();
