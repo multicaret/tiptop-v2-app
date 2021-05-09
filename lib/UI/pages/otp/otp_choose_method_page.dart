@@ -186,7 +186,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
                                   labelText: 'Phone Number',
                                   initialValue: '',
                                   // initialValue: '5070326662',
-                                  keyboardType: TextInputType.numberWithOptions(signed: true),
+                                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                                   hintText: 'xxx-xxx-xx-xx',
                                   onSaved: (value) {
                                     phoneNumber = value;
