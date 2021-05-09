@@ -88,6 +88,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
         Navigator.of(context, rootNavigator: true).pushNamed(
           requestedAppChannel == AppChannel.FOOD ? FavoriteRestaurantsPage.routeName : FavoriteMarketProductsPage.routeName,
         );
+        return;
       }
       break;
     case "addresses":
