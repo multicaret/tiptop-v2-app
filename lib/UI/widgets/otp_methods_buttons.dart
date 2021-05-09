@@ -23,12 +23,12 @@ class OTPMethodsButtons extends StatelessWidget {
         'color': AppColors.whatsApp,
         'icon': FontAwesomeIcons.whatsapp,
       },
-      // {
-      //   'id': 'telegram',
-      //   'name': 'Telegram',
-      //   'color': AppColors.telegram,
-      //   'icon': FontAwesomeIcons.telegram,
-      // },
+      {
+        'id': 'telegram',
+        'name': 'Telegram',
+        'color': AppColors.telegram,
+        'icon': FontAwesomeIcons.telegram,
+      },
       {
         'id': 'sms',
         'name': 'SMS',

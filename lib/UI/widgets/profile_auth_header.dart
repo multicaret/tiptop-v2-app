@@ -6,7 +6,6 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -20,14 +19,16 @@ class ProfileAuthHeader extends StatelessWidget {
         child: InkWell(
           onTap: () {
             if (appProvider.isAuth) {
-              Navigator.of(context, rootNavigator: true).pushNamed(
-                OTPCompleteProfile.routeName,
-                arguments: {
-                  'updating_profile': true,
-                }
-              );
+              Navigator.of(context, rootNavigator: true).pushNamed(OTPCompleteProfile.routeName, arguments: {
+                'updating_profile': true,
+              });
             } else {
-              Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
+              Navigator.of(context, rootNavigator: true).pushNamed(
+                WalkthroughPage.routeName,
+                arguments: {
+                  'should_pop_only': true,
+                },
+              );
             }
           },
           child: Container(

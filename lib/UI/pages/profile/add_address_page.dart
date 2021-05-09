@@ -65,7 +65,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       final createAddressResponse = await addressesProvider.createAddress(appProvider, pickedPosition);
       if (createAddressResponse == 401) {
         showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-        Navigator.of(context, rootNavigator: true).pushNamed(WalkthroughPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
         return false;
       }
       createAddressData = addressesProvider.createAddressData;
@@ -285,7 +285,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     if (shouldPopAfterAddressCreation) {
       Navigator.of(context).pop(true);
     } else {
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
     }
   }
 }

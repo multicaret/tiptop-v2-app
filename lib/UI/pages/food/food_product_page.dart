@@ -83,7 +83,10 @@ class _FoodProductPageState extends State<FoodProductPage> {
   Future<void> submitProductCartData(BuildContext context, AppProvider appProvider, AddressesProvider addressesProvider) async {
     if (!appProvider.isAuth) {
       showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamed(
+        WalkthroughPage.routeName,
+        arguments: {'should_pop_only': true},
+      );
       return;
     }
     if (!addressesProvider.addressIsSelected) {

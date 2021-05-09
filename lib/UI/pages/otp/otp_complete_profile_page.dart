@@ -201,9 +201,11 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
         await trackCompleteRegistrationEvent();
       }
       getLocationPermissionStatus().then((isGranted) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-          isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName,
-        );
+        if (isGranted) {
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+        } else {
+          Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);
+        }
       });
     } on HttpException catch (error) {
       appAlert(

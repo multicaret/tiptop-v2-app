@@ -357,7 +357,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         context: context,
         builder: (context) => OrderConfirmedDialog(),
       ).then((_) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
       });
     } catch (e) {
       setState(() => _isLoadingOrderSubmit = false);

@@ -16,7 +16,6 @@ import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
@@ -428,7 +427,10 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
         context: context,
         builder: (context) => OrderConfirmedDialog(),
       ).then((_) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          AppWrapper.routeName,
+          (Route<dynamic> route) => false,
+        );
       });
     } catch (e) {
       setState(() => _isLoadingOrderSubmit = false);

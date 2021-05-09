@@ -114,7 +114,7 @@ class _AddressesPageState extends State<AddressesPage> {
     if (_shouldPopAfterSelection) {
       Navigator.of(context).pop(true);
     } else {
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
     }
   }
 

@@ -387,7 +387,7 @@ class CartProvider with ChangeNotifier {
       isLoadingClearFoodCartRequest = false;
       if (shouldNavigateToHome) {
         showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
       }
       notifyListeners();
     } catch (e) {

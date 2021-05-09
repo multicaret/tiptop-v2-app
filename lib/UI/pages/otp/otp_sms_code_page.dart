@@ -137,7 +137,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
             const SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
               },
               child: Text(
                 Translations.of(context).get("Continue Without Login"),
@@ -181,7 +181,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
         );
       } else {
         print('Registered user, navigating to home page');
-        Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
       }
     } else {
       showToast(msg: Translations.of(context).get("OTP Validation Failed"));

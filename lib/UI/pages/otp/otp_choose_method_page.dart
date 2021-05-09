@@ -109,7 +109,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             );
           } else {
             print('Registered user, navigating to home page');
-            Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
           }
         } else {
           setState(() => _isLoadingCheckOTPValidation = false);
@@ -205,7 +205,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             const SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
               },
               child: Text(Translations.of(context).get("Continue Without Login")),
             ),

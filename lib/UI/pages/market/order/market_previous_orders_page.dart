@@ -31,7 +31,12 @@ class _MarketPreviousOrdersPageState extends State<MarketPreviousOrdersPage> {
     final response = await ordersProvider.fetchAndSetMarketPreviousOrders(appProvider);
     if (response == 401) {
       showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed(
+        WalkthroughPage.routeName,
+        arguments: {
+          'should_pop_only': true,
+        },
+      );
     }
     previousOrders = ordersProvider.marketPreviousOrders;
     setState(() => _isLoadingPreviousOrders = false);

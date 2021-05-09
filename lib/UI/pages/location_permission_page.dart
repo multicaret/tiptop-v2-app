@@ -37,8 +37,8 @@ class LocationPermissionPage extends StatelessWidget {
                   handleLocationPermission().then((isGranted) {
                     print('Location granted: $isGranted');
                     if (isGranted) {
-                      appProvider.isLocationPermissionGranted = true;
-                      Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+                      appProvider.setIsLocationPermissionGranted(true);
+                      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
                     } else {
                       openAppSettings();
                     }

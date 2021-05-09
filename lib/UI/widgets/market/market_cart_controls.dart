@@ -49,7 +49,10 @@ class _MarketCartControlsState extends State<MarketCartControls> {
   Future<void> adjustMarketProductQuantity(CartAction action) async {
     if (!appProvider.isAuth) {
       showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamed(
+        WalkthroughPage.routeName,
+        arguments: {'should_pop_only': true},
+      );
     } else if (!addressesProvider.addressIsSelected) {
       showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
       Navigator.of(context, rootNavigator: true).pushNamed(

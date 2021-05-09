@@ -137,6 +137,11 @@ class AppProvider with ChangeNotifier {
 
   bool isLocationPermissionGranted = false;
 
+  void setIsLocationPermissionGranted(value) {
+    isLocationPermissionGranted = value;
+    notifyListeners();
+  }
+
   bool noInternet = false;
 
   Future<void> bootActions() async {

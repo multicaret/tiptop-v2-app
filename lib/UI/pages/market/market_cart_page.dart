@@ -42,7 +42,7 @@ class MarketCartPage extends StatelessWidget {
                       if (response != null && response) {
                         cartProvider.clearMarketCart(appProvider).then((_) {
                           showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
-                          Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppWrapper.routeName);
+                          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
                         }).catchError((e) {
                           showToast(msg: Translations.of(context).get("Error clearing cart!"));
                         });

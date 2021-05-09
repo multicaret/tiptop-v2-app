@@ -25,6 +25,9 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
 
   @override
   Widget build(BuildContext context) {
+    final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    bool shouldPopOnly = data != null && data["should_pop_only"] != null ? data["should_pop_only"] : false;
+
     return AppScaffold(
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       bgColor: AppColors.white,
@@ -53,7 +56,13 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                     TextButton(
                       onPressed: () {
                         getLocationPermissionStatus().then((isGranted) {
-                          Navigator.of(context).pushReplacementNamed(isGranted ? AppWrapper.routeName : LocationPermissionPage.routeName);
+                          if (isGranted && !shouldPopOnly) {
+                            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                          } else if (isGranted && shouldPopOnly) {
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);
+                          }
                         });
                       },
                       child: Text(

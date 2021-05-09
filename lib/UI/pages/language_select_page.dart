@@ -55,9 +55,8 @@ List<Widget> _languageItems(
       child: AppButtons.secondary(
         onPressed: () {
           appProvider.changeLanguage(_appLanguages[i].locale);
-          //Todo: remove this when profile screen has language selection
           if (appProvider.localeSelected) {
-            Navigator.of(context).pushNamed(AppWrapper.routeName);
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
           }
         },
         child: Row(
