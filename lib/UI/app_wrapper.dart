@@ -12,7 +12,6 @@ import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/cart/cart_fab.dart';
-import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
@@ -83,19 +82,11 @@ class _AppWrapperState extends State<AppWrapper> {
       homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
 
-      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      if (data != null) {
-        AppChannel initiallySelectedChannel = data["initially_selected_channel"];
-        if (initiallySelectedChannel != null) {
-          homeProvider.setSelectedChannel(initiallySelectedChannel);
-        }
-      }
-
       _deepLinksSubscription = uriLinkStream.listen((Uri uri) {
         print("Got a deeeeep deep link from subscription: 💩💩💩💩💩💩💩");
         if (uri != null) {
           print('uri: $uri');
-          runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider.selectedChannel);
+          runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider);
         }
         // Use the uri and warn the user, if it is not correct
       }, onError: (err) {
@@ -142,6 +133,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    print(ModalRoute.of(context).settings.name);
 
     return WillPopScope(
       onWillPop: () async {

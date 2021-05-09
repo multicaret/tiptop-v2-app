@@ -105,7 +105,7 @@ class AppCarousel extends StatelessWidget {
                     launch(links[i]['value']);
                   } else {
                     Uri uri = Uri.parse(link);
-                    runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider.selectedChannel);
+                    runDeepLinkAction(context, uri, appProvider.isAuth, homeProvider);
                   }
                 },
           child: child,

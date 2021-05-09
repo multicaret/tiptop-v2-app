@@ -17,9 +17,10 @@ import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel currentChannel) {
+void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider homeProvider) {
   String deepLink; //full deep link with main action and params
   Uri deepLinkUri = uri; //full deep link with main action and params as URI to query params from
   String mainAction; //the main action (e.g. blog_index, favorites, ...) without params
@@ -57,6 +58,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
   String itemParentId = deepLinkUri.queryParameters['parent_id'];
 
   AppChannel requestedAppChannel = appChannelValues.map[uriChannel];
+  AppChannel currentChannel = homeProvider.selectedChannel;
   // Some Flags
   //Check if channel exists in params and is equal to one of the app's channels
   bool hasValidChannel = requestedAppChannel != null && (requestedAppChannel == AppChannel.MARKET || requestedAppChannel == AppChannel.FOOD);
@@ -104,10 +106,12 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, AppChannel cu
       break;
     case "home_screen_by_channel":
       if (hasValidChannel) {
+        if (currentChannel != requestedAppChannel) {
+          homeProvider.setSelectedChannel(requestedAppChannel);
+        }
         Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppWrapper.routeName,
           (Route<dynamic> route) => false,
-          arguments: {'initially_selected_channel': requestedAppChannel},
         );
         return;
       }
