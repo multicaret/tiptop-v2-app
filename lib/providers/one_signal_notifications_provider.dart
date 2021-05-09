@@ -48,6 +48,15 @@ class OneSignalNotificationsProvider with ChangeNotifier {
       OneSignalNotificationsProvider.notificationHasOpened = false;
       _payloadSubject.add(notification.payload);
       print('=========> NOTIFICATION_RECEIVED');
+
+      OSNotificationPayload notificationPayload = notification.payload;
+      print("notificationPayload.additionalData");
+      print(notificationPayload.additionalData);
+      if (notificationPayload.additionalData.length > 0 && notificationPayload.additionalData['deep_link'] != null) {
+        print(notificationPayload.additionalData['deep_link']);
+      }
+      print("========================================");
+
       // print(notification.jsonRepresentation().replaceAll("\\n", "\n"));
       // if (notification.payload.additionalData.containsKey('action')) {
       //   var actionValue = notification.payload.additionalData['action'];
