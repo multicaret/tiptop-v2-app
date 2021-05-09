@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_attribution.dart';
@@ -14,7 +14,6 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:flutter/services.dart' show PlatformException;
 
 class EventTracking {
   static final EventTracking _instance = EventTracking();
@@ -42,7 +41,7 @@ class EventTracking {
     try {
       print('Initiating MixPanel...');
       mixpanel = await Mixpanel.init("6d5313743174278f57c324f5aadcc75c");
-      if(AppProvider.userPhoneNumber != null) {
+      if (AppProvider.userPhoneNumber != null) {
         mixpanel.identify(AppProvider.userPhoneNumber);
       }
     } catch (e) {
@@ -265,7 +264,9 @@ class EventTracking {
     //Facebook Event Tracking
     Map<String, dynamic> facebookEventParams = {};
     params.forEach((key, value) {
-      facebookEventParams[key] = value is List<String> || value is List<int> ? json.encode(value) : value;
+      if (value != null) {
+        facebookEventParams[key] = value is List<String> || value is List<int> ? json.encode(value) : value;
+      }
     });
     await facebookAppEvents.logEvent(
       name: eventName,
