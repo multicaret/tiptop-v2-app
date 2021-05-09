@@ -56,11 +56,23 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     if (_isInit) {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       orderId = data["order_id"];
+      bool shouldNavigateToOrderRating = data["should_navigate_to_rating"] ?? false;
 
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       print('orderId: $orderId');
-      _fetchAndSetPreviousOrder();
+      _fetchAndSetPreviousOrder().then((_) {
+        if (shouldNavigateToOrderRating && order != null) {
+          Navigator.of(context, rootNavigator: true).pushNamed(
+            FoodOrderRatingPage.routeName,
+            arguments: {'order': order},
+          ).then((response) {
+            if (response != null && response) {
+              _fetchAndSetPreviousOrder();
+            }
+          });
+        }
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
