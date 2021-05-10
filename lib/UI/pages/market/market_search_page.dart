@@ -5,7 +5,6 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
-import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -111,17 +110,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                           'Search Results',
                           suffix: ' (${_searchedProducts.length})',
                         )
-                      : Column(
-                          children: [
-                            homeProvider.selectedChannel == "food"
-                                ? Container(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: CategoriesSlider(categories: homeProvider.foodHomeData.categories),
-                                  )
-                                : Container(),
-                            SectionTitle('Most Searched Terms'),
-                          ],
-                        ),
+                      : SectionTitle('Most Searched Terms'),
                   _searchedProducts.isNotEmpty
                       ? Expanded(
                           child: Container(
