@@ -251,6 +251,9 @@ class EventTracking {
 
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: params);
+    if(trackingEvent == TrackingEvent.COMPLETE_REGISTRATION) {
+      mixpanel.identify(AppProvider.userPhoneNumber);
+    }
 
     //Adjust Event Tracking
     String adjustEventToken = adjustTrackingEventsTokens.reverse[trackingEvent];
