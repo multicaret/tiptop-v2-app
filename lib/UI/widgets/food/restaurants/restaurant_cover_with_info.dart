@@ -37,11 +37,13 @@ class RestaurantCoverWithInfo extends StatelessWidget {
                 border: hasBorderRadius ? Border.all(color: AppColors.border, width: 0.5) : null,
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(hasBorderRadius ? 8 : 0),
                 child: CachedNetworkImage(
                   placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
                   imageUrl: restaurant.chain.media.cover,
                   fit: BoxFit.cover,
+                  color: AppColors.primary.withOpacity(0.2),
+                  colorBlendMode: BlendMode.darken,
                 ),
               ),
             ),
