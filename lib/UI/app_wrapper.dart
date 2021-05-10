@@ -94,6 +94,10 @@ class _AppWrapperState extends State<AppWrapper> {
         print('@e $err');
         // Handle exception by warning the user their action did not succeed
       });
+
+      if(appProvider.isFirstOpen) {
+        appProvider.setIsFirstOpen(false);
+      }
     }
     _isInit = false;
     super.didChangeDependencies();

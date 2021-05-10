@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/no_internet_page.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
@@ -195,16 +196,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           appProvider: appProvider,
         );
       }
-      return appProvider.localeSelected
-          ? appProvider.isAuth
-              ? !appProvider.isLocationPermissionGranted
-                  ? LocationPermissionPage()
-                  : AppWrapper()
-              : FutureBuilder(
-                  future: _autoLoginFuture,
-                  builder: (c, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AppWrapper(),
-                )
-          : LanguageSelectPage();
+      if (!appProvider.localeSelected) {
+        return LanguageSelectPage();
+      }
+      if (appProvider.isAuth) {
+        return appProvider.isFirstOpen
+            ? WalkthroughPage()
+            : !appProvider.isLocationPermissionGranted
+                ? LocationPermissionPage()
+                : AppWrapper();
+      } else {
+        print('here');
+        return FutureBuilder(
+          future: _autoLoginFuture,
+          builder: (c, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting
+              ? SplashScreen()
+              : appProvider.isFirstOpen
+                  ? WalkthroughPage()
+                  : AppWrapper(),
+        );
+      }
     }
   }
 }

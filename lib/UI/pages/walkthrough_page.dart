@@ -23,11 +23,21 @@ class WalkthroughPage extends StatefulWidget {
 class _WalkthroughPageState extends State<WalkthroughPage> {
   bool animationLoaded = false;
 
+  bool _isInit = true;
+  bool shouldPopOnly;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      shouldPopOnly = data != null && data["should_pop_only"] != null ? data["should_pop_only"] : false;
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    bool shouldPopOnly = data != null && data["should_pop_only"] != null ? data["should_pop_only"] : false;
-
     return AppScaffold(
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       bgColor: AppColors.white,

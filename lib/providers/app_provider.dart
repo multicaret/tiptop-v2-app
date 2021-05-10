@@ -56,6 +56,12 @@ class AppProvider with ChangeNotifier {
 
   bool isFirstOpen = true;
 
+  Future<void> setIsFirstOpen(bool value) async {
+    isFirstOpen = value;
+    await storageActions.save(key: 'is_first_open', data: value);
+    notifyListeners();
+  }
+
   // Locale Related.
   bool localeSelected = false;
   static const String DEFAULT_LOCALE = 'en';
@@ -115,11 +121,6 @@ class AppProvider with ChangeNotifier {
     var isFirstOpenKeyExists = storageActions.checkKey(key: 'is_first_open');
     isFirstOpen = !isFirstOpenKeyExists;
     print('First time opening the app: $isFirstOpen');
-    if (isFirstOpen) {
-      // await sendAppFirstVisitEvent();
-      await storageActions.save(key: 'is_first_open', data: false);
-      isFirstOpen = false;
-    }
   }
 
   fetchLocale() async {
