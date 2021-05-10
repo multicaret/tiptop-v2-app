@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/models/category.dart';
@@ -36,13 +37,16 @@ class FoodCategoryItem extends StatelessWidget {
               height: 70,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: CachedNetworkImageProvider(
-                    category.thumbnail,
-                  ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
+                  imageUrl: category.thumbnail,
+                  fit: BoxFit.cover,
+                  color: AppColors.primary50,
+                  colorBlendMode: BlendMode.darken,
                 ),
-                color: AppColors.primary50,
               ),
             ),
             Positioned.fill(
