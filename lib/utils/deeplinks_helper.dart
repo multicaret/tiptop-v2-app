@@ -132,8 +132,8 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
         } else if (requestedAppChannel == AppChannel.FOOD) {
           print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
           Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
-            'restaurant_id': int.parse(itemParentId),
-            'selected_menu_category_id': int.parse(itemId),
+            'restaurant_id': int.parse(itemId),
+            'selected_menu_category_id': int.parse(itemParentId),
           });
           return;
         }
