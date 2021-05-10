@@ -11,6 +11,7 @@ import 'package:adjust_sdk/adjust_session_failure.dart';
 import 'package:adjust_sdk/adjust_session_success.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:uni_links/uni_links.dart';
@@ -251,7 +252,7 @@ class EventTracking {
 
     //MixPanel Event Tracking
     mixpanel.track(eventName, properties: params);
-    if(trackingEvent == TrackingEvent.COMPLETE_REGISTRATION) {
+    if (trackingEvent == TrackingEvent.COMPLETE_REGISTRATION) {
       mixpanel.identify(AppProvider.userPhoneNumber);
     }
 
@@ -275,5 +276,10 @@ class EventTracking {
       name: eventName,
       parameters: facebookEventParams,
     );
+
+    if (trackingEvent == TrackingEvent.COMPLETE_PURCHASE && params['cart_grand_total'] != null) {
+      print('💩💩💩💩💩💩💩💩💩💩💩💩💩💩 Sending outcome to OneSignal 💩💩💩💩💩💩💩💩💩💩💩💩💩💩');
+      OneSignal.shared.sendOutcomeWithValue("Purchase", params['cart_grand_total']);
+    }
   }
 }
