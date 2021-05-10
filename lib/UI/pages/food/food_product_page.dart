@@ -24,6 +24,7 @@ import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -54,6 +55,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
   AppProvider appProvider;
   int chainId;
   int restaurantId;
+  bool restaurantIsOpen = true;
   int productId;
   CartProduct cartProduct;
   Product product;
@@ -207,7 +209,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
       if (cartProduct != null) {
         print('Cart product id: ${cartProduct.cartProductId}');
       }
+
       restaurantId = data["restaurant_id"];
+      restaurantIsOpen = data["restaurant_is_open"] ?? true;
       chainId = data["chain_id"];
       hasControls = data["has_controls"] == null ? true : data["has_controls"];
       productsProvider = Provider.of<ProductsProvider>(context);
@@ -226,11 +230,11 @@ class _FoodProductPageState extends State<FoodProductPage> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double screenHeightWithoutActionButton = screenSize.height - (buttonHeightSm + listItemVerticalPadding + actionButtonBottomPadding + 187);
-    print('screenHeightWithoutActionButton');
-    print(screenHeightWithoutActionButton);
+
     if (!_isLoadingProduct) {
       productTotalPrice = productsProvider.productTempCartData.productTotalPrice;
     }
+
     return AppScaffold(
       bgColor: AppColors.white,
       hasOverlayLoader: cartProvider.isLoadingAdjustFoodCartDataRequest,
@@ -289,20 +293,32 @@ class _FoodProductPageState extends State<FoodProductPage> {
                                     ],
                                   ),
                                 ),
-                                FoodProductOptions(
-                                  productOptionsScrollController: productOptionsScrollController,
-                                  product: product,
-                                  productOptions: productsProvider.productOptions,
+                                IgnorePointer(
+                                  ignoring: !restaurantIsOpen,
+                                  child: Opacity(
+                                    opacity: restaurantIsOpen ? 1 : 0.4,
+                                    child: FoodProductOptions(
+                                      productOptionsScrollController: productOptionsScrollController,
+                                      product: product,
+                                      productOptions: productsProvider.productOptions,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-                            color: AppColors.bg,
-                            child: FoodCartControls(
-                              quantity: productsProvider.productTempCartData.quantity,
-                              action: (CartAction cartAction) => productsProvider.setProductTempQuantity(cartAction),
+                          IgnorePointer(
+                            ignoring: !restaurantIsOpen,
+                            child: Opacity(
+                              opacity: restaurantIsOpen ? 1 : 0.4,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                                color: AppColors.bg,
+                                child: FoodCartControls(
+                                  quantity: productsProvider.productTempCartData.quantity,
+                                  action: (CartAction cartAction) => productsProvider.setProductTempQuantity(cartAction),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -310,31 +326,52 @@ class _FoodProductPageState extends State<FoodProductPage> {
                     ),
                   ),
                 ),
-                Consumer3<HomeProvider, AppProvider, AddressesProvider>(
-                  builder: (c, homeProvider, appProvider, addressesProvider, _) => TotalButton(
-                    onTap: () => submitProductCartData(context, appProvider, addressesProvider),
-                    isRTL: appProvider.isRTL,
-                    total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          LineAwesomeIcons.shopping_cart,
-                          color: AppColors.white,
-                          size: 20,
+                restaurantIsOpen
+                    ? Consumer3<HomeProvider, AppProvider, AddressesProvider>(
+                        builder: (c, homeProvider, appProvider, addressesProvider, _) => TotalButton(
+                          onTap: () => submitProductCartData(context, appProvider, addressesProvider),
+                          isRTL: appProvider.isRTL,
+                          total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                LineAwesomeIcons.shopping_cart,
+                                color: AppColors.white,
+                                size: 20,
+                              ),
+                              SizedBox(width: 5),
+                              Flexible(
+                                child: Text(
+                                  Translations.of(context).get(cartProduct == null ? 'Add To Cart' : 'Update Cart'),
+                                  maxLines: 1,
+                                  style: AppTextStyles.button,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 5),
-                        Flexible(
+                      )
+                    : Container(
+                        padding: const EdgeInsets.only(
+                          top: 20,
+                          bottom: actionButtonBottomPadding,
+                          right: screenHorizontalPadding,
+                          left: screenHorizontalPadding,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.bg,
+                          border: Border(top: BorderSide(color: AppColors.border)),
+                        ),
+                        child: AppButtons.secondarySm(
                           child: Text(
-                            Translations.of(context).get(cartProduct == null ? 'Add To Cart' : 'Update Cart'),
+                            Translations.of(context).get("This restaurant is closed right now!"),
                             maxLines: 1,
                             style: AppTextStyles.button,
                           ),
+                          onPressed: () {},
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
               ],
             ),
     );

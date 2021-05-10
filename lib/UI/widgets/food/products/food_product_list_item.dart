@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -12,17 +13,13 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FoodProductListItem extends StatelessWidget {
   final Product product;
-  final int restaurantId;
-  final int chainId;
-  final String restaurantEnglishTitle;
+  final Branch restaurant;
   final String categoryEnglishTitle;
 
   FoodProductListItem({
     @required this.product,
-    @required this.restaurantId,
-    @required this.chainId,
-    @required this.restaurantEnglishTitle,
-    @required this.categoryEnglishTitle,
+    @required this.restaurant,
+    this.categoryEnglishTitle,
   });
 
   @override
@@ -38,9 +35,10 @@ class FoodProductListItem extends StatelessWidget {
             } else {
               Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
                 'product_id': product.id,
-                'chain_id': chainId,
-                'restaurant_id': restaurantId,
-                'restaurant_english_title': restaurantEnglishTitle,
+                'chain_id': restaurant.chain.id,
+                'restaurant_id': restaurant.id,
+                'restaurant_is_open': restaurant.workingHours.isOpen,
+                'restaurant_english_title': restaurant.englishTitle,
                 'category_english_title': categoryEnglishTitle,
               });
             }

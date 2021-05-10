@@ -166,6 +166,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                                     Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
                                                   'product_id': product.id,
                                                   'restaurant_id': _searchedRestaurants[i].id,
+                                                  'restaurant_is_open': _searchedRestaurants[i].workingHours.isOpen,
                                                   'chain_id': _searchedRestaurants[i].chain.id,
                                                 }),
                                                 child: Container(

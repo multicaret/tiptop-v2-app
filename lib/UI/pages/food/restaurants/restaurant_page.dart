@@ -350,9 +350,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                               searchProductsResult.length,
                               (i) => FoodProductListItem(
                                 product: searchProductsResult[i],
-                                restaurantId: restaurant.id,
-                                chainId: restaurant.chain.id,
-                                restaurantEnglishTitle: restaurant.englishTitle,
+                                restaurant: restaurant,
                               ),
                             )
                           : List.generate(
@@ -374,10 +372,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                       menuCategories[i].products.length,
                                       (j) => FoodProductListItem(
                                         product: menuCategories[i].products[j],
-                                        restaurantId: restaurant.id,
-                                        chainId: restaurant.chain.id,
+                                        restaurant: restaurant,
                                         categoryEnglishTitle: menuCategories[i].englishTitle,
-                                        restaurantEnglishTitle: restaurant.englishTitle,
                                       ),
                                     ),
                                   ),

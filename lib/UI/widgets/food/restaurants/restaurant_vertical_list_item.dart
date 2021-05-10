@@ -12,42 +12,45 @@ class RestaurantVerticalListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20.0),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.border),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          RestaurantCoverWithInfo(restaurant: restaurant),
-          const SizedBox(height: 10),
-          Text(restaurant.title),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              if (restaurant.tiptopDelivery.isDeliveryEnabled)
-                Expanded(
-                  child: DeliveryInfo(
-                    delivery: restaurant.tiptopDelivery,
-                    hasDeliveryFeeItem: false,
-                  ),
-                ),
-              if (restaurant.restaurantDelivery.isDeliveryEnabled)
-                Expanded(
-                  child: DeliveryInfo(
-                    delivery: restaurant.restaurantDelivery,
-                    hasDeliveryFeeItem: false,
-                    isRestaurant: true,
-                  ),
-                ),
-              //Make the remaining delivery method fit half the screen
-              if (!restaurant.tiptopDelivery.isDeliveryEnabled || !restaurant.restaurantDelivery.isDeliveryEnabled) Expanded(child: Container())
-            ],
+    return Opacity(
+      opacity: restaurant.workingHours.isOpen ? 1 : 0.6,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20.0),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: AppColors.border),
           ),
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RestaurantCoverWithInfo(restaurant: restaurant),
+            const SizedBox(height: 10),
+            Text(restaurant.title),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                if (restaurant.tiptopDelivery.isDeliveryEnabled)
+                  Expanded(
+                    child: DeliveryInfo(
+                      delivery: restaurant.tiptopDelivery,
+                      hasDeliveryFeeItem: false,
+                    ),
+                  ),
+                if (restaurant.restaurantDelivery.isDeliveryEnabled)
+                  Expanded(
+                    child: DeliveryInfo(
+                      delivery: restaurant.restaurantDelivery,
+                      hasDeliveryFeeItem: false,
+                      isRestaurant: true,
+                    ),
+                  ),
+                //Make the remaining delivery method fit half the screen
+                if (!restaurant.tiptopDelivery.isDeliveryEnabled || !restaurant.restaurantDelivery.isDeliveryEnabled) Expanded(child: Container())
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
