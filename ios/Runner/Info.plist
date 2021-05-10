@@ -84,5 +84,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We are tracking our users to capture data on how users interact with our product, analyze this  data with and understand our users and provide them with better services and value. In other hand we do use it to promote our app to our users.</string>
 </dict>
 </plist>
