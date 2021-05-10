@@ -19,12 +19,12 @@ class ChannelsButtons extends StatelessWidget {
   final List<Map<String, dynamic>> channels = [
     {
       'id': AppChannel.FOOD,
-      'title': 'Food',
+      'title': "Food",
       'image': 'assets/images/tiptop-logo-title-yellow.png',
     },
     {
       'id': AppChannel.MARKET,
-      'title': 'Market',
+      'title': "Market",
       'image': 'assets/images/tiptop-logo-title-yellow.png',
     },
     /*{
