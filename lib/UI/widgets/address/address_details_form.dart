@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/UI/pages/profile/add_address_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -8,6 +7,7 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../UI/input/address_icon_dropdown.dart';
 
@@ -44,7 +44,7 @@ class AddressDetailsForm extends StatelessWidget {
   Widget build(BuildContext context) {
     print('rebuilt AddressDetailsForm');
     return Container(
-      height: AddAddressPage.addressDetailsFormContainerHeight,
+      height: getAddressDetailsFormContainerVisibleHeight(context),
       decoration: BoxDecoration(
         boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
         color: AppColors.white,

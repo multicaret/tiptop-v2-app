@@ -20,10 +20,10 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class AddAddressPage extends StatefulWidget {
   static const routeName = '/add-address-step-one';
-  static double addressDetailsFormContainerHeight = 320.0;
 
   @override
   _AddAddressPageState createState() => _AddAddressPageState();
@@ -155,7 +155,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       body: Stack(
         children: [
           Positioned(
-            bottom: useAddressButtonHeight,
+            bottom: addressLocationConfirmed ? getAddressMapBottomMargin(context) : useAddressButtonHeight,
             right: 0,
             left: 0,
             top: 0,
@@ -198,10 +198,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            bottom: addressLocationConfirmed ? 0 : -AddAddressPage.addressDetailsFormContainerHeight,
+            bottom: addressLocationConfirmed ? 0 : -getAddressDetailsFormContainerVisibleHeight(context),
             right: 0,
             left: 0,
-            height: AddAddressPage.addressDetailsFormContainerHeight,
+            height: getAddressDetailsFormContainerVisibleHeight(context),
             child: AddressDetailsForm(
               formKey: addressDetailsFormKey,
               addressAliasTextFieldController: addressAliasTextFieldController,

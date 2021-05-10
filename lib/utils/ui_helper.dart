@@ -27,3 +27,12 @@ double getRestaurantPageExpandedHeaderHeight({bool hasDoubleDelivery = false}) {
   double deliveryInfoContainerHeight = hasDoubleDelivery ? (restaurantSingleDeliveryInfoHeight * 2) : restaurantSingleDeliveryInfoHeight;
   return restaurantCoverHeight + (listItemVerticalPadding * 2) + deliveryInfoContainerHeight + sliverAppBarSearchBarHeight;
 }
+
+double getAddressDetailsFormContainerVisibleHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height * 0.6;
+}
+
+double getAddressMapBottomMargin(BuildContext context) {
+  double addressDetailsFormContainerVisibleHeight = getAddressDetailsFormContainerVisibleHeight(context);
+  return addressDetailsFormContainerVisibleHeight - 100;
+}
