@@ -233,16 +233,27 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                             color: AppColors.white,
                             width: double.infinity,
                             child: order.deliveryType == RestaurantDeliveryType.TIPTOP
-                                ? Row(
-                                    children: [
-                                      Image(
-                                        image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
-                                        width: 60,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(Translations.of(context).get("Delivery")),
-                                    ],
-                                  )
+                                ? appProvider.isRTL
+                                    ? Row(
+                                        children: [
+                                          Text(Translations.of(context).get("Delivery")),
+                                          const SizedBox(width: 5),
+                                          Image(
+                                            image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                                            width: 60,
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Image(
+                                            image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                                            width: 60,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(Translations.of(context).get("Delivery")),
+                                        ],
+                                      )
                                 : Text(Translations.of(context).get("Restaurant Delivery")),
                           ),
                           SectionTitle('Payment Method'),

@@ -53,23 +53,35 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
       return items;
     }
 
-    return Consumer<HomeProvider>(
-      builder: (c, homeProvider, _) => Column(
+    return Consumer2<HomeProvider, AppProvider>(
+      builder: (c, homeProvider, appProvider, _) => Column(
         children: [
           SectionTitle('Delivery Options'),
           if (restaurant.tiptopDelivery.isDeliveryEnabled)
             deliveryOptionRadioItem(
               context: context,
-              title: Row(
-                children: [
-                  Image(
-                    image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
-                    width: 60,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(Translations.of(context).get("Delivery")),
-                ],
-              ),
+              isRTL: appProvider.isRTL,
+              title: appProvider.isRTL
+                  ? Row(
+                      children: [
+                        Text(Translations.of(context).get("Delivery")),
+                        const SizedBox(width: 5),
+                        Image(
+                          image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                          width: 60,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Image(
+                          image: AssetImage('assets/images/tiptop-logo-title-yellow.png'),
+                          width: 60,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(Translations.of(context).get("Delivery")),
+                      ],
+                    ),
               isDisabled: restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.tiptopDelivery.minimumOrder.raw,
               delivery: restaurant.tiptopDelivery,
               deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.tiptopDelivery, homeProvider.foodCurrency),
@@ -78,6 +90,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
           if (restaurant.restaurantDelivery.isDeliveryEnabled)
             deliveryOptionRadioItem(
               context: context,
+              isRTL: appProvider.isRTL,
               title: "Restaurant Delivery",
               isDisabled:
                   restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.restaurantDelivery.minimumOrder.raw,
@@ -97,88 +110,84 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
     BranchDelivery delivery,
     RestaurantDeliveryType deliveryType,
     bool isDisabled = false,
+    @required bool isRTL,
   }) {
-    return Consumer<AppProvider>(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Radio(
-            value: deliveryType,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            groupValue: selectedDeliveryType,
-            onChanged: isDisabled ? null : (value) => selectDeliveryType(value),
-            activeColor: AppColors.secondary,
-          ),
-          Expanded(
-            child: Column(
+    return Opacity(
+      opacity: isDisabled ? 0.5 : 1,
+      child: Material(
+        color: AppColors.white,
+        child: InkWell(
+          onTap: () {
+            if (isDisabled) {
+              showToast(
+                msg: Translations.of(context).get(
+                  "Your cart total should be greater than: {minimumOrder}",
+                  args: [delivery.minimumOrder.formatted],
+                ),
+              );
+              return;
+            }
+            selectDeliveryType(deliveryType);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: AppColors.border)),
+            ),
+            padding: EdgeInsets.only(
+              top: 10,
+              bottom: 10,
+              left: isRTL ? screenHorizontalPadding : 7,
+              right: isRTL ? 7 : screenHorizontalPadding,
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                title is Widget ? title : Text(Translations.of(context).get(title)),
-                const SizedBox(height: 10),
-                Column(
-                  children: List.generate(deliveryInfoItems.length, (i) {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: i < deliveryInfoItems.length - 1 ? 10 : 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: LabeledIcon(
-                              isIconLarge: true,
-                              icon: deliveryInfoItems[i]['icon'],
-                              text: Translations.of(context).get(deliveryInfoItems[i]['title']),
+                Radio(
+                  value: deliveryType,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  groupValue: selectedDeliveryType,
+                  onChanged: isDisabled ? null : (value) => selectDeliveryType(value),
+                  activeColor: AppColors.secondary,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title is Widget ? title : Text(Translations.of(context).get(title)),
+                      const SizedBox(height: 10),
+                      Column(
+                        children: List.generate(deliveryInfoItems.length, (i) {
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: i < deliveryInfoItems.length - 1 ? 10 : 0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: LabeledIcon(
+                                    isIconLarge: true,
+                                    icon: deliveryInfoItems[i]['icon'],
+                                    text: Translations.of(context).get(deliveryInfoItems[i]['title']),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    deliveryInfoItems[i]['value'],
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              deliveryInfoItems[i]['value'],
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                        ],
+                          );
+                        }),
                       ),
-                    );
-                  }),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
-      builder: (c, appProvider, child) {
-        return Opacity(
-          opacity: isDisabled ? 0.5 : 1,
-          child: Material(
-            color: AppColors.white,
-            child: InkWell(
-              onTap: () {
-                if (isDisabled) {
-                  showToast(
-                    msg: Translations.of(context).get(
-                      "Your cart total should be greater than: {minimumOrder}",
-                      args: [delivery.minimumOrder.formatted],
-                    ),
-                  );
-                  return;
-                }
-                selectDeliveryType(deliveryType);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AppColors.border)),
-                ),
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                  left: appProvider.isRTL ? screenHorizontalPadding : 7,
-                  right: appProvider.isRTL ? 7 : screenHorizontalPadding,
-                ),
-                child: child,
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
