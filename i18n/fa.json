@@ -95,7 +95,7 @@
   "Add New Address": "ناونیشانێكی نوێ زیاد بكه‌",
   "Use This Address": "ئه‌م ناونیشانه‌ به‌كاربهێنه‌",
   "Your order will be delivered to the pinned location on the map, please confirm your pinned location": "داواكارییه‌كه‌ت ده‌گه‌یه‌نرێته‌ شوێنی جوگرافی هه‌ڵبژێردراو، تكایه‌ دڵنیاكردنه‌وه‌ له‌ شوێنی دبوسی هه‌ڵبژێردراو ئه‌نجام بده‌",
-  "Track Order": "به‌دواداچوون بۆ داواكارییه‌كه‌ ",
+  "Track Order": "بەدواداچوون",
   "Live Order(s)": "داواكاری كارا",
   "Track your order": "به‌دواداچوون بۆ داواكارییه‌كه‌ت بكه‌",
   "Preparing": "ئاماده‌ ده‌كرێت",
@@ -237,5 +237,6 @@
   "Please check your internet connection then try again!": "تکایە دڵنیایی بکەرەوە لە پەیوەندیکردن بە ئەنتەرنێت و جارێکی تر هەوڵ بدە!",
   "Try Again": "هەوڵ بدە سەرلەنوێ",
   "You are still not connected to the internet!": "تا ئێستا پەیوەندیت نەکردووە بە ئەنتەرنێت!",
-  "This restaurant is closed right now!": "هذا المطعم مغلق حالياً"
+  "This restaurant is closed right now!": "هذا المطعم مغلق حالياً",
+  "Closed": "مغلق"
 }

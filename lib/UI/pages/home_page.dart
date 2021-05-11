@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         _listener = _oneSignalNotificationsProvider.getPayload.listen(null);
         _listener.onData((event) {
           print("Is opened: ${OneSignalNotificationsProvider.notificationHasOpened}");
-          if (event.additionalData != null && event.additionalData.length > 0) {
+          if (event != null && event.additionalData != null && event.additionalData.length > 0) {
             // print(event.additionalData.keys.toString());
             if (event.additionalData['deep_link'] != null) {
               runDeepLinkAction(context, Uri.parse(event.additionalData['deep_link']), appProvider.isAuth, homeProvider);
