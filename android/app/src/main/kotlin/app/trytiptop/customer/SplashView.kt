@@ -1,4 +1,4 @@
-package app.trytiptop.tiptop_v2
+package app.trytiptop.customer
 
 import android.content.Context
 import android.os.Bundle

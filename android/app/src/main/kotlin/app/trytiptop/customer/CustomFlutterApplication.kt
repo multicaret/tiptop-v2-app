@@ -1,4 +1,4 @@
-//package app.trytiptop.tiptop_v2
+//package app.trytiptop.customer
 //
 //import io.flutter.app.FlutterApplication;
 //import com.instabug.instabugflutter.InstabugFlutterPlugin;

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-    package="app.trytiptop.tiptop_v2">
+    package="app.trytiptop.customer">
    <application
         android:name=".MyFlutterApplication"
         android:label="TipTop"

@@ -5,7 +5,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OneSignalNotificationsProvider with ChangeNotifier {
-  static const String ONE_SIGNAL_APP_ID = "a8feae53-9db1-4b5d-8e9c-b4a8e309bb82";
+  static const String ONE_SIGNAL_APP_ID = "081954e6-8c7c-4a10-9588-686f259402bf";
   static const bool REQUIRE_CONSENT = false;
   static bool notificationHasOpened = false;
   static bool permissionIsAllowedIOS = false;

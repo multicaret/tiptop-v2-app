@@ -1,0 +1,227 @@
+{
+  "project_info": {
+    "project_number": "621775670165",
+    "firebase_url": "https://tip-top-afe01.firebaseio.com",
+    "project_id": "tip-top-afe01",
+    "storage_bucket": "tip-top-afe01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:2b08c2809cea36a5e0049c",
+        "android_client_info": {
+          "package_name": "app.trytiptop.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:4b4eb607f7e86b46e0049c",
+        "android_client_info": {
+          "package_name": "app.trytiptop.restaurants"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:0e3fa65904fefbede0049c",
+        "android_client_info": {
+          "package_name": "com.namaa.tiptop_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:da4c147f92c9b3a2e0049c",
+        "android_client_info": {
+          "package_name": "com.namaa.tiptop_restaurants"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:cb41b2d48e1f840be0049c",
+        "android_client_info": {
+          "package_name": "com.tip.top"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621775670165:android:1196b593df0d46ace0049c",
+        "android_client_info": {
+          "package_name": "com.trytiptop.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4EEkt2YOr_pbS2EHBN-Nz85ZGm2ntJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621775670165-honb5dc1cbf4jt4rvvqt2kn0dal9kkqj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621775670165-991p5bvfjn4gaidfoj23vbh4upvf3irk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tip.top"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
