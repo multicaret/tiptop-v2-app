@@ -4,11 +4,13 @@ import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/food/order/track_food_order_page.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_products_page.dart';
 import 'package:tiptop_v2/UI/pages/market/order/market_previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/market/order/market_previous_orders_page.dart';
+import 'package:tiptop_v2/UI/pages/market/order/track_market_order_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/article_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/blog_page.dart';
@@ -165,8 +167,13 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
         return;
       }
       if (isAuth && itemId != null) {
-        // Todo: Open Order Tracking screen: using: {itemId}
-        print("Open Order Tracking screen: using: {itemId}");
+        print("Open Order Tracking screen: using order id: $itemId");
+        Navigator.of(context, rootNavigator: true).pushNamed(
+          requestedAppChannel == AppChannel.FOOD ? TrackFoodOrderPage.routeName : TrackMarketOrderPage.routeName,
+          arguments: {
+            'order_id': int.parse(itemId),
+          },
+        );
         return;
       }
       break;
