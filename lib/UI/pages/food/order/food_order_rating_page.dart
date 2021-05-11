@@ -67,8 +67,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
     _ratingFormKey.currentState.save();
     if (_ratingValue == null) {
       showToast(msg: Translations.of(context).get("Please enter a rating value!"));
-    } else if (_ratingValue <= 2 && _selectedIssueId == null) {
-      showToast(msg: Translations.of(context).get("Please select a reason!"));
     } else {
       setState(() => _isLoadingStoreRatingRequest = true);
       Map<String, dynamic> ratingData = {
