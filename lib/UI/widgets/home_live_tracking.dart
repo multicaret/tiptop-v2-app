@@ -138,7 +138,9 @@ class HomeLiveTracking extends StatelessWidget {
                           child: AppButtons.primarySm(
                             onPressed: () => Navigator.of(context, rootNavigator: true).pushNamed(
                               channelIsFood ? TrackFoodOrderPage.routeName : TrackMarketOrderPage.routeName,
-                              arguments: activeOrders[i],
+                              arguments: {
+                                'order_id': activeOrders[i].id,
+                              },
                             ),
                             child: Text(
                               Translations.of(context).get("Track Order"),
