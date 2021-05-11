@@ -73,7 +73,7 @@ class _MarketCartControlsState extends State<MarketCartControls> {
         return;
       }
       if (action == CartAction.ADD) {
-        // trackAddProductToCartEvent(returnedQuantity);
+        trackAddProductToCartEvent(returnedQuantity);
       }
     }
   }
