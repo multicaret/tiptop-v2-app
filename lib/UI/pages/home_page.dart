@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
             // print(event.additionalData.keys.toString());
             if (event.additionalData['deep_link'] != null) {
               runDeepLinkAction(context, Uri.parse(event.additionalData['deep_link']), appProvider.isAuth, homeProvider);
+              _oneSignalNotificationsProvider.clearPayload();
             }
           }
         });
@@ -124,6 +125,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   int count = 0;
+
+  @override
+  void dispose() {
+    _listener.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
