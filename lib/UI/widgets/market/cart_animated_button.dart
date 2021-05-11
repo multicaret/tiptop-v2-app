@@ -16,6 +16,7 @@ class CartAnimatedButton extends StatelessWidget {
   final int quantity;
   final bool isModalControls;
   final bool isLoadingFirstAddition;
+  final bool isLoadingQuantity;
 
   const CartAnimatedButton({
     @required this.isRTL,
@@ -25,6 +26,7 @@ class CartAnimatedButton extends StatelessWidget {
     @required this.quantity,
     this.isModalControls = false,
     this.isLoadingFirstAddition = false,
+    @required this.isLoadingQuantity,
   });
 
   double getLeftOffset(CartAction cartAction, bool isRTL, double cartButtonHeight, int quantity) {
@@ -89,7 +91,7 @@ class CartAnimatedButton extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       left: isModalControls ? getModalLeftOffset(screenThirdWidth, cartAction, isRTL) : getLeftOffset(cartAction, isRTL, cartButtonHeight, quantity),
       child: InkWell(
-        onTap: disabled ? () => showToast(msg: Translations.of(context).get("This item is not available")) : onTap,
+        onTap: disabled && !isLoadingQuantity ? () => showToast(msg: Translations.of(context).get("This item is not available")) : onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           height: cartButtonHeight,
