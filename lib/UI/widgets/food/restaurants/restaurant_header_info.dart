@@ -56,9 +56,9 @@ class RestaurantHeaderInfo extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              restaurant.workingHours.isOpen
+                              restaurant.workingHours.isOpen || restaurant.workingHours.closesAt != null
                                   ? '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}'
-                                  : !restaurant.workingHours.isOpen && restaurant.workingHours.closesAt == null
+                                  : restaurant.workingHours.closesAt == null
                                       ? Translations.of(context).get("Closed")
                                       : '',
                               maxLines: 1,
