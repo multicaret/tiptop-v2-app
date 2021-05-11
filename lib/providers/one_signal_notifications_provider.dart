@@ -32,7 +32,7 @@ class OneSignalNotificationsProvider with ChangeNotifier {
   void initOneSignal() async {
     print('=========> init-one-signal');
     OneSignal.shared.setLogLevel(OSLogLevel.none, OSLogLevel.none);
-    OneSignal.shared.setRequiresUserPrivacyConsent(REQUIRE_CONSENT); // Todo: set true if important
+    OneSignal.shared.setRequiresUserPrivacyConsent(REQUIRE_CONSENT);
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
     const osSettings = {OSiOSSettings.autoPrompt: true, OSiOSSettings.inAppLaunchUrl: true};
