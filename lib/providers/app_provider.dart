@@ -326,7 +326,7 @@ class AppProvider with ChangeNotifier {
 
   void initInstaBug() {
     if (Platform.isIOS) {
-      Instabug.start('82b5d29b0a4494bc9258e2562578037e', <InvocationEvent>[InvocationEvent.shake]);
+      Instabug.start('d2510301d448f73aa3f96f3cd74d44c6', <InvocationEvent>[InvocationEvent.shake]);
     }
   }
 

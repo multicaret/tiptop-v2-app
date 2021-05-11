@@ -5,7 +5,9 @@ import com.zoho.commons.Fonts;
 import com.zoho.commons.InitConfig;
 import com.zoho.livechat.android.ZohoLiveChat;
 import com.zoho.salesiqembed.ZohoSalesIQ;
+
 import java.util.ArrayList;
+
 import io.flutter.app.FlutterApplication;
 
 public class MyFlutterApplication extends FlutterApplication {
@@ -18,9 +20,9 @@ public class MyFlutterApplication extends FlutterApplication {
         super.onCreate();
         ArrayList<String> invocationEvents = new ArrayList<>();
         invocationEvents.add(InstabugFlutterPlugin.INVOCATION_EVENT_SHAKE);
-//        new InstabugFlutterPlugin().start(this,
-//                "82b5d29b0a4494bc9258e2562578037e",
-//                invocationEvents);
+        new InstabugFlutterPlugin().start(MyFlutterApplication.this,
+                "d2510301d448f73aa3f96f3cd74d44c6",
+                invocationEvents);
 
         InitConfig initConfig = new InitConfig();
         initConfig.setFont(Fonts.MEDIUM, "fonts/neo_sans_arabic_medium.ttf");

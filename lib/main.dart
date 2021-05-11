@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:adjust_sdk/adjust.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:instabug_flutter/CrashReporting.dart';
+import 'package:instabug_flutter/InstabugNavigatorObserver.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/language_select_page.dart';
 import 'package:tiptop_v2/UI/pages/no_internet_page.dart';
@@ -24,6 +26,10 @@ import 'models/enums.dart';
 
 void main() async {
   await runZonedGuarded<Future<void>>(() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      Zone.current.handleUncaughtError(details.exception, details.stack);
+    };
+
     WidgetsFlutterBinding.ensureInitialized();
     LocalStorage().isReady().then((_) async {
       // Uncomment when you want to clear local storage on app launch
@@ -36,7 +42,9 @@ void main() async {
         appProvider: appProvider,
       ));
     });
-  }, (e, _) => throw e);
+  }, (e, s) {
+    CrashReporting.reportCrash(e, s);
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -105,6 +113,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       child: Consumer<AppProvider>(
         builder: (c, appProvider, _) {
           return MaterialApp(
+            navigatorObservers: [InstabugNavigatorObserver()],
             debugShowCheckedModeBanner: false,
             title: 'TipTop',
             localizationsDelegates: [
