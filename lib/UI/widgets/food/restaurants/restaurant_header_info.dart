@@ -56,7 +56,11 @@ class RestaurantHeaderInfo extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}',
+                              restaurant.workingHours.isOpen
+                                  ? '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}'
+                                  : !restaurant.workingHours.isOpen && restaurant.workingHours.closesAt == null
+                                      ? Translations.of(context).get("Closed")
+                                      : '',
                               maxLines: 1,
                               style: AppTextStyles.subtitle50,
                             ),
@@ -64,14 +68,14 @@ class RestaurantHeaderInfo extends StatelessWidget {
                           if (restaurant.rating.averageRaw > 0 && restaurant.rating.countRaw > 0)
                             restaurant.rating.countRaw < 10
                                 ? Text(
-                              Translations.of(context).get("New"),
-                              style: AppTextStyles.subtitleSecondary,
-                            )
+                                    Translations.of(context).get("New"),
+                                    style: AppTextStyles.subtitleSecondary,
+                                  )
                                 : RatingInfo(
-                              ratingValue: restaurant.rating.averageRaw,
-                              ratingsCount: restaurant.rating.countRaw,
-                              hasWhiteBg: true,
-                            ),
+                                    ratingValue: restaurant.rating.averageRaw,
+                                    ratingsCount: restaurant.rating.countRaw,
+                                    hasWhiteBg: true,
+                                  ),
                         ],
                       )
                     ],
@@ -144,8 +148,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
               children: [
                 if (restaurant.tiptopDelivery.isDeliveryEnabled) DeliveryInfo(delivery: restaurant.tiptopDelivery),
                 const SizedBox(height: 10),
-                if (restaurant.restaurantDelivery.isDeliveryEnabled)
-                  DeliveryInfo(delivery: restaurant.restaurantDelivery, isRestaurant: true),
+                if (restaurant.restaurantDelivery.isDeliveryEnabled) DeliveryInfo(delivery: restaurant.restaurantDelivery, isRestaurant: true),
               ],
             ),
           ),
