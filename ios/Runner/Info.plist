@@ -52,13 +52,13 @@
 	<key>NSCameraUsageDescription</key>
 	<string>You can send order related images through the live chat support screen</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always and when in use!</string>
+	<string>Allow our drivers to deliver user order in accurate and proper way</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Can I have location always?</string>
+	<string>Allow our drivers to deliver user order in accurate and proper way</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Older devices need location.</string>
+	<string>Dislpay the the proper restaurants and local merchants close to user area</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need location when in use</string>
+	<string>Dislpay the the proper restaurants and local merchants close to user area</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>For debugging purposes you can shake your phone and record your issue</string>
 	<key>NSPhotoLibraryUsageDescription</key>
