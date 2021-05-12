@@ -61,7 +61,7 @@ class RestaurantLogoHeader extends StatelessWidget {
           color: AppColors.white,
           width: double.infinity,
           child: Text(
-            'Taco Bell',
+            restaurant.title,
             textAlign: TextAlign.center,
           ),
         ),
