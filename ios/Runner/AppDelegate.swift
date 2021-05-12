@@ -14,7 +14,7 @@ import Mobilisten
     ) -> Bool {
 
         GMSServices.provideAPIKey("AIzaSyAJZv7luVqour5IPa4eFaKjYgRW0BGEpaw")
-        ZohoSalesIQ.initWithAppKey("WYvyGrbC0pATvONdL3c8ilXXeXe3zJF2xJBP5Xix%2F7Qwhw7ix9iNRVSnV2hnR4GB", accessKey: "Llhnjg8S5adEww9ouZy8KMwfnI8ARBihopvgWOT0sQysGovHGKS%2Boc0nJKrA4h5FqOyZhpanlX8lX7nRTlbHIKeS9Tk453wiTbVCOxF%2BTTWPomKTsVtG%2FA6WiwJazCvw0qAedSksBGelycJMNh4AAUBWJL%2FT9Tqj")
+        ZohoSalesIQ.initWithAppKey("WYvyGrbC0pCStz42C7GcQgeovx1CR3OPsyGvhE5NeHU%3D", accessKey: "KJcCPJe5tzo%2BrJh3ywsR7vC9D5Sw2Hq6carML4IROSPk14wo2S82JnMf%2BWW0yQvXd69OKZZDpN%2FWhOUZDrDXO2zsz9y6n%2FIlYzTKBHwcrqUexKHZLmyMSVNX0FjYKA2xjYgQGwBVm9eAZzF%2BuCSVww%3D%3D")
 
         let customTheme = ZohoSalesIQ.Theme.baseTheme
         //Customize properties in the customTheme instance as desired
