@@ -1,5 +1,3 @@
-import 'package:tiptop_v2/models/user.dart';
-
 import 'address.dart';
 import 'cart.dart';
 import 'enums.dart';
@@ -98,7 +96,6 @@ class Order {
     this.id,
     this.referenceCode,
     this.address,
-    this.driver,
     this.completedAt,
     this.deliveryType,
     this.couponCode,
@@ -108,6 +105,10 @@ class Order {
     this.grandTotal,
     this.orderRating,
     this.status,
+    this.statusName,
+    this.driverName,
+    this.driverAvatar,
+    this.trackingLink,
     this.cart,
     this.paymentMethod,
   });
@@ -115,7 +116,6 @@ class Order {
   int id;
   int referenceCode;
   Address address;
-  User driver;
   EdAt completedAt;
   RestaurantDeliveryType deliveryType;
   String couponCode;
@@ -125,6 +125,10 @@ class Order {
   DoubleRawStringFormatted grandTotal;
   OrderRating orderRating;
   OrderStatus status;
+  String statusName;
+  String driverName;
+  String driverAvatar;
+  String trackingLink;
   Cart cart;
   PaymentMethod paymentMethod;
 
@@ -132,16 +136,20 @@ class Order {
         id: json["id"],
         referenceCode: json["referenceCode"],
         address: Address.fromJson(json["address"]),
-        driver: json["driver"] == null ? null : User.fromJson(json["driver"]),
         deliveryType: json["deliveryType"] == null ? null : restaurantDeliveryTypeValues.map[json["deliveryType"]],
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
         couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawStringFormatted.fromJson(json["couponDiscountAmount"]),
-        totalAfterCouponDiscount: json["totalAfterCouponDiscount"] == null ? null : DoubleRawStringFormatted.fromJson(json["totalAfterCouponDiscount"]),
+        totalAfterCouponDiscount:
+            json["totalAfterCouponDiscount"] == null ? null : DoubleRawStringFormatted.fromJson(json["totalAfterCouponDiscount"]),
         deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
         grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
         orderRating: OrderRating.fromJson(json["rating"]),
         status: json["status"] == null ? null : orderStatusValues.map[json["status"].toString()],
+        statusName: json["statusName"],
+        driverName: json["driverName"],
+        driverAvatar: json["driverAvatar"],
+        trackingLink: json["trackingLink"],
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
         paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
       );
@@ -150,7 +158,6 @@ class Order {
         "id": id,
         "referenceCode": referenceCode,
         "address": address.toJson(),
-        "driver": driver.toJson(),
         "completedAt": completedAt.toJson(),
         "deliveryFee": deliveryFee.toJson(),
         "grandTotal": grandTotal.toJson(),
@@ -227,7 +234,6 @@ class MarketOrderRatingAvailableIssue {
         "title": title,
       };
 }
-
 
 class FoodOrderRatingFactors {
   FoodOrderRatingFactors({

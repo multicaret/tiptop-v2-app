@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_order_page.dart';
@@ -139,7 +141,14 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                       child: Row(
                         children: [
                           Container(
-                            child: AppIcons.iconMdPrimary(FontAwesomeIcons.solidUser),
+                            child: widget.order.driverAvatar == null
+                                ? AppIcons.iconMdPrimary(FontAwesomeIcons.solidUser)
+                                : CachedNetworkImage(
+                                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
+                                    imageUrl: widget.order.driverAvatar,
+                                    width: 55,
+                                    height: 55,
+                                  ),
                             height: 55.0,
                             width: 55.0,
                             decoration: BoxDecoration(
@@ -151,10 +160,18 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Text('Lara')
+                          if (widget.order.driverName != null)
+                            Expanded(
+                              child: Text(
+                                widget.order.driverName,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
                         ],
                       ),
                     ),
+                    const SizedBox(width: 5),
                     Expanded(
                       flex: 1,
                       child: AppButtons.primarySm(

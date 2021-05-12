@@ -14,6 +14,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
+import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TrackFoodOrderPage extends StatefulWidget {
@@ -83,22 +84,31 @@ class _TrackFoodOrderPageState extends State<TrackFoodOrderPage> {
                     children: [
                       Container(
                         height: screenSize.height,
-                        child: WebView(
-                          // initialUrl: order.trackingLink,
-                          initialUrl: 'https://captain.trytiptop.app/tracking/index.html?jobID=5708ffe709627fa5848968489dd08b69',
-                          javascriptMode: JavascriptMode.unrestricted,
-                          onPageStarted: (_) => setState(() => _isLoadingWebView = true),
-                          onPageFinished: (_) => setState(() => _isLoadingWebView = false),
-                          onWebResourceError: (_) => setState(() {
-                            _isLoadingWebView = false;
-                            _webViewError = true;
-                          }),
-                          onWebViewCreated: (WebViewController webViewController) {
-                            _controller.complete(webViewController);
-                          },
-                        ),
+                        width: double.infinity,
+                        child: order.trackingLink == null
+                            ? Padding(
+                              padding: const EdgeInsets.all(50),
+                              child: Text(
+                                "${Translations.of(context).get("Reference Code")}: ${order.referenceCode}",
+                                style: AppTextStyles.body50,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                            : WebView(
+                                initialUrl: order.trackingLink,
+                                javascriptMode: JavascriptMode.unrestricted,
+                                onPageStarted: (_) => setState(() => _isLoadingWebView = true),
+                                onPageFinished: (_) => setState(() => _isLoadingWebView = false),
+                                onWebResourceError: (_) => setState(() {
+                                  _isLoadingWebView = false;
+                                  _webViewError = true;
+                                }),
+                                onWebViewCreated: (WebViewController webViewController) {
+                                  _controller.complete(webViewController);
+                                },
+                              ),
                       ),
-                      if (_isLoadingWebView)
+                      if (_isLoadingWebView && order.trackingLink != null)
                         Positioned.fill(
                           child: Container(
                             color: AppColors.bg,
