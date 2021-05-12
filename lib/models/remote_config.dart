@@ -35,7 +35,7 @@ class RemoteConfigs {
   int buildNumber;
   int applicationType;
   String platformType;
-  int updateMethod;
+  RemoteConfigUpdateMethod updateMethod;
   dynamic data;
   DataTranslated dataTranslated;
 
@@ -43,7 +43,7 @@ class RemoteConfigs {
         buildNumber: json["buildNumber"],
         applicationType: json["applicationType"],
         platformType: json["platformType"],
-        updateMethod: json["updateMethod"],
+        updateMethod: remoteConfigUpdateMethodValues.map[json["updateMethod"].toString()],
         data: json["data"],
         dataTranslated: DataTranslated.fromJson(json["dataTranslated"]),
       );

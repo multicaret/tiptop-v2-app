@@ -357,7 +357,7 @@ class AppProvider with ChangeNotifier {
     return getMobileApp(deviceData, platformState);
   }
 
-  Map<String, dynamic> mobileAppDetails;
+  static Map<String, dynamic> mobileAppDetails;
   RemoteConfigsData remoteConfigsData;
   static AppChannel appDefaultChannel = AppChannel.MARKET;
 
@@ -366,6 +366,7 @@ class AppProvider with ChangeNotifier {
     final Map<String, String> body = {
       'build_number': mobileAppDetails['buildNumber'],
       'platform': mobileAppDetails['device']['platform'],
+      'application_type': "1",
     };
     try {
       final responseData = await get(endpoint: 'remote-configs', body: body);
@@ -380,13 +381,21 @@ class AppProvider with ChangeNotifier {
       if (remoteConfigs != null) {
         print("bootConfigs");
         print("remoteConfigs.updateMethod: ${remoteConfigs.updateMethod}");
-        if (remoteConfigs.updateMethod == 2) {
+        if (remoteConfigs.updateMethod == RemoteConfigUpdateMethod.HARD) {
           print("HARD");
           isForceUpdateEnabled = true;
-        } else if (remoteConfigs.updateMethod == 1) {
+        } else if (remoteConfigs.updateMethod == RemoteConfigUpdateMethod.SOFT) {
           print("SOFT");
           isSoftUpdateEnabled = true;
         }
+        // Handle local storage
+        if (remoteConfigs.data['clear_local_storage'] != null && remoteConfigs.data['clear_local_storage'] == 1) {
+          print("remoteConfigs.data['clear_local_storage']");
+          print(remoteConfigs.data['clear_local_storage']);
+          await LocalStorage().clear();
+        }
+
+        notifyListeners();
       }
     } on SocketException catch (_) {
       print('Thrown socket exception!');

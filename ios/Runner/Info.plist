@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -33,7 +33,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
 	<key>FacebookAppID</key>
@@ -56,9 +56,9 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Allow our drivers to deliver user order in accurate and proper way</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Dislpay the the proper restaurants and local merchants close to user area</string>
+	<string>Display the the proper restaurants and local merchants close to user area</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Dislpay the the proper restaurants and local merchants close to user area</string>
+	<string>Display the the proper restaurants and local merchants close to user area</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>For debugging purposes you can shake your phone and record your issue</string>
 	<key>NSPhotoLibraryUsageDescription</key>

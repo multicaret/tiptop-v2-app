@@ -223,3 +223,15 @@ final adjustTrackingEventsTokens = EnumValues({
   "cwty3j": TrackingEvent.VIEW_CHECKOUT,
   "9mh6li": TrackingEvent.COMPLETE_PURCHASE,
 });
+
+enum RemoteConfigUpdateMethod {
+  DISABLED,
+  SOFT,
+  HARD,
+}
+
+final remoteConfigUpdateMethodValues = EnumValues({
+  "0": RemoteConfigUpdateMethod.DISABLED,
+  "1": RemoteConfigUpdateMethod.SOFT,
+  "2": RemoteConfigUpdateMethod.HARD,
+});

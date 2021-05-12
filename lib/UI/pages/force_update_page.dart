@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:tiptop_v2/UI/app_wrapper.dart';
+import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -11,19 +15,22 @@ import '../widgets/UI/app_scaffold.dart';
 
 class ForceUpdatePage extends StatelessWidget {
   final AppProvider appProvider;
+  final bool isSoftUpdateEnabled;
 
-  const ForceUpdatePage({Key key, this.appProvider}) : super(key: key);
+  const ForceUpdatePage({Key key, this.appProvider, this.isSoftUpdateEnabled}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    bool hasStoreLink = Platform.isAndroid
+        ? appProvider.remoteConfigs.data['android_store_link_package'] != null
+        : appProvider.remoteConfigs.data['apple_store_link_app_id'] != null;
 
     return AppScaffold(
       hasCurve: true,
       bgColor: AppColors.white,
       bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding:
-          const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       body: Column(
         children: [
           SizedBox(height: screenSize.height * 0.2),
@@ -33,41 +40,36 @@ class ForceUpdatePage extends StatelessWidget {
           const SizedBox(height: 10),
           getDialogContent(),
           const SizedBox(height: 30),
-          AppButtons.primary(
-            onPressed: () {
-              if (appProvider.remoteConfigs.data['clear_local_storage'] !=
-                      null &&
-                  appProvider.remoteConfigs.data['clear_local_storage'] == 1) {
-                print("appProvider.remoteConfigs.data['clear_local_storage']");
-                print(appProvider.remoteConfigs.data['clear_local_storage']);
-                LocalStorage().clear();
-              }
+          if (hasStoreLink)
+            AppButtons.primary(
+              onPressed: () {
+                String appPackageName;
+                var androidStoreLinkPackage = appProvider.remoteConfigs.data['android_store_link_package'];
+                if (androidStoreLinkPackage != null) {
+                  print("appProvider.remoteConfigs.data['android_store_link_package']");
+                  appPackageName = androidStoreLinkPackage;
+                  // print(appPackageName);
+                }
 
-              String appPackageName;
-              var androidStoreLinkPackage =
-                  appProvider.remoteConfigs.data['android_store_link_package'];
-              if (androidStoreLinkPackage != null) {
-                print(
-                    "appProvider.remoteConfigs.data['android_store_link_package']");
-                appPackageName = androidStoreLinkPackage;
-                print(appPackageName);
-              }
-
-              String iosAppId;
-              String appleStoreLinkAppId =
-                  appProvider.remoteConfigs.data['apple_store_link_app_id'];
-              if (appleStoreLinkAppId != null &&
-                  appleStoreLinkAppId.isNotEmpty) {
-                print(
-                    "appProvider.remoteConfigs.data['apple_store_link_app_id']");
-                iosAppId = appleStoreLinkAppId;
-                print(iosAppId);
-              }
-              LaunchReview.launch(
-                  androidAppId: appPackageName, iOSAppId: iosAppId);
-            },
-            child: Text("Open Store"),
-          )
+                String iosAppId;
+                String appleStoreLinkAppId = appProvider.remoteConfigs.data['apple_store_link_app_id'];
+                if (appleStoreLinkAppId != null && appleStoreLinkAppId.isNotEmpty) {
+                  print("appProvider.remoteConfigs.data['apple_store_link_app_id']");
+                  iosAppId = appleStoreLinkAppId;
+                  print(iosAppId);
+                }
+                LaunchReview.launch(androidAppId: appPackageName, iOSAppId: iosAppId);
+              },
+              child: Text("Open Store"),
+            ),
+          const SizedBox(height: 20),
+          if (isSoftUpdateEnabled)
+            AppButtons.secondary(
+              child: Text(Translations.of(context).get("Continue")),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
+              },
+            ),
         ],
       ),
     );
@@ -75,15 +77,13 @@ class ForceUpdatePage extends StatelessWidget {
 
   Text getDialogTitle() {
     String text = "Update Required";
-    if (appProvider.remoteConfigs.dataTranslated?.dialog != null)
-      text = appProvider.remoteConfigs.dataTranslated.dialog.title;
+    if (appProvider.remoteConfigs.dataTranslated?.dialog != null) text = appProvider.remoteConfigs.dataTranslated.dialog.title;
     return Text(text, style: AppTextStyles.h1);
   }
 
   Text getDialogContent() {
     String text = "Please update the application from the store";
-    if (appProvider.remoteConfigs.dataTranslated?.dialog != null)
-      text = appProvider.remoteConfigs.dataTranslated.dialog.content;
+    if (appProvider.remoteConfigs.dataTranslated?.dialog != null) text = appProvider.remoteConfigs.dataTranslated.dialog.content;
     return Text(
       text,
       style: AppTextStyles.body,

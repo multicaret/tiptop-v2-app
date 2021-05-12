@@ -152,7 +152,7 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
 
   Future<void> _submitSMSCode(String code) async {
     setState(() => _isLoadingSubmitSMSCode = true);
-    final mobileAppDetails = await appProvider.loadMobileAppDetails();
+    final mobileAppDetails = AppProvider.mobileAppDetails;
     smsOTPData = {
       'phone_country_code': phoneCountryCode, // i.e: 90, 964
       'phone_number': phoneNumber,

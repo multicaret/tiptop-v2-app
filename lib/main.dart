@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     //Send app visit event
     Map<String, dynamic> visitEventParams = {
-      'platform': widget.appProvider.mobileAppDetails['device']['platform'],
+      'platform': AppProvider.mobileAppDetails['device']['platform'],
       'user_language': widget.appProvider.appLocale.languageCode,
     };
     await eventTracking.trackEvent(TrackingEvent.VISIT, visitEventParams);
@@ -200,9 +200,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         appProvider: appProvider,
       );
     } else {
-      if (appProvider.isForceUpdateEnabled) {
+      if (appProvider.isForceUpdateEnabled || appProvider.isSoftUpdateEnabled) {
         return ForceUpdatePage(
           appProvider: appProvider,
+          isSoftUpdateEnabled: appProvider.isSoftUpdateEnabled,
         );
       }
       if (!appProvider.localeSelected) {

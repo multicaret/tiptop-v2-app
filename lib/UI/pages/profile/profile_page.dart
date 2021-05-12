@@ -133,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                     title: 'Version',
                     icon: FontAwesomeIcons.mobileAlt,
                     trailing: Text(
-                      '2.0.0',
+                      '${AppProvider.mobileAppDetails['version']}.${AppProvider.mobileAppDetails['buildNumber']}',
                       style: AppTextStyles.body50,
                     ),
                   ),

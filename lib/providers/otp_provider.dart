@@ -40,7 +40,7 @@ class OTPProvider with ChangeNotifier {
   Future<void> checkOTPValidation(AppProvider appProvider, String reference) async {
     print('reference in check: $reference');
     final endpoint = 'otp/check-validation/$reference';
-    final mobileAppDetails = await appProvider.loadMobileAppDetails();
+    final mobileAppDetails = AppProvider.mobileAppDetails;
     final Map<String, String> body = {
       'mobile_app_details': json.encode(mobileAppDetails),
     };
