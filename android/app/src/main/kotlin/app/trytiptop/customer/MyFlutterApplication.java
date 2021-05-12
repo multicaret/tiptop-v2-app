@@ -12,8 +12,8 @@ import io.flutter.app.FlutterApplication;
 
 public class MyFlutterApplication extends FlutterApplication {
 
-    String appKey = "WYvyGrbC0pCOi8u9GmEbtLj2gk33FVUbRsn%2FNCsQpls%3D";
-    String accessKey = "Llhnjg8S5adEww9ouZy8KDR%2BoFVM0FxIuDkDnA4yRjNtIorNsvQO7dK8%2F7EoaMOeSY0S14yH%2FWq2xCaLdyRXp6NNplpIP1k2247v1%2B4OZyPEkoAhyJK7uxPCANC9LnQa";
+    String appKey = "WYvyGrbC0pCStz42C7GcQgeovx1CR3OPsyGvhE5NeHU%3D";
+    String accessKey = "Llhnjg8S5adF2PM7qYwzQK%2BoI%2FoxCyYiQnX%2BV0r10NrCw%2BDJQ6L599ubgT2D43BerJW0%2BlIq%2B9OVr4sUcqpGJj3wkRhweWfVlzwvPSMwvh%2Ft4s26d8OcQQF8ztd7naiyWZj1eCrw9ZvQPETDpfajHNpVOOMTueCM";
 
     @Override
     public void onCreate() {

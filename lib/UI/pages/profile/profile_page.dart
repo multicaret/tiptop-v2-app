@@ -133,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                     title: 'Version',
                     icon: FontAwesomeIcons.mobileAlt,
                     trailing: Text(
-                      '1.0.0',
+                      '2.0.0',
                       style: AppTextStyles.body50,
                     ),
                   ),
