@@ -212,11 +212,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       if (appProvider.isAuth) {
         return appProvider.isFirstOpen
             ? WalkthroughPage()
-            : !appProvider.isLocationPermissionGranted
-                ? LocationPermissionPage()
-                : AppWrapper();
+            : AppWrapper();
       } else {
-        print('here');
         return FutureBuilder(
           future: _autoLoginFuture,
           builder: (c, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting

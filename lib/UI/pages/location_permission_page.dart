@@ -47,19 +47,24 @@ class LocationPermissionPage extends StatelessWidget {
                 child: Text(Translations.of(context).get("Use my location services")),
               ),
               const SizedBox(height: 40),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => LocationPermissionDialog(
-                      action: () {
-                        openAppSettings();
-                      },
-                    ),
-                  ).then((_) {
-                    // Navigator.of(context).pop();
-                  });
+              TextButton(
+                onPressed: () {
+                  AppProvider.latitude = erbilLocation.latitude;
+                  AppProvider.longitude = erbilLocation.longitude;
+                  Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
                 },
+                // onTap: () {
+                //   showDialog(
+                //     context: context,
+                //     builder: (context) => LocationPermissionDialog(
+                //       action: () {
+                //         openAppSettings();
+                //       },
+                //     ),
+                //   ).then((_) {
+                //     // Navigator.of(context).pop();
+                //   });
+                // },
                 child: Text(
                   Translations.of(context).get("I don’t want to use my location services"),
                 ),

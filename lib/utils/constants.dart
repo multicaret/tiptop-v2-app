@@ -1,5 +1,9 @@
-//Small vertical padding of list items
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+//Erbil Lat/Lng
+LatLng erbilLocation = LatLng(36.19383366079586, 44.007653979811444);
+
+//Small vertical padding of list items
 const double listItemVerticalPaddingSm = 10;
 
 //Default vertical padding of list items
