@@ -264,7 +264,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     return AppScaffold(
       hasOverlayLoader: _isLoadingOrderSubmit,
       appBar: AppBar(
-        title: Text('Checkout'),
+        title: Text(Translations.of(context).get("Checkout")),
       ),
       body: _isLoadingCreateOrder || _isLoadingvalidateFoodCoupon
           ? const AppLoader()
