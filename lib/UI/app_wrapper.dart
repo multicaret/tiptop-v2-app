@@ -130,14 +130,13 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   void dispose() {
-    print('main.dart disposed');
     _deepLinksSubscription.cancel();
+    _cupertinoTabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(ModalRoute.of(context).settings.name);
 
     return WillPopScope(
       onWillPop: () async {
