@@ -278,8 +278,13 @@ class EventTracking {
     );
 
     if (trackingEvent == TrackingEvent.COMPLETE_PURCHASE && params['cart_grand_total'] != null) {
-      print('💩💩💩💩💩💩💩💩💩💩💩💩💩💩 Sending outcome to OneSignal 💩💩💩💩💩💩💩💩💩💩💩💩💩💩');
-      OneSignal.shared.sendOutcomeWithValue("Purchase", params['cart_grand_total']);
+      try {
+        print('💩💩💩💩💩💩💩💩💩💩💩💩💩💩 Sending outcome to OneSignal 💩💩💩💩💩💩💩💩💩💩💩💩💩💩');
+        OneSignal.shared.sendOutcomeWithValue("Purchase", params['cart_grand_total']);
+      } catch (e) {
+        print('@e');
+        print(e);
+      }
     }
   }
 }
