@@ -135,7 +135,7 @@ class Order {
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
         referenceCode: json["referenceCode"],
-        address: Address.fromJson(json["address"]),
+        address: json["address"] == null ? null : Address.fromJson(json["address"]),
         deliveryType: json["deliveryType"] == null ? null : restaurantDeliveryTypeValues.map[json["deliveryType"]],
         completedAt: EdAt.fromJson(json["completedAt"]),
         couponCode: json["couponCode"],
