@@ -171,8 +171,8 @@ class _MarketProductPageState extends State<MarketProductPage> {
                         ),
                         if (product.unitText != null) Text(product.unitText, style: AppTextStyles.subtitleXs50),
                         const SizedBox(height: 20),
-                        if (product.description != null) SectionTitle('Details'),
-                        if (product.description != null)
+                        if (product.description.formatted != null) SectionTitle('Details'),
+                        if (product.description.formatted != null)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 9),
                             child: Html(
