@@ -32,7 +32,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   OneSignalNotificationsProvider _oneSignalNotificationsProvider;
   StreamSubscription<OSNotificationPayload> _listener;
 
@@ -86,7 +86,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      print('initedddd');
       appProvider = Provider.of<AppProvider>(context);
       homeProvider = Provider.of<HomeProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
@@ -134,6 +133,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool hideMarketContent = homeProvider.isLoadingHomeData ||
         homeProvider.marketHomeData == null ||
         homeProvider.marketHomeDataRequestError ||
@@ -262,4 +262,7 @@ class _HomePageState extends State<HomePage> {
       return Container();
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
