@@ -95,3 +95,9 @@ const int markerIconCompressedSize = 140;
 
 //Height on label under thumbnail (e.g. restaurant rating label)
 const double thumbLabelHeight = 30;
+
+//Arabic & English font family name
+const String arabicAndEnglishFontFamily = 'NeoSansArabic';
+
+//Kurdish font family name
+const String kurdishFontFamily = 'Bahij_Zar';

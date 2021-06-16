@@ -112,6 +112,12 @@ flutter:
           weight: 700
         - asset: assets/fonts/NeoSansArabic-Medium.ttf
           weight: 500
+      
+    - family: Bahij_Zar
+      fonts:
+        - asset: assets/fonts/Bahij_Zar-Regular.ttf
+        - asset: assets/fonts/Bahij_Zar-Bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
