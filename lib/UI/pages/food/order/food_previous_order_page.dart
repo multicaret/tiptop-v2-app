@@ -78,25 +78,6 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     super.didChangeDependencies();
   }
 
-  Future<void> _deleteOrder() async {
-    final response = await showDialog(
-      context: context,
-      builder: (context) => ConfirmAlertDialog(
-        title: 'Are you sure you want to delete this order from your order history?',
-      ),
-    );
-    if (response != null && response) {
-      try {
-        await ordersProvider.deletePreviousOrder(appProvider, orderId);
-        showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
-        Navigator.of(context).pop(true);
-      } catch (e) {
-        showToast(msg: Translations.of(context).get("Error deleting order!"));
-        throw e;
-      }
-    }
-  }
-
   void setTotals() {
     hasCoupon = order.couponDiscountAmount != null && order.couponDiscountAmount.raw != 0;
     totals = [
@@ -145,13 +126,6 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
       hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
       appBar: AppBar(
         title: Text(Translations.of(context).get("Order Details")),
-        actions: [
-          if (!_isLoadingOrderRequest && order.status == OrderStatus.DELIVERED)
-            IconButton(
-              onPressed: _deleteOrder,
-              icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-            )
-        ],
       ),
       body: _isLoadingOrderRequest
           ? AppLoader()
@@ -174,8 +148,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                         children: [
                           OrderInfo(order: order),
                           if (order.cart != null) RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
-                          if (order.status == OrderStatus.DELIVERED &&
-                              !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
+                          if (order.status == OrderStatus.DELIVERED && !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated

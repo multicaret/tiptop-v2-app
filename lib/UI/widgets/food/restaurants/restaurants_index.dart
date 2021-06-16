@@ -35,7 +35,7 @@ class RestaurantsIndex extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${Translations.of(context).get("Restaurants")} (${restaurants.length})', style: AppTextStyles.body50),
+                  Text(Translations.of(context).get("Restaurants"), style: AppTextStyles.body50),
                   Row(
                     children: List.generate(
                       listTypes.length,

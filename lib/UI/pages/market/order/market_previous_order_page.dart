@@ -63,7 +63,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
       ordersProvider = Provider.of<OrdersProvider>(context);
       print('orderId: $orderId');
       _fetchAndSetPreviousOrder().then((_) {
-        if(shouldNavigateToOrderRating && order != null) {
+        if (shouldNavigateToOrderRating && order != null) {
           Navigator.of(context, rootNavigator: true).pushNamed(
             MarketOrderRatingPage.routeName,
             arguments: {'order': order},
@@ -77,25 +77,6 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
     }
     _isInit = false;
     super.didChangeDependencies();
-  }
-
-  Future<void> _deleteOrder() async {
-    final response = await showDialog(
-      context: context,
-      builder: (context) => ConfirmAlertDialog(
-        title: 'Are you sure you want to delete this order from your order history?',
-      ),
-    );
-    if (response != null && response) {
-      try {
-        await ordersProvider.deletePreviousOrder(appProvider, orderId);
-        showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
-        Navigator.of(context).pop(true);
-      } catch (e) {
-        showToast(msg: Translations.of(context).get("Error deleting order!"));
-        throw e;
-      }
-    }
   }
 
   void setTotals() {
@@ -146,13 +127,6 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
       hasOverlayLoader: ordersProvider.isLoadingDeleteOrderRequest,
       appBar: AppBar(
         title: Text(Translations.of(context).get("Order Details")),
-        actions: [
-          if (!_isLoadingOrderRequest && order.status == OrderStatus.DELIVERED)
-            IconButton(
-              onPressed: _deleteOrder,
-              icon: AppIcons.iconPrimary(FontAwesomeIcons.trashAlt),
-            )
-        ],
       ),
       body: _isLoadingOrderRequest
           ? AppLoader()
@@ -174,8 +148,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                       child: Column(
                         children: [
                           OrderInfo(order: order),
-                          if (order.status == OrderStatus.DELIVERED &&
-                              !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
+                          if (order.status == OrderStatus.DELIVERED && !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated

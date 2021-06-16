@@ -202,7 +202,7 @@ class EventTracking {
       Adjust.resetSessionPartnerParameters();*/
 
       // Ask for tracking consent.
-      Adjust.requestTrackingAuthorizationWithCompletionHandler().then((status) {
+      /*Adjust.requestTrackingAuthorizationWithCompletionHandler().then((status) {
         print('[Adjust]: Authorization status update!');
         switch (status) {
           case 0:
@@ -218,7 +218,7 @@ class EventTracking {
             print('[Adjust]: Authorization status update: ATTrackingManagerAuthorizationStatusAuthorized');
             break;
         }
-      });
+      });*/
 
       // Start SDK.
       Adjust.start(config);
