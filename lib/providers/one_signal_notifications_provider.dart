@@ -125,7 +125,7 @@ class OneSignalNotificationsProvider with ChangeNotifier {
     return await OneSignal.shared.setExternalUserId(externalUserId);
   }
 
-  Future<Map<String, dynamic>> _handleRemoveExternalUserId() => OneSignal.shared.removeExternalUserId();
+  Future<Map<String, dynamic>> handleRemoveExternalUserId() => OneSignal.shared.removeExternalUserId();
 
   Future<Map<String, dynamic>> _handleSendTag(Map<String, dynamic> tags) async {
     assert(tags != null, "Tags is missing.");

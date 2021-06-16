@@ -21,6 +21,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -77,6 +78,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OneSignalNotificationsProvider _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
+
     return WillPopScope(
       onWillPop: () async => false,
       child: AppScaffold(
@@ -125,7 +128,17 @@ class ProfilePage extends StatelessWidget {
                     ProfileSettingItem(
                       title: 'Logout',
                       icon: FontAwesomeIcons.doorOpen,
-                      action: appProvider.logout,
+                      action: () {
+                        //Remove OneSignal external user id to disable notifications then logout
+                        _oneSignalNotificationsProvider.handleRemoveExternalUserId().then((_) {
+                          print('removed user external user Id from OneSignal');
+                          appProvider.logout();
+                        }).catchError((e) {
+                          print('Error occurred while trying to remove user external user Id from OneSignal');
+                          print(e);
+                          appProvider.logout();
+                        });
+                      },
                       hasTrailing: false,
                     ),
                   const SizedBox(height: 50),
