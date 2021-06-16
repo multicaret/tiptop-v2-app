@@ -33,7 +33,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   AppProvider appProvider;
   OTPProvider otpProvider;
 
-  bool updatingProfile = false;
+  bool _isUpdatingProfile = false;
   bool _isInit = true;
   bool _isLoadingCreateEditProfileRequest = false;
 
@@ -68,7 +68,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   void didChangeDependencies() {
     if (_isInit) {
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      updatingProfile = data["updating_profile"] ?? false;
+      _isUpdatingProfile = data["updating_profile"] ?? false;
       selectedOTPMethod = data["selected_otp_method"];
       print('route data: $data');
 
@@ -196,7 +196,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     _profileFormKey.currentState.save();
     try {
       await appProvider.updateProfile(formData);
-      if (!updatingProfile) {
+      if (!_isUpdatingProfile) {
         //Track complete registration event
         await trackCompleteRegistrationEvent();
       }
