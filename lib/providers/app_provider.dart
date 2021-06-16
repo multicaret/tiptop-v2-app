@@ -73,6 +73,8 @@ class AppProvider with ChangeNotifier {
 
   bool get isRTL => _appLocale == Locale('ar') || _appLocale == Locale('fa');
 
+  bool get isKurdish => _appLocale == Locale('fa');
+
   set appLocale(value) {
     _appLocale = value;
   }
