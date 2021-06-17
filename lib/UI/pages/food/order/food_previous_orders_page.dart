@@ -68,7 +68,7 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
                     itemCount: previousOrders.length,
                     itemBuilder: (context, i) => PreviousOrderItem(
                       order: previousOrders[i],
-                      isFood: true,
+                      channelIsFood: true,
                       action: () {
                         Navigator.of(context, rootNavigator: true).pushNamed(
                           FoodPreviousOrderPage.routeName,

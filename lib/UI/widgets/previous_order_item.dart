@@ -7,13 +7,13 @@ class PreviousOrderItem extends StatelessWidget {
   final Order order;
   final Function action;
   final Function dismissAction;
-  final bool isFood;
+  final bool channelIsFood;
 
   PreviousOrderItem({
     @required this.order,
     this.action,
     this.dismissAction,
-    this.isFood = false,
+    this.channelIsFood = false,
   });
 
   @override
@@ -22,7 +22,7 @@ class PreviousOrderItem extends StatelessWidget {
       color: AppColors.white,
       child: InkWell(
         onTap: action,
-        child: OrderItem(order: order, isFood: isFood),
+        child: OrderItem(order: order, channelIsFood: channelIsFood),
       ),
     );
   }
