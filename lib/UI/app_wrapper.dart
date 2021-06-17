@@ -144,32 +144,30 @@ class _AppWrapperState extends State<AppWrapper> {
       },
       child: Stack(
         children: [
-          Consumer<AppProvider>(
-            builder: (c, appProvider, _) => CupertinoTabScaffold(
-              backgroundColor: AppColors.white,
-              controller: _cupertinoTabController,
-              tabBar: CupertinoTabBar(
-                onTap: (index) => onTabItemTapped(index),
-                currentIndex: currentTabIndex,
-                backgroundColor: AppColors.primary,
-                activeColor: AppColors.secondary,
-                inactiveColor: AppColors.white.withOpacity(0.5),
-                items: _getCupertinoTabBarItems(appProvider.isRTL),
-              ),
-              tabBuilder: (BuildContext context, int index) {
-                return CupertinoTabView(
-                  navigatorKey: _tabNavKeys[index],
-                  builder: (BuildContext context) {
-                    return _getCupertinoTabsList(channelIsMarket: homeProvider.channelIsMarket)[index]['page'];
-                  },
-                  onGenerateRoute: (settings) {
-                    return MaterialPageRoute(
-                      builder: (context) => AppScaffold(),
-                    );
-                  },
-                );
-              },
+          CupertinoTabScaffold(
+            backgroundColor: AppColors.white,
+            controller: _cupertinoTabController,
+            tabBar: CupertinoTabBar(
+              onTap: (index) => onTabItemTapped(index),
+              currentIndex: currentTabIndex,
+              backgroundColor: AppColors.primary,
+              activeColor: AppColors.secondary,
+              inactiveColor: AppColors.white.withOpacity(0.5),
+              items: _getCupertinoTabBarItems(appProvider.isRTL),
             ),
+            tabBuilder: (BuildContext context, int index) {
+              return CupertinoTabView(
+                navigatorKey: _tabNavKeys[index],
+                builder: (BuildContext context) {
+                  return _getCupertinoTabsList(channelIsMarket: homeProvider.channelIsMarket)[index]['page'];
+                },
+                onGenerateRoute: (settings) {
+                  return MaterialPageRoute(
+                    builder: (context) => AppScaffold(),
+                  );
+                },
+              );
+            },
           ),
           CartFAB(),
         ],
