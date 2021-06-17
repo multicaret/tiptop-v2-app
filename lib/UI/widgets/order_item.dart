@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +18,12 @@ import 'address/address_icon.dart';
 class OrderItem extends StatelessWidget {
   final Order order;
   final bool isDisabled;
+  final bool isFood;
 
   const OrderItem({
     @required this.order,
     this.isDisabled = false,
+    this.isFood = false,
   });
 
   @override
@@ -36,10 +40,17 @@ class OrderItem extends StatelessWidget {
       child: Consumer<AppProvider>(
         child: Row(
           children: [
-            AddressIcon(
-              icon: order.address.kind.icon,
-              isAsset: false,
-            ),
+            isFood
+                ? CachedNetworkImage(
+                    imageUrl: order.cart.restaurant.chain.media.logo,
+                    width: addressIconSize,
+                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 20),
+                  )
+                : AddressIcon(
+                    icon: order.address.kind.icon,
+                    isAsset: false,
+                  ),
+            if (isFood) const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -48,7 +59,7 @@ class OrderItem extends StatelessWidget {
                   style: AppTextStyles.body50,
                 ),
                 const SizedBox(height: 5),
-                Text(order.address.kind.title)
+                Text(isFood ? order.cart.restaurant.title : order.address.kind.title)
               ],
             )
           ],
