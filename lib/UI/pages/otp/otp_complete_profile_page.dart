@@ -158,17 +158,20 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       },
                       hintText: Translations.of(context).get("Select City"),
                     ),
-                    AppSearchableDropDown(
-                      labelText: 'Neighborhood',
-                      hintText: 'Select Neighborhood',
-                      items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
-                      onChanged: (IdName _selectedCity) {
-                        setState(() {
-                          selectedCity = _selectedCity;
-                          formData['city_id'] = _selectedCity.id;
-                        });
-                      },
-                      selectedItem: selectedCity != null ? selectedCity : null,
+                    IgnorePointer(
+                      ignoring: formData['region_id'] == null,
+                      child: AppSearchableDropDown(
+                        labelText: 'Neighborhood',
+                        hintText: 'Select Neighborhood',
+                        items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
+                        onChanged: (IdName _selectedCity) {
+                          setState(() {
+                            selectedCity = _selectedCity;
+                            formData['city_id'] = _selectedCity.id;
+                          });
+                        },
+                        selectedItem: selectedCity != null ? selectedCity : null,
+                      ),
                     ),
                     AppButtons.primary(
                       child: Text(Translations.of(context).get("Save")),
