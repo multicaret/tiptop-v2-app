@@ -35,6 +35,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   OTPProvider otpProvider;
 
   bool _isUpdatingProfile = false;
+  bool _isLoadingUpdateProfileRequest = false;
   bool _isInit = true;
   bool _isLoadingCreateEditProfileRequest = false;
 
@@ -104,6 +105,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     return AppScaffold(
       bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+      hasOverlayLoader: _isLoadingUpdateProfileRequest,
       appBar: AppBar(
         title: Text(Translations.of(context).get("Complete Your Profile")),
       ),
@@ -210,18 +212,22 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     }
     _profileFormKey.currentState.save();
     try {
+      setState(() => _isLoadingUpdateProfileRequest = true);
       await appProvider.updateProfile(formData);
-      if (!_isUpdatingProfile) {
+      setState(() => _isLoadingUpdateProfileRequest = false);
+      if (_isUpdatingProfile) {
+        Navigator.of(context).pop();
+      } else {
         //Track complete registration event
         await trackCompleteRegistrationEvent();
+        getLocationPermissionStatus().then((isGranted) {
+          if (isGranted) {
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+          } else {
+            Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);
+          }
+        });
       }
-      getLocationPermissionStatus().then((isGranted) {
-        if (isGranted) {
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
-        } else {
-          Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);
-        }
-      });
     } on HttpException catch (error) {
       appAlert(
         context: context,
