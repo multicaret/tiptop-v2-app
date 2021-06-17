@@ -19,6 +19,12 @@ class RestaurantHeaderInfo extends StatelessWidget {
 
   RestaurantHeaderInfo({this.restaurant, this.coverHasRating = true});
 
+  String getScheduleMessage(BuildContext context) {
+    return restaurant.workingHours.isOpen
+        ? '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}'
+        : Translations.of(context).get("Closed");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,11 +62,7 @@ class RestaurantHeaderInfo extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              restaurant.workingHours.isOpen || restaurant.workingHours.closesAt != null
-                                  ? '${Translations.of(context).get("Closes at")} ${restaurant.workingHours.closesAt}'
-                                  : restaurant.workingHours.closesAt == null
-                                      ? Translations.of(context).get("Closed")
-                                      : '',
+                              getScheduleMessage(context),
                               maxLines: 1,
                               style: AppTextStyles.subtitle50,
                             ),
