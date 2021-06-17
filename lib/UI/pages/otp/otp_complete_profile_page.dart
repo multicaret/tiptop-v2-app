@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_searchable_drop_down.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -17,6 +18,7 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
+
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../app_wrapper.dart';
@@ -151,12 +153,12 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                       },
                       hintText: Translations.of(context).get("Select City"),
                     ),
-                    AppDropDownButton(
+                    AppSearchableDropDown(
                       labelText: 'Neighborhood',
-                      defaultValue: formData['city_id'],
+                      hintText: 'Select Neighborhood',
                       items: citiesDropDownItems,
-                      hintText: Translations.of(context).get("Select Neighborhood"),
                       onChanged: (cityId) => setState(() => formData['city_id'] = cityId),
+                      selectedItem: formData['city_id'] != null ? formData['city_id'] : null,
                     ),
                     AppButtons.primary(
                       child: Text(Translations.of(context).get("Save")),
