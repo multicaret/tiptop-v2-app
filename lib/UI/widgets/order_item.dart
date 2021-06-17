@@ -18,12 +18,12 @@ import 'address/address_icon.dart';
 class OrderItem extends StatelessWidget {
   final Order order;
   final bool isDisabled;
-  final bool isFood;
+  final bool channelIsFood;
 
   const OrderItem({
     @required this.order,
     this.isDisabled = false,
-    this.isFood = false,
+    this.channelIsFood = false,
   });
 
   @override
@@ -40,7 +40,7 @@ class OrderItem extends StatelessWidget {
       child: Consumer<AppProvider>(
         child: Row(
           children: [
-            isFood
+            channelIsFood
                 ? CachedNetworkImage(
                     imageUrl: order.cart.restaurant.chain.media.logo,
                     width: addressIconSize,
@@ -50,16 +50,18 @@ class OrderItem extends StatelessWidget {
                     icon: order.address.kind.icon,
                     isAsset: false,
                   ),
-            if (isFood) const SizedBox(width: 10),
+            if (channelIsFood) const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (channelIsFood) Text("#${order.id.toString()}", style: AppTextStyles.subtitle50),
+                if (channelIsFood) const SizedBox(height: 5),
                 Text(
                   order.completedAt.formatted,
                   style: AppTextStyles.body50,
                 ),
                 const SizedBox(height: 5),
-                Text(isFood ? order.cart.restaurant.title : order.address.kind.title)
+                Text(channelIsFood ? order.cart.restaurant.title : order.address.kind.title)
               ],
             )
           ],

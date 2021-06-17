@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_drop_down_button.dart';
+import 'package:tiptop_v2/UI/widgets/UI/input/app_searchable_drop_down.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -24,6 +26,7 @@ class AddressDetailsForm extends StatelessWidget {
   final bool citiesDropdownIsInvalid;
   final List<Map<String, dynamic>> addressIconsDropDownItems;
   final TextEditingController addressAliasTextFieldController;
+  final IdName selectedItem;
 
   AddressDetailsForm({
     @required this.addressDetailsFormData,
@@ -38,6 +41,7 @@ class AddressDetailsForm extends StatelessWidget {
     this.citiesDropdownIsInvalid = false,
     @required this.addressIconsDropDownItems,
     @required this.addressAliasTextFieldController,
+    this.selectedItem,
   });
 
   @override
@@ -95,14 +99,16 @@ class AddressDetailsForm extends StatelessWidget {
                   items: regionsDropDownItems,
                   onChanged: (regionId) => setAddressDetailsFormData('region_id', regionId),
                 ),
-                AppDropDownButton(
-                  labelText: 'Neighborhood',
-                  isRequired: true,
-                  isInvalid: citiesDropdownIsInvalid,
-                  hintText: Translations.of(context).get("Select Neighborhood"),
-                  defaultValue: addressDetailsFormData['city_id'],
-                  items: citiesDropDownItems,
-                  onChanged: (cityId) => setAddressDetailsFormData('city_id', cityId),
+                IgnorePointer(
+                  ignoring: citiesDropdownIsInvalid,
+                  child: AppSearchableDropDown(
+                    labelText: 'Neighborhood',
+                    hintText: 'Select Neighborhood',
+                    isRequired: true,
+                    items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
+                    onChanged: (IdName _selectedCity) => setAddressDetailsFormData('city_id', _selectedCity.id),
+                    selectedItem: selectedItem,
+                  ),
                 ),
                 RichText(
                   text: TextSpan(

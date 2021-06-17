@@ -49,6 +49,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   bool addressLocationConfirmed = false;
   double useAddressButtonHeight = 115.0;
 
+  IdName _selectetCityItem;
   City selectedCity;
   Region selectedRegion;
   CreateAddressData createAddressData;
@@ -214,6 +215,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
               regionsDropdownIsInvalid: regionsDropdownIsInvalid,
               citiesDropDownItems: citiesDropDownItems,
               citiesDropdownIsInvalid: citiesDropdownIsInvalid,
+              selectedItem: _selectetCityItem != null ? _selectetCityItem : null,
               setAddressDetailsFormData: (key, value) {
                 setState(() {
                   addressDetailsFormData[key] = value;

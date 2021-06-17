@@ -16,6 +16,7 @@ class AppSearchableDropDown extends StatelessWidget {
   final List<IdName> items;
   final IdName selectedItem;
   final Function onChanged;
+  final bool isRequired;
 
   AppSearchableDropDown({
     @required this.labelText,
@@ -23,6 +24,7 @@ class AppSearchableDropDown extends StatelessWidget {
     @required this.items,
     @required this.onChanged,
     @required this.selectedItem,
+    this.isRequired = false,
   });
 
   @override
@@ -30,21 +32,33 @@ class AppSearchableDropDown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          Translations.of(context).get(labelText),
-          style: AppTextStyles.bodyBold,
+        RichText(
+          text: TextSpan(
+            text: Translations.of(context).get(labelText),
+            style: AppTextStyles.bodyBold,
+            children: <TextSpan>[
+              if (isRequired) TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 6, bottom: 20),
           child: Consumer(
             builder: (BuildContext context, AppProvider appProvider, Widget child) {
+              print(items.length);
               return DropdownSearch<IdName>(
+                dropdownBuilderSupportsNullItem: true,
                 items: items,
                 itemAsString: (IdName item) => item.name,
                 selectedItem: selectedItem,
                 hint: Translations.of(context).get(hintText),
-                showSearchBox: true,
+                showSearchBox: items.length != 0,
                 dropDownButton: AppIcons.icon(FontAwesomeIcons.angleDown),
+                emptyBuilder: (BuildContext context, _) {
+                  return Center(
+                    child: Text(items.length == 0 ? 'No Neighborhoods Found' : 'No Data Found'),
+                  );
+                },
                 onChanged: (IdName selectedItem) => onChanged(selectedItem),
                 //Custom dropdown list
                 popupItemBuilder: (BuildContext context, IdName item, bool isSelected) {
