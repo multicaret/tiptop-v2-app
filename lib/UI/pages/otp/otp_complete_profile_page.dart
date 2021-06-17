@@ -18,7 +18,6 @@ import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
-
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import '../../app_wrapper.dart';
@@ -47,6 +46,8 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     'region_id': null,
     'city_id': null,
   };
+
+  IdName selectedCity;
 
   List<Map<String, dynamic>> regionsDropDownItems = [];
   List<Map<String, dynamic>> citiesDropDownItems = [];
@@ -85,6 +86,9 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
           'region_id': appProvider.authUser.region == null ? null : appProvider.authUser.region.id,
           'city_id': appProvider.authUser.city == null ? null : appProvider.authUser.city.id,
         };
+        if (appProvider.authUser.city != null) {
+          selectedCity = IdName(id: appProvider.authUser.city.id, name: appProvider.authUser.city.name);
+        }
       }
       _createEditProfileRequest();
     }
@@ -150,15 +154,21 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
                         List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
                         citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
                         formData['city_id'] = null;
+                        selectedCity = null;
                       },
                       hintText: Translations.of(context).get("Select City"),
                     ),
                     AppSearchableDropDown(
                       labelText: 'Neighborhood',
                       hintText: 'Select Neighborhood',
-                      items: citiesDropDownItems,
-                      onChanged: (cityId) => setState(() => formData['city_id'] = cityId),
-                      selectedItem: formData['city_id'] != null ? formData['city_id'] : null,
+                      items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
+                      onChanged: (IdName _selectedCity) {
+                        setState(() {
+                          selectedCity = _selectedCity;
+                          formData['city_id'] = _selectedCity.id;
+                        });
+                      },
+                      selectedItem: selectedCity != null ? selectedCity : null,
                     ),
                     AppButtons.primary(
                       child: Text(Translations.of(context).get("Save")),

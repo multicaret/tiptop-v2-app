@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -12,8 +13,8 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 class AppSearchableDropDown extends StatelessWidget {
   final String labelText;
   final String hintText;
-  final List<dynamic> items;
-  final dynamic selectedItem;
+  final List<IdName> items;
+  final IdName selectedItem;
   final Function onChanged;
 
   AppSearchableDropDown({
@@ -23,6 +24,7 @@ class AppSearchableDropDown extends StatelessWidget {
     @required this.onChanged,
     @required this.selectedItem,
   });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,14 +38,33 @@ class AppSearchableDropDown extends StatelessWidget {
           padding: const EdgeInsets.only(top: 6, bottom: 20),
           child: Consumer(
             builder: (BuildContext context, AppProvider appProvider, Widget child) {
-              return DropdownSearch(
-                //todo: items are displayed as a map!!!
+              return DropdownSearch<IdName>(
                 items: items,
+                itemAsString: (IdName item) => item.name,
                 selectedItem: selectedItem,
                 hint: Translations.of(context).get(hintText),
                 showSearchBox: true,
                 dropDownButton: AppIcons.icon(FontAwesomeIcons.angleDown),
-                onChanged: onChanged,
+                onChanged: (IdName selectedItem) => onChanged(selectedItem),
+                //Custom dropdown list
+                popupItemBuilder: (BuildContext context, IdName item, bool isSelected) {
+                  if (item == null) {
+                    return Container();
+                  }
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: listItemVerticalPaddingSm),
+                    child: Text(item.name),
+                  );
+                },
+                //Custom selected item
+                dropdownBuilder: (BuildContext context, IdName item, _) {
+                  if (item == null) {
+                    return Container();
+                  }
+                  return Container(
+                    child: Text(item.name),
+                  );
+                },
                 dropdownSearchDecoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.bg,

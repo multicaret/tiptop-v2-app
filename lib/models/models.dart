@@ -555,3 +555,13 @@ class PaymentSummaryTotal {
     this.isDiscounted = false,
   });
 }
+
+class IdName {
+  int id;
+  String name;
+
+  IdName({
+    this.id,
+    this.name,
+  });
+}
