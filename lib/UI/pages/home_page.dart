@@ -60,6 +60,12 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     await fetchAndSetHomeData();
     if (homeProvider.channelIsMarket) {
       productsProvider.setMarketParentCategoriesWithoutChildren(homeProvider.marketParentCategoriesWithoutChildren);
+    }
+    if (appProvider.initialUri != null) {
+      runDeepLinkAction(context, appProvider.initialUri, appProvider.isAuth, homeProvider);
+      appProvider.setInitialUri(null);
+    }
+    if (homeProvider.channelIsMarket) {
       await productsProvider.fetchAndSetParentCategoriesAndProducts();
     }
   }
@@ -92,12 +98,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       productsProvider = Provider.of<ProductsProvider>(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        fetchAndSetHomeDataAndProducts().then((_) {
-          if (appProvider.initialUri != null) {
-            runDeepLinkAction(context, appProvider.initialUri, appProvider.isAuth, homeProvider);
-            appProvider.setInitialUri(null);
-          }
-        });
+        fetchAndSetHomeDataAndProducts();
       });
       _oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context);
       if (_oneSignalNotificationsProvider != null && _oneSignalNotificationsProvider.getPayload != null) {
