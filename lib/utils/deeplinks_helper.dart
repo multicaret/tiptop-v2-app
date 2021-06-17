@@ -127,6 +127,7 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
               builder: (BuildContext context) => MarketProductsPage(
                 selectedParentCategoryId: int.parse(itemParentId),
                 selectedChildCategoryId: int.parse(itemId),
+                isDeepLink: true,
               ),
             ),
           );

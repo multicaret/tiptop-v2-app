@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ParentCategoriesTabs extends StatelessWidget {
-  final List<Category> parentCategories;
   final int selectedParentCategoryId;
   final TabController tabController;
+  final List<Widget> parentCategoriesTabs;
 
   const ParentCategoriesTabs({
-    @required this.parentCategories,
     @required this.selectedParentCategoryId,
     @required this.tabController,
+    @required this.parentCategoriesTabs,
   });
 
   static double _parentCategoriesTabHeight = 50.0;
@@ -39,12 +38,7 @@ class ParentCategoriesTabs extends StatelessWidget {
           color: Colors.white,
         ),
         indicatorColor: AppColors.white,
-        tabs: <Widget>[
-          ...parentCategories.map((parent) => Transform.translate(
-                offset: Offset(0.0, 3.0),
-                child: Tab(text: parent.title),
-              ))
-        ],
+        tabs: parentCategoriesTabs,
       ),
     );
   }
