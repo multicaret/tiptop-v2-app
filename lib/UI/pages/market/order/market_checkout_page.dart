@@ -99,7 +99,10 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       );
       if (responseData == 401) {
         setState(() => _isLoadingvalidateMarketCoupon = false);
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          WalkthroughPage.routeName,
+          (Route<dynamic> route) => false,
+        );
       }
       couponValidationData = ordersProvider.couponValidationData;
       couponCodeNotifier.value = _couponCode;

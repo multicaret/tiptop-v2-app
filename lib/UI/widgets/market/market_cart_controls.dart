@@ -69,7 +69,10 @@ class _MarketCartControlsState extends State<MarketCartControls> {
       );
       if (returnedQuantity == 401) {
         showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          WalkthroughPage.routeName,
+          (Route<dynamic> route) => false,
+        );
         return;
       }
       if (action == CartAction.ADD) {

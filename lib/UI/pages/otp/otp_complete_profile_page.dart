@@ -64,7 +64,10 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     setState(() => _isLoadingCreateEditProfileRequest = true);
     final responseData = await otpProvider.createEditProfileRequest(appProvider);
     if (responseData == 401) {
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        WalkthroughPage.routeName,
+        (Route<dynamic> route) => false,
+      );
       return;
     }
     regionsDropDownItems = otpProvider.regions.map((region) => {'id': region.id, 'title': region.name}).toList();

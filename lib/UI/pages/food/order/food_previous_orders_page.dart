@@ -4,7 +4,6 @@ import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/order_item.dart';
-import 'package:tiptop_v2/UI/widgets/previous_order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -34,7 +33,10 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
     final response = await ordersProvider.fetchAndSetFoodPreviousOrders(appProvider);
     if (response == 401) {
       showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        WalkthroughPage.routeName,
+        (Route<dynamic> route) => false,
+      );
     }
     previousOrders = ordersProvider.foodPreviousOrders;
     setState(() => _isLoadingPreviousOrders = false);

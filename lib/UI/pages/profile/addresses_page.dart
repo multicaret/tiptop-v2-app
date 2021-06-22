@@ -54,7 +54,10 @@ class _AddressesPageState extends State<AddressesPage> {
     try {
       final response = await addressesProvider.fetchAndSetAddresses(appProvider);
       if (response == 401) {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(WalkthroughPage.routeName);
+        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          WalkthroughPage.routeName,
+          (Route<dynamic> route) => false,
+        );
         return;
       }
       addresses = addressesProvider.addresses;
