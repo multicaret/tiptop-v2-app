@@ -95,7 +95,7 @@ class _AppWrapperState extends State<AppWrapper> {
         // Handle exception by warning the user their action did not succeed
       });
 
-      if(appProvider.isFirstOpen) {
+      if (appProvider.isFirstOpen) {
         appProvider.setIsFirstOpen(false);
       }
     }
@@ -137,7 +137,6 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () async {
         return Platform.isAndroid ? !await currentNavigatorKey().currentState.maybePop() : null;
