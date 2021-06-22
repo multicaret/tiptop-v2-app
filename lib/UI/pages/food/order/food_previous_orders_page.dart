@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
+import 'package:tiptop_v2/UI/widgets/order_item.dart';
 import 'package:tiptop_v2/UI/widgets/previous_order_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import 'food_previous_order_page.dart';
 
@@ -66,35 +68,28 @@ class _FoodPreviousOrdersPageState extends State<FoodPreviousOrdersPage> {
                   child: ListView.builder(
                     physics: AlwaysScrollableScrollPhysics(),
                     itemCount: previousOrders.length,
-                    itemBuilder: (context, i) => PreviousOrderItem(
-                      order: previousOrders[i],
-                      channelIsFood: true,
-                      action: () {
-                        Navigator.of(context, rootNavigator: true).pushNamed(
-                          FoodPreviousOrderPage.routeName,
-                          arguments: {
-                            'order_id': previousOrders[i].id,
-                          },
-                        ).then((shouldRefresh) {
-                          print('shouldRefresh');
-                          print(shouldRefresh);
-                          if (shouldRefresh != null && shouldRefresh == true) {
-                            _fetchAndSetFoodPreviousOrders();
-                          }
-                        });
-                      },
-                      dismissAction: () {
-                        int orderIdToRemove = previousOrders[i].id;
-                        setState(() {
-                          previousOrders.removeAt(i);
-                        });
-                        ordersProvider.deletePreviousOrder(appProvider, orderIdToRemove).then((_) {
-                          showToast(msg: Translations.of(context).get("Successfully Deleted Order From History!"));
-                          return true;
-                        }).catchError((e) {
-                          showToast(msg: Translations.of(context).get("Error deleting order!"));
-                        });
-                      },
+                    itemBuilder: (context, i) => Material(
+                      color: AppColors.white,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).pushNamed(
+                            FoodPreviousOrderPage.routeName,
+                            arguments: {
+                              'order_id': previousOrders[i].id,
+                            },
+                          ).then((shouldRefresh) {
+                            print('shouldRefresh');
+                            print(shouldRefresh);
+                            if (shouldRefresh != null && shouldRefresh == true) {
+                              _fetchAndSetFoodPreviousOrders();
+                            }
+                          });
+                        },
+                        child: OrderItem(
+                          order: previousOrders[i],
+                          channelIsFood: true,
+                        ),
+                      ),
                     ),
                   ),
                 ),

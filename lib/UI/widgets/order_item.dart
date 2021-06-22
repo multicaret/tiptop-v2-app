@@ -54,11 +54,11 @@ class OrderItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (channelIsFood) Text("#${order.id.toString()}", style: AppTextStyles.subtitle50),
+                if (channelIsFood) Text("#${order.id.toString()}", style: AppTextStyles.subtitleXs50),
                 if (channelIsFood) const SizedBox(height: 5),
                 Text(
                   order.completedAt.formatted,
-                  style: AppTextStyles.body50,
+                  style: AppTextStyles.subtitle50,
                 ),
                 const SizedBox(height: 5),
                 Text(channelIsFood ? order.cart.restaurant.title : order.address.kind.title)
