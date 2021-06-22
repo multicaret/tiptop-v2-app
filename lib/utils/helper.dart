@@ -10,6 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
+import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
+import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -308,4 +311,35 @@ List<Category> filterTwoLevelCategories(List<Category> originalCategories) {
 Future<List<Country>> getCountriesFromJsonFile() async {
   final countries = await rootBundle.loadString('assets/countries/countries.json');
   return List<Country>.from(json.decode(countries).map((x) => Country.fromJson(x)));
+}
+
+bool shouldProceedWithAuthRequest(BuildContext context, AppProvider appProvider, {bool addressIsSelected}) {
+  if (!appProvider.isAuth) {
+    showToast(msg: Translations.of(context).get("You Need to Log In First!"));
+    Navigator.of(context, rootNavigator: true).pushNamed(
+      WalkthroughPage.routeName,
+      arguments: {'should_pop_only': true},
+    );
+    return false;
+  }
+
+  bool shouldCompleteProfile = appProvider.getShouldCompleteProfile();
+  if (shouldCompleteProfile) {
+    showToast(msg: Translations.of(context).get("You Need to Complete Your Profile First!"));
+    Navigator.of(context, rootNavigator: true).pushNamed(
+      OTPCompleteProfile.routeName,
+      arguments: {'completing_profile': true},
+    );
+    return false;
+  }
+
+  if (addressIsSelected != null && !addressIsSelected) {
+    showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
+    Navigator.of(context, rootNavigator: true).pushNamed(
+      AddressesPage.routeName,
+      arguments: {'should_pop_after_selection': true},
+    );
+    return false;
+  }
+  return true;
 }

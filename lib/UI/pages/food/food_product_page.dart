@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
-import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
@@ -82,80 +80,76 @@ class _FoodProductPageState extends State<FoodProductPage> {
     setState(() => _isLoadingProduct = false);
   }
 
+  void invalidOptionsAction() {
+    int firstInvalidOptionIndex =
+        productsProvider.productOptions.indexWhere((option) => option.id == productsProvider.invalidOptions[0]['product_option_id']);
+    print('firstInvalidOptionIndex: $firstInvalidOptionIndex, product option id: ${productsProvider.invalidOptions[0]['product_option_id']}');
+    if (firstInvalidOptionIndex != null) {
+      productOptionsScrollController.scrollToIndex(
+        firstInvalidOptionIndex,
+        preferPosition: AutoScrollPosition.begin,
+      );
+    }
+    showToast(
+      msg: "Invalid options! Please check the error messages and modify your options accordingly",
+      timeInSec: 3,
+    );
+  }
+
   Future<void> submitProductCartData(BuildContext context, AppProvider appProvider, AddressesProvider addressesProvider) async {
-    if (!appProvider.isAuth) {
-      showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(
-        WalkthroughPage.routeName,
-        arguments: {'should_pop_only': true},
-      );
-      return;
-    }
-    if (!addressesProvider.addressIsSelected) {
-      showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(
-        AddressesPage.routeName,
-        arguments: {'should_pop_after_selection': true},
-      );
-      return;
-    }
-    bool optionsAreValid = productsProvider.validateProductOptions(context);
-    if (!optionsAreValid) {
-      int firstInvalidOptionIndex =
-          productsProvider.productOptions.indexWhere((option) => option.id == productsProvider.invalidOptions[0]['product_option_id']);
-      print('firstInvalidOptionIndex: $firstInvalidOptionIndex, product option id: ${productsProvider.invalidOptions[0]['product_option_id']}');
-      if (firstInvalidOptionIndex != null) {
-        productOptionsScrollController.scrollToIndex(
-          firstInvalidOptionIndex,
-          preferPosition: AutoScrollPosition.begin,
-        );
-      }
-      showToast(
-        msg: "Invalid options! Please check the error messages and modify your options accordingly",
-        timeInSec: 3,
-      );
-      return;
-    }
-    if (chainId == null || restaurantId == null) {
-      print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
-      return;
-    }
-    bool shouldDeleteExistingCart = false;
-
-    if (cartProvider.foodCart.restaurant != null &&
-        (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId)) {
-      print('Adding to cart from a different restaurant');
-      final response = await showDialog(
-        context: context,
-        builder: (context) => ConfirmAlertDialog(
-          title: 'This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?',
-        ),
-      );
-      if (response != null && response) {
-        shouldDeleteExistingCart = true;
-      } else {
-        return;
-      }
-    }
-
-    await cartProvider.adjustFoodProductCart(
+    bool shouldProceed = shouldProceedWithAuthRequest(
       context,
       appProvider,
-      productId: product.id,
-      cartProductId: cartProduct == null ? null : cartProduct.cartProductId,
-      restaurantId: restaurantId,
-      chainId: chainId,
-      productTempCartData: productsProvider.productTempCartData,
-      deleteExistingCart: shouldDeleteExistingCart,
+      addressIsSelected: addressesProvider.addressIsSelected,
     );
-    await trackAddProductToCartEvent(productsProvider.productTempCartData.quantity);
-    showToast(
-        msg: Translations.of(context).get(cartProduct == null
-            ? shouldDeleteExistingCart
-                ? 'Cleared existing cart and added product to new cart successfully!'
-                : 'Successfully added product to cart!'
-            : 'Cart updated successfully!'));
-    Navigator.of(context).pop();
+    if (shouldProceed) {
+      bool optionsAreValid = productsProvider.validateProductOptions(context);
+      if (!optionsAreValid) {
+        invalidOptionsAction();
+        return;
+      }
+      if (chainId == null || restaurantId == null) {
+        print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
+        return;
+      }
+      bool shouldDeleteExistingCart = false;
+      bool hasCartInDifferentRestaurant = cartProvider.foodCart.restaurant != null &&
+          (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId);
+
+      if (hasCartInDifferentRestaurant) {
+        print('Adding to cart from a different restaurant');
+        final response = await showDialog(
+          context: context,
+          builder: (context) => ConfirmAlertDialog(
+            title: 'This will delete the products in the cart you already have in another restaurant. Are you sure you want to proceed?',
+          ),
+        );
+        if (response != null && response) {
+          shouldDeleteExistingCart = true;
+        } else {
+          return;
+        }
+      }
+
+      await cartProvider.adjustFoodProductCart(
+        context,
+        appProvider,
+        productId: product.id,
+        cartProductId: cartProduct == null ? null : cartProduct.cartProductId,
+        restaurantId: restaurantId,
+        chainId: chainId,
+        productTempCartData: productsProvider.productTempCartData,
+        deleteExistingCart: shouldDeleteExistingCart,
+      );
+      await trackAddProductToCartEvent(productsProvider.productTempCartData.quantity);
+      showToast(
+          msg: Translations.of(context).get(cartProduct == null
+              ? shouldDeleteExistingCart
+                  ? 'Cleared existing cart and added product to new cart successfully!'
+                  : 'Successfully added product to cart!'
+              : 'Cart updated successfully!'));
+      Navigator.of(context).pop();
+    }
   }
 
   EventTracking eventTracking = EventTracking.getActions();

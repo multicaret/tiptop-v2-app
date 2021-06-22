@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -47,19 +46,13 @@ class _MarketCartControlsState extends State<MarketCartControls> {
   bool productHasDiscountedPrice = false;
 
   Future<void> adjustMarketProductQuantity(CartAction action) async {
-    if (!appProvider.isAuth) {
-      showToast(msg: Translations.of(context).get("You Need to Log In First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(
-        WalkthroughPage.routeName,
-        arguments: {'should_pop_only': true},
-      );
-    } else if (!addressesProvider.addressIsSelected) {
-      showToast(msg: Translations.of(context).get("You Need to Select Address First!"));
-      Navigator.of(context, rootNavigator: true).pushNamed(
-        AddressesPage.routeName,
-        arguments: {'should_pop_after_selection': true},
-      );
-    } else {
+    bool shouldProceed = shouldProceedWithAuthRequest(
+      context,
+      appProvider,
+      addressIsSelected: addressesProvider.addressIsSelected,
+    );
+
+    if (shouldProceed) {
       print('$action ${widget.product.id} ${widget.product.title}');
       final returnedQuantity = await cartProvider.adjustMarketProductQuantity(
         appProvider: appProvider,

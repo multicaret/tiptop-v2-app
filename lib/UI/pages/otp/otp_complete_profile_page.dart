@@ -42,6 +42,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   OTPProvider otpProvider;
 
   bool _isUpdatingProfile = false;
+  bool _completingProfile = false;
   bool _isLoadingUpdateProfileRequest = false;
   bool _isInit = true;
   bool _isLoadingCreateEditProfileRequest = false;
@@ -85,6 +86,7 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
 
       _isUpdatingProfile = data["updating_profile"] ?? false;
       selectedOTPMethod = data["selected_otp_method"];
+      _completingProfile = data["completing_profile"] ?? false;
       print('route data: $data');
 
       appProvider = Provider.of<AppProvider>(context);
@@ -237,7 +239,11 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
         await trackCompleteRegistrationEvent();
         getLocationPermissionStatus().then((isGranted) {
           if (isGranted) {
-            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+            if (_completingProfile) {
+              Navigator.of(context).pop();
+            } else {
+              Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+            }
           } else {
             Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);
           }

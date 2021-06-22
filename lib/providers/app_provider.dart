@@ -103,15 +103,20 @@ class AppProvider with ChangeNotifier {
     ),
   ];
 
-  // Auth Related.
   static const DOMAIN = 'https://trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
+
+  // Auth Related.
   User authUser;
   int userId;
   String token;
   static String userPhoneNumber;
 
   bool get isAuth => token != null;
+
+  bool getShouldCompleteProfile() {
+    return isAuth && authUser != null && authUser.phone == authUser.first;
+  }
 
   Map<String, String> get authHeader {
     var myHeader = headers;
