@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ],
             locale: appProvider.appLocale,
             supportedLocales: appProvider.appLanguages.map((language) => Locale(language.locale, language.countryCode)).toList(),
-              theme: AppThemes.mainTheme(appProvider.isRTL, appProvider.isKurdish),
+            theme: AppThemes.mainTheme(appProvider.isRTL, appProvider.isKurdish),
             home: getHomeWidget(appProvider),
             routes: routes,
             onGenerateRoute: (routeSettings) {
@@ -154,9 +154,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return LanguageSelectPage();
       }
       if (appProvider.isAuth) {
-        return appProvider.isFirstOpen
-            ? WalkthroughPage()
-            : AppWrapper();
+        return appProvider.isFirstOpen ? WalkthroughPage() : AppWrapper();
       } else {
         return FutureBuilder(
           future: _autoLoginFuture,
