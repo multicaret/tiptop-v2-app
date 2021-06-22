@@ -30,6 +30,13 @@ class OTPCompleteProfile extends StatefulWidget {
 }
 
 class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   final GlobalKey<FormState> _profileFormKey = GlobalKey();
   AppProvider appProvider;
   OTPProvider otpProvider;
@@ -71,7 +78,8 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic> ?? {};
+
       _isUpdatingProfile = data["updating_profile"] ?? false;
       selectedOTPMethod = data["selected_otp_method"];
       print('route data: $data');
@@ -102,88 +110,92 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
     AppProvider appProvider = Provider.of<AppProvider>(context);
     bool isProfileComplete = !appProvider.authUser.name.contains(appProvider.authUser.phone);
 
-    return AppScaffold(
-      bgImage: "assets/images/page-bg-pattern-white.png",
-      bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
-      hasOverlayLoader: _isLoadingUpdateProfileRequest,
-      appBar: AppBar(
-        title: Text(Translations.of(context).get("Complete Your Profile")),
-      ),
-      body: _isLoadingCreateEditProfileRequest
-          ? const AppLoader()
-          : SingleChildScrollView(
-              child: Form(
-                key: _profileFormKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    Text(
-                      isProfileComplete ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
-                      style: AppTextStyles.bodyBold,
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      Translations.of(context).get("Please fill out your details"),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    AppTextField(
-                      keyboardType: TextInputType.name,
-                      required: true,
-                      labelText: 'Full Name',
-                      hintText: Translations.of(context).get("John Doe"),
-                      initialValue: formData['full_name'],
-                      onSaved: (value) {
-                        formData['full_name'] = value;
-                      },
-                    ),
-                    AppTextField(
-                      textDirection: TextDirection.ltr,
-                      labelText: 'Email (Optional)',
-                      hintText: 'Johndoe@domain.com',
-                      keyboardType: TextInputType.emailAddress,
-                      initialValue: formData['email'],
-                      onSaved: (value) {
-                        formData['email'] = value;
-                      },
-                    ),
-                    AppDropDownButton(
-                      labelText: 'City',
-                      defaultValue: formData['region_id'],
-                      items: regionsDropDownItems,
-                      onChanged: (regionId) {
-                        setState(() => formData['region_id'] = regionId);
-                        List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
-                        citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
-                        formData['city_id'] = null;
-                        selectedCity = null;
-                      },
-                      hintText: Translations.of(context).get("Select City"),
-                    ),
-                    IgnorePointer(
-                      ignoring: formData['region_id'] == null,
-                      child: AppSearchableDropDown(
-                        labelText: 'Neighborhood',
-                        hintText: 'Select Neighborhood',
-                        items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
-                        onChanged: (IdName _selectedCity) {
-                          setState(() {
-                            selectedCity = _selectedCity;
-                            formData['city_id'] = _selectedCity.id;
-                          });
-                        },
-                        selectedItem: selectedCity != null ? selectedCity : null,
+    return WillPopScope(
+      onWillPop: () async => _isUpdatingProfile,
+      child: AppScaffold(
+        bgImage: "assets/images/page-bg-pattern-white.png",
+        bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
+        hasOverlayLoader: _isLoadingUpdateProfileRequest,
+        appBar: AppBar(
+          automaticallyImplyLeading: _isUpdatingProfile,
+          title: Text(Translations.of(context).get(_isUpdatingProfile ? "Profile" : "Complete Your Profile")),
+        ),
+        body: _isLoadingCreateEditProfileRequest
+            ? const AppLoader()
+            : SingleChildScrollView(
+                child: Form(
+                  key: _profileFormKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      Text(
+                        isProfileComplete ? appProvider.authUser.name : Translations.of(context).get("Final Step"),
+                        style: AppTextStyles.bodyBold,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    AppButtons.primary(
-                      child: Text(Translations.of(context).get("Save")),
-                      onPressed: () => _submit(context, appProvider),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+                      Text(
+                        Translations.of(context).get("Please fill out your details"),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 30),
+                      AppTextField(
+                        keyboardType: TextInputType.name,
+                        required: true,
+                        labelText: 'Full Name',
+                        hintText: Translations.of(context).get("John Doe"),
+                        initialValue: formData['full_name'],
+                        onSaved: (value) {
+                          formData['full_name'] = value;
+                        },
+                      ),
+                      AppTextField(
+                        textDirection: TextDirection.ltr,
+                        labelText: 'Email (Optional)',
+                        hintText: 'Johndoe@domain.com',
+                        keyboardType: TextInputType.emailAddress,
+                        initialValue: formData['email'],
+                        onSaved: (value) {
+                          formData['email'] = value;
+                        },
+                      ),
+                      AppDropDownButton(
+                        labelText: 'City',
+                        defaultValue: formData['region_id'],
+                        items: regionsDropDownItems,
+                        onChanged: (regionId) {
+                          setState(() => formData['region_id'] = regionId);
+                          List<City> cities = otpProvider.cities.where((city) => city.region.id == regionId).toList();
+                          citiesDropDownItems = cities.map((city) => {'id': city.id, 'title': city.name}).toList();
+                          formData['city_id'] = null;
+                          selectedCity = null;
+                        },
+                        hintText: Translations.of(context).get("Select City"),
+                      ),
+                      IgnorePointer(
+                        ignoring: formData['region_id'] == null,
+                        child: AppSearchableDropDown(
+                          labelText: 'Neighborhood',
+                          hintText: 'Select Neighborhood',
+                          items: citiesDropDownItems.map((city) => IdName(id: city['id'], name: city['title'])).toList(),
+                          onChanged: (IdName _selectedCity) {
+                            setState(() {
+                              selectedCity = _selectedCity;
+                              formData['city_id'] = _selectedCity.id;
+                            });
+                          },
+                          selectedItem: selectedCity != null ? selectedCity : null,
+                        ),
+                      ),
+                      AppButtons.primary(
+                        child: Text(Translations.of(context).get("Save")),
+                        onPressed: () => _submit(context, appProvider),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
