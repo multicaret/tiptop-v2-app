@@ -14,7 +14,6 @@ import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
