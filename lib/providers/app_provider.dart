@@ -323,6 +323,8 @@ class AppProvider with ChangeNotifier {
     userPhoneNumber = null;
     await storageActions.deleteData(key: 'userData');
     await storageActions.deleteData(key: 'selected_address');
+    await storageActions.deleteData(key: 'selected_food_branch_id');
+    await storageActions.deleteData(key: 'selected_food_chain_id');
     print('Deleted user data and logged out');
     notifyListeners();
   }
