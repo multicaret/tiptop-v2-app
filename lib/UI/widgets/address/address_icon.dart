@@ -22,7 +22,6 @@ class AddressIcon extends StatelessWidget {
           : AppCachedNetworkImage(
               imageUrl: icon,
               width: addressIconSize,
-              height: addressIconSize,
             ),
       builder: (c, appProvider, child) => Container(
         decoration: BoxDecoration(
