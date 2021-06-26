@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_favorite_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -75,10 +75,10 @@ class RestaurantCoverWithInfo extends StatelessWidget {
                         child: restaurant.rating.countRaw < 10
                             ? Text(Translations.of(context).get("New"), style: AppTextStyles.subtitleSecondary)
                             : RatingInfo(
-                          hasWhiteBg: true,
-                          ratingValue: restaurant.rating.averageRaw,
-                          ratingsCount: restaurant.rating.countRaw,
-                        ),
+                                hasWhiteBg: true,
+                                ratingValue: restaurant.rating.averageRaw,
+                                ratingsCount: restaurant.rating.countRaw,
+                              ),
                       ),
                     ],
                   ),
