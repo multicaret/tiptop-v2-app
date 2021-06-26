@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/pages/market/market_products_page.dart';
 import 'package:tiptop_v2/UI/widgets/market/category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class MarketHomeCategoriesGrid extends StatelessWidget {
@@ -30,12 +31,10 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
       children: parentCategories
           .map((category) => GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute<void>(
-                      builder: (BuildContext context) => MarketProductsPage(
-                        selectedParentCategoryId: category.id,
-                      ),
-                      settings: RouteSettings(name: 'market-products-page'),
+                  pushCupertinoPage(
+                    context,
+                    MarketProductsPage(
+                      selectedParentCategoryId: category.id,
                     ),
                   );
                 },

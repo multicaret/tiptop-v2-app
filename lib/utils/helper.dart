@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -354,4 +355,12 @@ String getFoodDeliveryFeeTitle(BuildContext context, DoubleRawStringFormatted de
     );
   }
   return Translations.of(context).get("Delivery Fee");
+}
+
+void pushCupertinoPage(BuildContext context, Widget page) {
+  Navigator.of(context).push(
+    CupertinoPageRoute<void>(
+      builder: (BuildContext context) => page,
+    ),
+  );
 }
