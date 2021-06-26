@@ -87,7 +87,7 @@ class OneSignalNotificationsProvider with ChangeNotifier {
     // OneSignal.shared.consentGranted(true);
   }
 
-  void _handleEmailSubscription() {
+  /*void _handleEmailSubscription() {
     // will be called whenever then user's email subscription changes
     // (ie. OneSignal.setEmail(email) is called and the user gets registered
     OneSignal.shared.setEmailSubscriptionObserver((OSEmailSubscriptionStateChanges emailChanges) {
@@ -118,7 +118,7 @@ class OneSignalNotificationsProvider with ChangeNotifier {
   Future<Map<String, dynamic>> _handleDeleteTag(String key) async {
     assert(key != null, "Key is missing.");
     return await OneSignal.shared.deleteTag(key);
-  }
+  }*/
 
   Future<Map<String, dynamic>> handleSetExternalUserId(externalUserId) async {
     assert(externalUserId != null, "External user id is missing.");
@@ -127,8 +127,8 @@ class OneSignalNotificationsProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> handleRemoveExternalUserId() => OneSignal.shared.removeExternalUserId();
 
-  Future<Map<String, dynamic>> _handleSendTag(Map<String, dynamic> tags) async {
-    assert(tags != null, "Tags is missing.");
-    return await OneSignal.shared.sendTags(tags);
-  }
+  // Future<Map<String, dynamic>> _handleSendTag(Map<String, dynamic> tags) async {
+  //   assert(tags != null, "Tags is missing.");
+  //   return await OneSignal.shared.sendTags(tags);
+  // }
 }

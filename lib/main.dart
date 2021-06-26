@@ -96,6 +96,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       case AppLifecycleState.paused:
         Adjust.onPause();
         break;
+      case AppLifecycleState.detached:
+        Adjust.onPause();
+        break;
     }
   }
 

@@ -4,14 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:location/location.dart' as locationPkg;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/google_geocoding.dart';
-import 'package:tiptop_v2/models/google_places.dart';
-import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 
 import 'constants.dart';
@@ -51,45 +46,45 @@ Future updateLocationAndStoreIt() async {
 final googleGeocodeEndpoint = 'https://maps.googleapis.com/maps/api/geocode/json?';
 
 // Reverse Geocoding
-Future<String> getLocationAddress(LatLng location) async {
-  final endpoint = 'latlng=${location.latitude},${location.longitude}&key=${AppProvider.GOOGLE_API_KEY}';
-  Uri url = Uri.http(googleGeocodeEndpoint, endpoint);
-  print('endpoint');
-  print(endpoint);
-  try {
-    http.Response response = await http.get(url);
-    GoogleGeocodeResponse reverseGeocodeResponse = geocodeResponseFromJson(response.body);
-    final status = reverseGeocodeResponse.status;
-    if (status != GoogleResponseStatus.OK) {
-      handleGoogleRequestError(status);
-    }
-    final address = reverseGeocodeResponse.results[0].formattedAddress;
-    print('status: $status');
-    return address;
-  } catch (error) {
-    throw error;
-  }
-}
+// Future<String> getLocationAddress(LatLng location) async {
+//   final endpoint = 'latlng=${location.latitude},${location.longitude}&key=${AppProvider.GOOGLE_API_KEY}';
+//   Uri url = Uri.http(googleGeocodeEndpoint, endpoint);
+//   print('endpoint');
+//   print(endpoint);
+//   try {
+//     http.Response response = await http.get(url);
+//     GoogleGeocodeResponse reverseGeocodeResponse = geocodeResponseFromJson(response.body);
+//     final status = reverseGeocodeResponse.status;
+//     if (status != GoogleResponseStatus.OK) {
+//       handleGoogleRequestError(status);
+//     }
+//     final address = reverseGeocodeResponse.results[0].formattedAddress;
+//     print('status: $status');
+//     return address;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
-final googlePlacesEndpoint = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?';
+// final googlePlacesEndpoint = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?';
 
 // Geocoding
-Future<List<Candidate>> findPlaces(String input) async {
-  final endpoint = 'input=$input&inputtype=textquery&fields=formatted_address,name,geometry/location&key=${AppProvider.GOOGLE_API_KEY}';
-  Uri url = Uri.http(googleGeocodeEndpoint, endpoint);
-  http.Response response = await http.get(url);
-
-  print('Request URL');
-  print(response.request);
-
-  GooglePlacesResponse googlePlacesResponse = googlePlacesResponseFromJson(response.body);
-  final status = googlePlacesResponse.status;
-  if (status != GoogleResponseStatus.OK) {
-    handleGoogleRequestError(status);
-  }
-  List<Candidate> foundAddresses = googlePlacesResponse.candidates;
-  return foundAddresses;
-}
+// Future<List<Candidate>> findPlaces(String input) async {
+//   final endpoint = 'input=$input&inputtype=textquery&fields=formatted_address,name,geometry/location&key=${AppProvider.GOOGLE_API_KEY}';
+//   Uri url = Uri.http(googleGeocodeEndpoint, endpoint);
+//   http.Response response = await http.get(url);
+//
+//   print('Request URL');
+//   print(response.request);
+//
+//   GooglePlacesResponse googlePlacesResponse = googlePlacesResponseFromJson(response.body);
+//   final status = googlePlacesResponse.status;
+//   if (status != GoogleResponseStatus.OK) {
+//     handleGoogleRequestError(status);
+//   }
+//   List<Candidate> foundAddresses = googlePlacesResponse.candidates;
+//   return foundAddresses;
+// }
 
 // Handling Google Maps Request Errors
 void handleGoogleRequestError(GoogleResponseStatus status) {

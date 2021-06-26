@@ -17,7 +17,6 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';

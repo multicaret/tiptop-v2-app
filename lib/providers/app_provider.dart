@@ -24,20 +24,18 @@ class AppProvider with ChangeNotifier {
   // Boot config related
   RemoteConfigs remoteConfigs;
 
-  bool _isForceUpdateEnabled = false;
+  bool isForceUpdateEnabled = false;
 
-  bool get isForceUpdateEnabled => _isForceUpdateEnabled;
-
-  set isForceUpdateEnabled(bool isForceUpdateEnabled) {
-    _isForceUpdateEnabled = isForceUpdateEnabled;
+  void setIsForceUpdateEnabled(bool value) {
+    isForceUpdateEnabled = value;
+    notifyListeners();
   }
 
-  bool _isSoftUpdateEnabled = false;
+  bool isSoftUpdateEnabled = false;
 
-  bool get isSoftUpdateEnabled => _isSoftUpdateEnabled;
-
-  set isSoftUpdateEnabled(bool isSoftUpdateEnabled) {
-    _isSoftUpdateEnabled = isSoftUpdateEnabled;
+  void setIsSoftUpdateEnabled(bool value) {
+    isSoftUpdateEnabled = value;
+    notifyListeners();
   }
 
   Uri initialUri;

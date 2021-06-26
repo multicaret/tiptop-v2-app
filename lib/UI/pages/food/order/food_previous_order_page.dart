@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_order_rating_page.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_cart_product_list_item.dart';
@@ -21,9 +19,7 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class FoodPreviousOrderPage extends StatefulWidget {
@@ -148,7 +144,8 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                         children: [
                           OrderInfo(order: order),
                           if (order.cart != null) RestaurantMinHorizontalListItem(restaurant: order.cart.restaurant),
-                          if (order.status == OrderStatus.DELIVERED && !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
+                          if (order.status == OrderStatus.DELIVERED &&
+                              !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated
