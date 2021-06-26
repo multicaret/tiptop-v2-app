@@ -5,25 +5,25 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AppCachedNetworkImage extends StatelessWidget {
+  final String imageUrl;
   final LoadingErrorWidgetBuilder customErrorWidgetBuilder;
   final Widget customErrorWidget;
   final Widget loaderWidget;
   final double height;
   final double width;
   final BoxFit fit;
-  final String imageUrl;
   final Alignment alignment;
   final Color color;
   final BlendMode colorBlendMode;
 
   AppCachedNetworkImage({
+    @required this.imageUrl,
     this.customErrorWidgetBuilder,
     this.customErrorWidget,
     this.loaderWidget,
     this.height,
     this.width,
     this.fit = BoxFit.cover,
-    this.imageUrl,
     this.alignment,
     this.color,
     this.colorBlendMode,
@@ -47,8 +47,8 @@ class AppCachedNetworkImage extends StatelessWidget {
       alignment: alignment,
       errorWidget: customErrorWidgetBuilder ??
           (BuildContext context, String url, dynamic error) {
-            print("🖼 🖼 🖼 🖼 🖼 🖼 🖼 🖼 Error Fetching Image 🖼 🖼 🖼 🖼 🖼 🖼 🖼 🖼");
-            print("Image url: $url");
+            // print("🖼 🖼 🖼 🖼 🖼 🖼 🖼 🖼 Error Fetching Image 🖼 🖼 🖼 🖼 🖼 🖼 🖼 🖼");
+            // print("Image url: $url");
             return customErrorWidget ?? Center(child: Text("-", style: AppTextStyles.subtitleXs50));
           },
     );

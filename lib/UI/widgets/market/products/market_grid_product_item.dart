@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
@@ -63,9 +63,12 @@ class MarketGridProductItem extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(width: 1.5, color: productCartQuantity > 0 ? AppColors.primary : AppColors.border),
                         borderRadius: BorderRadius.circular(14),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(product.media.coverSmall),
-                          fit: BoxFit.cover,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(14),
+                        child: AppCachedNetworkImage(
+                          imageUrl: product.media.coverSmall,
+                          height: getColItemHeight(3, context),
                         ),
                       ),
                     );

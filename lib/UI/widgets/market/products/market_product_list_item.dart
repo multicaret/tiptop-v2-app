@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
@@ -51,12 +51,17 @@ class MarketProductListItem extends StatelessWidget {
               width: productListItemThumbnailSize,
               height: productListItemThumbnailSize,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.border, width: 1.5),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(product.media.coverSmall),
-                    fit: BoxFit.cover,
-                  )),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border, width: 1.5),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: AppCachedNetworkImage(
+                  imageUrl: product.media.coverSmall,
+                  width: productListItemThumbnailSize,
+                  height: productListItemThumbnailSize,
+                ),
+              ),
             ),
           ),
           Expanded(
