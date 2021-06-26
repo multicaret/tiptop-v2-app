@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -60,8 +63,8 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  TextStyle labelStyle = AppTextStyles.bodyBold;
-  TextStyle innerLabelStyle = AppTextStyles.body;
+  TextStyle labelStyle = AppTextStyles.subtitleBold;
+  TextStyle innerLabelStyle = AppTextStyles.subtitle;
   Color inputColor = AppColors.text50;
   FocusNode _focusNode = new FocusNode();
   final TextEditingController _controller = new TextEditingController();
@@ -76,8 +79,8 @@ class _AppTextFieldState extends State<AppTextField> {
 
   void _handleFocusChange() {
     setState(() {
-      labelStyle = _focusNode.hasFocus ? AppTextStyles.bodyBoldSecondaryDark : AppTextStyles.bodyBold;
-      innerLabelStyle = _focusNode.hasFocus ? AppTextStyles.bodySecondary : AppTextStyles.body;
+      labelStyle = _focusNode.hasFocus ? AppTextStyles.subtitleSecondary.copyWith(fontWeight: FontWeight.w600) : AppTextStyles.subtitleBold;
+      innerLabelStyle = _focusNode.hasFocus ? AppTextStyles.subtitleSecondary : AppTextStyles.subtitle;
       inputColor = _focusNode.hasFocus ? AppColors.primary : AppColors.text50;
     });
   }
@@ -93,69 +96,71 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: widget.fit ? 0 : 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (!widget.hasInnerLabel && widget.labelText != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: RichText(
-                text: TextSpan(
-                  text: Translations.of(context).get(widget.labelText),
-                  style: labelStyle,
-                  children: <TextSpan>[
-                    if (widget.required) TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
-                  ],
+      child: Consumer<AppProvider>(
+        builder: (c, appProvider, _) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (!widget.hasInnerLabel && widget.labelText != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: RichText(
+                  text: TextSpan(
+                    text: Translations.of(context).get(widget.labelText),
+                    style: labelStyle.copyWith(fontFamily: appProvider.isKurdish ? kurdishFontFamily : arabicAndEnglishFontFamily),
+                    children: <TextSpan>[
+                      if (widget.required) TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
+                    ],
+                  ),
                 ),
               ),
+            TextFormField(
+              controller: widget.hasClearIcon ? _controller : widget.controller,
+              validator: widget.validator == null && widget.required ? (value) => requiredFieldValidator(context, value) : widget.validator,
+              focusNode: _focusNode,
+              obscureText: widget.isPassword ? _hidePassword : false,
+              maxLines: widget.maxLines,
+              initialValue: widget.initialValue,
+              keyboardType: widget.keyboardType,
+              textInputAction: TextInputAction.done,
+              textDirection: widget.textDirection,
+              onChanged: (value) {
+                setState(() {
+                  _showDeleteIcon = value.isNotEmpty;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: widget.hasInnerLabel ? Translations.of(context).get(widget.labelText) : null,
+                labelStyle: innerLabelStyle.copyWith(fontFamily: appProvider.isKurdish ? kurdishFontFamily : arabicAndEnglishFontFamily),
+                alignLabelWithHint: true,
+                prefixIcon: _getPrefixIcon(context),
+                suffixIcon: _getSuffixIcon(context),
+                hintText: widget.hintText,
+                hintTextDirection: widget.textDirection,
+                contentPadding: EdgeInsets.symmetric(vertical: widget.maxLines > 1 ? 20 : 0, horizontal: 20),
+                filled: true,
+                fillColor: AppColors.bg,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(width: 1.5, color: AppColors.border),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1.5, color: AppColors.border),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(width: 1.5, color: AppColors.secondary),
+                ),
+              ),
+              onSaved: widget.onSaved,
+              onTap: widget.onTap,
+              onEditingComplete: widget.onEditingComplete,
+              onFieldSubmitted: widget.onFieldSubmitted,
+              inputFormatters: widget.inputFormatters,
+              readOnly: widget.readOnly,
             ),
-          TextFormField(
-            controller: widget.hasClearIcon ? _controller : widget.controller,
-            validator: widget.validator == null && widget.required ? (value) => requiredFieldValidator(context, value) : widget.validator,
-            focusNode: _focusNode,
-            obscureText: widget.isPassword ? _hidePassword : false,
-            maxLines: widget.maxLines,
-            initialValue: widget.initialValue,
-            keyboardType: widget.keyboardType,
-            textInputAction: TextInputAction.done,
-            textDirection: widget.textDirection,
-            onChanged: (value) {
-              setState(() {
-                _showDeleteIcon = value.isNotEmpty;
-              });
-            },
-            decoration: InputDecoration(
-              labelText: widget.hasInnerLabel ? Translations.of(context).get(widget.labelText) : null,
-              labelStyle: innerLabelStyle,
-              alignLabelWithHint: true,
-              prefixIcon: _getPrefixIcon(context),
-              suffixIcon: _getSuffixIcon(context),
-              hintText: widget.hintText,
-              hintTextDirection: widget.textDirection,
-              contentPadding: EdgeInsets.symmetric(vertical: widget.maxLines > 1 ? 20 : 0, horizontal: 20),
-              filled: true,
-              fillColor: AppColors.bg,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(width: 1.5, color: AppColors.border),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1.5, color: AppColors.border),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(width: 1.5, color: AppColors.secondary),
-              ),
-            ),
-            onSaved: widget.onSaved,
-            onTap: widget.onTap,
-            onEditingComplete: widget.onEditingComplete,
-            onFieldSubmitted: widget.onFieldSubmitted,
-            inputFormatters: widget.inputFormatters,
-            readOnly: widget.readOnly,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

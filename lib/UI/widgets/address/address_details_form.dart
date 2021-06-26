@@ -113,7 +113,7 @@ class AddressDetailsForm extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     text: Translations.of(context).get("Phone Number"),
-                    style: AppTextStyles.bodyBold,
+                    style: DefaultTextStyle.of(context).style.copyWith(fontWeight: FontWeight.w600, fontSize: 14),
                     children: <TextSpan>[
                       TextSpan(text: ' *', style: AppTextStyles.bodyBoldSecondaryDark),
                     ],

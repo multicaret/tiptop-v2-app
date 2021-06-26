@@ -42,7 +42,7 @@ class AppDropDownButton extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   text: Translations.of(context).get(labelText),
-                  style: AppTextStyles.bodyBold,
+                  style: DefaultTextStyle.of(context).style.copyWith(fontWeight: FontWeight.w600, fontSize: 14),
                   children: <TextSpan>[
                     if (isRequired) TextSpan(text: ' *', style: AppTextStyles.bodySecondary),
                   ],
@@ -61,7 +61,7 @@ class AppDropDownButton extends StatelessWidget {
               child: DropdownButton<int>(
                 value: defaultValue,
                 icon: AppIcons.icon(FontAwesomeIcons.angleDown),
-                style: AppTextStyles.body,
+                style: DefaultTextStyle.of(context).style,
                 onChanged: (newValue) => onChanged(newValue),
                 itemHeight: 50,
                 isExpanded: true,

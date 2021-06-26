@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class ParentCategoriesTabs extends StatelessWidget {
   final int selectedParentCategoryId;
@@ -25,8 +24,8 @@ class ParentCategoriesTabs extends StatelessWidget {
         indicatorPadding: const EdgeInsets.only(top: 6, left: 6, right: 6),
         isScrollable: true,
         controller: tabController,
-        labelStyle: AppTextStyles.subtitle,
-        unselectedLabelStyle: AppTextStyles.subtitleWhite,
+        labelStyle: DefaultTextStyle.of(context).style.copyWith(fontWeight: FontWeight.w400, fontSize: 12),
+        unselectedLabelStyle: DefaultTextStyle.of(context).style.copyWith(fontWeight: FontWeight.w400, fontSize: 12, color: AppColors.white),
         unselectedLabelColor: AppColors.white,
         labelColor: AppColors.primary,
         labelPadding: const EdgeInsets.symmetric(horizontal: 15),
