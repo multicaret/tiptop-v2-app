@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -20,11 +19,10 @@ class AddressIcon extends StatelessWidget {
               image: AssetImage(icon),
               width: addressIconSize,
             )
-          : CachedNetworkImage(
+          : AppCachedNetworkImage(
               imageUrl: icon,
               width: addressIconSize,
               height: addressIconSize,
-              placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 20),
             ),
       builder: (c, appProvider, child) => Container(
         decoration: BoxDecoration(

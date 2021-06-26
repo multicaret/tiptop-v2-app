@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -48,8 +48,8 @@ class RestaurantLogoHeader extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                 ),
-                child: CachedNetworkImage(
-                  placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                child: AppCachedNetworkImage(
+                  loaderWidget: SpinKitDoubleBounce(color: AppColors.secondary),
                   imageUrl: restaurant.chain.media.logo,
                 ),
               ),

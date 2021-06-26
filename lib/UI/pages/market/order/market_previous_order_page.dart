@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -200,11 +200,10 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(order.paymentMethod.title),
-                                CachedNetworkImage(
+                                AppCachedNetworkImage(
                                   imageUrl: order.paymentMethod.logo,
                                   width: 30,
-                                  fit: BoxFit.cover,
-                                  placeholder: (_, __) => SpinKitDoubleBounce(
+                                  loaderWidget: SpinKitDoubleBounce(
                                     color: AppColors.secondary,
                                     size: 20,
                                   ),

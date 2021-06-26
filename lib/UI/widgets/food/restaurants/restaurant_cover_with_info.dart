@@ -1,6 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_favorite_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -38,8 +37,7 @@ class RestaurantCoverWithInfo extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(hasBorderRadius ? 8 : 0),
-                child: CachedNetworkImage(
-                  placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
+                child: AppCachedNetworkImage(
                   imageUrl: restaurant.chain.media.cover,
                   fit: BoxFit.cover,
                   color: AppColors.primary.withOpacity(0.2),

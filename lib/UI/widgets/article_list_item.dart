@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +8,8 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import 'UI/app_cahched_network_image.dart';
 
 class ArticleListItem extends StatelessWidget {
   final Article article;
@@ -68,10 +69,10 @@ class ArticleListItem extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6.0),
-                    child: CachedNetworkImage(
+                    child: AppCachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl: article.cover,
-                      placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                      loaderWidget: SpinKitDoubleBounce(color: AppColors.secondary),
                     ),
                   ),
                 ),

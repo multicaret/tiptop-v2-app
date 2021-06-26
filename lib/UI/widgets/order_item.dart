@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +11,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
+import 'UI/app_cahched_network_image.dart';
 import 'address/address_icon.dart';
 
 class OrderItem extends StatelessWidget {
@@ -41,10 +40,9 @@ class OrderItem extends StatelessWidget {
         child: Row(
           children: [
             channelIsFood
-                ? CachedNetworkImage(
+                ? AppCachedNetworkImage(
                     imageUrl: order.cart.restaurant.chain.media.logo,
                     width: addressIconSize,
-                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 20),
                   )
                 : AddressIcon(
                     icon: order.address.kind.icon,
