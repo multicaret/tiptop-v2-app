@@ -76,6 +76,7 @@
   "Total": "المجموع",
   "Grand Total": "المجموع الاجمالي",
   "Delivery Fee": "تكلفة التوصيل",
+  "Delivery Fee ({km} KM)": "تكلفة التوصيل ({0} كم)",
   "Payment Summary": "ملخص الدفع",
   "Order Received": "تم استقبال طلبك",
   "You can track your order live on the map": "يمكنك متابعة طلبك مباشرة على الخريطة",

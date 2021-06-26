@@ -19,6 +19,7 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -99,7 +100,7 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
     }
     final lastTotals = [
       PaymentSummaryTotal(
-        title: "Delivery Fee",
+        title: getFoodDeliveryFeeTitle(context, order.deliveryFee, order.cart.restaurant),
         value: order.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : order.deliveryFee.formatted,
       ),
       PaymentSummaryTotal(
@@ -246,7 +247,10 @@ class _FoodPreviousOrderPageState extends State<FoodPreviousOrderPage> {
                             ),
                           ),
                           SectionTitle('Payment Summary'),
-                          PaymentSummary(totals: totals),
+                          PaymentSummary(
+                            totals: totals,
+                            translateTitle: false,
+                          ),
                           const SizedBox(height: 30),
                         ],
                       ),

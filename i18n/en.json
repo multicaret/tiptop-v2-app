@@ -76,6 +76,7 @@
   "Total": "Total",
   "Grand Total": "Grand Total",
   "Delivery Fee": "Delivery Fee",
+  "Delivery Fee ({km} KM)": "Delivery Fee ({0} KM)",
   "Payment Summary": "Payment Summary",
   "Order Received": "Order Received",
   "You can track your order live on the map": "You can track your order live on the map",

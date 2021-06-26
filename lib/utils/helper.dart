@@ -343,3 +343,15 @@ bool shouldProceedWithAuthRequest(BuildContext context, AppProvider appProvider,
   }
   return true;
 }
+
+String getFoodDeliveryFeeTitle(BuildContext context, DoubleRawStringFormatted deliveryFee, Branch restaurant) {
+  print('restaurant');
+  print(deliveryFee.raw);
+  if (deliveryFee.raw != 0 && restaurant != null && restaurant.distanceToCurrentAddress != 0) {
+    return Translations.of(context).get(
+      "Delivery Fee ({km} KM)",
+      args: [restaurant.distanceToCurrentAddress.toStringAsFixed(2)],
+    );
+  }
+  return Translations.of(context).get("Delivery Fee");
+}

@@ -17,6 +17,7 @@ class Branch {
     this.secondaryPhoneNumber,
     this.whatsappPhoneNumber,
     this.rating,
+    this.distanceToCurrentAddress,
     this.workingHours,
     this.latitude,
     this.longitude,
@@ -38,6 +39,7 @@ class Branch {
   String secondaryPhoneNumber;
   String whatsappPhoneNumber;
   BranchRating rating;
+  double distanceToCurrentAddress;
   WorkingHours workingHours;
   double latitude;
   double longitude;
@@ -59,6 +61,7 @@ class Branch {
         secondaryPhoneNumber: json["secondaryPhoneNumber"],
         whatsappPhoneNumber: json["whatsappPhoneNumber"],
         rating: BranchRating.fromJson(json["rating"]),
+        distanceToCurrentAddress: json["distanceToCurrentAddress"] == null ? null : json["distanceToCurrentAddress"].toDouble(),
         workingHours: WorkingHours.fromJson(json["workingHours"]),
         latitude: json["latitude"] == null ? 0.0 : json["latitude"].toDouble(),
         longitude: json["longitude"] == null ? 0.0 : json["longitude"].toDouble(),
