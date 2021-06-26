@@ -101,6 +101,7 @@ class HomeProvider with ChangeNotifier {
       body.addAll({
         'selected_food_branch_id': selectedFoodBranchId == null ? null : '$selectedFoodBranchId',
         'selected_food_chain_id': selectedFoodChainId == null ? null : '$selectedFoodChainId',
+        'autoscroll_for_food_branches': '',
       });
     }
 
