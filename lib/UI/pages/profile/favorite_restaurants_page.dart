@@ -8,6 +8,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class FavoriteRestaurantsPage extends StatefulWidget {
@@ -68,11 +69,9 @@ class _FavoriteRestaurantsPageState extends State<FavoriteRestaurantsPage> {
                     itemBuilder: (c, i) => Material(
                       color: AppColors.white,
                       child: InkWell(
-                        onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                          RestaurantPage.routeName,
-                          arguments: {
-                            'restaurant_id': favoriteRestaurants[i].id,
-                          },
+                        onTap: () => pushCupertinoPage(
+                          context,
+                          RestaurantPage(restaurantId: favoriteRestaurants[i].id),
                         ),
                         child: RestaurantVerticalListItem(restaurant: favoriteRestaurants[i]),
                       ),

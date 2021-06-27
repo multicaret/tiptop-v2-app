@@ -119,7 +119,11 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
       }
       break;
     case "market_food_category_show":
-      if (hasValidChannel && itemId != null && itemParentId != null && currentChannel == requestedAppChannel) {
+      if (hasValidChannel && itemId != null && itemParentId != null) {
+        // //Todo: handle if requested channel is different than current channel
+        if (currentChannel != requestedAppChannel) {
+          homeProvider.setSelectedChannel(requestedAppChannel);
+        }
         if (requestedAppChannel == AppChannel.MARKET) {
           print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
           pushCupertinoPage(
@@ -133,10 +137,19 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
           return;
         } else if (requestedAppChannel == AppChannel.FOOD) {
           print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
-          Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
-            'restaurant_id': int.parse(itemId),
-            'selected_menu_category_id': int.parse(itemParentId),
-          });
+          // Old way (itemId and itemParentId were reversed)
+          // Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
+          //   'restaurant_id': int.parse(itemId),
+          //   'selected_menu_category_id': int.parse(itemParentId),
+          // });
+          pushCupertinoPage(
+            context,
+            RestaurantPage(
+              restaurantId: int.parse(itemParentId),
+              selectedMenuCategoryId: int.parse(itemId),
+            ),
+            rootNavigator: true,
+          );
           return;
         }
       }

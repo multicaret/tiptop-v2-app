@@ -94,7 +94,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
       showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
       Navigator.of(context).pop();
       if (!widget.shouldPopOnly) {
-        Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName);
+        pushCupertinoPage(context, RestaurantsPage());
       }
     } catch (e) {
       throw e;

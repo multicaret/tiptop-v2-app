@@ -3,6 +3,7 @@ import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/food_category_item.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 
 class CategoriesSlider extends StatelessWidget {
   final List<Category> categories;
@@ -39,9 +40,12 @@ class CategoriesSlider extends StatelessWidget {
               if (onCategoryTap != null) {
                 onCategoryTap(categories[i].title);
               } else if (setSelectedCategories == null) {
-                Navigator.of(context, rootNavigator: true).pushNamed(RestaurantsPage.routeName, arguments: {
-                  'selected_category_id': categories[i].id,
-                });
+                pushCupertinoPage(
+                  context,
+                  RestaurantsPage(
+                    selectedCategoryId: categories[i].id,
+                  ),
+                );
               } else {
                 setSelectedCategories(categories[i].id);
               }

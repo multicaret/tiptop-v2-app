@@ -101,7 +101,7 @@ class AppProvider with ChangeNotifier {
     ),
   ];
 
-  static const DOMAIN = 'https://stagingnew.trytiptop.app/';
+  static const DOMAIN = 'https://trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
 
   // Auth Related.
@@ -366,7 +366,7 @@ class AppProvider with ChangeNotifier {
 
   static Map<String, dynamic> mobileAppDetails;
   RemoteConfigsData remoteConfigsData;
-  static AppChannel appDefaultChannel = AppChannel.MARKET;
+  static AppChannel appDefaultChannel = AppChannel.FOOD;
 
   Future<void> fetchBootConfigurations() async {
     mobileAppDetails = await loadMobileAppDetails();
@@ -382,7 +382,7 @@ class AppProvider with ChangeNotifier {
       if (responseData["data"] != null) {
         remoteConfigsData = RemoteConfigsData.fromJson(responseData["data"]);
         remoteConfigs = remoteConfigsData.configs;
-        appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
+        // appDefaultChannel = remoteConfigsData.defaultChannel ?? AppChannel.MARKET;
       }
       print('selected channel is: $appDefaultChannel');
       if (remoteConfigs != null) {

@@ -9,6 +9,7 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -67,11 +68,9 @@ class RestaurantsIndex extends StatelessWidget {
               itemBuilder: (c, i) => Material(
                 color: AppColors.white,
                 child: InkWell(
-                  onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                    RestaurantPage.routeName,
-                    arguments: {
-                      'restaurant_id': restaurants[i].id,
-                    },
+                  onTap: () => pushCupertinoPage(
+                    context,
+                    RestaurantPage(restaurantId: restaurants[i].id),
                   ),
                   child: restaurantProvider.activeListType == ListType.HORIZONTALLY_STACKED
                       ? RestaurantHorizontalListItem(restaurant: restaurants[i])

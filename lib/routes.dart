@@ -75,7 +75,6 @@ final routes = <String, WidgetBuilder>{
   MarketProductPage.routeName: (BuildContext context) => MarketProductPage(),
   SupportPage.routeName: (BuildContext context) => SupportPage(),
   ArticlePage.routeName: (BuildContext context) => ArticlePage(),
-  RestaurantPage.routeName: (BuildContext context) => RestaurantPage(),
   FoodProductPage.routeName: (BuildContext context) => FoodProductPage(),
   FoodCartPage.routeName: (BuildContext context) => FoodCartPage(),
   RestaurantsPage.routeName: (BuildContext context) => RestaurantsPage(),

@@ -11,6 +11,9 @@ import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class RestaurantsPage extends StatefulWidget {
   static const routeName = '/restaurants';
+  final int selectedCategoryId;
+
+  RestaurantsPage({this.selectedCategoryId});
 
   @override
   _RestaurantsPageState createState() => _RestaurantsPageState();
@@ -24,8 +27,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
   void didChangeDependencies() {
     if (_isInit) {
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);
-      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      int initiallySelectedCategoryId = data == null ? null : data['selected_category_id'];
+      int initiallySelectedCategoryId = widget.selectedCategoryId;
       if (initiallySelectedCategoryId != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           restaurantsProvider.setFilterData(key: 'categories', value: [initiallySelectedCategoryId]);

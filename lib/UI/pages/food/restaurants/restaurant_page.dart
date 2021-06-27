@@ -26,6 +26,14 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 class RestaurantPage extends StatefulWidget {
+  final int restaurantId;
+  final int selectedMenuCategoryId;
+
+  RestaurantPage({
+    @required this.restaurantId,
+    this.selectedMenuCategoryId,
+  });
+
   static const routeName = '/restaurant';
 
   @override
@@ -206,9 +214,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      restaurantId = data["restaurant_id"];
-      selectedMenuCategoryId = data["selected_menu_category_id"];
+      restaurantId = widget.restaurantId;
+      selectedMenuCategoryId = widget.selectedMenuCategoryId;
 
       appProvider = Provider.of<AppProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context);

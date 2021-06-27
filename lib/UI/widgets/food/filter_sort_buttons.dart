@@ -30,7 +30,6 @@ class FilterSortButtons extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  useRootNavigator: true,
                   builder: (context) => FilterBottomSheet(shouldPopOnly: shouldPopOnly),
                 );
               },
@@ -50,7 +49,6 @@ class FilterSortButtons extends StatelessWidget {
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
-                  useRootNavigator: true,
                   backgroundColor: Colors.transparent,
                   builder: (context) => SortBottomSheet(shouldPopOnly: shouldPopOnly),
                 );

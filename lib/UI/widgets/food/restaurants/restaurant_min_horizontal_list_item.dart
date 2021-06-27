@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -20,14 +21,10 @@ class RestaurantMinHorizontalListItem extends StatelessWidget {
     return Material(
       color: AppColors.white,
       child: InkWell(
-        onTap: () {
-          Navigator.of(context, rootNavigator: true).pushNamed(
-            RestaurantPage.routeName,
-            arguments: {
-              'restaurant_id': restaurant.id,
-            },
-          );
-        },
+        onTap: () => pushCupertinoPage(
+          context,
+          RestaurantPage(restaurantId: restaurant.id),
+        ),
         child: Container(
           decoration: BoxDecoration(
             border: Border(

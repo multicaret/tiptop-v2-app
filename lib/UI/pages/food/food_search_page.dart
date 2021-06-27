@@ -141,11 +141,9 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                       Material(
                                         color: AppColors.white,
                                         child: InkWell(
-                                          onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                                            RestaurantPage.routeName,
-                                            arguments: {
-                                              'restaurant_id': _searchedRestaurants[i].id,
-                                            },
+                                          onTap: () => pushCupertinoPage(
+                                            context,
+                                            RestaurantPage(restaurantId: _searchedRestaurants[i].id),
                                           ),
                                           child: RestaurantHorizontalListItem(
                                             restaurant: _searchedRestaurants[i],
