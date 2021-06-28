@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -26,6 +27,14 @@ import 'food_product_page.dart';
 class FoodSearchPage extends StatefulWidget {
   static const routeName = '/food-search';
 
+  final TextEditingController searchFieldController;
+  final FocusNode searchFieldFocusNode;
+
+  FoodSearchPage({
+    this.searchFieldController,
+    this.searchFieldFocusNode,
+  });
+
   @override
   _FoodSearchPageState createState() => _FoodSearchPageState();
 }
@@ -33,10 +42,11 @@ class FoodSearchPage extends StatefulWidget {
 class _FoodSearchPageState extends State<FoodSearchPage> {
   bool _isInit = true;
   bool _isLoading = false;
-
+  bool _isLoadingFoodSearchTerms = false;
   String searchQuery = '';
-  TextEditingController searchFieldController = new TextEditingController();
-  FocusNode searchFieldFocusNode = new FocusNode();
+
+  TextEditingController searchFieldController;
+  FocusNode searchFieldFocusNode;
 
   RestaurantsProvider restaurantsProvider;
   SearchProvider searchProvider;
@@ -45,10 +55,10 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   List<Term> _terms = [];
 
   Future<void> fetchAndSetSearchTerms() async {
-    setState(() => _isLoading = true);
+    setState(() => _isLoadingFoodSearchTerms = true);
     await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.FOOD);
     _terms = searchProvider.terms;
-    setState(() => _isLoading = false);
+    setState(() => _isLoadingFoodSearchTerms = false);
   }
 
   void _clearSearchResults() {
@@ -58,6 +68,13 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
       _searchedRestaurants = [];
       searchQuery = '';
     });
+  }
+
+  @override
+  void initState() {
+    searchFieldController = TextEditingController();
+    searchFieldFocusNode = FocusNode();
+    super.initState();
   }
 
   @override
@@ -74,6 +91,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
 
   @override
   void dispose() {
+    print('🗑 🗑 🗑 🗑 🗑 disposing food search page! 🗑 🗑 🗑 🗑 🗑');
     searchFieldController.dispose();
     searchFieldFocusNode.dispose();
     super.dispose();
@@ -98,8 +116,8 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
         body: Column(
           children: [
             AppSearchField(
-              controller: searchFieldController,
-              focusNode: searchFieldFocusNode,
+              controller: widget.searchFieldController,
+              focusNode: widget.searchFieldFocusNode,
               onChanged: submitFoodSearch,
               isLoadingSearchResult: _isLoading,
             ),
@@ -211,11 +229,13 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                         }),
                   )
                 : Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [..._getMostSearchedTermsList()],
-                      ),
-                    ),
+                    child: _isLoadingFoodSearchTerms
+                        ? AppLoader()
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [..._getMostSearchedTermsList()],
+                            ),
+                          ),
                   ),
           ],
         ),

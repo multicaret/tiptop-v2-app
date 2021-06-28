@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -25,11 +26,12 @@ class MarketSearchPage extends StatefulWidget {
 
 class _MarketSearchPageState extends State<MarketSearchPage> {
   bool _isInit = true;
+  bool _isLoadingSearchTermsRequest = false;
   bool _isLoading = false;
 
   String searchQuery = '';
-  TextEditingController searchFieldController = new TextEditingController();
-  FocusNode searchFieldFocusNode = new FocusNode();
+  TextEditingController searchFieldController;
+  FocusNode searchFieldFocusNode;
 
   ProductsProvider productsProvider;
   SearchProvider searchProvider;
@@ -38,10 +40,10 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
   List<Term> _terms = [];
 
   Future<void> fetchAndSetSearchTerms() async {
-    setState(() => _isLoading = true);
+    setState(() => _isLoadingSearchTermsRequest = true);
     await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.MARKET);
     _terms = searchProvider.terms;
-    setState(() => _isLoading = false);
+    setState(() => _isLoadingSearchTermsRequest = false);
   }
 
   void _clearSearchResults() {
@@ -51,6 +53,14 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       _searchedProducts = [];
       searchQuery = '';
     });
+  }
+
+  @override
+  void initState() {
+    print('🗑 🗑 🗑 🗑 🗑 disposing market search page! 🗑 🗑 🗑 🗑 🗑');
+    searchFieldController = TextEditingController();
+    searchFieldFocusNode = FocusNode();
+    super.initState();
   }
 
   @override
@@ -113,11 +123,13 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                     ),
                   )
                 : Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [..._getMostSearchedTermsList()],
-                      ),
-                    ),
+                    child: _isLoadingSearchTermsRequest
+                        ? AppLoader()
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [..._getMostSearchedTermsList()],
+                            ),
+                          ),
                   ),
           ],
         ),

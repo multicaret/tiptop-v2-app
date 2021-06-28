@@ -80,6 +80,7 @@ class _AppWrapperState extends State<AppWrapper> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      print("Reran didChangeDependencies in app wrapper");
       appProvider = Provider.of<AppProvider>(context);
       oneSignalNotificationsProvider = Provider.of<OneSignalNotificationsProvider>(context, listen: false);
 
@@ -133,7 +134,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuilt app wrapper");
+    print("🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 Rebuilt app wrapper 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽");
     Size screenSize = MediaQuery.of(context).size;
     return Container(
       height: screenSize.height,
