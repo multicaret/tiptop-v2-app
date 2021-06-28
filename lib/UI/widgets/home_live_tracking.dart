@@ -78,7 +78,7 @@ class HomeLiveTracking extends StatelessWidget {
                         channelIsFood
                             ? Consumer<AppProvider>(
                                 child: AppCachedNetworkImage(
-                                  imageUrl: activeOrders[i].cart.restaurant.chain.media.logo,
+                                  imageUrl: activeOrders[i].branchLogo,
                                   width: addressIconSize,
                                 ),
                                 builder: (c, appProvider, child) => Container(
@@ -104,7 +104,7 @@ class HomeLiveTracking extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                channelIsFood ? activeOrders[i].cart.restaurant.title : Translations.of(context).get("Address"),
+                                channelIsFood ? activeOrders[i].branchName : Translations.of(context).get("Address"),
                                 style: AppTextStyles.subtitleBold,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

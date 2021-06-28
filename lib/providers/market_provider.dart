@@ -58,6 +58,7 @@ class MarketProvider with ChangeNotifier {
       'longitude': '${AppProvider.longitude}',
       'channel': appChannelValues.reverse[AppChannel.MARKET],
       'selected_address_id': AddressesProvider.selectedAddressId == null ? '' : '${AddressesProvider.selectedAddressId}',
+      'use_mini_order': '',
     };
 
     marketHomeDataRequestError = false;

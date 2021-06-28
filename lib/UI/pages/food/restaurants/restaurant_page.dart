@@ -41,6 +41,13 @@ class RestaurantPage extends StatefulWidget {
 }
 
 class _RestaurantPageState extends State<RestaurantPage> {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   AutoScrollController categoriesScrollController;
   AutoScrollController productsScrollController;
   bool _isInit = true;

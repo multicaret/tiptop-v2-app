@@ -140,11 +140,6 @@ class OrdersProvider with ChangeNotifier {
       throw 'No address selected!';
     }
 
-    // if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
-    //   print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
-    //   return;
-    // }
-
     if(cartProvider.foodCart.restaurant == null || cartProvider.foodCart.restaurant.chain == null) {
       throw "Food cart doesn't contain restaurant or chain!";
     }
@@ -184,7 +179,7 @@ class OrdersProvider with ChangeNotifier {
   }
 
   Future<dynamic> fetchAndSetMarketPreviousOrders(AppProvider appProvider) async {
-    final endpoint = 'orders/grocery';
+    final endpoint = 'orders/grocery?use_mini_order';
     final Map<String, String> body = {
       'chain_id': '${MarketProvider.chainId}',
     };
@@ -204,7 +199,7 @@ class OrdersProvider with ChangeNotifier {
   }
 
   Future<dynamic> fetchAndSetFoodPreviousOrders(AppProvider appProvider) async {
-    final endpoint = 'orders/food';
+    final endpoint = 'orders/food?use_mini_order';
 
     final responseData = await appProvider.get(
       endpoint: endpoint,

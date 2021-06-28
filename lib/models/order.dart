@@ -111,6 +111,8 @@ class Order {
     this.trackingLink,
     this.cart,
     this.paymentMethod,
+    this.branchName,
+    this.branchLogo,
   });
 
   int id;
@@ -131,6 +133,8 @@ class Order {
   String trackingLink;
   Cart cart;
   PaymentMethod paymentMethod;
+  String branchName;
+  String branchLogo;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
@@ -142,16 +146,18 @@ class Order {
         couponDiscountAmount: json["couponDiscountAmount"] == null ? null : DoubleRawStringFormatted.fromJson(json["couponDiscountAmount"]),
         totalAfterCouponDiscount:
             json["totalAfterCouponDiscount"] == null ? null : DoubleRawStringFormatted.fromJson(json["totalAfterCouponDiscount"]),
-        deliveryFee: DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
-        grandTotal: DoubleRawStringFormatted.fromJson(json["grandTotal"]),
-        orderRating: OrderRating.fromJson(json["rating"]),
+        deliveryFee: json["deliveryFee"] == null ? null : DoubleRawStringFormatted.fromJson(json["deliveryFee"]),
+        grandTotal: json["grandTotal"] == null ? null : DoubleRawStringFormatted.fromJson(json["grandTotal"]),
+        orderRating: json["rating"] == null ? null : OrderRating.fromJson(json["rating"]),
         status: json["status"] == null ? null : orderStatusValues.map[json["status"].toString()],
         statusName: json["statusName"],
         driverName: json["driverName"],
         driverAvatar: json["driverAvatar"],
         trackingLink: json["trackingLink"],
         cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
-        paymentMethod: PaymentMethod.fromJson(json["paymentMethod"]),
+        paymentMethod: json["paymentMethod"] == null ? null : PaymentMethod.fromJson(json["paymentMethod"]),
+        branchName: json["branchName"],
+        branchLogo: json["branchLogo"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -164,6 +170,8 @@ class Order {
         "rating": orderRating.toJson(),
         "cart": cart.toJson(),
         "paymentMethod": paymentMethod.toJson(),
+        "branchName": branchName,
+        "branchLogo": branchLogo,
       };
 }
 

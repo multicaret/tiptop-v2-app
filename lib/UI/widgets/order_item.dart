@@ -41,7 +41,7 @@ class OrderItem extends StatelessWidget {
           children: [
             channelIsFood
                 ? AppCachedNetworkImage(
-                    imageUrl: order.cart.restaurant.chain.media.logo,
+                    imageUrl: order.branchLogo,
                     width: addressIconSize,
                   )
                 : AddressIcon(
@@ -59,7 +59,7 @@ class OrderItem extends StatelessWidget {
                   style: AppTextStyles.subtitle50,
                 ),
                 const SizedBox(height: 5),
-                Text(channelIsFood ? order.cart.restaurant.title : order.address.kind.title)
+                Text(channelIsFood ? order.branchName : order.address.kind.title)
               ],
             )
           ],
