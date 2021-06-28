@@ -14,6 +14,7 @@ class ProfileSettingItem extends StatelessWidget {
   final Function action;
   final Widget trailing;
   final bool hasTrailing;
+  final Map<String, dynamic> routeArguments;
 
   ProfileSettingItem({
     @required this.icon,
@@ -22,6 +23,7 @@ class ProfileSettingItem extends StatelessWidget {
     this.action,
     this.trailing,
     this.hasTrailing = true,
+    this.routeArguments,
   });
 
   @override
@@ -67,7 +69,7 @@ class ProfileSettingItem extends StatelessWidget {
     }
     if (route != null) {
       return () {
-        Navigator.of(context, rootNavigator: true).pushNamed(route);
+        Navigator.of(context, rootNavigator: true).pushNamed(route, arguments: routeArguments);
       };
     }
     return null;

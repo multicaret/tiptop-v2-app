@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import 'constants.dart';
 

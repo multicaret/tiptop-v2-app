@@ -18,6 +18,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
@@ -290,7 +291,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
     if (shouldPopAfterAddressCreation) {
       Navigator.of(context).pop(true);
     } else {
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+      pushAndRemoveUntilCupertinoPage(
+        context,
+        AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+      );
     }
   }
 }

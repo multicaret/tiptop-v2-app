@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/search.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-
-import 'home_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 
 class SearchProvider with ChangeNotifier {
   List<Term> terms = [];
@@ -13,12 +12,12 @@ class SearchProvider with ChangeNotifier {
     final Map<String, String> body = {
       'channel': appChannelValues.reverse[selectedChannel],
     };
-    final Map<String, String> grocerySearchBody = {
-      'branch_id': HomeProvider.branchId.toString(),
-      'chain_id': HomeProvider.chainId.toString(),
+    final Map<String, String> marketSearchBody = {
+      'branch_id': MarketProvider.branchId.toString(),
+      'chain_id': MarketProvider.chainId.toString(),
     };
     if (selectedChannel == AppChannel.MARKET) {
-      body.addAll(grocerySearchBody);
+      body.addAll(marketSearchBody);
     }
     print('body');
     print(body);

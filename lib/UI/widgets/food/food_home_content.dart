@@ -10,6 +10,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -35,9 +36,7 @@ class FoodHomeContent extends StatelessWidget {
         FilterSortButtons(),
         RestaurantsIndex(),
         TextButton(
-          onPressed: () {
-            pushCupertinoPage(context, RestaurantsPage());
-          },
+          onPressed: () => pushCupertinoPage(context, RestaurantsPage()),
           child: Consumer<AppProvider>(
             builder: (c, appProvider, _) => Row(
               mainAxisAlignment: MainAxisAlignment.center,

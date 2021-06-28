@@ -6,12 +6,11 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/track_order_info_container.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -30,7 +29,6 @@ class _TrackFoodOrderPageState extends State<TrackFoodOrderPage> {
   bool _webViewError = false;
   bool _isLoadingOrderRequest = false;
 
-  HomeProvider homeProvider;
   AppProvider appProvider;
   OrdersProvider ordersProvider;
   int orderId;
@@ -48,7 +46,6 @@ class _TrackFoodOrderPageState extends State<TrackFoodOrderPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
@@ -72,7 +69,7 @@ class _TrackFoodOrderPageState extends State<TrackFoodOrderPage> {
           ? AppLoader()
           : Column(
               children: [
-                AddressSelectButton(
+                FoodAddressSelectButton(
                   isDisabled: true,
                   addressKindIcon: order.address.kind.icon,
                   addressKindTitle: order.address.kind.title,
@@ -87,13 +84,13 @@ class _TrackFoodOrderPageState extends State<TrackFoodOrderPage> {
                         width: double.infinity,
                         child: order.trackingLink == null
                             ? Padding(
-                              padding: const EdgeInsets.all(50),
-                              child: Text(
-                                "${Translations.of(context).get("Reference Code")}: ${order.referenceCode}",
-                                style: AppTextStyles.body50,
-                                textAlign: TextAlign.center,
-                              ),
-                            )
+                                padding: const EdgeInsets.all(50),
+                                child: Text(
+                                  "${Translations.of(context).get("Reference Code")}: ${order.referenceCode}",
+                                  style: AppTextStyles.body50,
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
                             : WebView(
                                 initialUrl: order.trackingLink,
                                 javascriptMode: JavascriptMode.unrestricted,

@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/models/search.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
@@ -34,7 +35,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
 
   ProductsProvider productsProvider;
   SearchProvider searchProvider;
-  HomeProvider homeProvider;
 
   List<Product> _searchedProducts = [];
   List<Term> _terms = [];
@@ -56,7 +56,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
 
       fetchAndSetSearchTerms();
     }
@@ -66,7 +65,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
 
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
-    await searchProvider.fetchAndSetSearchTerms(selectedChannel: homeProvider.selectedChannel);
+    await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.MARKET);
     _terms = searchProvider.terms;
     setState(() => _isLoading = false);
   }
@@ -170,7 +169,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
         searchQuery = _searchQuery;
         _isLoading = true;
       });
-      await productsProvider.fetchSearchedProducts(_searchQuery);
+      await productsProvider.fetchSearchedMarketProducts(_searchQuery);
       _searchedProducts = productsProvider.searchedProducts;
       if (_searchedProducts.isEmpty) {
         showToast(msg: Translations.of(context).get("No results match your search"));

@@ -9,7 +9,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/food/food_address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_checkout_delivery_options.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
@@ -21,12 +21,13 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 import '../../../app_wrapper.dart';
@@ -48,9 +49,9 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   AddressesProvider addressesProvider;
-  HomeProvider homeProvider;
-  CouponValidationData couponValidationData;
+  FoodProvider foodProvider;
 
+  CouponValidationData couponValidationData;
   List<PaymentSummaryTotal> paymentSummaryTotals = [];
   PaymentSummaryTotal grandTotal;
   DoubleRawStringFormatted deliveryFee;
@@ -73,7 +74,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       selectedDeliveryType: selectedDeliveryTypeNotifier.value,
       restaurant: cartProvider.foodCart.restaurant,
       cartTotal: cartProvider.foodCart.total.raw,
-      currency: homeProvider.foodCurrency,
+      currency: foodProvider.foodCurrency,
     );
     paymentSummaryTotals = [
       PaymentSummaryTotal(
@@ -89,7 +90,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       PaymentSummaryTotal(
         title: Translations.of(context).get("Grand Total"),
         rawValue: checkoutData.total.raw + deliveryFee.raw,
-        value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, homeProvider.foodCurrency),
+        value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, foodProvider.foodCurrency),
         isGrandTotal: true,
       ),
     ];
@@ -243,7 +244,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
+      foodProvider = Provider.of<FoodProvider>(context);
 
       selectedDeliveryTypeNotifier.value = initDeliveryTypeSelection(
         cartProvider.foodCart.restaurant,
@@ -272,7 +273,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  AddressSelectButton(isDisabled: true),
+                  FoodAddressSelectButton(isDisabled: true),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -314,7 +315,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                     selectedDeliveryType: _selectedDeliveryType,
                                     restaurant: cartProvider.foodCart.restaurant,
                                     cartTotal: cartProvider.foodCart.total.raw,
-                                    currency: homeProvider.foodCurrency,
+                                    currency: foodProvider.foodCurrency,
                                   );
                                   setState(() {
                                     paymentSummaryTotals = [
@@ -331,7 +332,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                       PaymentSummaryTotal(
                                         title: Translations.of(context).get("Grand Total"),
                                         rawValue: checkoutData.total.raw + deliveryFee.raw,
-                                        value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, homeProvider.foodCurrency),
+                                        value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, foodProvider.foodCurrency),
                                         isGrandTotal: true,
                                       ),
                                     ];
@@ -435,9 +436,9 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
         context: context,
         builder: (context) => OrderConfirmedDialog(),
       ).then((_) {
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          AppWrapper.routeName,
-          (Route<dynamic> route) => false,
+        pushAndRemoveUntilCupertinoPage(
+          context,
+          AppWrapper(targetAppChannel: AppChannel.FOOD),
         );
       });
     } catch (e) {

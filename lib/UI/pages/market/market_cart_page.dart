@@ -8,11 +8,13 @@ import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.da
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 import 'order/market_checkout_page.dart';
@@ -22,8 +24,8 @@ class MarketCartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<AppProvider, HomeProvider, CartProvider>(
-      builder: (c, appProvider, homeProvider, cartProvider, _) {
+    return Consumer2<AppProvider, CartProvider>(
+      builder: (c, appProvider, cartProvider, _) {
         return AppScaffold(
           hasCurve: false,
           hasOverlayLoader: cartProvider.isLoadingClearMarketCartRequest || cartProvider.isLoadingDeleteMarketCartProduct,
@@ -42,7 +44,10 @@ class MarketCartPage extends StatelessWidget {
                       if (response != null && response) {
                         cartProvider.clearMarketCart(appProvider).then((_) {
                           showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
-                          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                          pushAndRemoveUntilCupertinoPage(
+                            context,
+                            AppWrapper(targetAppChannel: AppChannel.MARKET),
+                          );
                         }).catchError((e) {
                           showToast(msg: Translations.of(context).get("Error clearing cart!"));
                         });
@@ -109,23 +114,25 @@ class MarketCartPage extends StatelessWidget {
                       ),
               ),
               if (!cartProvider.noMarketCart)
-                TotalButton(
-                  total: cartProvider.marketCart.total.formatted,
-                  isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
-                  isRTL: appProvider.isRTL,
-                  child: Text(Translations.of(context).get("Continue")),
-                  onTap: () {
-                    if (cartProvider.marketCart == null ||
-                        cartProvider.marketCart.total == null ||
-                        cartProvider.marketCart.total.raw == 0 ||
-                        cartProvider.marketCart.total.raw < homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
-                      showToast(
-                          msg: Translations.of(context).get('Order total should be greater than: {branchMinimumOrder}',
-                              args: [homeProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted]));
-                    } else {
-                      Navigator.of(context, rootNavigator: true).pushNamed(MarketCheckoutPage.routeName);
-                    }
-                  },
+                Consumer<MarketProvider>(
+                  builder: (c, marketProvider, _) => TotalButton(
+                    total: cartProvider.marketCart.total.formatted,
+                    isLoading: cartProvider.isLoadingAdjustCartQuantityRequest,
+                    isRTL: appProvider.isRTL,
+                    child: Text(Translations.of(context).get("Continue")),
+                    onTap: () {
+                      if (cartProvider.marketCart == null ||
+                          cartProvider.marketCart.total == null ||
+                          cartProvider.marketCart.total.raw == 0 ||
+                          cartProvider.marketCart.total.raw < marketProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.raw) {
+                        showToast(
+                            msg: Translations.of(context).get('Order total should be greater than: {branchMinimumOrder}',
+                                args: [marketProvider.marketHomeData.branch.tiptopDelivery.minimumOrder.formatted]));
+                      } else {
+                        Navigator.of(context, rootNavigator: true).pushNamed(MarketCheckoutPage.routeName);
+                      }
+                    },
+                  ),
                 ),
             ],
           ),

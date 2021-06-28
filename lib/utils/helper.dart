@@ -356,11 +356,3 @@ String getFoodDeliveryFeeTitle(BuildContext context, DoubleRawStringFormatted de
   }
   return Translations.of(context).get("Delivery Fee");
 }
-
-void pushCupertinoPage(BuildContext context, Widget page, {bool rootNavigator = false}) {
-  Navigator.of(context, rootNavigator: rootNavigator).push(
-    CupertinoPageRoute<void>(
-      builder: (BuildContext context) => page,
-    ),
-  );
-}

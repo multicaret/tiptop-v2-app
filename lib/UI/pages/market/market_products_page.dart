@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
+import 'package:tiptop_v2/UI/widgets/market/cart/market_app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_categories_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_category_tab_content.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -99,7 +99,13 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
         title: Text(Translations.of(context).get("Products")),
         actions: [
           Consumer<AppProvider>(
-            builder: (c, appProvider, _) => appProvider.isAuth ? AppBarCartTotal() : Container(),
+            builder: (c, appProvider, _) => appProvider.isAuth
+                ? MarketAppBarCartTotal(
+                    isLoading: productsProvider.isLoadingFetchAllProductsRequest,
+                    requestError: productsProvider.fetchAllProductsError,
+                    isRTL: appProvider.isRTL,
+                  )
+                : Container(),
           ),
         ],
       ),

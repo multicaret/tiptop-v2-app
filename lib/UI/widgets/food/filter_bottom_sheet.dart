@@ -7,10 +7,12 @@ import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/food/categories_slider.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
+import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -99,16 +101,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   children: [
                     Text(Translations.of(context).get("Min. Cart"), style: AppTextStyles.body50),
                     const SizedBox(height: 5),
-                    Consumer<HomeProvider>(
-                      builder: (c, homeProvider, _) => Row(
+                    Consumer<FoodProvider>(
+                      builder: (c, foodProvider, _) => Row(
                         children: [
-                          Text(priceAndCurrency(minCartValue.round(), homeProvider.foodCurrency)),
+                          Text(priceAndCurrency(minCartValue.round(), foodProvider.foodCurrency)),
                           Expanded(
                             child: Slider(
                               min: minCartValue,
                               max: maxCartValue,
                               value: filterData['minimum_order'].round().toDouble(),
-                              label: priceAndCurrency(filterData['minimum_order'].round().toDouble(), homeProvider.foodCurrency),
+                              label: priceAndCurrency(filterData['minimum_order'].round().toDouble(), foodProvider.foodCurrency),
                               onChanged: (newValue) => restaurantsProvider.setFilterData(
                                 key: 'minimum_order',
                                 value: newValue.round().toDouble(),

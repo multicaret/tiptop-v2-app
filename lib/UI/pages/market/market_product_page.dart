@@ -23,7 +23,18 @@ import '../../widgets/UI/app_carousel.dart';
 import '../../widgets/UI/app_scaffold.dart';
 
 class MarketProductPage extends StatefulWidget {
-  static const routeName = '/product';
+  // static const routeName = '/market-product';
+  final int productId;
+  final bool hasControls;
+  final String categoryEnglishTitle;
+  final String parentCategoryEnglishTitle;
+
+  MarketProductPage({
+    this.productId,
+    this.hasControls,
+    this.categoryEnglishTitle,
+    this.parentCategoryEnglishTitle,
+  });
 
   @override
   _MarketProductPageState createState() => _MarketProductPageState();
@@ -109,11 +120,10 @@ class _MarketProductPageState extends State<MarketProductPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      productId = data["product_id"];
-      hasControls = data["has_controls"] ?? true;
-      categoryEnglishTitle = data["category_english_title"];
-      parentCategoryEnglishTitle = data["parent_category_english_title"];
+      productId = widget.productId;
+      hasControls = widget.hasControls ?? true;
+      categoryEnglishTitle = widget.categoryEnglishTitle;
+      parentCategoryEnglishTitle = widget.parentCategoryEnglishTitle;
 
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);

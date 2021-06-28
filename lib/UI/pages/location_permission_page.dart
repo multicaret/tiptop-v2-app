@@ -7,6 +7,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 
 class LocationPermissionPage extends StatelessWidget {
@@ -37,7 +38,10 @@ class LocationPermissionPage extends StatelessWidget {
                     print('Location granted: $isGranted');
                     if (isGranted) {
                       appProvider.setIsLocationPermissionGranted(true);
-                      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                      pushAndRemoveUntilCupertinoPage(
+                        context,
+                        AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                      );
                     } else {
                       openAppSettings();
                     }
@@ -50,20 +54,11 @@ class LocationPermissionPage extends StatelessWidget {
                 onPressed: () {
                   AppProvider.latitude = erbilLocation.latitude;
                   AppProvider.longitude = erbilLocation.longitude;
-                  Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                  pushAndRemoveUntilCupertinoPage(
+                    context,
+                    AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                  );
                 },
-                // onTap: () {
-                //   showDialog(
-                //     context: context,
-                //     builder: (context) => LocationPermissionDialog(
-                //       action: () {
-                //         openAppSettings();
-                //       },
-                //     ),
-                //   ).then((_) {
-                //     // Navigator.of(context).pop();
-                //   });
-                // },
                 child: Text(
                   Translations.of(context).get("I don’t want to use my location services"),
                 ),

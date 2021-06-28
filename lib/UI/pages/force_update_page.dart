@@ -7,6 +7,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -64,9 +65,10 @@ class ForceUpdatePage extends StatelessWidget {
           if (isSoftUpdateEnabled)
             AppButtons.secondary(
               child: Text(Translations.of(context).get("Continue")),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed(AppWrapper.routeName);
-              },
+              onPressed: () => pushAndRemoveUntilCupertinoPage(
+                context,
+                AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+              ),
             ),
         ],
       ),

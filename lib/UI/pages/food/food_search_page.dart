@@ -11,12 +11,13 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_horizontal_list
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/search.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -40,7 +41,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
 
   RestaurantsProvider restaurantsProvider;
   SearchProvider searchProvider;
-  HomeProvider homeProvider;
 
   List<Branch> _searchedRestaurants = [];
   List<Term> _terms = [];
@@ -60,7 +60,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      homeProvider = Provider.of<HomeProvider>(context);
       restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
       searchProvider = Provider.of<SearchProvider>(context);
 
@@ -72,7 +71,7 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
 
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
-    await searchProvider.fetchAndSetSearchTerms(selectedChannel: homeProvider.selectedChannel);
+    await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.FOOD);
     _terms = searchProvider.terms;
     setState(() => _isLoading = false);
   }
@@ -160,13 +159,18 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                                             return Material(
                                               color: AppColors.white,
                                               child: InkWell(
-                                                onTap: () =>
-                                                    Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
-                                                  'product_id': product.id,
-                                                  'restaurant_id': _searchedRestaurants[i].id,
-                                                  'restaurant_is_open': _searchedRestaurants[i].workingHours.isOpen,
-                                                  'chain_id': _searchedRestaurants[i].chain.id,
-                                                }),
+                                                onTap: () {
+                                                  pushCupertinoPage(
+                                                    context,
+                                                    FoodProductPage(
+                                                      productId: product.id,
+                                                      restaurantId: _searchedRestaurants[i].id,
+                                                      chainId: _searchedRestaurants[i].chain.id,
+                                                      restaurantIsOpen: _searchedRestaurants[i].workingHours.isOpen,
+                                                    ),
+                                                    rootNavigator: true,
+                                                  );
+                                                },
                                                 child: Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
                                                   decoration: BoxDecoration(

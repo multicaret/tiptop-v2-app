@@ -11,7 +11,7 @@ import 'package:tiptop_v2/UI/widgets/UI/input/app_text_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/radio_list_items.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/add_coupon_button.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/payment_summary.dart';
 import 'package:tiptop_v2/UI/widgets/total_button.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -22,12 +22,12 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class MarketCheckoutPage extends StatefulWidget {
@@ -41,13 +41,12 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   bool _isInit = true;
   bool _isLoadingCreateOrder = false;
   bool _isLoadingOrderSubmit = false;
-  bool _isLoadingvalidateMarketCoupon = false;
+  bool _isLoadingValidateMarketCoupon = false;
 
   CartProvider cartProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   AddressesProvider addressesProvider;
-  HomeProvider homeProvider;
   CouponValidationData couponValidationData;
 
   final couponCodeNotifier = ValueNotifier<String>(null);
@@ -90,7 +89,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
   }
 
   Future<void> _validateMarketCouponCode(String _couponCode) async {
-    setState(() => _isLoadingvalidateMarketCoupon = true);
+    setState(() => _isLoadingValidateMarketCoupon = true);
     try {
       final responseData = await ordersProvider.validateMarketCoupon(
         appProvider: appProvider,
@@ -98,7 +97,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         couponCode: _couponCode,
       );
       if (responseData == 401) {
-        setState(() => _isLoadingvalidateMarketCoupon = false);
+        setState(() => _isLoadingValidateMarketCoupon = false);
         Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           WalkthroughPage.routeName,
           (Route<dynamic> route) => false,
@@ -137,7 +136,7 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         ),
       ];
       showToast(msg: Translations.of(context).get("Successfully validated coupon code!"));
-      setState(() => _isLoadingvalidateMarketCoupon = false);
+      setState(() => _isLoadingValidateMarketCoupon = false);
     } on HttpException catch (error) {
       if (error.errors != null && error.errors.length > 0) {
         appAlert(
@@ -147,13 +146,13 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         ).show();
       }
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
-      setState(() => _isLoadingvalidateMarketCoupon = false);
+      setState(() => _isLoadingValidateMarketCoupon = false);
       couponCodeNotifier.value = null;
       throw error;
     } catch (e) {
       couponCodeNotifier.value = null;
       showToast(msg: Translations.of(context).get("Coupon Validation Failed"));
-      setState(() => _isLoadingvalidateMarketCoupon = false);
+      setState(() => _isLoadingValidateMarketCoupon = false);
       throw e;
     }
   }
@@ -218,7 +217,6 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       _createOrderAndGetCheckoutData().then((_) {
         setCommonEventsParams();
         trackViewCheckoutEvent();
@@ -235,13 +233,13 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
       appBar: AppBar(
         title: Text(Translations.of(context).get("Checkout")),
       ),
-      body: _isLoadingCreateOrder || _isLoadingvalidateMarketCoupon
+      body: _isLoadingCreateOrder || _isLoadingValidateMarketCoupon
           ? const AppLoader()
           : Form(
               key: _formKey,
               child: Column(
                 children: [
-                  AddressSelectButton(isDisabled: true),
+                  MarketAddressSelectButton(isDisabled: true),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -360,7 +358,10 @@ class _MarketCheckoutPageState extends State<MarketCheckoutPage> {
         context: context,
         builder: (context) => OrderConfirmedDialog(),
       ).then((_) {
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+        pushAndRemoveUntilCupertinoPage(
+          context,
+          AppWrapper(targetAppChannel: AppChannel.MARKET),
+        );
       });
     } catch (e) {
       setState(() => _isLoadingOrderSubmit = false);

@@ -11,12 +11,13 @@ import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -44,7 +45,7 @@ class _AddressesPageState extends State<AddressesPage> {
   AddressesProvider addressesProvider;
   AppProvider appProvider;
   CartProvider cartProvider;
-  HomeProvider homeProvider;
+  AppChannel currentChannel;
 
   List<Address> addresses = [];
   List<Kind> kinds = [];
@@ -73,37 +74,47 @@ class _AddressesPageState extends State<AddressesPage> {
 
   Future<void> _changeSelectedAddressWithConfirmation(Address _selectedAddress) async {
     bool shouldClearExistingCart = false;
-    if (homeProvider.channelIsMarket) {
-      if (!cartProvider.noMarketCart) {
-        //User wants to change address while he has filled cart
-        final response = await showDialog(
-          context: context,
-          builder: (context) => ConfirmAlertDialog(
-            title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
-          ),
-        );
-        if (response != null && response) {
-          //User accepted changing address while he has filled cart, change address and clear cart
-          await cartProvider.clearMarketCart(appProvider);
-        } else {
-          return;
+    if (currentChannel != null) {
+      bool channelIsMarket = currentChannel == AppChannel.MARKET;
+      if (channelIsMarket) {
+        if (!cartProvider.noMarketCart) {
+          //User wants to change address while he has filled cart
+          final response = await showDialog(
+            context: context,
+            builder: (context) => ConfirmAlertDialog(
+              title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
+            ),
+          );
+          if (response != null && response) {
+            //User accepted changing address while he has filled cart, change address and clear cart
+            await cartProvider.clearMarketCart(appProvider);
+          } else {
+            return;
+          }
+        }
+      } else {
+        if (!cartProvider.noFoodCart) {
+          //User wants to change address while he has filled cart
+          final response = await showDialog(
+            context: context,
+            builder: (context) => ConfirmAlertDialog(
+              title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
+            ),
+          );
+          if (response != null && response) {
+            //User accepted changing address while he has filled cart, change address and clear cart
+            await cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
+          } else {
+            return;
+          }
         }
       }
     } else {
+      if (!cartProvider.noMarketCart) {
+        await cartProvider.clearMarketCart(appProvider);
+      }
       if (!cartProvider.noFoodCart) {
-        //User wants to change address while he has filled cart
-        final response = await showDialog(
-          context: context,
-          builder: (context) => ConfirmAlertDialog(
-            title: 'Are you sure you want to change your selected Address? Your cart will be cleared',
-          ),
-        );
-        if (response != null && response) {
-          //User accepted changing address while he has filled cart, change address and clear cart
-          await cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
-        } else {
-          return;
-        }
+        await cartProvider.clearFoodCart(context, appProvider, shouldNavigateToHome: false);
       }
     }
     await _changeSelectedAddress(_selectedAddress, shouldClearExistingCart: shouldClearExistingCart);
@@ -117,7 +128,10 @@ class _AddressesPageState extends State<AddressesPage> {
     if (_shouldPopAfterSelection) {
       Navigator.of(context).pop(true);
     } else {
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+      pushAndRemoveUntilCupertinoPage(
+        context,
+        AppWrapper(targetAppChannel: currentChannel ?? appProvider.appDefaultChannel),
+      );
     }
   }
 
@@ -145,10 +159,10 @@ class _AddressesPageState extends State<AddressesPage> {
       appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
-      homeProvider = Provider.of<HomeProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       if (data != null) {
         _shouldPopAfterSelection = data['should_pop_after_selection'] ?? false;
+        currentChannel = data['current_channel'];
       }
       _fetchAndSetAddresses();
     }

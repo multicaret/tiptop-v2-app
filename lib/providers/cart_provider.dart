@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/app_wrapper.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/cart.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/food_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 
 import 'local_storage.dart';
 
@@ -80,7 +83,7 @@ class CartProvider with ChangeNotifier {
       return 401;
     }
 
-    if (HomeProvider.branchId == null || HomeProvider.chainId == null) {
+    if (MarketProvider.branchId == null || MarketProvider.chainId == null) {
       print('Cannot find branch id and/or chain id!');
       return null;
     }
@@ -88,8 +91,8 @@ class CartProvider with ChangeNotifier {
     final endpoint = 'carts/${marketCart.id}/products/grocery/adjust-quantity';
     Map<String, dynamic> body = {
       'product_id': product.id,
-      'chain_id': HomeProvider.chainId,
-      'branch_id': HomeProvider.branchId,
+      'chain_id': MarketProvider.chainId,
+      'branch_id': MarketProvider.branchId,
       'is_adding': isAdding,
     };
 
@@ -213,9 +216,9 @@ class CartProvider with ChangeNotifier {
       }
       isLoadingAdjustFoodCartDataRequest = false;
       foodCart = cartData.cart;
-      if (HomeProvider.selectedFoodBranchId == null && HomeProvider.selectedFoodChainId == null) {
-        HomeProvider.selectedFoodBranchId = foodCart.branchId;
-        HomeProvider.selectedFoodChainId = foodCart.chainId;
+      if (FoodProvider.selectedFoodBranchId == null && FoodProvider.selectedFoodChainId == null) {
+        FoodProvider.selectedFoodBranchId = foodCart.branchId;
+        FoodProvider.selectedFoodChainId = foodCart.chainId;
         print('Saving food branch id and chain id to local storage...');
         await storageActions.save(key: 'selected_food_branch_id', data: foodCart.branchId);
         await storageActions.save(key: 'selected_food_chain_id', data: foodCart.chainId);
@@ -240,8 +243,8 @@ class CartProvider with ChangeNotifier {
       return 401;
     }
 
-    if (HomeProvider.branchId == null || HomeProvider.chainId == null) {
-      print('Either chain id (${HomeProvider.chainId}) or restaurant id (${HomeProvider.branchId}) is null');
+    if (MarketProvider.branchId == null || MarketProvider.chainId == null) {
+      print('Either chain id (${MarketProvider.chainId}) or restaurant id (${MarketProvider.branchId}) is null');
       return;
     }
 
@@ -250,8 +253,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.branchId,
-      'chain_id': HomeProvider.chainId,
+      'branch_id': MarketProvider.branchId,
+      'chain_id': MarketProvider.chainId,
     };
     print('body: $body');
 
@@ -284,8 +287,8 @@ class CartProvider with ChangeNotifier {
       return 401;
     }
 
-    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
-      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+    if (FoodProvider.selectedFoodBranchId == null || FoodProvider.selectedFoodChainId == null) {
+      print('Either chain id (${FoodProvider.selectedFoodChainId}) or restaurant id (${FoodProvider.selectedFoodBranchId}) is null');
       return;
     }
 
@@ -294,8 +297,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.selectedFoodBranchId,
-      'chain_id': HomeProvider.selectedFoodChainId,
+      'branch_id': FoodProvider.selectedFoodBranchId,
+      'chain_id': FoodProvider.selectedFoodChainId,
     };
     print('body: $body');
 
@@ -333,8 +336,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.branchId,
-      'chain_id': HomeProvider.chainId,
+      'branch_id': MarketProvider.branchId,
+      'chain_id': MarketProvider.chainId,
     };
 
     try {
@@ -356,8 +359,8 @@ class CartProvider with ChangeNotifier {
   Future<void> clearFoodCart(BuildContext context, AppProvider appProvider, {bool shouldNavigateToHome = true}) async {
     final endpoint = 'carts/${foodCart.id}/delete';
 
-    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
-      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+    if (FoodProvider.selectedFoodBranchId == null || FoodProvider.selectedFoodChainId == null) {
+      print('Either chain id (${FoodProvider.selectedFoodChainId}) or restaurant id (${FoodProvider.selectedFoodBranchId}) is null');
       return;
     }
 
@@ -366,8 +369,8 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.selectedFoodBranchId,
-      'chain_id': HomeProvider.selectedFoodChainId,
+      'branch_id': FoodProvider.selectedFoodBranchId,
+      'chain_id': FoodProvider.selectedFoodChainId,
     };
     print('body: $body');
 
@@ -381,13 +384,16 @@ class CartProvider with ChangeNotifier {
       print('Deleting chain id and branch id from local storage...');
       await storageActions.deleteData(key: 'selected_food_branch_id');
       await storageActions.deleteData(key: 'selected_food_chain_id');
-      HomeProvider.selectedFoodBranchId = null;
-      HomeProvider.selectedFoodChainId = null;
+      FoodProvider.selectedFoodBranchId = null;
+      FoodProvider.selectedFoodChainId = null;
 
       isLoadingClearFoodCartRequest = false;
       if (shouldNavigateToHome) {
         showToast(msg: Translations.of(context).get("Cart Cleared Successfully!"));
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+        pushAndRemoveUntilCupertinoPage(
+          context,
+          AppWrapper(targetAppChannel: AppChannel.FOOD),
+        );
       }
       notifyListeners();
     } catch (e) {

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
 
 class TrackMarketOrderMap extends StatefulWidget {
@@ -16,7 +16,10 @@ class _TrackMarketOrderMapState extends State<TrackMarketOrderMap> {
   double centerLong;
 
   double defaultZoom = 12.0;
-  LatLng initCameraPosition = LatLng((HomeProvider.marketBranchLat + AppProvider.latitude) / 2, (HomeProvider.marketBranchLong + AppProvider.longitude) / 2);
+  LatLng initCameraPosition = LatLng(
+    (MarketProvider.marketBranchLat + AppProvider.latitude) / 2,
+    (MarketProvider.marketBranchLong + AppProvider.longitude) / 2,
+  );
 
   Marker homeMarker;
   Marker marketMarker;
@@ -48,7 +51,7 @@ class _TrackMarketOrderMapState extends State<TrackMarketOrderMap> {
         markerId: MarkerId('Market'),
         draggable: false,
         icon: BitmapDescriptor.fromBytes(marketMarkerIconBytes),
-        position: LatLng(HomeProvider.marketBranchLat, HomeProvider.marketBranchLong),
+        position: LatLng(MarketProvider.marketBranchLat, MarketProvider.marketBranchLong),
       );
       // add marker
       allMarkers.add(homeMarker);

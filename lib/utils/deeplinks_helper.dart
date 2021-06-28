@@ -19,10 +19,11 @@ import 'package:tiptop_v2/UI/pages/profile/favorite_restaurants_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
-void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider homeProvider) {
+import 'navigator_helper.dart';
+
+void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
   String deepLink; //full deep link with main action and params
   Uri deepLinkUri = uri; //full deep link with main action and params as URI to query params from
   String mainAction; //the main action (e.g. blog_index, favorites, ...) without params
@@ -60,7 +61,6 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
   String itemParentId = deepLinkUri.queryParameters['parent_id'];
 
   AppChannel requestedAppChannel = appChannelValues.map[uriChannel];
-  AppChannel currentChannel = homeProvider.selectedChannel;
   // Some Flags
   //Check if channel exists in params and is equal to one of the app's channels
   bool hasValidChannel = requestedAppChannel != null && (requestedAppChannel == AppChannel.MARKET || requestedAppChannel == AppChannel.FOOD);
@@ -108,22 +108,15 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
       break;
     case "home_screen_by_channel":
       if (hasValidChannel) {
-        if (currentChannel != requestedAppChannel) {
-          homeProvider.setSelectedChannel(requestedAppChannel);
-        }
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          AppWrapper.routeName,
-          (Route<dynamic> route) => false,
+        pushAndRemoveUntilCupertinoPage(
+          context,
+          AppWrapper(targetAppChannel: requestedAppChannel),
         );
         return;
       }
       break;
     case "market_food_category_show":
       if (hasValidChannel && itemId != null && itemParentId != null) {
-        // //Todo: handle if requested channel is different than current channel
-        if (currentChannel != requestedAppChannel) {
-          homeProvider.setSelectedChannel(requestedAppChannel);
-        }
         if (requestedAppChannel == AppChannel.MARKET) {
           print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
           pushCupertinoPage(
@@ -137,11 +130,6 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
           return;
         } else if (requestedAppChannel == AppChannel.FOOD) {
           print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
-          // Old way (itemId and itemParentId were reversed)
-          // Navigator.of(context, rootNavigator: true).pushNamed(RestaurantPage.routeName, arguments: {
-          //   'restaurant_id': int.parse(itemId),
-          //   'selected_menu_category_id': int.parse(itemParentId),
-          // });
           pushCupertinoPage(
             context,
             RestaurantPage(
@@ -208,11 +196,16 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
     case "product_show":
       if (itemId != null && hasValidChannel) {
         print("Open Product Show screen: using {itemId,hasChannel}");
-        Navigator.of(context, rootNavigator: true).pushNamed(
-          requestedAppChannel == AppChannel.MARKET ? MarketProductPage.routeName : FoodProductPage.routeName,
-          arguments: {
-            'product_id': int.parse(itemId),
-          },
+        pushCupertinoPage(
+          context,
+          requestedAppChannel == AppChannel.MARKET
+              ? MarketProductPage(
+                  productId: int.parse(itemId),
+                )
+              : FoodProductPage(
+                  productId: int.parse(itemId),
+                ),
+          rootNavigator: true,
         );
         return;
       }

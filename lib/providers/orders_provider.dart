@@ -7,8 +7,9 @@ import 'package:tiptop_v2/utils/http_exception.dart';
 
 import 'app_provider.dart';
 import 'cart_provider.dart';
-import 'home_provider.dart';
+import 'food_provider.dart';
 import 'local_storage.dart';
+import 'market_provider.dart';
 
 class OrdersProvider with ChangeNotifier {
   Order submittedMarketOrder;
@@ -30,8 +31,8 @@ class OrdersProvider with ChangeNotifier {
   Future<dynamic> createMarketOrderAndGetCheckoutData(AppProvider appProvider, int selectedAddressId) async {
     final endpoint = 'orders/create';
     Map<String, String> body = {
-      'chain_id': '${HomeProvider.chainId}',
-      'branch_id': '${HomeProvider.branchId}',
+      'chain_id': '${MarketProvider.chainId}',
+      'branch_id': '${MarketProvider.branchId}',
       'selected_address_id': '$selectedAddressId',
     };
     final responseData = await appProvider.get(
@@ -50,14 +51,14 @@ class OrdersProvider with ChangeNotifier {
 
   Future<dynamic> createFoodOrderAndGetCheckoutData(AppProvider appProvider, int selectedAddressId) async {
     final endpoint = 'orders/create';
-    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
-      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+    if (FoodProvider.selectedFoodBranchId == null || FoodProvider.selectedFoodChainId == null) {
+      print('Either chain id (${FoodProvider.selectedFoodChainId}) or restaurant id (${FoodProvider.selectedFoodBranchId}) is null');
       return;
     }
 
     Map<String, String> body = {
-      'chain_id': '${HomeProvider.selectedFoodChainId}',
-      'branch_id': '${HomeProvider.selectedFoodBranchId}',
+      'chain_id': '${FoodProvider.selectedFoodChainId}',
+      'branch_id': '${FoodProvider.selectedFoodBranchId}',
       'selected_address_id': '$selectedAddressId',
     };
     final responseData = await appProvider.get(
@@ -97,8 +98,8 @@ class OrdersProvider with ChangeNotifier {
     }
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.branchId,
-      'chain_id': HomeProvider.chainId,
+      'branch_id': MarketProvider.branchId,
+      'chain_id': MarketProvider.chainId,
       'cart_id': cartProvider.marketCart.id,
       'payment_method_id': paymentMethodId,
       'selected_address_id': addressesProvider.selectedAddress.id,
@@ -174,8 +175,8 @@ class OrdersProvider with ChangeNotifier {
       print('Deleting chain id and branch id from local storage...');
       await storageActions.deleteData(key: 'selected_food_branch_id');
       await storageActions.deleteData(key: 'selected_food_chain_id');
-      HomeProvider.selectedFoodBranchId = null;
-      HomeProvider.selectedFoodChainId = null;
+      FoodProvider.selectedFoodBranchId = null;
+      FoodProvider.selectedFoodChainId = null;
       notifyListeners();
     } catch (e) {
       throw e;
@@ -185,7 +186,7 @@ class OrdersProvider with ChangeNotifier {
   Future<dynamic> fetchAndSetMarketPreviousOrders(AppProvider appProvider) async {
     final endpoint = 'orders/grocery';
     final Map<String, String> body = {
-      'chain_id': '${HomeProvider.chainId}',
+      'chain_id': '${MarketProvider.chainId}',
     };
 
     final responseData = await appProvider.get(
@@ -281,7 +282,7 @@ class OrdersProvider with ChangeNotifier {
   }) async {
     final endpoint = 'coupons/$couponCode/validate';
     Map<String, String> body = {
-      'branch_id': '${HomeProvider.branchId}',
+      'branch_id': '${MarketProvider.branchId}',
       'cart_id': '${cartProvider.marketCart.id}',
       'selected_address_id': '${AddressesProvider.selectedAddressId}',
     };
@@ -306,7 +307,7 @@ class OrdersProvider with ChangeNotifier {
   }) async {
     final endpoint = 'coupons/$couponCode/validate';
     Map<String, String> body = {
-      'branch_id': '${HomeProvider.selectedFoodBranchId}',
+      'branch_id': '${FoodProvider.selectedFoodBranchId}',
       'cart_id': '$cartId',
       'delivery_type': restaurantDeliveryTypeValues.reverse[deliveryType],
       'selected_address_id': '$selectedAddressId',

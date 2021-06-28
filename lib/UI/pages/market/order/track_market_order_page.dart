@@ -6,12 +6,11 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/track_order_info_container.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -30,7 +29,6 @@ class _TrackMarketOrderPageState extends State<TrackMarketOrderPage> {
   bool _webViewError = false;
   bool _isLoadingOrderRequest = false;
 
-  HomeProvider homeProvider;
   OrdersProvider ordersProvider;
   AppProvider appProvider;
   int orderId;
@@ -48,7 +46,6 @@ class _TrackMarketOrderPageState extends State<TrackMarketOrderPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      homeProvider = Provider.of<HomeProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       ordersProvider = Provider.of<OrdersProvider>(context);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
@@ -72,7 +69,7 @@ class _TrackMarketOrderPageState extends State<TrackMarketOrderPage> {
           ? AppLoader()
           : Column(
               children: [
-                AddressSelectButton(
+                MarketAddressSelectButton(
                   isDisabled: true,
                   addressKindIcon: order.address.kind.icon,
                   addressKindTitle: order.address.kind.title,
