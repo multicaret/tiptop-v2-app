@@ -5,6 +5,7 @@ import 'package:tiptop_v2/UI/widgets/food/sort_bottom_sheet.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
+import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
 class FilterSortButtons extends StatelessWidget {
   final Function onSortButtonPressed;
@@ -20,11 +21,12 @@ class FilterSortButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 10),
+      padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 10, bottom: 5),
       child: Row(
         children: [
           Expanded(
-            child: AppButtons.primarySm(
+            child: AppButtons.dynamic(
+              height: 40,
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -36,7 +38,7 @@ class FilterSortButtons extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.filter),
+                  AppIcons.iconXsWhite(FontAwesomeIcons.filter),
                   const SizedBox(width: 10),
                   Text(Translations.of(context).get("Filter")),
                 ],
@@ -45,7 +47,8 @@ class FilterSortButtons extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: AppButtons.primarySm(
+            child: AppButtons.dynamic(
+              height: 40,
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -56,7 +59,7 @@ class FilterSortButtons extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.sort),
+                  AppIcons.iconXsWhite(FontAwesomeIcons.sort),
                   const SizedBox(width: 10),
                   Text(Translations.of(context).get("Sort")),
                 ],
