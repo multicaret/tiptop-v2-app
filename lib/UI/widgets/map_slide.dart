@@ -37,10 +37,15 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
   AppProvider appProvider;
   double centerLat;
   double centerLong;
+  LatLng centerLatLng;
+
   LatLng initCameraPosition;
   double defaultZoom = 1;
+
   double userLat;
   double userLong;
+  LatLng userLatLng;
+  LatLng branchLatLng;
 
   @override
   void didChangeDependencies() {
@@ -48,6 +53,11 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
       appProvider = Provider.of<AppProvider>(context);
       centerLat = (MarketProvider.marketBranchLat + AppProvider.latitude) / 2;
       centerLong = (MarketProvider.marketBranchLong + AppProvider.longitude) / 2;
+      centerLatLng = LatLng(centerLat, centerLong);
+      branchLatLng = LatLng(MarketProvider.marketBranchLat, MarketProvider.marketBranchLong);
+      print('branchLatLng');
+      print(branchLatLng);
+
       initCameraPosition = LatLng(centerLat, centerLong);
       if (widget.selectedAddress == null) {
         userLat = AppProvider.latitude;
@@ -56,6 +66,7 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
         userLat = widget.selectedAddress.latitude;
         userLong = widget.selectedAddress.longitude;
       }
+      userLatLng = LatLng(userLat, userLong);
       _isInit = false;
       super.didChangeDependencies();
     }
@@ -71,12 +82,9 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
         child: Stack(
           children: [
             StaticGoogleMap(
-              centerLatitude: centerLat,
-              centerLongitude: centerLong,
-              userLatitude: userLat,
-              userLongitude: userLong,
-              branchLatitude: MarketProvider.marketBranchLat,
-              branchLongitude: MarketProvider.marketBranchLong,
+              centerLatLng: centerLatLng,
+              userLatLng: userLatLng,
+              branchLatLng: branchLatLng,
             ),
             Align(
               alignment: Alignment.bottomCenter,
