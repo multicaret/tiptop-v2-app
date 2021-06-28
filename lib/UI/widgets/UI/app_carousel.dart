@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +23,7 @@ class AppCarousel extends StatelessWidget {
   final List<Map<String, dynamic>> links;
 
   AppCarousel({
-    this.height = 212,
+    this.height = homeSliderHeight,
     this.width,
     @required this.images,
     this.autoPlay = false,
