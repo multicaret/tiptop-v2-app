@@ -1,17 +1,14 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/static_google_map.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/location_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -41,10 +38,9 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
   double centerLat;
   double centerLong;
   LatLng initCameraPosition;
-
-  Completer<GoogleMapController> _controller = Completer();
-  GoogleMapController _mapController;
-  double defaultZoom = 4.0;
+  double defaultZoom = 1;
+  double userLat;
+  double userLong;
 
   @override
   void didChangeDependencies() {
@@ -53,14 +49,17 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
       centerLat = (HomeProvider.marketBranchLat + AppProvider.latitude) / 2;
       centerLong = (HomeProvider.marketBranchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
+      if (widget.selectedAddress == null) {
+        userLat = AppProvider.latitude;
+        userLong = AppProvider.longitude;
+      } else {
+        userLat = widget.selectedAddress.latitude;
+        userLong = widget.selectedAddress.longitude;
+      }
+      _isInit = false;
+      super.didChangeDependencies();
     }
-    _isInit = false;
-    super.didChangeDependencies();
   }
-
-  List<Marker> allMarkers = [];
-  Marker branchMarker;
-  Marker userMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -71,16 +70,13 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
         height: homeSliderHeight,
         child: Stack(
           children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(target: initCameraPosition, zoom: defaultZoom),
-              mapType: MapType.normal,
-              markers: Set.from(allMarkers),
-              compassEnabled: false,
-              zoomControlsEnabled: false,
-              zoomGesturesEnabled: false,
-              myLocationButtonEnabled: false,
-              indoorViewEnabled: false,
-              onMapCreated: _onMapCreated,
+            StaticGoogleMap(
+              centerLatitude: centerLat,
+              centerLongitude: centerLong,
+              userLatitude: userLat,
+              userLongitude: userLong,
+              branchLatitude: HomeProvider.marketBranchLat,
+              branchLongitude: HomeProvider.marketBranchLong,
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -141,71 +137,6 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
         ),
       ),
     );
-  }
-
-  bool addressHasLatLng(Address _address) {
-    return _address != null && _address.latitude != null && _address.latitude != 0 && _address.latitude != null && _address.longitude != 0;
-  }
-
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    // print('Carousel map recreated!!');
-    _mapController = controller;
-    _controller.complete(controller);
-
-    LatLng branchLatLng = LatLng(HomeProvider.marketBranchLat, HomeProvider.marketBranchLong);
-    Uint8List branchMarkerIconBytes = await getBytesFromAsset(
-      'assets/images/tiptop-marker-icon.png',
-      targetWidth: 150,
-    );
-
-    LatLng userLatLng = addressHasLatLng(widget.selectedAddress)
-        ? LatLng(widget.selectedAddress.latitude, widget.selectedAddress.longitude)
-        : LatLng(AppProvider.latitude, AppProvider.longitude);
-
-    Uint8List userMarkerIconBytes = widget.selectedAddress != null && widget.selectedAddress.kind.markerIcon != null
-        ? await getAndCacheMarkerIcon(widget.selectedAddress.kind.markerIcon)
-        : await getBytesFromAsset('assets/images/address-home-marker-icon.png');
-
-    setState(() {
-      userMarker = Marker(
-        markerId: MarkerId('user-marker'),
-        position: userLatLng,
-        icon: BitmapDescriptor.fromBytes(userMarkerIconBytes),
-      );
-      branchMarker = Marker(
-        markerId: MarkerId('main-marker'),
-        position: branchLatLng,
-        icon: BitmapDescriptor.fromBytes(branchMarkerIconBytes),
-      );
-      allMarkers.add(userMarker);
-      allMarkers.add(branchMarker);
-    });
-
-    LatLngBounds bound;
-    if (userLatLng.latitude > branchLatLng.latitude && userLatLng.longitude > branchLatLng.longitude) {
-      bound = LatLngBounds(southwest: branchLatLng, northeast: userLatLng);
-    } else if (userLatLng.longitude > branchLatLng.longitude) {
-      bound = LatLngBounds(
-          southwest: LatLng(userLatLng.latitude, branchLatLng.longitude), northeast: LatLng(branchLatLng.latitude, userLatLng.longitude));
-    } else if (userLatLng.latitude > branchLatLng.latitude) {
-      bound = LatLngBounds(
-          southwest: LatLng(branchLatLng.latitude, userLatLng.longitude), northeast: LatLng(userLatLng.latitude, branchLatLng.longitude));
-    } else {
-      bound = LatLngBounds(southwest: userLatLng, northeast: branchLatLng);
-    }
-
-    CameraUpdate _cameraUpdate = CameraUpdate.newLatLngBounds(bound, 70);
-    this._mapController.animateCamera(_cameraUpdate).then((void v) {
-      animate(_cameraUpdate, this._mapController);
-    });
-  }
-
-  void animate(CameraUpdate cameraUpdate, GoogleMapController controller) async {
-    controller.animateCamera(cameraUpdate);
-    _mapController.animateCamera(cameraUpdate);
-    LatLngBounds firstLatLng = await controller.getVisibleRegion();
-    LatLngBounds secondLatLng = await controller.getVisibleRegion();
-    if (firstLatLng.southwest.latitude == -90 || secondLatLng.southwest.latitude == -90) animate(cameraUpdate, controller);
   }
 
   @override
