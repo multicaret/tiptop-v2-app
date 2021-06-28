@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/rating_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_cover_with_info.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -112,11 +111,8 @@ class RestaurantHeaderInfo extends StatelessWidget {
                             boxShadow: [const BoxShadow(color: AppColors.shadow, blurRadius: 6)],
                           ),
                           padding: const EdgeInsets.all(10),
-                          child: CachedNetworkImage(
+                          child: AppCachedNetworkImage(
                             imageUrl: restaurant.chain.media.logo,
-                            placeholder: (_, __) => SpinKitFadingCircle(
-                              color: AppColors.secondary,
-                            ),
                           ),
                         ),
                       )

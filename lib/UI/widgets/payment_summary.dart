@@ -11,8 +11,9 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class PaymentSummary extends StatelessWidget {
   final List<PaymentSummaryTotal> totals;
+  final bool translateTitle;
 
-  PaymentSummary({this.totals});
+  PaymentSummary({this.totals, this.translateTitle = true});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +24,12 @@ class PaymentSummary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                Translations.of(context).get(totals[i].title),
+                translateTitle ? Translations.of(context).get(totals[i].title) : totals[i].title,
                 style: totals[i].isGrandTotal
                     ? AppTextStyles.bodyBoldSecondaryDark
                     : totals[i].isSavedAmount
-                    ? AppTextStyles.bodyBold.copyWith(color: Colors.green)
-                    : AppTextStyles.body,
+                        ? AppTextStyles.bodyBold.copyWith(color: Colors.green)
+                        : AppTextStyles.body,
               ),
               Expanded(
                 child: Html(
@@ -36,7 +37,11 @@ class PaymentSummary extends StatelessWidget {
                   style: {
                     "body": Style(
                       textAlign: TextAlign.end,
-                      color: totals[i].isGrandTotal ? AppColors.secondary : totals[i].isSavedAmount ? Colors.green : AppColors.primary,
+                      color: totals[i].isGrandTotal
+                          ? AppColors.secondary
+                          : totals[i].isSavedAmount
+                              ? Colors.green
+                              : AppColors.primary,
                       fontWeight: totals[i].isGrandTotal || totals[i].isSavedAmount ? FontWeight.w600 : FontWeight.w400,
                       textDecoration: totals[i].isDiscounted ? TextDecoration.lineThrough : null,
                     ),

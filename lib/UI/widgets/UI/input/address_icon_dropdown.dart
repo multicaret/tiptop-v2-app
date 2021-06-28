@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +6,8 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
+
+import '../app_cahched_network_image.dart';
 
 class AddressIconDropDown extends StatelessWidget {
   final List<Map<String, dynamic>> iconItems;
@@ -47,11 +48,11 @@ class AddressIconDropDown extends StatelessWidget {
                 value: value['id'],
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: CachedNetworkImage(
+                  child: AppCachedNetworkImage(
                     imageUrl: value['icon_url'],
                     width: 40,
                     alignment: Alignment.center,
-                    placeholder: (_, __) => SpinKitDoubleBounce(color: AppColors.secondary),
+                    loaderWidget: SpinKitDoubleBounce(color: AppColors.secondary),
                   ),
                 ),
               );

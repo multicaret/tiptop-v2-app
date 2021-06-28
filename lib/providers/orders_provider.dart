@@ -136,18 +136,21 @@ class OrdersProvider with ChangeNotifier {
     }
 
     if (addressesProvider.selectedAddress == null) {
-      print('No address selected!');
-      return false;
+      throw 'No address selected!';
     }
 
-    if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
-      print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
-      return;
+    // if (HomeProvider.selectedFoodBranchId == null || HomeProvider.selectedFoodChainId == null) {
+    //   print('Either chain id (${HomeProvider.selectedFoodChainId}) or restaurant id (${HomeProvider.selectedFoodBranchId}) is null');
+    //   return;
+    // }
+
+    if(cartProvider.foodCart.restaurant == null || cartProvider.foodCart.restaurant.chain == null) {
+      throw "Food cart doesn't contain restaurant or chain!";
     }
 
     Map<String, dynamic> body = {
-      'branch_id': HomeProvider.selectedFoodBranchId,
-      'chain_id': HomeProvider.selectedFoodChainId,
+      'branch_id': cartProvider.foodCart.restaurant.id,
+      'chain_id': cartProvider.foodCart.restaurant.chain.id,
       'cart_id': cartProvider.foodCart.id,
       'payment_method_id': paymentMethodId,
       'selected_address_id': addressesProvider.selectedAddress.id,

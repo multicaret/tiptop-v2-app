@@ -135,7 +135,7 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
   Widget build(BuildContext context) {
     return AppScaffold(
       bgColor: AppColors.white,
-      hasOverlayLoader: _isLoadingCheckOTPValidation,
+      hasOverlayLoader: _isLoadingCheckOTPValidation || _isLoadingInitOTPValidation,
       bgImage: "assets/images/page-bg-pattern-white.png",
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       body: SingleChildScrollView(

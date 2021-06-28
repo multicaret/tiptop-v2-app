@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
@@ -86,12 +85,10 @@ class FoodProductListItem extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
+                    child: AppCachedNetworkImage(
                       imageUrl: product.media.coverSmall,
-                      fit: BoxFit.cover,
                       width: listItemThumbnailSize,
                       height: listItemThumbnailSize,
-                      placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary),
                     ),
                   ),
                 ),

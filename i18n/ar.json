@@ -76,6 +76,7 @@
   "Total": "المجموع",
   "Grand Total": "المجموع الاجمالي",
   "Delivery Fee": "تكلفة التوصيل",
+  "Delivery Fee ({km} KM)": "تكلفة التوصيل ({0} كم)",
   "Payment Summary": "ملخص الدفع",
   "Order Received": "تم استقبال طلبك",
   "You can track your order live on the map": "يمكنك متابعة طلبك مباشرة على الخريطة",
@@ -239,5 +240,6 @@
   "You are still not connected to the internet!": "لازلت غير متصل بالانترنت!",
   "This restaurant is closed right now!": "هذا المطعم مغلق حالياً",
   "Closed": "مغلق",
-  "Checkout": "تأكيد الطلب"
+  "Checkout": "تأكيد الطلب",
+  "You Need to Complete Your Profile First!": "يرجى اكمال معلومات الحساب"
 }

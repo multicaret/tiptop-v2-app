@@ -24,20 +24,18 @@ class AppProvider with ChangeNotifier {
   // Boot config related
   RemoteConfigs remoteConfigs;
 
-  bool _isForceUpdateEnabled = false;
+  bool isForceUpdateEnabled = false;
 
-  bool get isForceUpdateEnabled => _isForceUpdateEnabled;
-
-  set isForceUpdateEnabled(bool isForceUpdateEnabled) {
-    _isForceUpdateEnabled = isForceUpdateEnabled;
+  void setIsForceUpdateEnabled(bool value) {
+    isForceUpdateEnabled = value;
+    notifyListeners();
   }
 
-  bool _isSoftUpdateEnabled = false;
+  bool isSoftUpdateEnabled = false;
 
-  bool get isSoftUpdateEnabled => _isSoftUpdateEnabled;
-
-  set isSoftUpdateEnabled(bool isSoftUpdateEnabled) {
-    _isSoftUpdateEnabled = isSoftUpdateEnabled;
+  void setIsSoftUpdateEnabled(bool value) {
+    isSoftUpdateEnabled = value;
+    notifyListeners();
   }
 
   Uri initialUri;
@@ -103,7 +101,7 @@ class AppProvider with ChangeNotifier {
     ),
   ];
 
-  static const DOMAIN = 'https://trytiptop.app/';
+  static const DOMAIN = 'https://stagingnew.trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
 
   // Auth Related.
@@ -325,6 +323,8 @@ class AppProvider with ChangeNotifier {
     userPhoneNumber = null;
     await storageActions.deleteData(key: 'userData');
     await storageActions.deleteData(key: 'selected_address');
+    await storageActions.deleteData(key: 'selected_food_branch_id');
+    await storageActions.deleteData(key: 'selected_food_chain_id');
     print('Deleted user data and logged out');
     notifyListeners();
   }

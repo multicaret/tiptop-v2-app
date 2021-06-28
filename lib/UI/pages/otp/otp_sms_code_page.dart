@@ -51,14 +51,15 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
     super.didChangeDependencies();
   }
 
-  Future<void> _resendSMSCode() async {
-    showToast(msg: Translations.of(context).get("Sending SMS code again"));
-    await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
-    if (otpProvider.reference == null) {
-      showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
-      return;
-    }
-  }
+  //Todo: uncomment when resend is fixed
+  // Future<void> _resendSMSCode() async {
+  //   showToast(msg: Translations.of(context).get("Sending SMS code again"));
+  //   await otpProvider.initSMSOTPAndSendCode(phoneCountryCode, phoneNumber);
+  //   if (otpProvider.reference == null) {
+  //     showToast(msg: Translations.of(context).get("Unable to send SMS code, please try another method!"));
+  //     return;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

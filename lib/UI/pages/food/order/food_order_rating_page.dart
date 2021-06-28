@@ -36,7 +36,6 @@ class _FoodOrderRatingPageState extends State<FoodOrderRatingPage> {
   double _ratingValue;
   Map<String, bool> _foodRatingFactors = {};
   String _ratingComments = '';
-  int _selectedIssueId;
 
   List<FoodOrderRatingFactors> foodOrderRatingFactors = [];
 

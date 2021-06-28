@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
@@ -22,6 +22,7 @@ class CategoryItem extends StatelessWidget {
           width: double.infinity,
           height: getColItemHeight(4, context),
           decoration: BoxDecoration(
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               const BoxShadow(
@@ -29,9 +30,13 @@ class CategoryItem extends StatelessWidget {
                 color: AppColors.shadow,
               )
             ],
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(imageUrl),
-              fit: BoxFit.cover,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: AppCachedNetworkImage(
+              imageUrl: imageUrl,
+              width: double.infinity,
+              height: getColItemHeight(4, context),
             ),
           ),
         ),

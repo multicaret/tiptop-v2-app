@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_order_page.dart';
@@ -15,6 +13,8 @@ import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
+
+import 'UI/app_cahched_network_image.dart';
 
 class TrackOrderInfoContainer extends StatefulWidget {
   final Order order;
@@ -143,8 +143,7 @@ class _TrackOrderInfoContainerState extends State<TrackOrderInfoContainer> {
                           Container(
                             child: widget.order.driverAvatar == null
                                 ? AppIcons.iconMdPrimary(FontAwesomeIcons.solidUser)
-                                : CachedNetworkImage(
-                                    placeholder: (_, __) => SpinKitFadingCircle(color: AppColors.secondary, size: 30),
+                                : AppCachedNetworkImage(
                                     imageUrl: widget.order.driverAvatar,
                                     width: 55,
                                     height: 55,

@@ -122,13 +122,12 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, HomeProvider 
       if (hasValidChannel && itemId != null && itemParentId != null && currentChannel == requestedAppChannel) {
         if (requestedAppChannel == AppChannel.MARKET) {
           print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-          Navigator.of(context).push(
-            CupertinoPageRoute<void>(
-              builder: (BuildContext context) => MarketProductsPage(
-                selectedParentCategoryId: int.parse(itemParentId),
-                selectedChildCategoryId: int.parse(itemId),
-                isDeepLink: true,
-              ),
+          pushCupertinoPage(
+            context,
+            MarketProductsPage(
+              selectedParentCategoryId: int.parse(itemParentId),
+              selectedChildCategoryId: int.parse(itemId),
+              isDeepLink: true,
             ),
           );
           return;

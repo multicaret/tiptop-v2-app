@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,8 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
+
+import '../app_cahched_network_image.dart';
 
 class CheckboxListItems extends StatelessWidget {
   final List<dynamic> items;
@@ -78,11 +79,11 @@ class CheckboxListItems extends StatelessWidget {
                                 height: 30,
                               ),
                             )
-                          : CachedNetworkImage(
+                          : AppCachedNetworkImage(
                               imageUrl: items[i]["logo"],
                               width: 30,
                               fit: BoxFit.cover,
-                              placeholder: (_, __) => SpinKitDoubleBounce(
+                              loaderWidget: SpinKitDoubleBounce(
                                 color: AppColors.secondary,
                                 size: 20,
                               ),

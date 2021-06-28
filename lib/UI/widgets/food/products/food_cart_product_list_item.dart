@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/selected_options_text.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
@@ -106,9 +106,13 @@ class FoodCartProductListItem extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.border, width: 1.5),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(cartProduct.product.media.coverSmall),
-                  fit: BoxFit.cover,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: AppCachedNetworkImage(
+                  imageUrl: cartProduct.product.media.coverSmall,
+                  width: productListItemThumbnailSize,
+                  height: productListItemThumbnailSize,
                 ),
               ),
             ),

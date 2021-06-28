@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_cart_controls.dart';
@@ -111,6 +111,9 @@ class _FoodProductPageState extends State<FoodProductPage> {
       if (chainId == null || restaurantId == null) {
         print('Either chain id ($chainId) or restaurant id ($restaurantId) is null');
         return;
+      }
+      if (cartProvider.foodCart == null) {
+        print("Food cart is null!");
       }
       bool shouldDeleteExistingCart = false;
       bool hasCartInDifferentRestaurant = cartProvider.foodCart.restaurant != null &&
@@ -256,10 +259,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
                                 Container(
                                   height: screenSize.height * 0.4,
                                   width: double.infinity,
-                                  child: CachedNetworkImage(
-                                    imageUrl: product.media.cover,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: AppCachedNetworkImage(imageUrl: product.media.cover),
                                 ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),

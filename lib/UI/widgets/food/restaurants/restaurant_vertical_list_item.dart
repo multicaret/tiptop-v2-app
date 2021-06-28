@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/food/delivery_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_cover_with_info.dart';
-import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 

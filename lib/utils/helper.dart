@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,9 +15,9 @@ import 'package:tiptop_v2/UI/pages/otp/otp_complete_profile_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -342,4 +343,24 @@ bool shouldProceedWithAuthRequest(BuildContext context, AppProvider appProvider,
     return false;
   }
   return true;
+}
+
+String getFoodDeliveryFeeTitle(BuildContext context, DoubleRawStringFormatted deliveryFee, Branch restaurant) {
+  print('restaurant');
+  print(deliveryFee.raw);
+  if (deliveryFee.raw != 0 && restaurant != null && restaurant.distanceToCurrentAddress != 0) {
+    return Translations.of(context).get(
+      "Delivery Fee ({km} KM)",
+      args: [restaurant.distanceToCurrentAddress.toStringAsFixed(2)],
+    );
+  }
+  return Translations.of(context).get("Delivery Fee");
+}
+
+void pushCupertinoPage(BuildContext context, Widget page) {
+  Navigator.of(context).push(
+    CupertinoPageRoute<void>(
+      builder: (BuildContext context) => page,
+    ),
+  );
 }

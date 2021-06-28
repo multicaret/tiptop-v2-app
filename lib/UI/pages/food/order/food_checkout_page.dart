@@ -77,17 +77,17 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
     );
     paymentSummaryTotals = [
       PaymentSummaryTotal(
-        title: "Total",
+        title: Translations.of(context).get("Total"),
         rawValue: checkoutData.total.raw,
         value: checkoutData.total.formatted,
       ),
       PaymentSummaryTotal(
-        title: "Delivery Fee",
+        title: getFoodDeliveryFeeTitle(context, deliveryFee, cartProvider.foodCart.restaurant),
         rawValue: deliveryFee.raw,
         value: deliveryFee.raw == 0 ? Translations.of(context).get("Free") : deliveryFee.formatted,
       ),
       PaymentSummaryTotal(
-        title: "Grand Total",
+        title: Translations.of(context).get("Grand Total"),
         rawValue: checkoutData.total.raw + deliveryFee.raw,
         value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, homeProvider.foodCurrency),
         isGrandTotal: true,
@@ -117,29 +117,29 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
       setState(() {
         paymentSummaryTotals = [
           PaymentSummaryTotal(
-            title: "Total Before Discount",
+            title: Translations.of(context).get("Total Before Discount"),
             rawValue: couponValidationData.totalBefore.raw,
             value: couponValidationData.totalBefore.formatted,
             isDiscounted: true,
           ),
           PaymentSummaryTotal(
-            title: "You Saved",
+            title: Translations.of(context).get("You Saved"),
             rawValue: couponValidationData.discountedAmount.raw,
             value: couponValidationData.discountedAmount.formatted,
             isSavedAmount: true,
           ),
           PaymentSummaryTotal(
-            title: "Total After Discount",
+            title: Translations.of(context).get("Total After Discount"),
             rawValue: couponValidationData.totalAfter.raw,
             value: couponValidationData.totalAfter.formatted,
           ),
           PaymentSummaryTotal(
-            title: "Delivery Fee",
+            title: getFoodDeliveryFeeTitle(context, couponValidationData.deliveryFee, cartProvider.foodCart.restaurant),
             rawValue: couponValidationData.deliveryFee.raw,
             value: couponValidationData.deliveryFee.raw == 0 ? Translations.of(context).get("Free") : couponValidationData.deliveryFee.formatted,
           ),
           PaymentSummaryTotal(
-            title: "Grand Total",
+            title: Translations.of(context).get("Grand Total"),
             rawValue: couponValidationData.grandTotal.raw,
             value: couponValidationData.grandTotal.formatted,
             isGrandTotal: true,
@@ -319,17 +319,17 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                                   setState(() {
                                     paymentSummaryTotals = [
                                       PaymentSummaryTotal(
-                                        title: "Total",
+                                        title: Translations.of(context).get("Total"),
                                         rawValue: checkoutData.total.raw,
                                         value: checkoutData.total.formatted,
                                       ),
                                       PaymentSummaryTotal(
-                                        title: "Delivery Fee",
+                                        title: getFoodDeliveryFeeTitle(context, deliveryFee, cartProvider.foodCart.restaurant),
                                         rawValue: deliveryFee.raw,
                                         value: deliveryFee.raw == 0 ? Translations.of(context).get("Free") : deliveryFee.formatted,
                                       ),
                                       PaymentSummaryTotal(
-                                        title: "Grand Total",
+                                        title: Translations.of(context).get("Grand Total"),
                                         rawValue: checkoutData.total.raw + deliveryFee.raw,
                                         value: priceAndCurrency(checkoutData.total.raw + deliveryFee.raw, homeProvider.foodCurrency),
                                         isGrandTotal: true,
@@ -392,6 +392,7 @@ class _FoodCheckoutPageState extends State<FoodCheckoutPage> {
                           SectionTitle('Payment Summary'),
                           PaymentSummary(
                             totals: paymentSummaryTotals,
+                            translateTitle: false,
                           ),
                         ],
                       ),

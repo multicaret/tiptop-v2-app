@@ -172,7 +172,7 @@ class CartProvider with ChangeNotifier {
       appProvider.logout();
       return 401;
     }
-    if(adjustingQuantity) {
+    if (adjustingQuantity) {
       isLoadingAdjustFoodProductQuantityRequest[cartProductId] = true;
     }
     isLoadingAdjustFoodCartDataRequest = true;
@@ -208,7 +208,7 @@ class CartProvider with ChangeNotifier {
         return 401;
       }
       CartData cartData = CartData.fromJson(responseData["data"]);
-      if(adjustingQuantity) {
+      if (adjustingQuantity) {
         isLoadingAdjustFoodProductQuantityRequest[cartProductId] = false;
       }
       isLoadingAdjustFoodCartDataRequest = false;
@@ -224,7 +224,7 @@ class CartProvider with ChangeNotifier {
     } catch (e) {
       // showToast(msg: Translations.of(context).get("An Error Occurred!"));
       isLoadingAdjustFoodCartDataRequest = false;
-      if(adjustingQuantity) {
+      if (adjustingQuantity) {
         isLoadingAdjustFoodProductQuantityRequest[cartProductId] = false;
       }
       notifyListeners();

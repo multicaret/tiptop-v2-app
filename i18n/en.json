@@ -76,6 +76,7 @@
   "Total": "Total",
   "Grand Total": "Grand Total",
   "Delivery Fee": "Delivery Fee",
+  "Delivery Fee ({km} KM)": "Delivery Fee ({0} KM)",
   "Payment Summary": "Payment Summary",
   "Order Received": "Order Received",
   "You can track your order live on the map": "You can track your order live on the map",
@@ -239,5 +240,6 @@
   "You are still not connected to the internet!": "You are still not connected to the internet!",
   "This restaurant is closed right now!": "This restaurant is closed right now!",
   "Closed": "Closed",
-  "Checkout": "Checkout"
+  "Checkout": "Checkout",
+  "You Need to Complete Your Profile First!": "You Need to Complete Your Profile First!"
 }

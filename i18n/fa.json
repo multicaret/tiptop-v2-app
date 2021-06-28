@@ -76,6 +76,7 @@
   "Total": "كۆی گشتی",
   "Grand Total": "كۆی گشتی ",
   "Delivery Fee": "تێچووی گه‌یاندن",
+  "Delivery Fee ({km} KM)": "تێچووی گه‌یاندن ({0} كم)",
   "Payment Summary": "پوخته‌ی پاره‌دان",
   "Order Received": "پێشوازی له‌ داواكارییه‌كه‌ت كرا",
   "You can track your order live on the map": "ده‌توانیت ڕاسته‌وخۆ به‌دواداچوون بۆ داواكارییه‌كه‌ت بكه‌ی له‌سه‌ر نه‌خشه‌ ",
@@ -239,5 +240,6 @@
   "You are still not connected to the internet!": "تا ئێستا پەیوەندیت نەکردووە بە ئەنتەرنێت!",
   "This restaurant is closed right now!": "لەئێستادا ئەم چێشتخانە داخراوە",
   "Closed": "داخراوە",
-  "Checkout": "دڵنیابوون لە داواکاری"
+  "Checkout": "دڵنیابوون لە داواکاری",
+  "You Need to Complete Your Profile First!": "تکایە زانیارییەکانی ئەژمارەکە تەواو بکە"
 }

@@ -71,7 +71,10 @@ class ProductsProvider with ChangeNotifier {
     int selectionOrIngredientId,
     BuildContext context,
   }) {
-    double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
+    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
+    double productTotalPrice = hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw;
+    print('productTotalPrice');
+    print(productTotalPrice);
     List<ProductSelectedOption> newSelectedOptions;
     newSelectedOptions = productTempCartData.selectedOptions.map((selectedProductOption) {
       List<int> selectionIds = selectedProductOption.selectionIds == null ? <int>[] : selectedProductOption.selectionIds;
@@ -127,7 +130,8 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void setProductTempQuantity(CartAction action) {
-    double productTotalPrice = product.discountedPrice != null && product.discountedPrice.raw == 0 ? product.discountedPrice.raw : product.price.raw;
+    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
+    double productTotalPrice = hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw;
     if (action == CartAction.ADD) {
       productTempCartData.quantity++;
     } else {
@@ -193,6 +197,7 @@ class ProductsProvider with ChangeNotifier {
       print('existingCartProduct, cart product id: ${existingCartProduct.cartProductId}, selected options:');
       print(List<dynamic>.from(existingCartProduct.selectedOptions.map((x) => x.toJson())));
     }
+    bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
     productTempCartData = ProductCartData(
       productId: product.id,
       selectedOptions: productOptions.map((option) {
@@ -219,7 +224,7 @@ class ProductsProvider with ChangeNotifier {
         );
       }).toList(),
       productTotalPrice: existingCartProduct == null
-          ? product.discountedPrice != null && product.discountedPrice.raw == 0
+          ? hasDiscountedPrice
               ? product.discountedPrice.raw
               : product.price.raw
           : existingCartProduct.totalPrice.raw,

@@ -25,7 +25,7 @@ class RatingInfo extends StatelessWidget {
         Text('$ratingValue', style: AppTextStyles.subtitleSecondary),
         const SizedBox(width: 4),
         Text(
-          '($ratingsCount+)',
+          '($ratingsCount)',
           style: hasWhiteBg ? AppTextStyles.subtitle50 : AppTextStyles.subtitleWhite50,
         )
       ],

@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/UI/dialogs/confirm_alert_dialog.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
@@ -19,9 +17,7 @@ import 'package:tiptop_v2/models/order.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/orders_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
-import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 import 'market_order_rating_page.dart';
@@ -148,7 +144,8 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                       child: Column(
                         children: [
                           OrderInfo(order: order),
-                          if (order.status == OrderStatus.DELIVERED && !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
+                          if (order.status == OrderStatus.DELIVERED &&
+                              !(order.orderRating.branchHasBeenRated && order.orderRating.branchRatingValue == 0))
                             OrderRatingButton(
                               order: order,
                               onTap: order.orderRating.branchHasBeenRated
@@ -203,11 +200,10 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(order.paymentMethod.title),
-                                CachedNetworkImage(
+                                AppCachedNetworkImage(
                                   imageUrl: order.paymentMethod.logo,
                                   width: 30,
-                                  fit: BoxFit.cover,
-                                  placeholder: (_, __) => SpinKitDoubleBounce(
+                                  loaderWidget: SpinKitDoubleBounce(
                                     color: AppColors.secondary,
                                     size: 20,
                                   ),

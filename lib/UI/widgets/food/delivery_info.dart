@@ -3,7 +3,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:tiptop_v2/UI/widgets/UI/circle_icon.dart';
 import 'package:tiptop_v2/UI/widgets/UI/labeled_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
-import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class DeliveryInfo extends StatelessWidget {

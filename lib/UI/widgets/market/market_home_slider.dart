@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/models/address.dart';
+import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/home.dart';
 
 import '../map_slide.dart';
