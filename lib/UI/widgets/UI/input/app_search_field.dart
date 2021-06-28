@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -10,11 +13,15 @@ class AppSearchField extends StatefulWidget {
   final Function submitAction;
   final TextEditingController controller;
   final FocusNode focusNode;
+  final Function onChanged;
+  final bool isLoadingSearchResult;
 
   AppSearchField({
-    @required this.submitAction,
+    this.submitAction,
     @required this.controller,
     @required this.focusNode,
+    this.onChanged,
+    this.isLoadingSearchResult,
   });
 
   @override
@@ -23,6 +30,7 @@ class AppSearchField extends StatefulWidget {
 
 class _AppSearchFieldState extends State<AppSearchField> {
   bool _showDeleteIcon = false;
+  Timer debounceTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +42,47 @@ class _AppSearchFieldState extends State<AppSearchField> {
         setState(() {
           _showDeleteIcon = value.isNotEmpty;
         });
+        // submit search with debounce timer
+        if (widget.onChanged != null) {
+          const duration = Duration(milliseconds: 500);
+          if (debounceTimer != null) {
+            setState(() => debounceTimer.cancel());
+          }
+          setState(
+            () => debounceTimer = Timer(duration, () {
+              if (this.mounted && value.length >= 3) {
+                widget.onChanged(value);
+              }
+            }),
+          );
+        }
       },
       decoration: InputDecoration(
         hintText: Translations.of(context).get("Quick Search"),
         fillColor: AppColors.white,
         filled: true,
         prefixIcon: AppIcons.iconSecondary(FontAwesomeIcons.search),
-        suffix: _showDeleteIcon
-            ? GestureDetector(
-                child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
-                onTap: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) => widget.controller.clear());
-                  widget.focusNode.unfocus();
-                  setState(() {
-                    _showDeleteIcon = false;
-                  });
-                },
+        suffix: widget.isLoadingSearchResult
+            ? SizedBox(
+                width: 18,
+                height: 18,
+                child: SpinKitFadingCircle(
+                  color: AppColors.primary,
+                  size: 18,
+                ),
               )
-            : null,
+            : _showDeleteIcon
+                ? GestureDetector(
+                    child: AppIcons.iconSm50(FontAwesomeIcons.solidTimesCircle),
+                    onTap: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) => widget.controller.clear());
+                      widget.focusNode.unfocus();
+                      setState(() {
+                        _showDeleteIcon = false;
+                      });
+                    },
+                  )
+                : null,
         border: UnderlineInputBorder(
           borderSide: BorderSide(width: 1.5, color: AppColors.border),
         ),
@@ -63,7 +94,9 @@ class _AppSearchFieldState extends State<AppSearchField> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
       ),
-      onFieldSubmitted: (value) => widget.submitAction(value),
+      onFieldSubmitted: (value) {
+        if (widget.submitAction != null) widget.submitAction(value);
+      },
     );
   }
 }

@@ -17,6 +17,7 @@ import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -122,20 +123,30 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   Future<void> _deleteAddress(int _addressId) async {
-    final response = await showDialog(
-      context: context,
-      builder: (context) => ConfirmAlertDialog(
-        title: 'Are you sure you want to delete this address?',
-      ),
-    );
-    if (response != null && response) {
-      if (!cartProvider.noMarketCart) {
-        await cartProvider.clearMarketCart(appProvider);
-        print('cart cleared as well :( ');
+    try {
+      final response = await showDialog(
+        context: context,
+        builder: (context) => ConfirmAlertDialog(
+          title: 'Are you sure you want to delete this address?',
+        ),
+      );
+      if (response != null && response) {
+        if (!cartProvider.noMarketCart) {
+          await cartProvider.clearMarketCart(appProvider);
+          print('cart cleared as well :( ');
+        }
+
+        final responseMessage = await addressesProvider.deleteAddress(appProvider, _addressId);
+        _fetchAndSetAddresses();
+        showToast(msg: responseMessage ?? Translations.of(context).get("Successfully deleted address!"));
       }
-      await addressesProvider.deleteAddress(appProvider, _addressId);
-      _fetchAndSetAddresses();
-      showToast(msg: Translations.of(context).get("Successfully deleted address!"));
+    } on HttpException catch (error) {
+      if (error.errors != null && error.errors.length > 0) {
+        showToast(msg: error.errors["address"]);
+        throw error;
+      }
+    } catch (e) {
+      throw e;
     }
   }
 
