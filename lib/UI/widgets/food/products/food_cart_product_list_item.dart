@@ -10,6 +10,7 @@ import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/models/cart.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
@@ -74,15 +75,16 @@ class FoodCartProductListItem extends StatelessWidget {
 
   Widget _getCartListItem(BuildContext context) {
     void openFoodProductPage() {
-      Navigator.of(context, rootNavigator: true).pushNamed(
-        FoodProductPage.routeName,
-        arguments: {
-          "product_id": cartProduct.product.id,
-          "has_controls": hasControls,
-          "cart_product": editableCartProduct ? cartProduct : null,
-          'chain_id': chainId,
-          'restaurant_id': restaurantId,
-        },
+      pushCupertinoPage(
+        context,
+        FoodProductPage(
+          productId: cartProduct.product.id,
+          restaurantId: restaurantId,
+          chainId: chainId,
+          cartProduct: editableCartProduct ? cartProduct : null,
+          hasControls: hasControls,
+        ),
+        rootNavigator: true,
       );
     }
 

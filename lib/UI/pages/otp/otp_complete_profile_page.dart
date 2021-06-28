@@ -17,6 +17,7 @@ import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -242,7 +243,10 @@ class _OTPCompleteProfileState extends State<OTPCompleteProfile> {
             if (_completingProfile) {
               Navigator.of(context).pop();
             } else {
-              Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+              pushAndRemoveUntilCupertinoPage(
+                context,
+                AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+              );
             }
           } else {
             Navigator.of(context).pushReplacementNamed(LocationPermissionPage.routeName);

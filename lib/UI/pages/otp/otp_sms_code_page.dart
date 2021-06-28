@@ -12,6 +12,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -138,7 +139,10 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
             const SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                pushAndRemoveUntilCupertinoPage(
+                  context,
+                  AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                );
               },
               child: Text(
                 Translations.of(context).get("Continue Without Login"),
@@ -182,7 +186,10 @@ class _OTPSMSCodePageState extends State<OTPSMSCodePage> {
         );
       } else {
         print('Registered user, navigating to home page');
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+        pushAndRemoveUntilCupertinoPage(
+          context,
+          AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+        );
       }
     } else {
       showToast(msg: Translations.of(context).get("OTP Validation Failed"));

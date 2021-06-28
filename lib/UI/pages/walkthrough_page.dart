@@ -9,6 +9,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/location_helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -38,26 +39,23 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
+
     return AppScaffold(
       bodyPadding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding),
       bgColor: AppColors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Consumer<AppProvider>(
-              builder: (c, appProvider, _) {
-                print(appProvider.appLocale.languageCode);
-                return Container(
-                  width: double.infinity,
-                  child: Lottie.asset(
-                    'assets/images/lottie-walkthrough/walkthrough-${appProvider.appLocale.languageCode}.json',
-                    repeat: false,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    onLoaded: (_) => setState(() => animationLoaded = true),
-                  ),
-                );
-              },
+            Container(
+              width: double.infinity,
+              child: Lottie.asset(
+                'assets/images/lottie-walkthrough/walkthrough-${appProvider.appLocale.languageCode}.json',
+                repeat: false,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                onLoaded: (_) => setState(() => animationLoaded = true),
+              ),
             ),
             if (animationLoaded)
               Container(
@@ -67,7 +65,10 @@ class _WalkthroughPageState extends State<WalkthroughPage> {
                       onPressed: () {
                         getLocationPermissionStatus().then((isGranted) {
                           if (isGranted && !shouldPopOnly) {
-                            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                            pushAndRemoveUntilCupertinoPage(
+                              context,
+                              AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                            );
                           } else if (isGranted && shouldPopOnly) {
                             Navigator.of(context).pop();
                           } else {

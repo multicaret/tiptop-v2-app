@@ -565,3 +565,17 @@ class IdName {
     this.name,
   });
 }
+
+class TabItem {
+  int id;
+  String title;
+  IconData icon;
+  Widget view;
+
+  TabItem({
+    this.id,
+    this.title,
+    this.icon,
+    this.view,
+  });
+}

@@ -7,7 +7,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -46,8 +46,8 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
   void didChangeDependencies() {
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
-      centerLat = (HomeProvider.marketBranchLat + AppProvider.latitude) / 2;
-      centerLong = (HomeProvider.marketBranchLong + AppProvider.longitude) / 2;
+      centerLat = (MarketProvider.marketBranchLat + AppProvider.latitude) / 2;
+      centerLong = (MarketProvider.marketBranchLong + AppProvider.longitude) / 2;
       initCameraPosition = LatLng(centerLat, centerLong);
       if (widget.selectedAddress == null) {
         userLat = AppProvider.latitude;

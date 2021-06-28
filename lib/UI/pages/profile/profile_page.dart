@@ -18,32 +18,38 @@ import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
 import 'package:tiptop_v2/UI/widgets/profile_auth_header.dart';
 import 'package:tiptop_v2/UI/widgets/profile_setting_item.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class ProfilePage extends StatelessWidget {
-  static const routeName = '/profile';
+import '../../app_wrapper.dart';
 
-  List<Map<String, dynamic>> getAuthProfileItems(bool _channelIsMarket) {
+class ProfilePage extends StatelessWidget {
+  final AppChannel currentChannel;
+
+  ProfilePage({this.currentChannel});
+
+  List<Map<String, dynamic>> getAuthProfileItems() {
     return [
       {
         'title': "My Addresses",
         'icon': FontAwesomeIcons.mapMarked,
         'route': AddressesPage.routeName,
+        'route_arguments': {'current_channel': currentChannel},
       },
       {
-        'title': _channelIsMarket ? "Favorite Products" : "Favorite Restaurants",
+        'title': currentChannel == AppChannel.MARKET ? "Favorite Products" : "Favorite Restaurants",
         'icon': FontAwesomeIcons.solidHeart,
-        'route': _channelIsMarket ? FavoriteMarketProductsPage.routeName : FavoriteRestaurantsPage.routeName,
+        'route': currentChannel == AppChannel.MARKET ? FavoriteMarketProductsPage.routeName : FavoriteRestaurantsPage.routeName,
       },
       {
         'title': "Previous Orders",
-        'icon': _channelIsMarket ? FontAwesomeIcons.shoppingBag : FontAwesomeIcons.utensils,
-        'route': _channelIsMarket ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName,
+        'icon': currentChannel == AppChannel.MARKET ? FontAwesomeIcons.shoppingBag : FontAwesomeIcons.utensils,
+        'route': currentChannel == AppChannel.MARKET ? MarketPreviousOrdersPage.routeName : FoodPreviousOrdersPage.routeName,
       },
     ];
   }
@@ -87,8 +93,8 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           title: Text(Translations.of(context).get("Profile")),
         ),
-        body: Consumer2<AppProvider, HomeProvider>(
-          builder: (c, appProvider, homeProvider, _) {
+        body: Consumer<AppProvider>(
+          builder: (c, appProvider, _) {
             Language selectedLanguage =
                 appProvider.appLanguages.firstWhere((language) => language.locale == appProvider.appLocale.languageCode, orElse: () => null);
             int selectedLanguageId = selectedLanguage.id;
@@ -103,7 +109,7 @@ class ProfilePage extends StatelessWidget {
                     icon: FontAwesomeIcons.headphones,
                     route: SupportPage.routeName,
                   ),
-                  if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems(homeProvider.channelIsMarket)),
+                  if (appProvider.isAuth) ..._getProfileSettingItems(context, getAuthProfileItems()),
                   SectionTitle('Languages'),
                   Consumer<ProductsProvider>(
                     builder: (c, productsProvider, _) => RadioListItems(
@@ -112,11 +118,10 @@ class ProfilePage extends StatelessWidget {
                       action: (languageId) async {
                         Language selectedLanguage = appProvider.appLanguages.firstWhere((language) => language.id == languageId);
                         appProvider.changeLanguage(selectedLanguage.locale);
-                        await homeProvider.fetchAndSetHomeData(context, appProvider, afterLanguageChange: true);
-                        if (homeProvider.channelIsMarket) {
-                          productsProvider.setMarketParentCategoriesWithoutChildren(homeProvider.marketParentCategoriesWithoutChildren);
-                          await productsProvider.fetchAndSetParentCategoriesAndProducts();
-                        }
+                        pushAndRemoveUntilCupertinoPage(
+                          context,
+                          AppWrapper(targetAppChannel: currentChannel),
+                        );
                       },
                       isAssetLogo: true,
                     ),
@@ -167,6 +172,7 @@ class ProfilePage extends StatelessWidget {
         icon: _items[i]['icon'],
         title: _items[i]['title'],
         route: _items[i]['route'],
+        routeArguments: _items[i]['route_arguments'],
       ),
     );
   }

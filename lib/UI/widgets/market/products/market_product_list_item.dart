@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -27,10 +28,14 @@ class MarketProductListItem extends StatelessWidget {
     bool hasUnitTitle = product.unit != null && product.unit.title != null;
 
     void openMarketProductPage() {
-      Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
-        "product_id": product.id,
-        "has_controls": hasControls,
-      });
+      pushCupertinoPage(
+        context,
+        MarketProductPage(
+          productId: product.id,
+          hasControls: hasControls,
+        ),
+        rootNavigator: true,
+      );
     }
 
     return Container(

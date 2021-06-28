@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/models/address.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 
 import '../map_slide.dart';
 
 class MarketHomeSlider extends StatelessWidget {
   final List<Slide> slides;
   final BranchDelivery delivery;
-  final Address selectedAddress;
 
   MarketHomeSlider({
     @required this.slides,
     @required this.delivery,
-    @required this.selectedAddress,
   });
 
   @override
@@ -25,10 +25,12 @@ class MarketHomeSlider extends StatelessWidget {
       autoPlay: slides.length > 0,
       autoplayDuration: const Duration(milliseconds: 300),
       autoPlayInterval: const Duration(seconds: 7),
-      mapWidget: MapSlide(
-        selectedAddress: selectedAddress,
-        delivery: delivery,
-      ),
+      // mapWidget: Consumer<AddressesProvider>(
+      //   builder: (c, addressesProvider, _) => MapSlide(
+      //     selectedAddress: addressesProvider.selectedAddress,
+      //     delivery: delivery,
+      //   ),
+      // ),
     );
   }
 }

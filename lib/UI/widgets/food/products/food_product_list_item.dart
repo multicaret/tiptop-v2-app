@@ -7,6 +7,7 @@ import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
@@ -32,14 +33,18 @@ class FoodProductListItem extends StatelessWidget {
             if (product.isDisabled) {
               showToast(msg: Translations.of(context).get("This item is not available"));
             } else {
-              Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
-                'product_id': product.id,
-                'chain_id': restaurant.chain.id,
-                'restaurant_id': restaurant.id,
-                'restaurant_is_open': restaurant.workingHours.isOpen,
-                'restaurant_english_title': restaurant.englishTitle,
-                'category_english_title': categoryEnglishTitle,
-              });
+              pushCupertinoPage(
+                context,
+                FoodProductPage(
+                  productId: product.id,
+                  restaurantId: restaurant.id,
+                  chainId: restaurant.chain.id,
+                  restaurantIsOpen: restaurant.workingHours.isOpen,
+                  restaurantEnglishTitle: restaurant.englishTitle,
+                  categoryEnglishTitle: categoryEnglishTitle,
+                ),
+                rootNavigator: true,
+              );
             }
           },
           child: Container(

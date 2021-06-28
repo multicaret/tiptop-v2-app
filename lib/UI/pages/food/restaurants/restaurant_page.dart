@@ -8,7 +8,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_horizontal_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
-import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
+import 'package:tiptop_v2/UI/widgets/food/cart/food_app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/food/products/food_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_header_info.dart';
 import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_search_field.dart';
@@ -259,7 +259,14 @@ class _RestaurantPageState extends State<RestaurantPage> {
   Widget build(BuildContext context) {
     return AppScaffold(
       hasCurve: false,
-      appBarActions: appProvider.isAuth ? [AppBarCartTotal()] : null,
+      appBarActions: appProvider.isAuth
+          ? [
+              FoodAppBarCartTotal(
+                isLoading: _isLoadingRestaurantShowRequest,
+                isRTL: appProvider.isRTL,
+              ),
+            ]
+          : null,
       body: _isLoadingRestaurantShowRequest
           ? AppLoader()
           : RefreshIndicator(

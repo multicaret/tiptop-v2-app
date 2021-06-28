@@ -6,17 +6,18 @@ import 'package:tiptop_v2/UI/pages/profile/addresses_page.dart';
 import 'package:tiptop_v2/UI/pages/walkthrough_page.dart';
 import 'package:tiptop_v2/UI/widgets/address/address_icon.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
+import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/market_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-class AddressSelectButton extends StatelessWidget {
+class MarketAddressSelectButton extends StatelessWidget {
   final bool isDisabled;
   final bool hasETA;
   final String addressKindIcon;
@@ -24,7 +25,7 @@ class AddressSelectButton extends StatelessWidget {
   final String addressText;
   final bool forceAddressView;
 
-  AddressSelectButton({
+  MarketAddressSelectButton({
     this.isDisabled = false,
     this.hasETA = true,
     this.addressKindIcon,
@@ -37,16 +38,12 @@ class AddressSelectButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
-    return Consumer3<AppProvider, HomeProvider, AddressesProvider>(
-      builder: (c, appProvider, homeProvider, addressesProvider, _) {
+    return Consumer3<AppProvider, MarketProvider, AddressesProvider>(
+      builder: (c, appProvider, marketProvider, addressesProvider, _) {
         bool tempShowSelectAddress = !addressesProvider.addressIsSelected || addressesProvider.selectedAddress == null || !appProvider.isAuth;
         bool showSelectAddress = tempShowSelectAddress;
-        if (homeProvider.channelIsMarket) {
-          showSelectAddress = homeProvider.marketHomeDataRequestError || tempShowSelectAddress;
-        } else {
-          showSelectAddress = homeProvider.foodHomeDataRequestError || tempShowSelectAddress;
-        }
-        EstimatedArrivalTime estimatedArrivalTime = homeProvider.getEstimateArrivalTime();
+        showSelectAddress = marketProvider.marketHomeDataRequestError || tempShowSelectAddress;
+        EstimatedArrivalTime estimatedArrivalTime = marketProvider.marketHomeData != null ? marketProvider.marketHomeData.estimatedArrivalTime : null;
         bool etaIsVisible = estimatedArrivalTime != null && forceAddressView || showSelectAddress || !hasETA;
 
         return Container(
@@ -110,13 +107,16 @@ class AddressSelectButton extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
                   height: 70,
-                  width: homeProvider.isLoadingHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
+                  width: marketProvider.isLoadingMarketHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
                         ? null
                         : () {
                             if (appProvider.isAuth) {
-                              Navigator.of(context, rootNavigator: true).pushNamed(AddressesPage.routeName);
+                              Navigator.of(context, rootNavigator: true).pushNamed(
+                                AddressesPage.routeName,
+                                arguments: {'current_channel': AppChannel.MARKET},
+                              );
                             } else {
                               showToast(msg: Translations.of(context).get("You Need to Log In First!"));
                               Navigator.of(context, rootNavigator: true).pushNamed(
@@ -127,7 +127,7 @@ class AddressSelectButton extends StatelessWidget {
                               );
                             }
                           },
-                    child: homeProvider.isLoadingHomeData || (showSelectAddress && !forceAddressView)
+                    child: marketProvider.isLoadingMarketHomeData || (showSelectAddress && !forceAddressView)
                         ? Container(
                             child: Text(
                               Translations.of(context).get("Select Address"),

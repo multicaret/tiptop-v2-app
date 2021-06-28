@@ -62,8 +62,9 @@ String requiredFieldValidator(BuildContext context, String value) {
 String formatDate(BuildContext context, dynamic dateTime, {bool withWeekDay = false}) {
   AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
   DateTime _dateTime = dateTime.runtimeType == DateTime ? dateTime : DateTime.parse(dateTime);
-  String formattedDate =
-      withWeekDay ? DateFormat.yMMMEd(appProvider.appLocale.languageCode).format(_dateTime) : DateFormat.yMMMd(appProvider.appLocale.languageCode).format(_dateTime);
+  String formattedDate = withWeekDay
+      ? DateFormat.yMMMEd(appProvider.appLocale.languageCode).format(_dateTime)
+      : DateFormat.yMMMd(appProvider.appLocale.languageCode).format(_dateTime);
   return formattedDate;
 }
 
@@ -270,7 +271,9 @@ double calculateDeliveryFee({BranchDelivery delivery, double cartTotal}) {
   if (delivery.freeDeliveryThreshold.raw > 0 && cartTotal > delivery.freeDeliveryThreshold.raw) {
     return 0.0;
   } else {
-    return cartTotal < delivery.minimumOrder.raw ? delivery.fixedDeliveryFee.raw + delivery.underMinimumOrderDeliveryFee.raw : delivery.fixedDeliveryFee.raw;
+    return cartTotal < delivery.minimumOrder.raw
+        ? delivery.fixedDeliveryFee.raw + delivery.underMinimumOrderDeliveryFee.raw
+        : delivery.fixedDeliveryFee.raw;
   }
 }
 
@@ -352,12 +355,4 @@ String getFoodDeliveryFeeTitle(BuildContext context, DoubleRawStringFormatted de
     );
   }
   return Translations.of(context).get("Delivery Fee");
-}
-
-void pushCupertinoPage(BuildContext context, Widget page, {bool rootNavigator = false}) {
-  Navigator.of(context, rootNavigator: rootNavigator).push(
-    CupertinoPageRoute<void>(
-      builder: (BuildContext context) => page,
-    ),
-  );
 }

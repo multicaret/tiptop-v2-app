@@ -13,6 +13,7 @@ import 'package:tiptop_v2/providers/otp_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/http_exception.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_buttons.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,7 +110,10 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             );
           } else {
             print('Registered user, navigating to home page');
-            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+            pushAndRemoveUntilCupertinoPage(
+              context,
+              AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+            );
           }
         } else {
           setState(() => _isLoadingCheckOTPValidation = false);
@@ -205,7 +209,10 @@ class _OTPChooseMethodPageState extends State<OTPChooseMethodPage> with WidgetsB
             const SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(AppWrapper.routeName, (Route<dynamic> route) => false);
+                pushAndRemoveUntilCupertinoPage(
+                  context,
+                  AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                );
               },
               child: Text(Translations.of(context).get("Continue Without Login")),
             ),

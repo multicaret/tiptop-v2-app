@@ -8,6 +8,7 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
@@ -30,12 +31,16 @@ class MarketGridProductItem extends StatelessWidget {
     if (product.isDisabled) {
       showToast(msg: Translations.of(context).get("This item is not available"));
     } else {
-      Navigator.of(context, rootNavigator: true).pushNamed(MarketProductPage.routeName, arguments: {
-        "product_id": product.id,
-        "has_controls": true,
-        "category_english_title": categoryEnglishTitle,
-        "parent_category_english_title": parentCategoryEnglishTitle,
-      });
+      pushCupertinoPage(
+        context,
+        MarketProductPage(
+          productId: product.id,
+          hasControls: true,
+          categoryEnglishTitle: categoryEnglishTitle,
+          parentCategoryEnglishTitle: parentCategoryEnglishTitle,
+        ),
+        rootNavigator: true,
+      );
     }
   }
 

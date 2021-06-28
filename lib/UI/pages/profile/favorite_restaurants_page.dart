@@ -8,7 +8,7 @@ import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
-import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class FavoriteRestaurantsPage extends StatefulWidget {

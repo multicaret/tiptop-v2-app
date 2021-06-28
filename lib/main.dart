@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return LanguageSelectPage();
       }
       if (appProvider.isAuth) {
-        return appProvider.isFirstOpen ? WalkthroughPage() : AppWrapper();
+        return appProvider.isFirstOpen ? WalkthroughPage() : AppWrapper(targetAppChannel: appProvider.appDefaultChannel);
       } else {
         return FutureBuilder(
           future: _autoLoginFuture,
@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ? SplashScreen()
               : appProvider.isFirstOpen
                   ? WalkthroughPage()
-                  : AppWrapper(),
+                  : AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
         );
       }
     }

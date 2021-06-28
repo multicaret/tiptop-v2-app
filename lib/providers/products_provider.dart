@@ -7,8 +7,9 @@ import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+
+import 'market_provider.dart';
 
 class ProductsProvider with ChangeNotifier {
   Category selectedParentCategory;
@@ -37,7 +38,7 @@ class ProductsProvider with ChangeNotifier {
     try {
       print('Fetching all market products in the background.... 👻');
       final responseData = await AppProvider().get(endpoint: endpoint, body: {
-        'branch_id': '${HomeProvider.branchId}',
+        'branch_id': '${MarketProvider.branchId}',
       });
       marketParentCategories = List<Category>.from(responseData["data"].map((x) => Category.fromJson(x)));
       isLoadingFetchAllProductsRequest = false;
@@ -56,7 +57,7 @@ class ProductsProvider with ChangeNotifier {
     final endpoint = 'grocery/categories/$selectedParentCategoryId/products';
 
     final responseData = await AppProvider().get(endpoint: endpoint, body: {
-      'branch_id': '${HomeProvider.branchId}',
+      'branch_id': '${MarketProvider.branchId}',
     });
     marketParentCategoriesWithoutChildren = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
@@ -235,13 +236,13 @@ class ProductsProvider with ChangeNotifier {
     print(json.encode(productTempCartData.toJson()["selectedOptions"]));
   }
 
-  Future<void> fetchSearchedProducts(searchQuery) async {
+  Future<void> fetchSearchedMarketProducts(searchQuery) async {
     final endpoint = 'search/products';
     try {
       final Map<String, String> body = {
         'q': searchQuery,
-        'branch_id': HomeProvider.branchId.toString(),
-        'chain_id': HomeProvider.chainId.toString(),
+        'branch_id': MarketProvider.branchId.toString(),
+        'chain_id': MarketProvider.chainId.toString(),
       };
       final responseData = await AppProvider().get(endpoint: endpoint, body: body);
       searchedProducts = responseData["data"] == null ? <Product>[] : List<Product>.from(responseData["data"].map((x) => Product.fromJson(x)));

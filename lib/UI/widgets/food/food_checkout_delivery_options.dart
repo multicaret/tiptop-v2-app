@@ -6,7 +6,7 @@ import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
@@ -53,8 +53,8 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
       return items;
     }
 
-    return Consumer2<HomeProvider, AppProvider>(
-      builder: (c, homeProvider, appProvider, _) => Column(
+    return Consumer2<FoodProvider, AppProvider>(
+      builder: (c, foodProvider, appProvider, _) => Column(
         children: [
           SectionTitle('Delivery Options'),
           if (restaurant.tiptopDelivery.isDeliveryEnabled)
@@ -84,7 +84,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
                     ),
               isDisabled: restaurant.tiptopDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.tiptopDelivery.minimumOrder.raw,
               delivery: restaurant.tiptopDelivery,
-              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.tiptopDelivery, homeProvider.foodCurrency),
+              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.tiptopDelivery, foodProvider.foodCurrency),
               deliveryType: RestaurantDeliveryType.TIPTOP,
             ),
           if (restaurant.restaurantDelivery.isDeliveryEnabled)
@@ -95,7 +95,7 @@ class FoodCheckoutDeliveryOptions extends StatelessWidget {
               isDisabled:
                   restaurant.restaurantDelivery.underMinimumOrderDeliveryFee.raw == 0 && cartTotal < restaurant.restaurantDelivery.minimumOrder.raw,
               delivery: restaurant.restaurantDelivery,
-              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.restaurantDelivery, homeProvider.foodCurrency),
+              deliveryInfoItems: getDeliveryOptionInfoItems(restaurant.restaurantDelivery, foodProvider.foodCurrency),
               deliveryType: RestaurantDeliveryType.RESTAURANT,
             ),
         ],

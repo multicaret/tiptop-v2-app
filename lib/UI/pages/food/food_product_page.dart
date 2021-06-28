@@ -17,7 +17,7 @@ import 'package:tiptop_v2/models/product.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/cart_provider.dart';
-import 'package:tiptop_v2/providers/home_provider.dart';
+import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/providers/products_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
@@ -29,7 +29,27 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import '../../widgets/UI/app_scaffold.dart';
 
 class FoodProductPage extends StatefulWidget {
-  static const routeName = '/food-product';
+  final int productId;
+  final CartProduct cartProduct;
+  final String categoryEnglishTitle;
+  final String restaurantEnglishTitle;
+  final int restaurantId;
+  final bool restaurantIsOpen;
+  final int chainId;
+  final bool hasControls;
+
+  FoodProductPage({
+    @required this.productId,
+    this.cartProduct,
+    this.categoryEnglishTitle,
+    this.restaurantEnglishTitle,
+    @required this.restaurantId,
+    @required this.chainId,
+    this.restaurantIsOpen = true,
+    this.hasControls = true,
+  });
+
+  // static const routeName = '/food-product';
 
   @override
   _FoodProductPageState createState() => _FoodProductPageState();
@@ -196,21 +216,19 @@ class _FoodProductPageState extends State<FoodProductPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Map<String, dynamic> data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      print('Route data: $data');
-      productId = data["product_id"];
-      cartProduct = data["cart_product"];
-      categoryEnglishTitle = data["category_english_title"];
-      restaurantEnglishTitle = data["restaurant_english_title"];
+      productId = widget.productId;
+      cartProduct = widget.cartProduct;
+      categoryEnglishTitle = widget.categoryEnglishTitle;
+      restaurantEnglishTitle = widget.restaurantEnglishTitle;
 
       if (cartProduct != null) {
         print('Cart product id: ${cartProduct.cartProductId}');
       }
 
-      restaurantId = data["restaurant_id"];
-      restaurantIsOpen = data["restaurant_is_open"] ?? true;
-      chainId = data["chain_id"];
-      hasControls = data["has_controls"] == null ? true : data["has_controls"];
+      restaurantId = widget.restaurantId;
+      restaurantIsOpen = widget.restaurantIsOpen;
+      chainId = widget.chainId;
+      hasControls = widget.hasControls;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
@@ -321,29 +339,30 @@ class _FoodProductPageState extends State<FoodProductPage> {
                   ),
                 ),
                 restaurantIsOpen
-                    ? Consumer3<HomeProvider, AppProvider, AddressesProvider>(
-                        builder: (c, homeProvider, appProvider, addressesProvider, _) => TotalButton(
+                    ? Consumer3<FoodProvider, AppProvider, AddressesProvider>(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              LineAwesomeIcons.shopping_cart,
+                              color: AppColors.white,
+                              size: 20,
+                            ),
+                            SizedBox(width: 5),
+                            Flexible(
+                              child: Text(
+                                Translations.of(context).get(cartProduct == null ? 'Add To Cart' : 'Update Cart'),
+                                maxLines: 1,
+                                style: AppTextStyles.button,
+                              ),
+                            ),
+                          ],
+                        ),
+                        builder: (c, foodProvider, appProvider, addressesProvider, child) => TotalButton(
                           onTap: () => submitProductCartData(context, appProvider, addressesProvider),
                           isRTL: appProvider.isRTL,
-                          total: priceAndCurrency(productTotalPrice, homeProvider.foodCurrency),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                LineAwesomeIcons.shopping_cart,
-                                color: AppColors.white,
-                                size: 20,
-                              ),
-                              SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  Translations.of(context).get(cartProduct == null ? 'Add To Cart' : 'Update Cart'),
-                                  maxLines: 1,
-                                  style: AppTextStyles.button,
-                                ),
-                              ),
-                            ],
-                          ),
+                          total: priceAndCurrency(productTotalPrice, foodProvider.foodCurrency),
+                          child: child,
                         ),
                       )
                     : Container(

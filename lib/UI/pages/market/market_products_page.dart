@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
-import 'package:tiptop_v2/UI/widgets/cart/app_bar_cart_total.dart';
+import 'package:tiptop_v2/UI/widgets/market/cart/market_app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_categories_tabs.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_category_tab_content.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
@@ -73,9 +73,9 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
 
       //If opening the page from deeplink OR if the products request hasn't been run before, perform it then display the page
       //Another deeplink of another page might interrupt the running of the products request in the home page
-      if (!productsProvider.isLoadingFetchAllProductsRequest && productsProvider.marketParentCategories.length == 0) {
-        _fetchAndSetParentCategoriesAndProducts();
-      }
+      // if (!productsProvider.isLoadingFetchAllProductsRequest && productsProvider.marketParentCategories.length == 0) {
+      //   _fetchAndSetParentCategoriesAndProducts();
+      // }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -99,7 +99,13 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
         title: Text(Translations.of(context).get("Products")),
         actions: [
           Consumer<AppProvider>(
-            builder: (c, appProvider, _) => appProvider.isAuth ? AppBarCartTotal() : Container(),
+            builder: (c, appProvider, _) => appProvider.isAuth
+                ? MarketAppBarCartTotal(
+                    isLoading: productsProvider.isLoadingFetchAllProductsRequest,
+                    requestError: productsProvider.fetchAllProductsError,
+                    isRTL: appProvider.isRTL,
+                  )
+                : Container(),
           ),
         ],
       ),

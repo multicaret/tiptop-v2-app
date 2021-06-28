@@ -5,7 +5,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
-import 'package:tiptop_v2/UI/widgets/address/address_select_button.dart';
+import 'package:tiptop_v2/UI/widgets/market/market_address_select_button.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_product_list_item.dart';
 import 'package:tiptop_v2/UI/widgets/order_info.dart';
 import 'package:tiptop_v2/UI/widgets/order_rating_button.dart';
@@ -128,7 +128,7 @@ class _MarketPreviousOrderPageState extends State<MarketPreviousOrderPage> {
           ? AppLoader()
           : Column(
               children: [
-                AddressSelectButton(
+                MarketAddressSelectButton(
                   isDisabled: true,
                   hasETA: false,
                   forceAddressView: true,
