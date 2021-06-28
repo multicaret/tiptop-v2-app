@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -102,130 +101,128 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
               )
           ],
         ),
-        body: _isLoading
-            ? const AppLoader()
-            : Column(
-                children: [
-                  AppSearchField(
-                    submitAction: (String searchQuery) => submitFoodSearch(searchQuery),
-                    controller: searchFieldController,
-                    focusNode: searchFieldFocusNode,
+        body: Column(
+          children: [
+            AppSearchField(
+              controller: searchFieldController,
+              focusNode: searchFieldFocusNode,
+              onChanged: submitFoodSearch,
+              isLoadingSearchResult: _isLoading,
+            ),
+            _searchedRestaurants.isNotEmpty
+                ? SectionTitle(
+                    'Search Results',
+                    suffix: ' (${_searchedRestaurants.length})',
+                  )
+                : Column(
+                    children: [
+                      SectionTitle('Categories'),
+                      CategoriesSlider(
+                        categories: restaurantsProvider.foodCategories,
+                        onCategoryTap: (String categoryTitle) {
+                          searchFieldController.text = categoryTitle;
+                          submitFoodSearch(categoryTitle);
+                        },
+                      ),
+                      SectionTitle('Most Searched Terms'),
+                    ],
                   ),
-                  _searchedRestaurants.isNotEmpty
-                      ? SectionTitle(
-                          'Search Results',
-                          suffix: ' (${_searchedRestaurants.length})',
-                        )
-                      : Column(
-                          children: [
-                            SectionTitle('Categories'),
-                            CategoriesSlider(
-                              categories: restaurantsProvider.foodCategories,
-                              onCategoryTap: (String categoryTitle) {
-                                searchFieldController.text = categoryTitle;
-                                submitFoodSearch(categoryTitle);
-                              },
-                            ),
-                            SectionTitle('Most Searched Terms'),
-                          ],
-                        ),
-                  _searchedRestaurants.isNotEmpty
-                      ? Expanded(
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _searchedRestaurants.length,
-                              itemBuilder: (c, i) {
-                                return Container(
-                                  child: Column(
-                                    children: [
-                                      Material(
+            _searchedRestaurants.isNotEmpty
+                ? Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _searchedRestaurants.length,
+                        itemBuilder: (c, i) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                Material(
+                                  color: AppColors.white,
+                                  child: InkWell(
+                                    onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
+                                      RestaurantPage.routeName,
+                                      arguments: {
+                                        'restaurant_id': _searchedRestaurants[i].id,
+                                      },
+                                    ),
+                                    child: RestaurantHorizontalListItem(
+                                      restaurant: _searchedRestaurants[i],
+                                      isMini: true,
+                                    ),
+                                  ),
+                                ),
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _searchedRestaurants[i].searchProducts.length,
+                                    itemBuilder: (c, j) {
+                                      var product = _searchedRestaurants[i].searchProducts[j];
+                                      return Material(
                                         color: AppColors.white,
                                         child: InkWell(
-                                          onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
-                                            RestaurantPage.routeName,
-                                            arguments: {
-                                              'restaurant_id': _searchedRestaurants[i].id,
-                                            },
-                                          ),
-                                          child: RestaurantHorizontalListItem(
-                                            restaurant: _searchedRestaurants[i],
-                                            isMini: true,
-                                          ),
-                                        ),
-                                      ),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          itemCount: _searchedRestaurants[i].searchProducts.length,
-                                          itemBuilder: (c, j) {
-                                            var product = _searchedRestaurants[i].searchProducts[j];
-                                            return Material(
-                                              color: AppColors.white,
-                                              child: InkWell(
-                                                onTap: () =>
-                                                    Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
-                                                  'product_id': product.id,
-                                                  'restaurant_id': _searchedRestaurants[i].id,
-                                                  'restaurant_is_open': _searchedRestaurants[i].workingHours.isOpen,
-                                                  'chain_id': _searchedRestaurants[i].chain.id,
-                                                }),
-                                                child: Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
-                                                  decoration: BoxDecoration(
-                                                    border: Border(bottom: BorderSide(color: AppColors.primary50)),
-                                                  ),
-                                                  child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                          onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(FoodProductPage.routeName, arguments: {
+                                            'product_id': product.id,
+                                            'restaurant_id': _searchedRestaurants[i].id,
+                                            'restaurant_is_open': _searchedRestaurants[i].workingHours.isOpen,
+                                            'chain_id': _searchedRestaurants[i].chain.id,
+                                          }),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 10),
+                                            decoration: BoxDecoration(
+                                              border: Border(bottom: BorderSide(color: AppColors.primary50)),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Text(product.title),
-                                                            if (product.excerpt.raw != null && product.excerpt.raw.isNotEmpty)
-                                                              Text(
-                                                                product.excerpt.raw,
-                                                                style: AppTextStyles.subtitle50,
-                                                                maxLines: 2,
-                                                                overflow: TextOverflow.ellipsis,
-                                                              ),
-                                                          ],
+                                                      Text(product.title),
+                                                      if (product.excerpt.raw != null && product.excerpt.raw.isNotEmpty)
+                                                        Text(
+                                                          product.excerpt.raw,
+                                                          style: AppTextStyles.subtitle50,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: FormattedPrices(
-                                                          price: product.price,
-                                                          discountedPrice: product.discountedPrice,
-                                                          isEndAligned: true,
-                                                        ),
-                                                      ),
-                                                      // Text(
-                                                      //   product.price.formatted,
-                                                      //   style: AppTextStyles.subtitleSecondary,
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          }),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        )
-                      : Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [..._getMostSearchedTermsList()],
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: FormattedPrices(
+                                                    price: product.price,
+                                                    discountedPrice: product.discountedPrice,
+                                                    isEndAligned: true,
+                                                  ),
+                                                ),
+                                                // Text(
+                                                //   product.price.formatted,
+                                                //   style: AppTextStyles.subtitleSecondary,
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ],
                             ),
-                          ),
-                        ),
-                ],
-              ),
+                          );
+                        }),
+                  )
+                : Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [..._getMostSearchedTermsList()],
+                      ),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

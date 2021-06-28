@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/UI/input/app_search_field.dart';
 import 'package:tiptop_v2/UI/widgets/UI/section_title.dart';
@@ -96,40 +95,39 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               )
           ],
         ),
-        body: _isLoading
-            ? const AppLoader()
-            : Column(
-                children: [
-                  AppSearchField(
-                    submitAction: (String searchQuery) => _submitSearch(searchQuery),
-                    controller: searchFieldController,
-                    focusNode: searchFieldFocusNode,
+        body: Column(
+          children: [
+            AppSearchField(
+              controller: searchFieldController,
+              focusNode: searchFieldFocusNode,
+              onChanged: _submitSearch,
+              isLoadingSearchResult: _isLoading,
+            ),
+            _searchedProducts.isNotEmpty
+                ? SectionTitle(
+                    'Search Results',
+                    suffix: ' (${_searchedProducts.length})',
+                  )
+                : SectionTitle('Most Searched Terms'),
+            _searchedProducts.isNotEmpty
+                ? Expanded(
+                    child: Container(
+                      color: AppColors.white,
+                      child: MarketProductsGridView(
+                        products: _searchedProducts,
+                        physics: AlwaysScrollableScrollPhysics(),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [..._getMostSearchedTermsList()],
+                      ),
+                    ),
                   ),
-                  _searchedProducts.isNotEmpty
-                      ? SectionTitle(
-                          'Search Results',
-                          suffix: ' (${_searchedProducts.length})',
-                        )
-                      : SectionTitle('Most Searched Terms'),
-                  _searchedProducts.isNotEmpty
-                      ? Expanded(
-                          child: Container(
-                            color: AppColors.white,
-                            child: MarketProductsGridView(
-                              products: _searchedProducts,
-                              physics: AlwaysScrollableScrollPhysics(),
-                            ),
-                          ),
-                        )
-                      : Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [..._getMostSearchedTermsList()],
-                            ),
-                          ),
-                        ),
-                ],
-              ),
+          ],
+        ),
       ),
     );
   }
