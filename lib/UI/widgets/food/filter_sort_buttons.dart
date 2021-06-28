@@ -20,7 +20,7 @@ class FilterSortButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 30.0, bottom: 10),
+      padding: const EdgeInsets.only(left: screenHorizontalPadding, right: screenHorizontalPadding, top: 20, bottom: 10),
       child: Row(
         children: [
           Expanded(
