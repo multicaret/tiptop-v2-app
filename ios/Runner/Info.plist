@@ -64,7 +64,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>You can send order related images through the live chat support screen</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>We are tracking our users to capture data on how users interact with our product, analyze this  data with and understand our users and provide them with better services and value. In other hand we do use it to promote our app to our users.</string>
+	<string>Allow TipTop to track your activity across other companies' apps and websites? TipTop will only use this data to provide the best possible suggestions and discounts for you.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
