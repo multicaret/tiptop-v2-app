@@ -49,7 +49,7 @@ const double marketProductUnitTitleHeight = 12;
 const double restaurantCategoriesHeight = 70;
 
 //Height of home page carousel
-const double homeSliderHeight = 212;
+const double homeSliderHeight = 170;
 
 //Screen left and right padding
 const double screenHorizontalPadding = 17;

@@ -16,13 +16,13 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 30, bottom: 5),
+      padding: const EdgeInsets.only(right: screenHorizontalPadding, left: screenHorizontalPadding, top: 15, bottom: 5),
       margin: const EdgeInsets.only(bottom: 8),
       color: AppColors.bg,
       child: RichText(
         text: TextSpan(
           text: translate ? Translations.of(context).get(text) : text,
-          style: DefaultTextStyle.of(context).style.copyWith(color: AppColors.text50, fontSize: 14),
+          style: DefaultTextStyle.of(context).style.copyWith(color: AppColors.text50, fontSize: 16),
           children: <TextSpan>[
             if (suffix != null && suffix.isNotEmpty) TextSpan(text: suffix, style: suffixTextStyle),
           ],

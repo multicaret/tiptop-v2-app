@@ -52,7 +52,7 @@ class MarketAddressSelectButton extends StatelessWidget {
               bottom: BorderSide(width: 2, color: AppColors.primary),
             ),
           ),
-          height: 70,
+          height: buttonHeight,
           child: Stack(
             children: [
               if (!showSelectAddress && hasETA && estimatedArrivalTime != null)
@@ -106,7 +106,7 @@ class MarketAddressSelectButton extends StatelessWidget {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.fastOutSlowIn,
                   color: AppColors.white,
-                  height: 70,
+                  height: buttonHeight,
                   width: marketProvider.isLoadingMarketHomeData || etaIsVisible ? screenSize.width : screenSize.width * 0.75,
                   child: InkWell(
                     onTap: isDisabled
