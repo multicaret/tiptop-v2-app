@@ -109,6 +109,9 @@ class AddressesProvider with ChangeNotifier {
     if (responseData == 401) {
       return 401;
     }
+    if (responseData["message"] != null) {
+      return responseData["message"];
+    }
     if (selectedAddress != null && selectedAddress.id == addressId) {
       print('😱😱😱😱 Ya Lahweeee you are deleting selected address');
       storageActions.deleteData(key: 'selected_address');
