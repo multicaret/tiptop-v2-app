@@ -334,6 +334,11 @@ class CartProvider with ChangeNotifier {
 
   Future<void> clearMarketCart(AppProvider appProvider) async {
     final endpoint = 'carts/${marketCart.id}/delete';
+
+    if (MarketProvider.branchId == null || MarketProvider.chainId == null) {
+      throw "Either chain id (${MarketProvider.chainId}) or restaurant id (${MarketProvider.branchId}) is null";
+    }
+
     clearRequestedMoreThanAvailableQuantity();
     isLoadingClearMarketCartRequest = true;
     notifyListeners();
@@ -353,7 +358,7 @@ class CartProvider with ChangeNotifier {
       isLoadingClearMarketCartRequest = false;
       notifyListeners();
     } catch (e) {
-      isLoadingClearMarketCartRequest = true;
+      isLoadingClearMarketCartRequest = false;
       notifyListeners();
       throw e;
     }
@@ -375,6 +380,7 @@ class CartProvider with ChangeNotifier {
       'branch_id': FoodProvider.selectedFoodBranchId,
       'chain_id': FoodProvider.selectedFoodChainId,
     };
+
     print('body: $body');
 
     try {
