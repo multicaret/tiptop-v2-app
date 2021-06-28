@@ -53,15 +53,18 @@ class AppScaffold extends StatelessWidget {
             ),
           ),
           Scaffold(
-            appBar: appBar ??
-                AppBar(
-                    automaticallyImplyLeading: automaticallyImplyLeading,
-                    title: Image.asset(
-                      'assets/images/tiptop-logo-title.png',
-                      width: 77.42,
-                      height: 26.84,
-                    ),
-                    actions: appBarActions),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(48),
+              child: appBar ??
+                  AppBar(
+                      automaticallyImplyLeading: automaticallyImplyLeading,
+                      title: Image.asset(
+                        'assets/images/tiptop-logo-title.png',
+                        width: 77.42,
+                        height: 26.84,
+                      ),
+                      actions: appBarActions),
+            ),
             body: ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(hasCurve ? 40 : 0),
