@@ -77,10 +77,11 @@ class CartProvider with ChangeNotifier {
     BuildContext context,
   }) async {
     if (marketCart == null || marketCart.id == null) {
-      print('No marketCart');
-      showToast(msg: Translations.of(context).get("An Error Occurred! Logging out..."));
-      appProvider.logout();
-      return 401;
+      print('🛒🛒🛒🛒🛒🛒🛒🛒🛒 No marketCart 🛒🛒🛒🛒🛒🛒🛒🛒🛒🛒');
+      showToast(msg: Translations.of(context).get("An Error Occurred!"));
+      return null;
+      // appProvider.logout();
+      // return 401;
     }
 
     if (MarketProvider.branchId == null || MarketProvider.chainId == null) {
@@ -110,6 +111,8 @@ class CartProvider with ChangeNotifier {
       withToken: true,
       overrideStatusCheck: true,
     );
+    print('responseData');
+    print(responseData);
 
     if (responseData == 401) {
       return 401;

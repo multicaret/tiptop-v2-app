@@ -88,7 +88,7 @@ class FoodProvider with ChangeNotifier {
         cartProvider.setFoodCart(foodHomeData.cart);
       }
 
-      print('Notifying listeners from home provider fetch home data function!');
+      print('Notifying listeners from food provider fetch food home data function!');
       isLoadingFoodHomeData = false;
       notifyListeners();
     } catch (e) {

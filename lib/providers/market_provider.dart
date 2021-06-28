@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/location_permission_page.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
@@ -35,15 +34,14 @@ class MarketProvider with ChangeNotifier {
   LocalStorage storageActions = LocalStorage.getActions();
   bool isLocationPermissionGranted = false;
 
-  Future<void> fetchAndSetMarketHomeData(
+  Future<void> fetchAndSetMarketHomeData({
     BuildContext context,
-    AppProvider appProvider, {
-    bool afterLanguageChange = false,
+    AppProvider appProvider,
+    CartProvider cartProvider,
   }) async {
     final endpoint = 'home';
     isLoadingMarketHomeData = true;
     notifyListeners();
-    CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
 
     if (AppProvider.latitude == null || AppProvider.longitude == null) {
       print('Lat/Long not found!');
@@ -70,6 +68,8 @@ class MarketProvider with ChangeNotifier {
         body: body,
         withToken: appProvider.isAuth,
       );
+      // print('responseData of market home request');
+      // print(responseData);
       print('Setting market home data...');
       marketHomeData = HomeData.fromJson(responseData["data"]);
       marketCurrency = marketHomeData.currentCurrency;
@@ -92,7 +92,7 @@ class MarketProvider with ChangeNotifier {
       if (marketHomeData.cart != null) {
         cartProvider.setMarketCart(marketHomeData.cart);
       }
-      print('Notifying listeners from home provider fetch home data function!');
+      print('Notifying listeners from market provider fetch market home data function!');
       isLoadingMarketHomeData = false;
       notifyListeners();
     } catch (e) {

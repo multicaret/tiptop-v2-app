@@ -120,11 +120,7 @@ class ProfilePage extends StatelessWidget {
                         appProvider.changeLanguage(selectedLanguage.locale);
                         pushAndRemoveUntilCupertinoPage(
                           context,
-                          AppWrapper(
-                            targetAppChannel: currentChannel,
-                            forceMarketHomeDataRefresh: true,
-                            forceFoodHomeDataRefresh: true,
-                          ),
+                          AppWrapper(targetAppChannel: currentChannel),
                         );
                       },
                       isAssetLogo: true,

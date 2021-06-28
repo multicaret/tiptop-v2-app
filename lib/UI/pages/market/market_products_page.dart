@@ -73,9 +73,9 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
 
       //If opening the page from deeplink OR if the products request hasn't been run before, perform it then display the page
       //Another deeplink of another page might interrupt the running of the products request in the home page
-      if (!productsProvider.isLoadingFetchAllProductsRequest && productsProvider.marketParentCategories.length == 0) {
-        _fetchAndSetParentCategoriesAndProducts();
-      }
+      // if (!productsProvider.isLoadingFetchAllProductsRequest && productsProvider.marketParentCategories.length == 0) {
+      //   _fetchAndSetParentCategoriesAndProducts();
+      // }
     }
     _isInit = false;
     super.didChangeDependencies();

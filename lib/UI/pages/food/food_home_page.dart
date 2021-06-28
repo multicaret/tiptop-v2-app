@@ -10,89 +10,109 @@ import 'package:tiptop_v2/UI/widgets/food/food_home_content.dart';
 import 'package:tiptop_v2/UI/widgets/food/food_home_slider.dart';
 import 'package:tiptop_v2/UI/widgets/home_live_tracking.dart';
 import 'package:tiptop_v2/models/enums.dart';
+import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
-import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-import '../../app_wrapper.dart';
+class FoodHomePage extends StatefulWidget {
+  final Function foodDeepLinkAction;
+  final Function onChannelSwitch;
 
-class FoodHomePage extends StatelessWidget {
-  final bool forceMarketHomeDataRefresh;
+  FoodHomePage({this.foodDeepLinkAction, this.onChannelSwitch});
 
-  FoodHomePage({this.forceMarketHomeDataRefresh = false});
+  @override
+  _FoodHomePageState createState() => _FoodHomePageState();
+}
+
+class _FoodHomePageState extends State<FoodHomePage> with AutomaticKeepAliveClientMixin {
+  bool _isInit = true;
+  AppProvider appProvider;
+  FoodProvider foodProvider;
+  AddressesProvider addressesProvider;
+
+  Future<void> _fetchAndSetFoodHomeData() async {
+    await addressesProvider.fetchSelectedAddress();
+    await foodProvider.fetchAndSetFoodHomeData(context, appProvider);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      appProvider = Provider.of<AppProvider>(context, listen: false);
+      addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
+      foodProvider = Provider.of<FoodProvider>(context);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchAndSetFoodHomeData().then((_) {
+          // Check if a deeplink exists
+          // (this only happen when the app was shutdown and not running in the background)
+          if (widget.foodDeepLinkAction != null) {
+            widget.foodDeepLinkAction();
+          }
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     print("Rebuilt Food Home Page!");
+    super.build(context);
+    bool hideFoodContent = foodProvider.isLoadingFoodHomeData ||
+        foodProvider.foodHomeData == null ||
+        foodProvider.foodHomeDataRequestError ||
+        foodProvider.foodNoRestaurantFound;
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Consumer2<AppProvider, FoodProvider>(
-        builder: (c, appProvider, foodProvider, _) {
-          bool hideFoodContent = foodProvider.isLoadingFoodHomeData ||
-              foodProvider.foodHomeData == null ||
-              foodProvider.foodHomeDataRequestError ||
-              foodProvider.foodNoRestaurantFound;
-
-          return AppScaffold(
-            appBarActions: appProvider.isAuth
-                ? [
-                    FoodAppBarCartTotal(
-                      isLoading: foodProvider.isLoadingFoodHomeData,
-                      requestError: foodProvider.foodHomeDataRequestError,
+    return AppScaffold(
+      appBarActions: appProvider.isAuth
+          ? [
+              FoodAppBarCartTotal(
+                isLoading: foodProvider.isLoadingFoodHomeData,
+                requestError: foodProvider.foodHomeDataRequestError,
+                isRTL: appProvider.isRTL,
+              ),
+            ]
+          : null,
+      bodyPadding: const EdgeInsets.all(0),
+      hasOverlayLoader: foodProvider.isLoadingFoodHomeData,
+      body: Column(
+        children: [
+          FoodAddressSelectButton(),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => foodProvider.fetchAndSetFoodHomeData(context, appProvider),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 50.0),
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    hideFoodContent
+                        ? Container(
+                            height: homeSliderHeight,
+                            color: AppColors.bg,
+                          )
+                        : FoodHomeSlider(slides: foodProvider.foodHomeData.slides),
+                    ChannelsButtons(
+                      selectedChannel: AppChannel.FOOD,
+                      onPressed: foodProvider.isLoadingFoodHomeData ? () {} : (AppChannel _channel) => widget.onChannelSwitch(),
                       isRTL: appProvider.isRTL,
                     ),
-                  ]
-                : null,
-            bodyPadding: const EdgeInsets.all(0),
-            hasOverlayLoader: foodProvider.isLoadingFoodHomeData,
-            body: Column(
-              children: [
-                FoodAddressSelectButton(),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () => foodProvider.fetchAndSetFoodHomeData(context, appProvider),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 50.0),
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          hideFoodContent
-                              ? Container(
-                                  height: homeSliderHeight,
-                                  color: AppColors.bg,
-                                )
-                              : FoodHomeSlider(slides: foodProvider.foodHomeData.slides),
-                          ChannelsButtons(
-                            selectedChannel: AppChannel.FOOD,
-                            onPressed: foodProvider.isLoadingFoodHomeData
-                                ? () {}
-                                : (AppChannel _channel) => pushAndRemoveUntilCupertinoPage(
-                                      context,
-                                      AppWrapper(
-                                        targetAppChannel: _channel,
-                                        forceMarketHomeDataRefresh: forceMarketHomeDataRefresh,
-                                      ),
-                                    ),
-                            isRTL: appProvider.isRTL,
-                          ),
-                          _foodHomeContent(
-                            foodProvider: foodProvider,
-                            hideFoodContent: hideFoodContent,
-                            isAuth: appProvider.isAuth,
-                          ),
-                        ],
-                      ),
+                    _foodHomeContent(
+                      foodProvider: foodProvider,
+                      hideFoodContent: hideFoodContent,
+                      isAuth: appProvider.isAuth,
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -129,10 +149,14 @@ class FoodHomePage extends StatelessWidget {
             if (foodProvider.foodHomeData != null)
               FoodHomeContent(
                 foodHomeData: foodProvider.foodHomeData,
+                isRTL: appProvider.isRTL,
               ),
           ],
         );
       }
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -119,14 +119,25 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       if (hasValidChannel && itemId != null && itemParentId != null) {
         if (requestedAppChannel == AppChannel.MARKET) {
           print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-          pushCupertinoPage(
-            context,
-            MarketProductsPage(
-              selectedParentCategoryId: int.parse(itemParentId),
-              selectedChildCategoryId: int.parse(itemId),
-              isDeepLink: true,
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            CupertinoPageRoute<void>(
+              builder: (BuildContext context) => AppWrapper(
+                targetAppChannel: requestedAppChannel,
+                marketDeepLinkAction: () {
+                  pushCupertinoPage(
+                    context,
+                    MarketProductsPage(
+                      selectedParentCategoryId: int.parse(itemParentId),
+                      selectedChildCategoryId: int.parse(itemId),
+                      isDeepLink: true,
+                    ),
+                  );
+                },
+              ),
             ),
+            (Route<dynamic> route) => false,
           );
+
           return;
         } else if (requestedAppChannel == AppChannel.FOOD) {
           print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");

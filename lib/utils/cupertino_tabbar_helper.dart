@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptop_v2/UI/pages/food/food_home_page.dart';
 import 'package:tiptop_v2/UI/pages/food/food_search_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
@@ -8,6 +9,7 @@ import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
+import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 List<TabItem> initCupertinoTabsList = [
@@ -29,11 +31,8 @@ List<TabItem> initCupertinoTabsList = [
   ),
 ];
 
-List<TabItem> getCupertinoTabsList(
-  AppChannel targetAppChannel, {
-  bool forceMarketHomeDataRefresh = false,
-  bool forceFoodHomeDataRefresh = false,
-}) {
+List<TabItem> getCupertinoTabsList(AppChannel targetAppChannel,
+    {Function onChannelSwitch, Function marketDeepLinkAction, Function foodDeepLinkAction}) {
   return initCupertinoTabsList.map((tabItem) {
     switch (tabItem.id) {
       case 0:
@@ -41,8 +40,14 @@ List<TabItem> getCupertinoTabsList(
           id: tabItem.id,
           icon: tabItem.icon,
           view: targetAppChannel == AppChannel.FOOD
-              ? FoodHomePage(forceMarketHomeDataRefresh: forceMarketHomeDataRefresh)
-              : MarketHomePage(forceFoodHomeDataRefresh: forceFoodHomeDataRefresh),
+              ? FoodHomePage(
+                  onChannelSwitch: onChannelSwitch,
+                  foodDeepLinkAction: foodDeepLinkAction,
+                )
+              : MarketHomePage(
+                  onChannelSwitch: onChannelSwitch,
+                  marketDeepLinkAction: marketDeepLinkAction,
+                ),
         );
         break;
       case 1:
@@ -70,10 +75,7 @@ List<TabItem> getCupertinoTabsList(
   }).toList();
 }
 
-List<BottomNavigationBarItem> getCupertinoTabBarItems({
-  BuildContext context,
-  bool isRTL,
-}) {
+List<BottomNavigationBarItem> getCupertinoTabBarItems(BuildContext context) {
   double tabWidth = MediaQuery.of(context).size.width / initCupertinoTabsList.length;
 
   return List.generate(initCupertinoTabsList.length, (i) {
@@ -82,16 +84,19 @@ List<BottomNavigationBarItem> getCupertinoTabBarItems({
 
     return BottomNavigationBarItem(
       backgroundColor: AppColors.primary,
-      icon: Padding(
-        padding: i == tabWithEndPaddingIndex
-            ? isRTL
-                ? EdgeInsets.only(left: tabWidth / 2)
-                : EdgeInsets.only(right: tabWidth / 2)
-            : i == tabWithStartPaddingIndex
-                ? isRTL
-                    ? EdgeInsets.only(right: tabWidth / 2)
-                    : EdgeInsets.only(left: tabWidth / 2)
-                : EdgeInsets.all(0),
+      icon: Consumer<AppProvider>(
+        builder: (c, appProvider, icon) => Padding(
+          padding: i == tabWithEndPaddingIndex
+              ? appProvider.isRTL
+                  ? EdgeInsets.only(left: tabWidth / 2)
+                  : EdgeInsets.only(right: tabWidth / 2)
+              : i == tabWithStartPaddingIndex
+                  ? appProvider.isRTL
+                      ? EdgeInsets.only(right: tabWidth / 2)
+                      : EdgeInsets.only(left: tabWidth / 2)
+                  : EdgeInsets.all(0),
+          child: icon,
+        ),
         child: Icon(
           initCupertinoTabsList[i].icon,
         ),

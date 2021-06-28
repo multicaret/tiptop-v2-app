@@ -23,6 +23,10 @@ import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
 class AddressesPage extends StatefulWidget {
+  final AppChannel currentChannel;
+
+  AddressesPage({this.currentChannel});
+
   static const routeName = '/my-addresses';
 
   @override
@@ -156,13 +160,13 @@ class _AddressesPageState extends State<AddressesPage> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context);
-      addressesProvider = Provider.of<AddressesProvider>(context);
-      cartProvider = Provider.of<CartProvider>(context);
+      appProvider = Provider.of<AppProvider>(context, listen: false);
+      addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
+      cartProvider = Provider.of<CartProvider>(context, listen: false);
       final data = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       if (data != null) {
         _shouldPopAfterSelection = data['should_pop_after_selection'] ?? false;
-        currentChannel = data['current_channel'];
+        currentChannel = widget.currentChannel ?? data['current_channel'];
       }
       _fetchAndSetAddresses();
     }

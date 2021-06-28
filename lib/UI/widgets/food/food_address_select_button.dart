@@ -13,6 +13,7 @@ import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/helper.dart';
+import 'package:tiptop_v2/utils/navigator_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
@@ -113,9 +114,10 @@ class FoodAddressSelectButton extends StatelessWidget {
                         ? null
                         : () {
                             if (appProvider.isAuth) {
-                              Navigator.of(context, rootNavigator: true).pushNamed(
-                                AddressesPage.routeName,
-                                arguments: {'current_channel': AppChannel.FOOD},
+                              pushCupertinoPage(
+                                context,
+                                AddressesPage(currentChannel: AppChannel.FOOD),
+                                rootNavigator: true,
                               );
                             } else {
                               showToast(msg: Translations.of(context).get("You Need to Log In First!"));
