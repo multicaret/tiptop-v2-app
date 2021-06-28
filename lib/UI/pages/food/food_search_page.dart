@@ -44,30 +44,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   List<Branch> _searchedRestaurants = [];
   List<Term> _terms = [];
 
-  @override
-  void dispose() {
-    searchFieldController.dispose();
-    searchFieldFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
-      searchProvider = Provider.of<SearchProvider>(context);
-
-      fetchAndSetSearchTerms();
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
     await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.FOOD);
@@ -82,6 +58,25 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
       _searchedRestaurants = [];
       searchQuery = '';
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
+      searchProvider = Provider.of<SearchProvider>(context);
+
+      fetchAndSetSearchTerms();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    searchFieldController.dispose();
+    searchFieldFocusNode.dispose();
+    super.dispose();
   }
 
   @override

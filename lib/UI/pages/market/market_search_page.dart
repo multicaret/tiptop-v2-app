@@ -37,30 +37,6 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
   List<Product> _searchedProducts = [];
   List<Term> _terms = [];
 
-  @override
-  void dispose() {
-    searchFieldController.dispose();
-    searchFieldFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      productsProvider = Provider.of<ProductsProvider>(context, listen: false);
-      searchProvider = Provider.of<SearchProvider>(context);
-
-      fetchAndSetSearchTerms();
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
   Future<void> fetchAndSetSearchTerms() async {
     setState(() => _isLoading = true);
     await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.MARKET);
@@ -75,6 +51,25 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       _searchedProducts = [];
       searchQuery = '';
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      productsProvider = Provider.of<ProductsProvider>(context, listen: false);
+      searchProvider = Provider.of<SearchProvider>(context);
+
+      fetchAndSetSearchTerms();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    searchFieldController.dispose();
+    searchFieldFocusNode.dispose();
+    super.dispose();
   }
 
   @override
