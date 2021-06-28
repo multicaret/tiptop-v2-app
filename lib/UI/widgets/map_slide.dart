@@ -75,8 +75,8 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
               centerLongitude: centerLong,
               userLatitude: userLat,
               userLongitude: userLong,
-              branchLatitude: HomeProvider.marketBranchLat,
-              branchLongitude: HomeProvider.marketBranchLong,
+              branchLatitude: MarketProvider.marketBranchLat,
+              branchLongitude: MarketProvider.marketBranchLong,
             ),
             Align(
               alignment: Alignment.bottomCenter,

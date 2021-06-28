@@ -51,7 +51,7 @@ class _MarketHomePageState extends State<MarketHomePage> with AutomaticKeepAlive
     if (_isInit) {
       appProvider = Provider.of<AppProvider>(context);
       marketProvider = Provider.of<MarketProvider>(context);
-      addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
+      addressesProvider = Provider.of<AddressesProvider>(context);
       productsProvider = Provider.of<ProductsProvider>(context, listen: false);
       cartProvider = Provider.of<CartProvider>(context);
 
