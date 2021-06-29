@@ -11,8 +11,6 @@ import 'package:tiptop_v2/UI/widgets/food/restaurants/restaurant_horizontal_list
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
-import 'package:tiptop_v2/models/enums.dart';
-import 'package:tiptop_v2/models/search.dart';
 import 'package:tiptop_v2/providers/restaurants_provider.dart';
 import 'package:tiptop_v2/providers/search_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
@@ -25,14 +23,12 @@ import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 import 'food_product_page.dart';
 
 class FoodSearchPage extends StatefulWidget {
-  static const routeName = '/food-search';
-
-  final TextEditingController searchFieldController;
-  final FocusNode searchFieldFocusNode;
+  final Function onSearchSubmitted;
+  final bool isLoadingSearchTerms;
 
   FoodSearchPage({
-    this.searchFieldController,
-    this.searchFieldFocusNode,
+    this.onSearchSubmitted,
+    this.isLoadingSearchTerms = false,
   });
 
   @override
@@ -42,7 +38,6 @@ class FoodSearchPage extends StatefulWidget {
 class _FoodSearchPageState extends State<FoodSearchPage> {
   bool _isInit = true;
   bool _isLoading = false;
-  bool _isLoadingFoodSearchTerms = false;
   String searchQuery = '';
 
   TextEditingController searchFieldController;
@@ -52,14 +47,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   SearchProvider searchProvider;
 
   List<Branch> _searchedRestaurants = [];
-  List<Term> _terms = [];
-
-  Future<void> fetchAndSetSearchTerms() async {
-    setState(() => _isLoadingFoodSearchTerms = true);
-    await searchProvider.fetchAndSetSearchTerms(selectedChannel: AppChannel.FOOD);
-    _terms = searchProvider.terms;
-    setState(() => _isLoadingFoodSearchTerms = false);
-  }
 
   void _clearSearchResults() {
     searchFieldController.clear();
@@ -81,9 +68,6 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
   void didChangeDependencies() {
     if (_isInit) {
       restaurantsProvider = Provider.of<RestaurantsProvider>(context, listen: false);
-      searchProvider = Provider.of<SearchProvider>(context);
-
-      fetchAndSetSearchTerms();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -116,8 +100,8 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
         body: Column(
           children: [
             AppSearchField(
-              controller: widget.searchFieldController,
-              focusNode: widget.searchFieldFocusNode,
+              controller: searchFieldController,
+              focusNode: searchFieldFocusNode,
               onChanged: submitFoodSearch,
               isLoadingSearchResult: _isLoading,
             ),
@@ -229,43 +213,41 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
                         }),
                   )
                 : Expanded(
-                    child: _isLoadingFoodSearchTerms
-                        ? AppLoader()
-                        : SingleChildScrollView(
-                            child: Column(
-                              children: [..._getMostSearchedTermsList()],
-                            ),
-                          ),
+                    child: SingleChildScrollView(
+                      child: Consumer<SearchProvider>(
+                        builder: (c, searchProvider, _) => searchProvider.isLoadingSearchTerms
+                            ? AppLoader()
+                            : Column(
+                                children: List.generate(
+                                  searchProvider.foodSearchTerms.length,
+                                  (i) => Material(
+                                    color: AppColors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        searchFieldController.text = searchProvider.foodSearchTerms[i].term;
+                                        submitFoodSearch(searchProvider.foodSearchTerms[i].term);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(bottom: BorderSide(color: AppColors.border)),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
+                                        child: Row(
+                                          children: [
+                                            AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),
+                                            const SizedBox(width: 10),
+                                            Text(searchProvider.foodSearchTerms[i].term),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
                   ),
           ],
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _getMostSearchedTermsList() {
-    return List.generate(
-      _terms.length,
-      (i) => Material(
-        color: AppColors.white,
-        child: InkWell(
-          onTap: () {
-            searchFieldController.text = _terms[i].term;
-            submitFoodSearch(_terms[i].term);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColors.border)),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: screenHorizontalPadding, vertical: 20),
-            child: Row(
-              children: [
-                AppIcons.iconSecondary(FontAwesomeIcons.infoCircle),
-                const SizedBox(width: 10),
-                Text(_terms[i].term),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -278,14 +260,18 @@ class _FoodSearchPageState extends State<FoodSearchPage> {
         _isLoading = true;
       });
       await restaurantsProvider.fetchSearchedRestaurants(_searchQuery);
-      _searchedRestaurants = restaurantsProvider.searchedRestaurants;
+      setState(() {
+        _searchedRestaurants = restaurantsProvider.searchedRestaurants;
+      });
       if (_searchedRestaurants.isEmpty) {
         showToast(msg: Translations.of(context).get("No results match your search"));
       } else {
         var key = 'Result${_searchedRestaurants.length > 1 ? "s" : ""} match your search';
         showToast(msg: '${_searchedRestaurants.length} ${Translations.of(context).get(key)}');
       }
-      fetchAndSetSearchTerms();
+      if (widget.onSearchSubmitted != null) {
+        widget.onSearchSubmitted();
+      }
       setState(() {
         _isLoading = false;
       });

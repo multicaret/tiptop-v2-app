@@ -19,17 +19,17 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class MarketHomePage extends StatefulWidget {
+class MarketHomePageView extends StatefulWidget {
   final Function marketDeepLinkAction;
   final Function onChannelSwitch;
 
-  MarketHomePage({this.marketDeepLinkAction, this.onChannelSwitch});
+  MarketHomePageView({this.marketDeepLinkAction, this.onChannelSwitch});
 
   @override
-  _MarketHomePageState createState() => _MarketHomePageState();
+  _MarketHomePageViewState createState() => _MarketHomePageViewState();
 }
 
-class _MarketHomePageState extends State<MarketHomePage> with AutomaticKeepAliveClientMixin {
+class _MarketHomePageViewState extends State<MarketHomePageView> with AutomaticKeepAliveClientMixin {
   AppProvider appProvider;
   MarketProvider marketProvider;
   AddressesProvider addressesProvider;

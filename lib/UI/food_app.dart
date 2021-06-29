@@ -39,7 +39,6 @@ class _FoodAppState extends State<FoodApp> with AutomaticKeepAliveClientMixin {
     _cupertinoTabController.index = index;
     currentTabIndex = index;
   }
-
   //End Cupertino Tab Bar Code
 
   @override
@@ -78,7 +77,7 @@ class _FoodAppState extends State<FoodApp> with AutomaticKeepAliveClientMixin {
                   builder: (BuildContext context) {
                     List<TabItem> cupertinoTabListItems = getCupertinoTabsList(
                       AppChannel.FOOD,
-                      onChannelSwitch: widget.onChannelSwitch,
+                      // onChannelSwitch: widget.onChannelSwitch,
                       foodDeepLinkAction: widget.foodDeepLinkAction,
                     );
                     return cupertinoTabListItems[index].view;

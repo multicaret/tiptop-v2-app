@@ -78,7 +78,7 @@ class _MarketAppState extends State<MarketApp> with AutomaticKeepAliveClientMixi
                   builder: (BuildContext context) {
                     List<TabItem> cupertinoTabListItems = getCupertinoTabsList(
                       AppChannel.MARKET,
-                      onChannelSwitch: widget.onChannelSwitch,
+                      // onChannelSwitch: widget.onChannelSwitch,
                       marketDeepLinkAction: widget.marketDeepLinkAction,
                     );
                     return cupertinoTabListItems[index].view;

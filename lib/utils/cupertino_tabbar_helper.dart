@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiptop_v2/UI/pages/food/food_home_page.dart';
+import 'package:tiptop_v2/UI/home_page.dart';
 import 'package:tiptop_v2/UI/pages/food/food_search_page.dart';
-import 'package:tiptop_v2/UI/pages/market/market_home_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_search_page.dart';
 import 'package:tiptop_v2/UI/pages/profile/profile_page.dart';
+import 'package:tiptop_v2/UI/pages/search_page.dart';
 import 'package:tiptop_v2/UI/pages/support_page.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/models.dart';
@@ -33,7 +33,7 @@ List<TabItem> initCupertinoTabsList = [
 
 List<TabItem> getCupertinoTabsList(
   AppChannel targetAppChannel, {
-  Function onChannelSwitch,
+  Function switchAppWrapperChannel,
   Function foodDeepLinkAction,
   Function marketDeepLinkAction,
 }) {
@@ -43,22 +43,19 @@ List<TabItem> getCupertinoTabsList(
         return TabItem(
           id: tabItem.id,
           icon: tabItem.icon,
-          view: targetAppChannel == AppChannel.FOOD
-              ? FoodHomePage(
-                  onChannelSwitch: onChannelSwitch,
-                  foodDeepLinkAction: foodDeepLinkAction,
-                )
-              : MarketHomePage(
-                  onChannelSwitch: onChannelSwitch,
-                  marketDeepLinkAction: marketDeepLinkAction,
-                ),
+          view: HomePage(
+            switchAppWrapperChannel: switchAppWrapperChannel,
+            targetAppChannel: targetAppChannel,
+            foodDeepLinkAction: foodDeepLinkAction,
+            marketDeepLinkAction: marketDeepLinkAction,
+          ),
         );
         break;
       case 1:
         return TabItem(
           id: tabItem.id,
           icon: tabItem.icon,
-          view: targetAppChannel == AppChannel.FOOD ? FoodSearchPage() : MarketSearchPage(),
+          view: SearchPage(currentAppChannel: targetAppChannel),
         );
         break;
       case 2:

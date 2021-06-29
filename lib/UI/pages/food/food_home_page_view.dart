@@ -17,17 +17,17 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
-class FoodHomePage extends StatefulWidget {
+class FoodHomePageView extends StatefulWidget {
   final Function foodDeepLinkAction;
   final Function onChannelSwitch;
 
-  FoodHomePage({this.foodDeepLinkAction, this.onChannelSwitch});
+  FoodHomePageView({this.foodDeepLinkAction, this.onChannelSwitch});
 
   @override
-  _FoodHomePageState createState() => _FoodHomePageState();
+  _FoodHomePageViewState createState() => _FoodHomePageViewState();
 }
 
-class _FoodHomePageState extends State<FoodHomePage> with AutomaticKeepAliveClientMixin {
+class _FoodHomePageViewState extends State<FoodHomePageView> with AutomaticKeepAliveClientMixin {
   bool _isInit = true;
   AppProvider appProvider;
   FoodProvider foodProvider;
