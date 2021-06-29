@@ -14,6 +14,7 @@ import 'package:tiptop_v2/providers.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/local_storage.dart';
 import 'package:tiptop_v2/routes.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/event_tracking.dart';
 
 import 'UI/app_wrapper.dart';
@@ -58,8 +59,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _autoLoginFuture;
   EventTracking eventTracking = EventTracking.getActions();
 
+  AppChannel targetChannelFromDeepLink;
+
   Future<void> _initEventTracking() async {
-    await eventTracking.initEventTracking(widget.appProvider);
+    final initialUri = await eventTracking.initEventTracking(widget.appProvider);
+    if (initialUri != null) {
+      targetChannelFromDeepLink = getDeepLinkChannel(initialUri);
+      print('📺 📺 📺 📺 📺 📺 Requested channel from app launch deeplink: $targetChannelFromDeepLink 📺 📺 📺 📺 📺 📺');
+    }
 
     //Send app visit event
     Map<String, dynamic> visitEventParams = {
@@ -157,7 +164,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         return LanguageSelectPage();
       }
       if (appProvider.isAuth) {
-        return appProvider.isFirstOpen ? WalkthroughPage() : AppWrapper(targetAppChannel: appProvider.appDefaultChannel);
+        return appProvider.isFirstOpen ? WalkthroughPage() : AppWrapper(targetAppChannel: targetChannelFromDeepLink ?? appProvider.appDefaultChannel);
       } else {
         return FutureBuilder(
           future: _autoLoginFuture,
@@ -165,7 +172,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               ? SplashScreen()
               : appProvider.isFirstOpen
                   ? WalkthroughPage()
-                  : AppWrapper(targetAppChannel: appProvider.appDefaultChannel),
+                  : AppWrapper(targetAppChannel: targetChannelFromDeepLink ?? appProvider.appDefaultChannel),
         );
       }
     }

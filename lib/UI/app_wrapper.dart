@@ -10,6 +10,7 @@ import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/one_signal_notifications_provider.dart';
 import 'package:tiptop_v2/utils/deeplinks_helper.dart';
+import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:uni_links/uni_links.dart';
 
 //Widget that sets up the app's OneSignal & DeepLinks listeners
@@ -18,6 +19,7 @@ class AppWrapper extends StatefulWidget {
   final AppChannel targetAppChannel;
   final Function marketDeepLinkAction;
   final Function foodDeepLinkAction;
+  final Uri initialUri;
 
   // static const routeName = '/app-wrapper';
 
@@ -25,6 +27,7 @@ class AppWrapper extends StatefulWidget {
     @required this.targetAppChannel,
     this.marketDeepLinkAction,
     this.foodDeepLinkAction,
+    this.initialUri,
   });
 
   @override
@@ -32,6 +35,7 @@ class AppWrapper extends StatefulWidget {
 }
 
 class _AppWrapperState extends State<AppWrapper> {
+  EventTracking eventTracking = EventTracking.getActions();
   AppProvider appProvider;
   StreamSubscription _deepLinksSubscription;
   OneSignalNotificationsProvider oneSignalNotificationsProvider;
@@ -40,6 +44,7 @@ class _AppWrapperState extends State<AppWrapper> {
   bool _isInit = true;
 
   PageController _pageViewController;
+  AppChannel currentChannel;
 
   List<Map<String, dynamic>> _pages;
 
@@ -88,7 +93,12 @@ class _AppWrapperState extends State<AppWrapper> {
         print("Got a deeeeep deep link from subscription: 💩💩💩💩💩💩💩");
         if (uri != null) {
           print('uri: $uri');
-          runDeepLinkAction(context, uri, appProvider.isAuth);
+          runDeepLinkAction(
+            context,
+            uri,
+            appProvider.isAuth,
+            // currentChannel: widget.targetAppChannel,
+          );
         }
         // Use the uri and warn the user, if it is not correct
       }, onError: (err) {
@@ -135,6 +145,9 @@ class _AppWrapperState extends State<AppWrapper> {
   @override
   Widget build(BuildContext context) {
     print("🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 Rebuilt app wrapper 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽 🥷🏽");
+    print('widget.targetAppChannel');
+    print(widget.targetAppChannel);
+
     Size screenSize = MediaQuery.of(context).size;
     return Container(
       height: screenSize.height,
@@ -145,6 +158,9 @@ class _AppWrapperState extends State<AppWrapper> {
         itemCount: _pages.length,
         itemBuilder: (BuildContext context, int index) {
           return _pages[index]['page'];
+        },
+        onPageChanged: (int index) {
+          currentChannel = index == 0 ? AppChannel.FOOD : AppChannel.MARKET;
         },
       ),
     );

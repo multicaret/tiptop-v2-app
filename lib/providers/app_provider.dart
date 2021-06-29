@@ -41,6 +41,7 @@ class AppProvider with ChangeNotifier {
   Uri initialUri;
 
   void setInitialUri(uri) {
+    print("✅✅✅✅✅✅✅✅✅✅✅✅ Initial Uri received on app launch is set to app provider to e handled later ✅✅✅✅✅✅✅✅✅✅✅✅");
     initialUri = uri;
     notifyListeners();
   }

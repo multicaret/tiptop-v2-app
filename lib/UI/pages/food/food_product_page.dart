@@ -43,8 +43,8 @@ class FoodProductPage extends StatefulWidget {
     this.cartProduct,
     this.categoryEnglishTitle,
     this.restaurantEnglishTitle,
-    @required this.restaurantId,
-    @required this.chainId,
+    this.restaurantId,
+    this.chainId,
     this.restaurantIsOpen = true,
     this.hasControls = true,
   });
@@ -227,13 +227,18 @@ class _FoodProductPageState extends State<FoodProductPage> {
 
       restaurantId = widget.restaurantId;
       restaurantIsOpen = widget.restaurantIsOpen;
-      chainId = widget.chainId;
       hasControls = widget.hasControls;
       productsProvider = Provider.of<ProductsProvider>(context);
       appProvider = Provider.of<AppProvider>(context);
       cartProvider = Provider.of<CartProvider>(context);
 
       _fetchAndSetProduct().then((_) {
+        if (restaurantId == null) {
+          restaurantId = product.branchId;
+        }
+        if (chainId == null) {
+          chainId = product.chainId;
+        }
         trackViewProductDetailsEvent();
       });
     }

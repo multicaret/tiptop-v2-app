@@ -26,11 +26,12 @@ class EventTracking {
   final facebookAppEvents = FacebookAppEvents();
   Mixpanel mixpanel;
 
-  Future<void> initEventTracking(AppProvider appProvider) async {
+  Future<Uri> initEventTracking(AppProvider appProvider) async {
     await initFacebookAppEvents();
     await initMixpanel();
     await initAdjust();
-    await initUniLinks(appProvider);
+    Uri initialUri = await initUniLinks(appProvider);
+    return initialUri;
   }
 
   Future<void> initFacebookAppEvents() async {
@@ -228,7 +229,7 @@ class EventTracking {
     }
   }
 
-  Future<void> initUniLinks(AppProvider appProvider) async {
+  Future<Uri> initUniLinks(AppProvider appProvider) async {
     // Uri parsing may fail, so we use a try/catch FormatException.
     try {
       final initialUri = await getInitialUri();
@@ -238,12 +239,15 @@ class EventTracking {
         print("Got a deeeeep deep link initialUri 😇🍑:");
         print(initialUri);
         appProvider.setInitialUri(initialUri);
+        return initialUri;
       }
     } on FormatException {
       // Handle exception by warning the user their action did not succeed
       // return?
       print("Error while formatting an incoming deep link @event_tracking");
+      return null;
     }
+    return null;
   }
 
   Future<void> trackEvent(TrackingEvent trackingEvent, Map<String, dynamic> params) async {

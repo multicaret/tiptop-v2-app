@@ -4,6 +4,8 @@ import 'models.dart';
 class Product {
   Product({
     this.id,
+    this.branchId,
+    this.chainId,
     this.uuid,
     this.englishTitle,
     this.title,
@@ -33,6 +35,8 @@ class Product {
   });
 
   int id;
+  int branchId;
+  int chainId;
   String uuid;
   String englishTitle;
   String title;
@@ -62,6 +66,8 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
+        branchId: json["branchId"],
+        chainId: json["chainId"],
         uuid: json["uuid"],
         englishTitle: json["englishTitle"],
         title: json["title"],

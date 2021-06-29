@@ -34,8 +34,8 @@ List<TabItem> initCupertinoTabsList = [
 List<TabItem> getCupertinoTabsList(
   AppChannel targetAppChannel, {
   Function onChannelSwitch,
-  Function marketDeepLinkAction,
   Function foodDeepLinkAction,
+  Function marketDeepLinkAction,
 }) {
   return initCupertinoTabsList.map((tabItem) {
     switch (tabItem.id) {

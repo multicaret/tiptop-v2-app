@@ -14,6 +14,7 @@ import 'package:tiptop_v2/providers/addresses_provider.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/providers/food_provider.dart';
 import 'package:tiptop_v2/utils/constants.dart';
+import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 
 class FoodHomePage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _FoodHomePageState extends State<FoodHomePage> with AutomaticKeepAliveClie
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      appProvider = Provider.of<AppProvider>(context, listen: false);
+      appProvider = Provider.of<AppProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context, listen: false);
       foodProvider = Provider.of<FoodProvider>(context);
 
@@ -48,6 +49,21 @@ class _FoodHomePageState extends State<FoodHomePage> with AutomaticKeepAliveClie
         _fetchAndSetFoodHomeData().then((_) {
           // Check if a deeplink exists
           // (this only happen when the app was shutdown and not running in the background)
+          if (appProvider.initialUri != null) {
+            print("👽👽👽👽👽👽👽👽👽👽 Got a deep link in app launch! 👽👽👽👽👽👽👽👽👽👽");
+            runDeepLinkAction(
+              context,
+              appProvider.initialUri,
+              appProvider.isAuth,
+              currentChannel: AppChannel.FOOD,
+            );
+            //Clear deeplink from app provider to prevent it from running again when this page is accessed again
+            appProvider.setInitialUri(null);
+          }
+
+          // Check if a deeplink exists
+          // (this only happen when the app was shutdown and not running in the background
+          // and it received a deeplink that needed the home page to run first)
           if (widget.foodDeepLinkAction != null) {
             widget.foodDeepLinkAction();
           }

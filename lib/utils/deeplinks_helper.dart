@@ -6,6 +6,7 @@ import 'package:tiptop_v2/UI/pages/food/order/food_previous_order_page.dart';
 import 'package:tiptop_v2/UI/pages/food/order/food_previous_orders_page.dart';
 import 'package:tiptop_v2/UI/pages/food/order/track_food_order_page.dart';
 import 'package:tiptop_v2/UI/pages/food/restaurants/restaurant_page.dart';
+import 'package:tiptop_v2/UI/pages/food/restaurants/restaurants_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
 import 'package:tiptop_v2/UI/pages/market/market_products_page.dart';
 import 'package:tiptop_v2/UI/pages/market/order/market_previous_order_page.dart';
@@ -23,28 +24,50 @@ import 'package:tiptop_v2/utils/helper.dart';
 
 import 'navigator_helper.dart';
 
-void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
+class DeepLinkData {
+  Uri uri;
+  String mainAction;
+
+  DeepLinkData({
+    this.uri,
+    this.mainAction,
+  });
+}
+
+DeepLinkData getDeeplinkUri(Uri originalUri) {
   String deepLink; //full deep link with main action and params
-  Uri deepLinkUri = uri; //full deep link with main action and params as URI to query params from
+  Uri deepLinkUri = originalUri; //full deep link with main action and params as URI to query params from
   String mainAction; //the main action (e.g. blog_index, favorites, ...) without params
 
-  if (uri.host == 'app.adjust.com') {
-    deepLink = uri.queryParameters['deep_link'];
+  if (originalUri.host == 'app.adjust.com') {
+    deepLink = originalUri.queryParameters['deep_link'];
     deepLinkUri = Uri.parse(deepLink);
     mainAction = deepLinkUri.host;
-  } else if (uri.host == '66dh.adj.st') {
-    deepLink = uri.queryParameters['deep_link'];
+  } else if (originalUri.host == '66dh.adj.st') {
+    deepLink = originalUri.queryParameters['deep_link'];
     if (deepLink != null) {
       var splitDeeplink = deepLink.split("//");
-      deepLinkUri = splitDeeplink.length > 1 ? Uri.parse(splitDeeplink[1]) : uri;
+      deepLinkUri = splitDeeplink.length > 1 ? Uri.parse(splitDeeplink[1]) : originalUri;
       mainAction = deepLinkUri.host;
     } else {
-      mainAction = uri.pathSegments[0];
-      deepLinkUri = uri;
+      mainAction = originalUri.pathSegments[0];
+      deepLinkUri = originalUri;
     }
   } else {
-    deepLinkUri = uri;
+    deepLinkUri = originalUri;
   }
+
+  return DeepLinkData(
+    uri: deepLinkUri,
+    mainAction: mainAction,
+  );
+}
+
+void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth, {AppChannel currentChannel}) {
+  DeepLinkData deepLinkData = getDeeplinkUri(uri);
+  Uri deepLinkUri = deepLinkData.uri;
+  String mainAction = deepLinkData.mainAction;
+
   print('👿👿👿👿👿👿👿👿👿👿👿👿👿👿👿👿 DEEPLINK INFO 👿👿👿👿👿👿👿👿👿👿👿👿👿👿👿👿👿');
   print('uri: $uri');
   print('deepLinkUri: $deepLinkUri');
@@ -119,39 +142,59 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
       if (hasValidChannel && itemId != null && itemParentId != null) {
         if (requestedAppChannel == AppChannel.MARKET) {
           print("Open Category Market scroll to category: using: { uriChannel, itemId, itemParentId}");
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            CupertinoPageRoute<void>(
-              builder: (BuildContext context) => AppWrapper(
-                targetAppChannel: requestedAppChannel,
-                marketDeepLinkAction: () {
-                  pushCupertinoPage(
-                    context,
-                    MarketProductsPage(
-                      selectedParentCategoryId: int.parse(itemParentId),
-                      selectedChildCategoryId: int.parse(itemId),
-                      isDeepLink: true,
-                    ),
-                  );
-                },
-              ),
-            ),
-            (Route<dynamic> route) => false,
+          runDeepLinkActionThatNeedsHomeRequest(
+            context: context,
+            currentChannel: currentChannel,
+            requestedAppChannel: requestedAppChannel,
+            marketDeepLinkAction: (BuildContext context) {
+              pushCupertinoPage(
+                context,
+                MarketProductsPage(
+                  selectedParentCategoryId: int.parse(itemParentId),
+                  selectedChildCategoryId: int.parse(itemId),
+                  isDeepLink: true,
+                ),
+              );
+            },
           );
-
           return;
         } else if (requestedAppChannel == AppChannel.FOOD) {
           print("Open Food Branch scroll to category: using: { restaurant id: $itemId, menu categoryId: $itemParentId}");
-          pushCupertinoPage(
-            context,
-            RestaurantPage(
-              restaurantId: int.parse(itemParentId),
-              selectedMenuCategoryId: int.parse(itemId),
-            ),
-            rootNavigator: true,
+          runDeepLinkActionThatNeedsHomeRequest(
+            context: context,
+            currentChannel: currentChannel,
+            requestedAppChannel: requestedAppChannel,
+            foodDeepLinkAction: (BuildContext context) {
+              pushCupertinoPage(
+                context,
+                RestaurantPage(
+                  restaurantId: int.parse(itemParentId),
+                  selectedMenuCategoryId: int.parse(itemId),
+                ),
+              );
+            },
           );
           return;
         }
       }
+      break;
+    case "food_category_show":
+      if (itemId != null) {
+        runDeepLinkActionThatNeedsHomeRequest(
+          context: context,
+          currentChannel: currentChannel,
+          requestedAppChannel: requestedAppChannel,
+          foodDeepLinkAction: (BuildContext context) {
+            pushCupertinoPage(
+              context,
+              RestaurantsPage(
+                selectedCategoryId: int.parse(itemId),
+              ),
+            );
+          },
+        );
+      }
+      return;
       break;
     case "order_rating":
       if (!isAuth) {
@@ -207,21 +250,84 @@ void runDeepLinkAction(BuildContext context, Uri uri, bool isAuth) {
     case "product_show":
       if (itemId != null && hasValidChannel) {
         print("Open Product Show screen: using {itemId,hasChannel}");
-        pushCupertinoPage(
-          context,
-          requestedAppChannel == AppChannel.MARKET
-              ? MarketProductPage(
-                  productId: int.parse(itemId),
-                )
-              : FoodProductPage(
-                  productId: int.parse(itemId),
-                ),
-          rootNavigator: true,
+        runDeepLinkActionThatNeedsHomeRequest(
+          context: context,
+          currentChannel: currentChannel,
+          requestedAppChannel: requestedAppChannel,
+          foodDeepLinkAction: requestedAppChannel == AppChannel.FOOD
+              ? (context) => pushCupertinoPage(
+                    context,
+                    FoodProductPage(
+                      productId: int.parse(itemId),
+                    ),
+                    rootNavigator: true,
+                  )
+              : null,
+          marketDeepLinkAction: requestedAppChannel == AppChannel.MARKET
+              ? (context) => pushCupertinoPage(
+                    context,
+                    MarketProductPage(
+                      productId: int.parse(itemId),
+                    ),
+                  )
+              : null,
         );
         return;
       }
       break;
     default:
       return;
+  }
+}
+
+AppChannel getDeepLinkChannel(Uri uri) {
+  DeepLinkData deepLinkData = getDeeplinkUri(uri);
+  Uri deepLinkUri = deepLinkData.uri;
+
+  String uriChannel = deepLinkUri.queryParameters['channel'];
+  AppChannel requestedAppChannel = appChannelValues.map[uriChannel];
+  return requestedAppChannel;
+}
+
+void runDeepLinkActionThatNeedsHomeRequest({
+  BuildContext context,
+  Function marketDeepLinkAction,
+  Function foodDeepLinkAction,
+  AppChannel currentChannel,
+  AppChannel requestedAppChannel,
+}) {
+  print("📺 📺 📺 📺 📺 📺");
+  print("currentChannel: $currentChannel");
+  print("requestedAppChannel: $requestedAppChannel");
+  print("📺 📺 📺 📺 📺 📺");
+  //If the current channel isn't provided or is not equal to the requested channel,
+  if (currentChannel == null || currentChannel != requestedAppChannel) {
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      CupertinoPageRoute<void>(
+        builder: (BuildContext newContext) => AppWrapper(
+          targetAppChannel: requestedAppChannel,
+          marketDeepLinkAction: marketDeepLinkAction == null
+              ? null
+              : () {
+                  print("Market deeplink action...");
+                  marketDeepLinkAction(newContext);
+                },
+          foodDeepLinkAction: foodDeepLinkAction == null
+              ? null
+              : () {
+                  print("Market deeplink action...");
+                  foodDeepLinkAction(newContext);
+                },
+        ),
+      ),
+      (Route<dynamic> route) => false,
+    );
+  } else {
+    if (foodDeepLinkAction != null) {
+      foodDeepLinkAction(context);
+    }
+    if (marketDeepLinkAction != null) {
+      marketDeepLinkAction(context);
+    }
   }
 }
