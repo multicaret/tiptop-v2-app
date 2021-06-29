@@ -5,6 +5,7 @@ import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/models/enums.dart';
 import 'package:tiptop_v2/models/home.dart';
+import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
 import 'package:tiptop_v2/utils/helper.dart';
 
@@ -17,6 +18,7 @@ class RestaurantsProvider with ChangeNotifier {
   List<Branch> filteredRestaurants = <Branch>[];
   List<Branch> searchedRestaurants = <Branch>[];
   ListType activeListType = ListType.HORIZONTALLY_STACKED;
+  Pagination restaurantsPagination;
 
   double minCartValue;
   double maxCartValue;
@@ -26,7 +28,7 @@ class RestaurantsProvider with ChangeNotifier {
     'min_rating': null,
     'categories': <int>[],
   };
-  bool isLoadingSubmitFilterAndSort = false;
+  bool isLoadingFetchRestaurantsRequest = false;
   RestaurantSortType sortType = RestaurantSortType.SMART;
 
   List<Map<String, dynamic>> listTypes = [
@@ -61,9 +63,9 @@ class RestaurantsProvider with ChangeNotifier {
     ];
   }
 
-  void setRestaurantData(HomeData foodHomeData) {
+  void setRestaurantsData(HomeData foodHomeData) {
     restaurants = foodHomeData.restaurants;
-    filteredRestaurants = foodHomeData.restaurants;
+    // filteredRestaurants = foodHomeData.restaurants;
     foodCategories = foodHomeData.categories;
     foodHomeData.restaurants.forEach((restaurant) {
       restaurantsFavoriteStatuses[restaurant.id] = restaurant.isFavorited;
@@ -109,6 +111,42 @@ class RestaurantsProvider with ChangeNotifier {
 
   bool getRestaurantFavoriteStatus(int restaurantId) {
     return restaurantsFavoriteStatuses[restaurantId] == null ? false : restaurantsFavoriteStatuses[restaurantId];
+  }
+
+  int currentPage = 1;
+
+  void setCurrentPage(int value) {
+    currentPage = value;
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetRestaurants({Map<String, dynamic> sortData, int page}) async {
+    isLoadingFetchRestaurantsRequest = true;
+    notifyListeners();
+    final endpoint = 'restaurants?autoscroll_for_food_branches';
+    Map<String, dynamic> body = filterData;
+    body['sort'] = restaurantSortTypeValues.reverse[sortType];
+    if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
+      body.addAll(sortData);
+    }
+    currentPage = page ?? currentPage;
+    body['page'] = currentPage;
+    print('fetchAndSetRestaurants body');
+    print(body);
+    final responseData = await AppProvider().post(endpoint: endpoint, body: body);
+    PaginatedRestaurantsResponse paginatedRestaurantsResponse = PaginatedRestaurantsResponse.fromJson(responseData["data"]);
+    if (currentPage == 1 && filteredRestaurants.length > 0) {
+      print("🚰 🚰 🚰 🚰 🚰 Resetting to page 1 because page 1 is requested and filtered restaurants already exist 🚰 🚰 🚰 🚰 🚰 ");
+      filteredRestaurants = paginatedRestaurantsResponse.restaurants;
+      currentPage++;
+    } else {
+      print("🚰 🚰 🚰 🚰 🚰 Loading more, requested page: $currentPage 🚰 🚰 🚰 🚰 🚰 ");
+      filteredRestaurants.addAll(paginatedRestaurantsResponse.restaurants);
+      currentPage++;
+    }
+    restaurantsPagination = paginatedRestaurantsResponse.pagination;
+    isLoadingFetchRestaurantsRequest = false;
+    notifyListeners();
   }
 
   Future<void> fetchAndSetRestaurant(AppProvider appProvider, int restaurantId) async {
@@ -195,23 +233,6 @@ class RestaurantsProvider with ChangeNotifier {
     minCartValue = responseData["data"]["minCart"] == null ? 0.0 : responseData["data"]["minCart"].toDouble();
     maxCartValue = responseData["data"]["maxCart"] == null ? 0.0 : responseData["data"]["maxCart"].toDouble();
     filterData['minimum_order'] = minCartValue;
-    notifyListeners();
-  }
-
-  Future<void> submitFiltersAndSort({Map<String, dynamic> sortData}) async {
-    isLoadingSubmitFilterAndSort = true;
-    notifyListeners();
-    final endpoint = 'restaurants';
-    Map<String, dynamic> body = filterData;
-    body['sort'] = restaurantSortTypeValues.reverse[sortType];
-    if (sortType == RestaurantSortType.DISTANCE && sortData != null) {
-      body.addAll(sortData);
-    }
-    print('submitFiltersAndSort body');
-    print(body);
-    final responseData = await AppProvider().post(endpoint: endpoint, body: body);
-    filteredRestaurants = List<Branch>.from(responseData["data"].map((x) => Branch.fromJson(x)));
-    isLoadingSubmitFilterAndSort = false;
     notifyListeners();
   }
 }

@@ -63,7 +63,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     final deliveryTypesRadioItems = restaurantsProvider.getRestaurantDeliveryTypes(context);
 
     return AppBottomSheet(
-      hasOverlayLoading: restaurantsProvider.isLoadingSubmitFilterAndSort,
+      hasOverlayLoading: restaurantsProvider.isLoadingFetchRestaurantsRequest,
       screenHeightFraction: 0.8,
       title: 'Filters',
       clearAction: filtersAreEmpty ? null : _clearFilters,
@@ -175,8 +175,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   Future<void> _submitFilters() async {
     try {
-      await restaurantsProvider.submitFiltersAndSort();
-      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
+      await restaurantsProvider.fetchAndSetRestaurants(page: 1);
+      showToast(msg: '${restaurantsProvider.restaurantsPagination.total} ${Translations.of(context).get("result(s) match your search")}');
       Navigator.of(context).pop(true);
       if (!widget.shouldPopOnly) {
         pushCupertinoPage(context, RestaurantsPage());

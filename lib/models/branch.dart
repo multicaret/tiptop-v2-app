@@ -3,6 +3,21 @@ import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/models/models.dart';
 import 'package:tiptop_v2/models/product.dart';
 
+class PaginatedRestaurantsResponse {
+  PaginatedRestaurantsResponse({
+    this.restaurants,
+    this.pagination,
+  });
+
+  List<Branch> restaurants;
+  Pagination pagination;
+
+  factory PaginatedRestaurantsResponse.fromJson(Map<String, dynamic> json) => PaginatedRestaurantsResponse(
+        restaurants: List<Branch>.from(json["restaurants"].map((x) => Branch.fromJson(x))),
+        pagination: Pagination.fromJson(json["pagination"]),
+      );
+}
+
 class Branch {
   Branch({
     this.id,

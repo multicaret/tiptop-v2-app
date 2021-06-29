@@ -579,3 +579,31 @@ class TabItem {
     this.view,
   });
 }
+
+class Pagination {
+  Pagination({
+    this.total,
+    this.perPage,
+    this.currentPage,
+    this.totalPages,
+  });
+
+  int total;
+  int perPage;
+  int currentPage;
+  int totalPages;
+
+  factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
+        total: json["total"],
+        perPage: json["perPage"],
+        currentPage: json["currentPage"],
+        totalPages: json["totalPages"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total": total,
+        "perPage": perPage,
+        "currentPage": currentPage,
+        "totalPages": totalPages,
+      };
+}

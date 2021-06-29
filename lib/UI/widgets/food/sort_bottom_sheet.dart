@@ -49,7 +49,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     return Consumer2<RestaurantsProvider, AddressesProvider>(
       builder: (c, restaurantsProvider, addressesProvider, _) {
         return AppBottomSheet(
-          hasButtonLoader: restaurantsProvider.isLoadingSubmitFilterAndSort,
+          hasButtonLoader: restaurantsProvider.isLoadingFetchRestaurantsRequest,
           screenHeightFraction: 0.45,
           applyAction: () => _submitSort(restaurantsProvider, addressesProvider),
           title: 'Sort',
@@ -59,7 +59,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                 RadioListItems(
                   items: _getSortItems(context),
                   selectedId: restaurantsProvider.sortType,
-                  action: restaurantsProvider.isLoadingSubmitFilterAndSort ? null : (value) => restaurantsProvider.setSortType(value),
+                  action: restaurantsProvider.isLoadingFetchRestaurantsRequest ? null : (value) => restaurantsProvider.setSortType(value),
                   hasBorder: false,
                 ),
               ],
@@ -91,8 +91,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
               addressesProvider.addressIsSelected && addressesProvider.selectedAddress != null ? addressesProvider.selectedAddress.id : null,
         };
       }
-      await restaurantsProvider.submitFiltersAndSort(sortData: sortData);
-      showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search")}');
+      await restaurantsProvider.fetchAndSetRestaurants(sortData: sortData, page: 1);
+      showToast(msg: '${restaurantsProvider.restaurantsPagination.total} ${Translations.of(context).get("result(s) match your search")}');
       Navigator.of(context).pop();
       if (!widget.shouldPopOnly) {
         pushCupertinoPage(context, RestaurantsPage());

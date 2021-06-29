@@ -21,14 +21,13 @@ class FoodHomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilt food home content");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionTitle('Categories'),
         CategoriesSlider(categories: foodHomeData.categories),
         FilterSortButtons(),
-        RestaurantsIndex(),
+        RestaurantsIndex(restaurants: foodHomeData.restaurants),
         TextButton(
           onPressed: () => pushCupertinoPage(context, RestaurantsPage()),
           child: Row(

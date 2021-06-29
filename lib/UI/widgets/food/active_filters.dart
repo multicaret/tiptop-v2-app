@@ -67,7 +67,7 @@ class ActiveFilters extends StatelessWidget {
     } else {
       restaurantsProvider.setFilterData(key: key, value: value);
     }
-    restaurantsProvider.submitFiltersAndSort();
+    restaurantsProvider.fetchAndSetRestaurants(page: 1);
     // showToast(msg: '${restaurantsProvider.filteredRestaurants.length} ${Translations.of(context).get("result(s) match your search')}");
   }
 }

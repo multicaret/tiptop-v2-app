@@ -82,7 +82,7 @@ class FoodProvider with ChangeNotifier {
         foodNoRestaurantFound = true;
         foodNoAvailabilityMessage = foodHomeData != null && foodHomeData.noAvailabilityMessage != null ? foodHomeData.noAvailabilityMessage : '';
       } else {
-        restaurantsProvider.setRestaurantData(foodHomeData);
+        restaurantsProvider.setRestaurantsData(foodHomeData);
       }
 
       if (foodHomeData.cart != null) {
