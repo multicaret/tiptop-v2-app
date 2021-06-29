@@ -51,6 +51,9 @@ const double restaurantCategoriesHeight = 70;
 //Height of home page carousel
 const double homeSliderHeight = 170;
 
+//Screen height fraction of home page carousel
+const double homeSliderHeightFraction = 0.23;
+
 //Screen left and right padding
 const double screenHorizontalPadding = 17;
 

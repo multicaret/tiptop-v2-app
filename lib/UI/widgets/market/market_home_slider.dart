@@ -4,6 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_carousel.dart';
 import 'package:tiptop_v2/models/branch.dart';
 import 'package:tiptop_v2/models/home.dart';
 import 'package:tiptop_v2/providers/addresses_provider.dart';
+import 'package:tiptop_v2/utils/constants.dart';
 
 import '../map_slide.dart';
 
@@ -18,7 +19,9 @@ class MarketHomeSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
     return AppCarousel(
+      height: screenSize.height * homeSliderHeightFraction,
       images: slides.map((slide) => slide.image).toList(),
       infinite: slides.length > 0,
       autoPlay: slides.length > 0,
