@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/market/market_product_page.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cached_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/UI/widgets/market/market_cart_controls.dart';
 import 'package:tiptop_v2/models/product.dart';

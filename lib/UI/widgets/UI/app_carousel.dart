@@ -8,7 +8,7 @@ import 'package:tiptop_v2/utils/deeplinks_helper.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_cahched_network_image.dart';
+import 'app_cached_network_image.dart';
 
 class AppCarousel extends StatelessWidget {
   final double height;

@@ -7,7 +7,7 @@ import 'package:tiptop_v2/utils/constants.dart';
 import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 
-import '../app_cahched_network_image.dart';
+import '../app_cached_network_image.dart';
 
 class AddressIconDropDown extends StatelessWidget {
   final List<Map<String, dynamic>> iconItems;

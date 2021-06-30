@@ -14,7 +14,7 @@ import 'package:tiptop_v2/utils/styles/app_colors.dart';
 import 'package:tiptop_v2/utils/styles/app_icons.dart';
 import 'package:tiptop_v2/utils/styles/app_text_styles.dart';
 
-import 'UI/app_cahched_network_image.dart';
+import 'UI/app_cached_network_image.dart';
 import 'address/address_icon.dart';
 
 class HomeLiveTracking extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiptop_v2/UI/pages/food/food_product_page.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_cahched_network_image.dart';
+import 'package:tiptop_v2/UI/widgets/UI/app_cached_network_image.dart';
 import 'package:tiptop_v2/UI/widgets/formatted_prices.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/branch.dart';
