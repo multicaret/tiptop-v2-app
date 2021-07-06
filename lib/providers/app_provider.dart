@@ -102,7 +102,7 @@ class AppProvider with ChangeNotifier {
     ),
   ];
 
-  static const DOMAIN = 'https://stagingnew.trytiptop.app/';
+  static const DOMAIN = 'https://trytiptop.app/';
   final Map<String, String> headers = {"accept": "application/json", "content-type": "application/json"};
 
   // Auth Related.
