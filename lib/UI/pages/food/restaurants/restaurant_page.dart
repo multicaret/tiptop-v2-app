@@ -289,6 +289,17 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         searchQuery.isNotEmpty ? sliverAppBarSearchBarHeight : sliverAppBarSearchBarHeight + scrollableHorizontalTabBarHeight,
                     backgroundColor: AppColors.bg,
                     pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.zoomBackground,
+                      ],
+                      centerTitle: true,
+                      titlePadding: const EdgeInsets.all(0),
+                      background: RestaurantHeaderInfo(
+                        restaurant: restaurant,
+                        coverHasRating: false,
+                      ),
+                    ),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(0),
                       child: ValueListenableBuilder(
@@ -350,17 +361,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                    flexibleSpace: FlexibleSpaceBar(
-                      stretchModes: const <StretchMode>[
-                        StretchMode.zoomBackground,
-                      ],
-                      centerTitle: true,
-                      titlePadding: const EdgeInsets.all(0),
-                      background: RestaurantHeaderInfo(
-                        restaurant: restaurant,
-                        coverHasRating: false,
                       ),
                     ),
                   ),
