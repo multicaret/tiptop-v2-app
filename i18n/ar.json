@@ -241,5 +241,6 @@
   "This restaurant is closed right now!": "هذا المطعم مغلق حالياً",
   "Closed": "مغلق",
   "Checkout": "تأكيد الطلب",
-  "You Need to Complete Your Profile First!": "يرجى اكمال معلومات الحساب"
+  "You Need to Complete Your Profile First!": "يرجى اكمال معلومات الحساب",
+  "Order ID": "رقم الطلب"
 }

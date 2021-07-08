@@ -23,7 +23,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(Translations.of(context).get("Reference Code"), style: AppTextStyles.body50),
+              Text(Translations.of(context).get("Order ID"), style: AppTextStyles.body50),
               Text('${order.referenceCode}'),
             ],
           ),
