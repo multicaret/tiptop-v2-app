@@ -88,9 +88,6 @@ class _MapSlideState extends State<MapSlide> with AutomaticKeepAliveClientMixin<
       centerLong = (branchLatLng.longitude + userLatLng.longitude) / 2;
       centerLatLng = LatLng(centerLat, centerLong);
 
-      print('centerLatLng: $centerLatLng');
-      print('userLatLng: $userLatLng');
-      print('branchLatLng: $branchLatLng');
       _isInit = false;
       super.didChangeDependencies();
     }
