@@ -18,6 +18,8 @@ class AppThemes {
         bodyText1: AppTextStyles.body.copyWith(fontFamily: isKurdish ? kurdishFontFamily : arabicAndEnglishFontFamily),
         bodyText2: AppTextStyles.body.copyWith(fontFamily: isKurdish ? kurdishFontFamily : arabicAndEnglishFontFamily), //Default style everywhere, e.g. Text widget
       ),
+      indicatorColor: AppColors.primary,
+      unselectedWidgetColor: AppColors.secondary,
       appBarTheme: AppBarTheme(
         centerTitle: true,
         color: Colors.transparent,
