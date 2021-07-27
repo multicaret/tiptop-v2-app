@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/scrollable_vertical_content.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/market_products_grid_view.dart';
 import 'package:tiptop_v2/models/category.dart';
@@ -11,6 +10,7 @@ import 'package:tiptop_v2/utils/event_tracking.dart';
 import 'package:tiptop_v2/utils/ui_helper.dart';
 
 import '../../UI/scrollable_horizontal_tabs.dart';
+import 'market_products_shimmer_grid.dart';
 
 class ParentCategoryTabContent extends StatefulWidget {
   final int selectedParentCategoryId;
@@ -158,7 +158,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> wit
           child: RefreshIndicator(
             onRefresh: _fetchSelectedParentCategoryData,
             child: _isLoadingParentCategoryData
-                ? Center(child: AppLoader())
+                ? MarketProductsShimmerGrid()
                 : ListView.builder(
                     controller: productsScrollController,
                     itemCount: selectedParentChildCategories.length,
