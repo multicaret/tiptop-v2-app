@@ -14,8 +14,8 @@ import 'market_provider.dart';
 class ProductsProvider with ChangeNotifier {
   Category selectedParentCategory;
   List<Category> marketParentCategories = <Category>[];
-  List<Category> marketParentCategoriesWithoutChildren = <Category>[];
-  List<Category> selectedParentChildCategories = [];
+
+  // List<Category> selectedParentChildCategories = [];
 
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
@@ -25,10 +25,8 @@ class ProductsProvider with ChangeNotifier {
   bool isLoadingFetchAllProductsRequest = false;
   bool fetchAllProductsError = false;
 
-  void setMarketParentCategoriesWithoutChildren(List<Category> _marketParentCategoriesWithoutChildren) {
-    marketParentCategoriesWithoutChildren = _marketParentCategoriesWithoutChildren;
-    notifyListeners();
-  }
+  Map<int, Map<int, List<Product>>> products = {}; //i.e. {ParentCategoryId: {ChildCategoryId: List<Product>}}
+  Map<int, List<Category>> parentCategoryData = {}; //i.e. {ParentCategoryId: list of child categories with their products}
 
   Future<void> fetchAndSetParentCategoriesAndProducts() async {
     final endpoint = 'grocery/categories';
@@ -59,10 +57,10 @@ class ProductsProvider with ChangeNotifier {
     final responseData = await AppProvider().get(endpoint: endpoint, body: {
       'branch_id': '${MarketProvider.branchId}',
     });
-    marketParentCategoriesWithoutChildren = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
-    selectedParentChildCategories =
+    List<Category> _selectedParentChildCategories =
         selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
+    parentCategoryData[selectedParentCategory.id] = _selectedParentChildCategories;
     notifyListeners();
   }
 

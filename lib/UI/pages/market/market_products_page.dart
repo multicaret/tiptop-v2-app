@@ -16,11 +16,13 @@ class MarketProductsPage extends StatefulWidget {
   final int selectedParentCategoryId;
   final int selectedChildCategoryId;
   final bool isDeepLink;
+  final List<Category> parentCategoriesWithoutChildren;
 
   MarketProductsPage({
     @required this.selectedParentCategoryId,
     this.selectedChildCategoryId,
     this.isDeepLink = false,
+    this.parentCategoriesWithoutChildren,
   });
 
   @override
@@ -36,46 +38,29 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
   int selectedParentIndex;
 
   bool _isInit = true;
-  bool _isLoadingHomeAndProducts = false;
 
-  List<Widget> parentCategoriesTabs = <Widget>[];
-
-  List<Widget> getParentCategoriesTabs(List<Category> _parentCategories) {
+  List<Widget> getParentCategoriesTabs() {
     return List.generate(
-      _parentCategories.length,
+      widget.parentCategoriesWithoutChildren.length,
       (i) => Transform.translate(
         offset: Offset(0.0, 3.0),
-        child: Tab(text: _parentCategories[i].title),
+        child: Tab(text: widget.parentCategoriesWithoutChildren[i].title),
       ),
     );
-  }
-
-  Future<void> _fetchAndSetParentCategoriesAndProducts() async {
-    setState(() => _isLoadingHomeAndProducts = true);
-    await productsProvider.fetchAndSetParentCategoriesAndProducts();
-    setState(() => _isLoadingHomeAndProducts = false);
   }
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context);
-      parentCategoriesTabController = TabController(length: parentCategoriesTabs.length, vsync: this);
 
       //These parent categories (without their children) are only used to set up the tab bar length and the initial category to scroll to
-      List<Category> _parentCategories = productsProvider.marketParentCategoriesWithoutChildren;
-      selectedParentIndex = _parentCategories.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
-      parentCategoriesTabs = getParentCategoriesTabs(_parentCategories);
-      parentCategoriesTabController = TabController(length: parentCategoriesTabs.length, vsync: this);
+      parentCategoriesTabController = TabController(length: widget.parentCategoriesWithoutChildren.length, vsync: this);
+
+      selectedParentIndex = widget.parentCategoriesWithoutChildren.indexWhere((parent) => parent.id == widget.selectedParentCategoryId);
       if (selectedParentIndex != null && parentCategoriesTabController.length > 0) {
         parentCategoriesTabController.animateTo(selectedParentIndex);
       }
-
-      //If opening the page from deeplink OR if the products request hasn't been run before, perform it then display the page
-      //Another deeplink of another page might interrupt the running of the products request in the home page
-      // if (!productsProvider.isLoadingFetchAllProductsRequest && productsProvider.marketParentCategories.length == 0) {
-      //   _fetchAndSetParentCategoriesAndProducts();
-      // }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -91,7 +76,6 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    List<Category> marketParentCategories = productsProvider.marketParentCategories;
 
     return AppScaffold(
       hasCurve: false,
@@ -112,29 +96,22 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
       body: Column(
         children: [
           ParentCategoriesTabs(
-            parentCategoriesTabs: parentCategoriesTabs,
+            parentCategoriesTabs: getParentCategoriesTabs(),
             selectedParentCategoryId: widget.selectedParentCategoryId,
             tabController: parentCategoriesTabController,
           ),
           Expanded(
-            child: productsProvider.isLoadingFetchAllProductsRequest || _isLoadingHomeAndProducts
-                ? AppLoader()
-                : productsProvider.fetchAllProductsError
-                    ? Center(child: Text(Translations.of(context).get("An Error Occurred!")))
-                    : TabBarView(
-                        controller: parentCategoriesTabController,
-                        children: List.generate(marketParentCategories.length, (i) {
-                          List<Category> childCategories =
-                              marketParentCategories[i].childCategories.where((child) => child.products.length > 0).toList();
+            child: TabBarView(
+              controller: parentCategoriesTabController,
+              children: List.generate(getParentCategoriesTabs().length, (i) {
 
-                          return ParentCategoryTabContent(
-                            selectedParentCategoryId: marketParentCategories[i].id,
-                            selectedChildCategoryId: widget.selectedChildCategoryId,
-                            selectedParentCategoryEnglishTitle: marketParentCategories[i].englishTitle,
-                            childCategories: childCategories,
-                          );
-                        }),
-                      ),
+                return ParentCategoryTabContent(
+                  selectedParentCategoryId: widget.parentCategoriesWithoutChildren[i].id,
+                  selectedChildCategoryId: widget.selectedChildCategoryId,
+                  selectedParentCategoryEnglishTitle: widget.parentCategoriesWithoutChildren[i].englishTitle,
+                );
+              }),
+            ),
           ),
         ],
       ),

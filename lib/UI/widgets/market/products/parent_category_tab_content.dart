@@ -13,13 +13,11 @@ import 'package:tiptop_v2/utils/ui_helper.dart';
 import '../../UI/scrollable_horizontal_tabs.dart';
 
 class ParentCategoryTabContent extends StatefulWidget {
-  final List<Category> childCategories;
   final int selectedParentCategoryId;
   final int selectedChildCategoryId;
   final String selectedParentCategoryEnglishTitle;
 
   ParentCategoryTabContent({
-    @required this.childCategories,
     @required this.selectedParentCategoryId,
     @required this.selectedChildCategoryId,
     @required this.selectedParentCategoryEnglishTitle,
@@ -29,25 +27,26 @@ class ParentCategoryTabContent extends StatefulWidget {
   _ParentCategoryTabContentState createState() => _ParentCategoryTabContentState();
 }
 
-class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
+class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> with AutomaticKeepAliveClientMixin {
   bool _isInit = true;
   final selectedChildCategoryIdNotifier = ValueNotifier<int>(null);
 
   AutoScrollController childCategoriesScrollController;
   AutoScrollController productsScrollController;
+  ProductsProvider productsProvider;
 
   bool scrollIsAtTheTop = true;
-  bool _isRefreshingData = false;
+  bool _isLoadingParentCategoryData = false;
   List<Map<String, dynamic>> childCategoriesHeights;
   List<Category> selectedParentChildCategories = <Category>[];
 
   double productGridItemHeight = 0;
 
-  Future<void> _refreshSelectedParentCategory(ProductsProvider productsProvider) async {
-    setState(() => _isRefreshingData = true);
+  Future<void> _fetchSelectedParentCategoryData() async {
+    setState(() => _isLoadingParentCategoryData = true);
     await productsProvider.fetchAndSetChildCategoriesAndProducts(widget.selectedParentCategoryId);
-    selectedParentChildCategories = productsProvider.selectedParentChildCategories;
-    setState(() => _isRefreshingData = false);
+    selectedParentChildCategories = productsProvider.parentCategoryData[widget.selectedParentCategoryId];
+    setState(() => _isLoadingParentCategoryData = false);
   }
 
   void scrollToCategory(int index) {
@@ -75,6 +74,25 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
     await eventTracking.trackEvent(TrackingEvent.VIEW_CATEGORY, eventParams);
   }
 
+  void _layoutAndChildCategoriesSetUp() {
+    productGridItemHeight = getProductGridItemHeight(context);
+    childCategoriesHeights = List.generate(selectedParentChildCategories.length, (i) {
+      int rowsCount = (selectedParentChildCategories[i].products.length / 3).ceil();
+      return {
+        'id': selectedParentChildCategories[i].id,
+        'height': (rowsCount * productGridItemHeight) + (10 * 2) + (10 * (rowsCount - 1)),
+      };
+    });
+    if (widget.selectedChildCategoryId != null) {
+      selectedChildCategoryIdNotifier.value = widget.selectedChildCategoryId;
+      int selectedChildCategoryIndex =
+          selectedParentChildCategories.indexWhere((childCategory) => childCategory.id == widget.selectedChildCategoryId);
+      scrollToProducts(selectedChildCategoryIndex);
+    } else {
+      selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
+    }
+  }
+
   @override
   void initState() {
     childCategoriesScrollController = AutoScrollController(
@@ -86,10 +104,6 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
       viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
       axis: Axis.vertical,
     );
-    selectedParentChildCategories = widget.childCategories;
-    if (selectedParentChildCategories.length > 0) {
-      selectedChildCategoryIdNotifier.value = selectedParentChildCategories[0].id;
-    }
     //Todo: ask if this should be not, not recommended for performance
     // trackViewCategoryEvent(selectedParentChildCategories[0].englishTitle);
     super.initState();
@@ -98,18 +112,14 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      productGridItemHeight = getProductGridItemHeight(context);
-      childCategoriesHeights = List.generate(selectedParentChildCategories.length, (i) {
-        int rowsCount = (selectedParentChildCategories[i].products.length / 3).ceil();
-        return {
-          'id': selectedParentChildCategories[i].id,
-          'height': (rowsCount * productGridItemHeight) + (10 * 2) + (10 * (rowsCount - 1)),
-        };
-      });
-      if(widget.selectedChildCategoryId != null) {
-        selectedChildCategoryIdNotifier.value = widget.selectedChildCategoryId;
-        int selectedChildCategoryIndex = widget.childCategories.indexWhere((childCategory) => childCategory.id == widget.selectedChildCategoryId);
-        scrollToProducts(selectedChildCategoryIndex);
+      productsProvider = Provider.of<ProductsProvider>(context);
+      if (productsProvider.parentCategoryData[widget.selectedParentCategoryId] == null) {
+        _fetchSelectedParentCategoryData().then((_) {
+          _layoutAndChildCategoriesSetUp();
+        });
+      } else {
+        selectedParentChildCategories = productsProvider.parentCategoryData[widget.selectedParentCategoryId];
+        _layoutAndChildCategoriesSetUp();
       }
     }
     _isInit = false;
@@ -126,6 +136,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         ValueListenableBuilder(
@@ -143,39 +154,40 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> {
             },
           ),
         ),
-        Consumer<ProductsProvider>(
-          builder: (c, productsProvider, _) => Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => _refreshSelectedParentCategory(productsProvider),
-              child: _isRefreshingData
-                  ? Center(child: AppLoader())
-                  : ListView.builder(
-                      controller: productsScrollController,
-                      itemCount: selectedParentChildCategories.length,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (c, i) => ScrollableVerticalContent(
-                        index: i,
-                        count: selectedParentChildCategories.length,
-                        child: selectedParentChildCategories[i],
-                        scrollController: productsScrollController,
-                        //Fired when a child category is scrolled into view
-                        scrollSpyAction: (index) {
-                          selectedChildCategoryIdNotifier.value = selectedParentChildCategories[index].id;
-                          scrollToCategory(index);
-                        },
-                        categoriesHeights: childCategoriesHeights,
-                        singleTabContent: MarketProductsGridView(
-                          products: selectedParentChildCategories[i].products,
-                          categoryEnglishTitle: selectedParentChildCategories[i].englishTitle,
-                          parentCategoryEnglishTitle: widget.selectedParentCategoryEnglishTitle,
-                        ),
-                        pageTopOffset: 0,
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: _fetchSelectedParentCategoryData,
+            child: _isLoadingParentCategoryData
+                ? Center(child: AppLoader())
+                : ListView.builder(
+                    controller: productsScrollController,
+                    itemCount: selectedParentChildCategories.length,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (c, i) => ScrollableVerticalContent(
+                      index: i,
+                      count: selectedParentChildCategories.length,
+                      child: selectedParentChildCategories[i],
+                      scrollController: productsScrollController,
+                      //Fired when a child category is scrolled into view
+                      scrollSpyAction: (index) {
+                        selectedChildCategoryIdNotifier.value = selectedParentChildCategories[index].id;
+                        scrollToCategory(index);
+                      },
+                      categoriesHeights: childCategoriesHeights,
+                      singleTabContent: MarketProductsGridView(
+                        products: selectedParentChildCategories[i].products,
+                        categoryEnglishTitle: selectedParentChildCategories[i].englishTitle,
+                        parentCategoryEnglishTitle: widget.selectedParentCategoryEnglishTitle,
                       ),
+                      pageTopOffset: 0,
                     ),
-            ),
+                  ),
           ),
-        )
+        ),
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

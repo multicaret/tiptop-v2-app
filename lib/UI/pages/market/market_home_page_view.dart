@@ -33,7 +33,6 @@ class _MarketHomePageViewState extends State<MarketHomePageView> with AutomaticK
   AppProvider appProvider;
   MarketProvider marketProvider;
   AddressesProvider addressesProvider;
-  ProductsProvider productsProvider;
   CartProvider cartProvider;
 
   bool _isInit = true;
@@ -53,7 +52,6 @@ class _MarketHomePageViewState extends State<MarketHomePageView> with AutomaticK
       appProvider = Provider.of<AppProvider>(context);
       marketProvider = Provider.of<MarketProvider>(context);
       addressesProvider = Provider.of<AddressesProvider>(context);
-      productsProvider = Provider.of<ProductsProvider>(context, listen: false);
       cartProvider = Provider.of<CartProvider>(context);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -78,9 +76,6 @@ class _MarketHomePageViewState extends State<MarketHomePageView> with AutomaticK
           if (widget.marketDeepLinkAction != null) {
             widget.marketDeepLinkAction();
           }
-
-          productsProvider.setMarketParentCategoriesWithoutChildren(marketProvider.marketParentCategoriesWithoutChildren);
-          productsProvider.fetchAndSetParentCategoriesAndProducts();
         });
       });
     }

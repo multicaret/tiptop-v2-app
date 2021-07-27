@@ -16,7 +16,6 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('Built market home categories grid!');
     double colSize = getColItemHeight(4, context);
     double crossAxisCount = colSize / (colSize + 25);
 
@@ -35,6 +34,7 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
                     context,
                     MarketProductsPage(
                       selectedParentCategoryId: category.id,
+                      parentCategoriesWithoutChildren: parentCategories,
                     ),
                   );
                 },
