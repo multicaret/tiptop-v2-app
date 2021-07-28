@@ -136,8 +136,7 @@ class _FoodProductPageState extends State<FoodProductPage> {
         print("Food cart is null!");
       }
       bool shouldDeleteExistingCart = false;
-      bool hasCartInDifferentRestaurant = cartProvider.foodCart.restaurant != null &&
-          (cartProvider.foodCart.restaurant.id != restaurantId || cartProvider.foodCart.restaurant.chain.id != chainId);
+      bool hasCartInDifferentRestaurant = cartProvider.foodCart.restaurant != null && (cartProvider.foodCart.restaurant.id != restaurantId);
 
       if (hasCartInDifferentRestaurant) {
         print('Adding to cart from a different restaurant');
