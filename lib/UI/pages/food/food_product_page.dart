@@ -301,11 +301,12 @@ class _FoodProductPageState extends State<FoodProductPage> {
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
-                                      FormattedPrices(
-                                        price: product.price,
-                                        discountedPrice: product.discountedPrice,
-                                        isLarge: true,
-                                      ),
+                                      if (product.price.raw != null && product.price.raw > 0)
+                                        FormattedPrices(
+                                          price: product.price,
+                                          discountedPrice: product.discountedPrice,
+                                          isLarge: true,
+                                        ),
                                     ],
                                   ),
                                 ),

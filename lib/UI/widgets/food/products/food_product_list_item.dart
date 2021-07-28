@@ -75,10 +75,11 @@ class FoodProductListItem extends StatelessWidget {
                           ),
                         ),
                       const SizedBox(height: 10),
-                      FormattedPrices(
-                        price: product.price,
-                        discountedPrice: product.discountedPrice,
-                      )
+                      if (product.price.raw != null && product.price.raw > 0)
+                        FormattedPrices(
+                          price: product.price,
+                          discountedPrice: product.discountedPrice,
+                        )
                     ],
                   ),
                 ),
