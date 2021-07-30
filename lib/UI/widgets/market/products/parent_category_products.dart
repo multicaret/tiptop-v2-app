@@ -12,22 +12,22 @@ import 'package:tiptop_v2/utils/ui_helper.dart';
 import '../../UI/scrollable_horizontal_tabs.dart';
 import 'market_products_shimmer_grid.dart';
 
-class ParentCategoryTabContent extends StatefulWidget {
+class ParentCategoryProducts extends StatefulWidget {
   final int selectedParentCategoryId;
   final int selectedChildCategoryId;
   final String selectedParentCategoryEnglishTitle;
 
-  ParentCategoryTabContent({
+  ParentCategoryProducts({
     @required this.selectedParentCategoryId,
     @required this.selectedChildCategoryId,
     @required this.selectedParentCategoryEnglishTitle,
   });
 
   @override
-  _ParentCategoryTabContentState createState() => _ParentCategoryTabContentState();
+  _ParentCategoryProductsState createState() => _ParentCategoryProductsState();
 }
 
-class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> with AutomaticKeepAliveClientMixin {
+class _ParentCategoryProductsState extends State<ParentCategoryProducts> with AutomaticKeepAliveClientMixin {
   bool _isInit = true;
   final selectedChildCategoryIdNotifier = ValueNotifier<int>(null);
 
@@ -113,13 +113,16 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> wit
   void didChangeDependencies() {
     if (_isInit) {
       productsProvider = Provider.of<ProductsProvider>(context);
-      if (productsProvider.parentCategoryData[widget.selectedParentCategoryId] == null) {
-        _fetchSelectedParentCategoryData().then((_) {
-          _layoutAndChildCategoriesSetUp();
-        });
-      } else {
+      // isLoadingParentCategoryData = productsProvider.isLoadingParentCategoryData[widget.selectedParentCategoryId] ?? false;
+      if (productsProvider.parentCategoryData[widget.selectedParentCategoryId] != null) {
         selectedParentChildCategories = productsProvider.parentCategoryData[widget.selectedParentCategoryId];
         _layoutAndChildCategoriesSetUp();
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _fetchSelectedParentCategoryData().then((_) {
+            _layoutAndChildCategoriesSetUp();
+          });
+        });
       }
     }
     _isInit = false;
@@ -136,6 +139,7 @@ class _ParentCategoryTabContentState extends State<ParentCategoryTabContent> wit
 
   @override
   Widget build(BuildContext context) {
+    // isLoadingParentCategoryData = productsProvider.isLoadingParentCategoryData[widget.selectedParentCategoryId] ?? false;
     super.build(context);
     return Column(
       children: [

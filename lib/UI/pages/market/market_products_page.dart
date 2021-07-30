@@ -4,7 +4,7 @@ import 'package:tiptop_v2/UI/widgets/UI/app_loader.dart';
 import 'package:tiptop_v2/UI/widgets/UI/app_scaffold.dart';
 import 'package:tiptop_v2/UI/widgets/market/cart/market_app_bar_cart_total.dart';
 import 'package:tiptop_v2/UI/widgets/market/products/parent_categories_tabs.dart';
-import 'package:tiptop_v2/UI/widgets/market/products/parent_category_tab_content.dart';
+import 'package:tiptop_v2/UI/widgets/market/products/parent_category_products.dart';
 import 'package:tiptop_v2/i18n/translations.dart';
 import 'package:tiptop_v2/models/category.dart';
 import 'package:tiptop_v2/providers/app_provider.dart';
@@ -105,7 +105,7 @@ class _MarketProductsPageState extends State<MarketProductsPage> with TickerProv
               controller: parentCategoriesTabController,
               children: List.generate(getParentCategoriesTabs().length, (i) {
 
-                return ParentCategoryTabContent(
+                return ParentCategoryProducts(
                   selectedParentCategoryId: widget.parentCategoriesWithoutChildren[i].id,
                   selectedChildCategoryId: widget.selectedChildCategoryId,
                   selectedParentCategoryEnglishTitle: widget.parentCategoriesWithoutChildren[i].englishTitle,

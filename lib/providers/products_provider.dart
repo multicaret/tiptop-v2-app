@@ -13,9 +13,7 @@ import 'market_provider.dart';
 
 class ProductsProvider with ChangeNotifier {
   Category selectedParentCategory;
-  List<Category> marketParentCategories = <Category>[];
-
-  // List<Category> selectedParentChildCategories = [];
+  List<Category> marketParentCategoriesWithoutChildren = <Category>[];
 
   List<Product> searchedProducts = [];
   List<Product> favoriteProducts = [];
@@ -28,40 +26,83 @@ class ProductsProvider with ChangeNotifier {
   Map<int, Map<int, List<Product>>> products = {}; //i.e. {ParentCategoryId: {ChildCategoryId: List<Product>}}
   Map<int, List<Category>> parentCategoryData = {}; //i.e. {ParentCategoryId: list of child categories with their products}
 
-  Future<void> fetchAndSetParentCategoriesAndProducts() async {
-    final endpoint = 'grocery/categories';
-    fetchAllProductsError = false;
-    isLoadingFetchAllProductsRequest = true;
-    notifyListeners();
-    try {
-      print('Fetching all market products in the background.... 👻');
-      final responseData = await AppProvider().get(endpoint: endpoint, body: {
-        'branch_id': '${MarketProvider.branchId}',
-      });
-      marketParentCategories = List<Category>.from(responseData["data"].map((x) => Category.fromJson(x)));
-      isLoadingFetchAllProductsRequest = false;
-      print('Fetched all market products in the background 👻');
-      notifyListeners();
-    } catch (e) {
-      print('An error occurred while fetching all market products in the background.... 👻');
-      fetchAllProductsError = true;
-      isLoadingFetchAllProductsRequest = false;
-      notifyListeners();
-      throw e;
-    }
+  // The structure of the response of the next request is:
+  // data: {
+  //     selectedParent: <Category with children & products>{
+  //        id: 2,
+  //        ....,
+  //        children: [
+  //          {
+  //              ....,
+  //              products: [],
+  //          }
+  //        ],
+  //     },
+  //     //The parents container all parent categories INCLUDING the selected
+  //     //parent so we can see where it is in the array
+  //     parents: <Category without children OR products>[
+  //        {
+  //          id: 1,
+  //          ....
+  //        },
+  //        {
+  //          id: 2,  <The selected parent>
+  //          ....
+  //        },
+  //     ]
+  // },
+  Map<int, bool> isLoadingParentCategoryData = {}; //i.e {parentCategoryId: isLoadingProducts?}
+
+  Future<Map<String, dynamic>> fetchParentCategoryData(int selectedParentCategoryId) async {
+    final endpoint = 'grocery/categories/$selectedParentCategoryId/products';
+
+    return await AppProvider().get(endpoint: endpoint, body: {
+      'branch_id': '${MarketProvider.branchId}',
+    });
   }
 
   Future<void> fetchAndSetChildCategoriesAndProducts(int selectedParentCategoryId) async {
-    final endpoint = 'grocery/categories/$selectedParentCategoryId/products';
+    // isLoadingParentCategoryData[selectedParentCategoryId] = true;
+    // notifyListeners();
 
-    final responseData = await AppProvider().get(endpoint: endpoint, body: {
-      'branch_id': '${MarketProvider.branchId}',
-    });
+    final responseData = await fetchParentCategoryData(selectedParentCategoryId);
+
     selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
-    List<Category> _selectedParentChildCategories =
-        selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
-    parentCategoryData[selectedParentCategory.id] = _selectedParentChildCategories;
+    marketParentCategoriesWithoutChildren = List<Category>.from(responseData["data"]["parents"].map((x) => Category.fromJson(x)));
+
+    // List<Category> _selectedParentChildCategories =
+    //     selectedParentCategory.childCategories.where((childCategory) => childCategory.products != null && childCategory.products.length > 0).toList();
+    parentCategoryData[selectedParentCategory.id] = selectedParentCategory.childCategories;
+    // isLoadingParentCategoryData[selectedParentCategoryId] = false;
     notifyListeners();
+
+    // int indexOfSelectedParent = marketParentCategoriesWithoutChildren.indexWhere((category) => category.id == selectedParentCategory.id);
+    // print('indexOfSelectedParent: $indexOfSelectedParent');
+    // List<int> parentCategoryIdsToFetch = [];
+    // if (indexOfSelectedParent - 1 > 0 && marketParentCategoriesWithoutChildren[indexOfSelectedParent + 1] != null) {
+    //   parentCategoryIdsToFetch.add(marketParentCategoriesWithoutChildren[indexOfSelectedParent - 1].id);
+    // }
+    // if (indexOfSelectedParent - 2 > 0 && marketParentCategoriesWithoutChildren[indexOfSelectedParent + 1] != null) {
+    //   parentCategoryIdsToFetch.add(marketParentCategoriesWithoutChildren[indexOfSelectedParent - 2].id);
+    // }
+    // if (indexOfSelectedParent + 1 < marketParentCategoriesWithoutChildren.length - 1 &&
+    //     marketParentCategoriesWithoutChildren[indexOfSelectedParent + 1] != null) {
+    //   parentCategoryIdsToFetch.add(marketParentCategoriesWithoutChildren[indexOfSelectedParent + 1].id);
+    // }
+    // if (indexOfSelectedParent + 2 < marketParentCategoriesWithoutChildren.length - 1 &&
+    //     marketParentCategoriesWithoutChildren[indexOfSelectedParent + 2] != null) {
+    //   parentCategoryIdsToFetch.add(marketParentCategoriesWithoutChildren[indexOfSelectedParent + 2].id);
+    // }
+    // parentCategoryIdsToFetch.forEach((parentCategoryId) async {
+    //   if (parentCategoryData[parentCategoryId] == null) {
+    //     isLoadingParentCategoryData[parentCategoryId] = true;
+    //     final responseData = await fetchParentCategoryData(parentCategoryId);
+    //     Category _selectedParentCategory = Category.fromJson(responseData["data"]["selectedParent"]);
+    //     parentCategoryData[parentCategoryId] = _selectedParentCategory.childCategories;
+    //     isLoadingParentCategoryData[parentCategoryId] = false;
+    //     notifyListeners();
+    //   }
+    // });
   }
 
   void setProductTempOption({
@@ -72,8 +113,7 @@ class ProductsProvider with ChangeNotifier {
   }) {
     bool hasDiscountedPrice = product.discountedPrice != null && product.discountedPrice.raw != 0 && product.discountedPrice.raw < product.price.raw;
     double productTotalPrice = hasDiscountedPrice ? product.discountedPrice.raw : product.price.raw;
-    print('productTotalPrice');
-    print(productTotalPrice);
+    print('productTotalPrice: $productTotalPrice');
     List<ProductSelectedOption> newSelectedOptions;
     newSelectedOptions = productTempCartData.selectedOptions.map((selectedProductOption) {
       List<int> selectionIds = selectedProductOption.selectionIds == null ? <int>[] : selectedProductOption.selectionIds;
@@ -302,5 +342,29 @@ class ProductsProvider with ChangeNotifier {
     }
     favoriteProducts = List<Product>.from(responseData["data"]["products"].map((x) => Product.fromJson(x)));
     notifyListeners();
+  }
+
+  //This function isn't used anymore
+  Future<void> fetchAndSetParentCategoriesAndProducts() async {
+    final endpoint = 'grocery/categories';
+    fetchAllProductsError = false;
+    isLoadingFetchAllProductsRequest = true;
+    notifyListeners();
+    try {
+      print('Fetching all market products in the background.... 👻');
+      final responseData = await AppProvider().get(endpoint: endpoint, body: {
+        'branch_id': '${MarketProvider.branchId}',
+      });
+      // marketParentCategories = List<Category>.from(responseData["data"].map((x) => Category.fromJson(x)));
+      isLoadingFetchAllProductsRequest = false;
+      print('Fetched all market products in the background 👻');
+      notifyListeners();
+    } catch (e) {
+      print('An error occurred while fetching all market products in the background.... 👻');
+      fetchAllProductsError = true;
+      isLoadingFetchAllProductsRequest = false;
+      notifyListeners();
+      throw e;
+    }
   }
 }
