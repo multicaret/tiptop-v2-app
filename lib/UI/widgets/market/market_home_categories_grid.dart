@@ -32,10 +32,7 @@ class MarketHomeCategoriesGrid extends StatelessWidget {
                 onTap: () {
                   pushCupertinoPage(
                     context,
-                    MarketProductsPage(
-                      selectedParentCategoryId: category.id,
-                      parentCategoriesWithoutChildren: parentCategories,
-                    ),
+                    MarketProductsPage(selectedParentCategoryId: category.id),
                   );
                 },
                 child: CategoryItem(
